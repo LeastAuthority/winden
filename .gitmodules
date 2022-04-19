@@ -1,0 +1,3 @@
+[submodule "client/vendor/wormhole-william"]
+	path = client/vendor/wormhole-william
+	url = git@github.com:LeastAuthority/wormhole-william.git

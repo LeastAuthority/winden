@@ -1,10 +1,12 @@
-FROM node:16-alpine as builder
+FROM node:16-alpine
 
 WORKDIR /usr/src/app
 
+RUN npm install --global gulp-cli
+COPY --from=golang:1.16-alpine /usr/local/go/ /usr/local/go/
+ENV PATH="/usr/local/go/bin:${PATH}"
 COPY package.json .
 COPY package-lock.json .
-RUN npm install --global gulp-cli
 RUN npm install
 COPY . .
 
