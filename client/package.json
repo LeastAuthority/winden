@@ -5,6 +5,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "gulp": "^4.0.2"
+    "del": "^6.0.0",
+    "gulp": "^4.0.2",
+    "ts-loader": "^9.2.8",
+    "webpack-stream": "^7.0.0"
   }
 }
