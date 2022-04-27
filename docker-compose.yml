@@ -20,6 +20,9 @@ services:
     ports:
       - "8080:8080" # DevServer
       - "35729:35729" # LiveReload
+    depends_on:
+      - mailbox
+      - relay
   # Selenium services
   chrome:
     image: selenium/node-chrome:4.1.3-20220405
