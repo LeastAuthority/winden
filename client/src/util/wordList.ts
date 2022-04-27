@@ -1,4 +1,4 @@
-export default {
+const wordList = {
   "00": ["aardvark", "adroitness"],
   "01": ["absurd", "adviser"],
   "02": ["accrue", "aftermath"],
@@ -256,3 +256,7 @@ export default {
   FE: ["woodlark", "yesteryear"],
   FF: ["Zulu", "Yucatan"],
 };
+
+const pairs = Object.values(wordList);
+export const firstWordList = pairs.map((x) => x[1].toLocaleLowerCase());
+export const secondWordList = pairs.map((x) => x[0].toLocaleLowerCase());

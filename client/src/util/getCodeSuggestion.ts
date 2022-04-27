@@ -3,11 +3,7 @@ import {
   CODE_SEGMENT_FIRST_WORD_INDEX,
   CODE_SEGMENT_LENGTH,
 } from "./constants";
-import wordList from "./wordList";
-
-const pairs = Object.values(wordList);
-const firstWordList = pairs.map((x) => x[1].toLocaleLowerCase());
-const secondWordList = pairs.map((x) => x[0].toLocaleLowerCase());
+import { firstWordList, secondWordList } from "./wordList";
 
 export function getCodeSuggestion(partialCode: string) {
   const codeSegments = partialCode

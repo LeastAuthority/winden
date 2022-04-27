@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { applyCodeSuggestion } from "../../util/applyCodeSuggestion";
 import { getCodeSuggestion } from "../../util/getCodeSuggestion";
+import { CodeErrorType, validateCode } from "../../util/validateCode";
 import { Popover } from "./Popover";
 
 type Props = {};
@@ -19,6 +20,14 @@ export function CodeInput({}: Props) {
     }
   }
 
+  const [validationError, setValidationError] = useState<CodeErrorType | null>(
+    null
+  );
+
+  function validate() {
+    setValidationError(validateCode(code));
+  }
+
   return (
     <div>
       <input
@@ -28,7 +37,9 @@ export function CodeInput({}: Props) {
         value={code}
         onChange={handleChange}
         placeholder="Enter code here"
+        onBlur={validate}
       />
+      <div>{validationError}</div>
       <Popover elementRef={inputRef} active={!!codeSuggestion}>
         <div>
           <span>{codeSuggestion}</span>
