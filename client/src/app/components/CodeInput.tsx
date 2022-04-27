@@ -1,6 +1,8 @@
 import React, { useRef, useState } from "react";
 import { applyCodeSuggestion } from "../../util/applyCodeSuggestion";
+import { CODE_SEGMENT_DELIMITER } from "../../util/constants";
 import { getCodeSuggestion } from "../../util/getCodeSuggestion";
+import { spellCheckCodeWord } from "../../util/spellCheckCodeWord";
 import { CodeErrorType, validateCode } from "../../util/validateCode";
 import { Popover } from "./Popover";
 
@@ -24,6 +26,26 @@ export function CodeInput({}: Props) {
     null
   );
 
+  const errorMessage = (() => {
+    const [codeNumber, codeFirstWord, codeSecondWord] = code.split(
+      CODE_SEGMENT_DELIMITER
+    );
+    switch (validationError) {
+      case "INVALID_FORMAT":
+        return "Please use a code with the number-word-word format.";
+      case "INVALID_FIRST_WORD":
+        return `First word is not recognized. Did you mean: ${spellCheckCodeWord(
+          codeFirstWord,
+          "first"
+        ).join(", ")}`;
+      case "INVALID_SECOND_WORD":
+        return `Second word is not recognized. Did you mean: ${spellCheckCodeWord(
+          codeSecondWord,
+          "second"
+        ).join(", ")}`;
+    }
+  })();
+
   function validate() {
     setValidationError(validateCode(code));
   }
@@ -40,6 +62,7 @@ export function CodeInput({}: Props) {
         onBlur={validate}
       />
       <div>{validationError}</div>
+      <div>{errorMessage}</div>
       <Popover elementRef={inputRef} active={!!codeSuggestion}>
         <div>
           <span>{codeSuggestion}</span>
