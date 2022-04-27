@@ -51,7 +51,7 @@ export function CodeInput({}: Props) {
   }
 
   return (
-    <div>
+    <div data-testid="code-input-container">
       <input
         data-testid="code-input"
         ref={inputRef}
@@ -62,7 +62,7 @@ export function CodeInput({}: Props) {
         onBlur={validate}
       />
       <div>{validationError}</div>
-      <div>{errorMessage}</div>
+      <div data-testid="code-error-message">{errorMessage}</div>
       <Popover elementRef={inputRef} active={!!codeSuggestion}>
         <div>
           <span>{codeSuggestion}</span>

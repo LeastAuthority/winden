@@ -18,8 +18,59 @@ describe("<CodeInput />", () => {
     const user = userEvent.setup();
     render(<CodeInput />);
     const input = screen.getByTestId("code-input");
-    await user.click(input);
-    await user.keyboard("7-a s d f ");
+    await user.type(input, "7-a s d f ");
     expect(input).toHaveValue("7-asdf");
+  });
+
+  test("inputting a code not following number-word-word format", async () => {
+    const user = userEvent.setup();
+    render(<CodeInput />);
+    const input = screen.getByTestId("code-input");
+    const errorMessage = screen.getByTestId("code-error-message");
+    const container = screen.getByTestId("code-input-container");
+    await user.type(input, "asdf-asdf-asdf");
+    await user.click(container);
+    expect(errorMessage).toHaveTextContent(
+      "Please use a code with the number-word-word format."
+    );
+  });
+
+  test("inputting a code with a typo on the first word", async () => {
+    const user = userEvent.setup();
+    render(<CodeInput />);
+    const input = screen.getByTestId("code-input");
+    const errorMessage = screen.getByTestId("code-error-message");
+    const container = screen.getByTestId("code-input-container");
+    await user.type(input, "7-gitarist-revenge");
+    await user.click(container);
+    expect(errorMessage).toHaveTextContent(
+      "First word is not recognized. Did you mean: guitarist"
+    );
+  });
+
+  test("inputting a code with a typo on the second word", async () => {
+    const user = userEvent.setup();
+    render(<CodeInput />);
+    const input = screen.getByTestId("code-input");
+    const errorMessage = screen.getByTestId("code-error-message");
+    const container = screen.getByTestId("code-input-container");
+    await user.type(input, "7-guitarist-revege");
+    await user.click(container);
+    expect(errorMessage).toHaveTextContent(
+      "Second word is not recognized. Did you mean: revenge"
+    );
+  });
+
+  test("inputting a code with a typo on both words", async () => {
+    const user = userEvent.setup();
+    render(<CodeInput />);
+    const input = screen.getByTestId("code-input");
+    const errorMessage = screen.getByTestId("code-error-message");
+    const container = screen.getByTestId("code-input-container");
+    await user.type(input, "7-gitarist-revege");
+    await user.click(container);
+    expect(errorMessage).toHaveTextContent(
+      "First word is not recognized. Did you mean: guitarist"
+    );
   });
 });
