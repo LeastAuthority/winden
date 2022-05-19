@@ -6,10 +6,18 @@
     "wdio": "wdio run test/wdio.conf.ts"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.5",
+    "bowser": "^2.11.0",
+    "classnames": "^2.3.1",
     "fastest-levenshtein": "^1.0.12",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-router-dom": "^6.3.0"
+    "react-dropzone": "^14.2.1",
+    "react-popper": "^2.3.0",
+    "react-router-dom": "^6.3.0",
+    "streamsaver": "^2.0.5",
+    "web-streams-polyfill": "^2.0.2",
+    "worker-rpc": "^0.2.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.4",
@@ -18,15 +26,18 @@
     "@types/jest": "^27.4.1",
     "@types/react": "^18.0.5",
     "@types/react-dom": "^18.0.1",
+    "@types/streamsaver": "^2.0.1",
     "@types/testing-library__jest-dom": "^5.14.3",
     "@wdio/cli": "^7.19.5",
     "@wdio/local-runner": "^7.19.5",
     "@wdio/mocha-framework": "^7.19.5",
     "@wdio/spec-reporter": "^7.19.5",
+    "css-loader": "^6.7.1",
     "del": "^6.0.0",
     "gulp": "^4.0.2",
     "gulp-connect": "^5.7.0",
     "jest": "^27.5.1",
+    "style-loader": "^3.3.1",
     "ts-jest": "^27.1.4",
     "ts-loader": "^9.2.8",
     "ts-node": "^10.7.0",

@@ -2,6 +2,8 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "jsx": "react",
-    "strict": true
+    "sourceMap": true,
+    "strict": true,
+    "plugins": [{ "name": "typescript-plugin-css-modules" }]
   }
 }

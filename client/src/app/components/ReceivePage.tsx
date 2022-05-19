@@ -1,17 +1,29 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useWormhole } from "../useWormhole";
 import { CodeInput } from "./CodeInput";
 
 type Props = {};
 
 export default function ReceivePage({}: Props) {
-  return (
+  const wormhole = useWormhole();
+
+  return wormhole?.fileMeta ? (
+    <div>
+      <div>
+        You will download {wormhole.fileMeta.name} which has{" "}
+        {wormhole.fileMeta.size} bytes.
+      </div>
+      <div>
+        <button onClick={() => wormhole.fileMeta?.accept()}>
+          Accept and download
+        </button>
+      </div>
+    </div>
+  ) : (
     <div data-testid="receive-page-container">
-      ReceivePage
-      <Link data-testid="go-to-send-page" to="/s">
-        Receive
-      </Link>
-      <CodeInput />
+      <h2>Receive files in real-time</h2>
+      <h3>Always end-to-end encrypted.</h3>
+      <CodeInput onSubmit={(code) => wormhole?.saveFile(code)} />
     </div>
   );
 }

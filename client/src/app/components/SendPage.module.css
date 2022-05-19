@@ -1,0 +1,24 @@
+.container {
+  height: 100%;
+}
+
+.uploadSection {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.dropZone {
+  border: 4px dashed #858789;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.plusIcon {
+  margin-right: 0.5rem;
+}

@@ -1,0 +1,16 @@
+@font-face {
+  font-family: "Poppins";
+  font-weight: normal;
+  src: url("/Poppins/Poppins-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("/Poppins/Poppins-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+}
+
+body {
+  font-family: "Poppins";
+  background: linear-gradient(222.19deg, #f0f0f0 23.77%, #ffffff 98.02%);
+}
