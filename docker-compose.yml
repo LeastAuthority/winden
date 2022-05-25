@@ -31,6 +31,8 @@ services:
       - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+    profiles:
+      - e2e
   edge:
     image: selenium/node-edge:4.1.3-20220405
     shm_size: 2gb
@@ -40,6 +42,8 @@ services:
       - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+    profiles:
+      - e2e
   firefox:
     image: selenium/node-firefox:4.1.3-20220405
     shm_size: 2gb
@@ -49,6 +53,8 @@ services:
       - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+    profiles:
+      - e2e
   selenium-hub:
     image: selenium/hub:4.1.3-20220405
     container_name: selenium-hub
@@ -56,3 +62,28 @@ services:
       - "4442:4442"
       - "4443:4443"
       - "4444:4444"
+    healthcheck:
+      test:
+        ["CMD", "/opt/bin/check-grid.sh", "--host", "0.0.0.0", "--port", "4444"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    profiles:
+      - e2e
+  client-e2e:
+    build: ./client-e2e
+    volumes:
+      - ./client-e2e:/usr/src/app
+    depends_on:
+      client:
+        condition: service_started
+      chrome:
+        condition: service_started
+      firefox:
+        condition: service_started
+      edge:
+        condition: service_started
+      selenium-hub:
+        condition: service_healthy
+    profiles:
+      - e2e

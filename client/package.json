@@ -2,8 +2,7 @@
   "name": "transfer-rewrite",
   "private": true,
   "scripts": {
-    "test": "jest",
-    "wdio": "wdio run test/wdio.conf.ts"
+    "test": "jest"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.5",
@@ -28,10 +27,6 @@
     "@types/react-dom": "^18.0.1",
     "@types/streamsaver": "^2.0.1",
     "@types/testing-library__jest-dom": "^5.14.3",
-    "@wdio/cli": "^7.19.5",
-    "@wdio/local-runner": "^7.19.5",
-    "@wdio/mocha-framework": "^7.19.5",
-    "@wdio/spec-reporter": "^7.19.5",
     "css-loader": "^6.7.1",
     "del": "^6.0.0",
     "gulp": "^4.0.2",
