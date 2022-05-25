@@ -16,7 +16,7 @@ import {
   SEND_FILE_RESULT_OK,
   SEND_TEXT,
   WASM_READY,
-} from "../actions";
+} from "../util/actions";
 import { SENDER_TIMEOUT } from "../util/constants";
 import { FileStreamReader } from "./streaming";
 import {

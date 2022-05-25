@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-import { useWormhole } from "../useWormhole";
+import { useWormhole } from "../hooks/useWormhole";
 import Button from "./Button";
 import styles from "./SendPage.module.css";
 

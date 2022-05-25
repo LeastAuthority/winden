@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { WormholeContext } from "./WormholeProvider";
+import { WormholeContext } from "../components/WormholeProvider";
 
 export function useWormhole() {
   const wormhole = useContext(WormholeContext);

@@ -1,12 +1,12 @@
 import React, { PropsWithChildren, useEffect, useRef, useState } from "react";
-import { detectErrorType } from "./util/detectErrorType";
-import { durationToClosesUnit } from "./util/durationToClosestUnit";
-import ClientWorker from "./wormhole/client_worker";
+import { detectErrorType } from "../util/detectErrorType";
+import { durationToClosesUnit } from "../util/durationToClosestUnit";
+import ClientWorker from "../wormhole/client_worker";
 import {
   ClientConfig,
   TransferOptions,
   TransferProgress,
-} from "./wormhole/types";
+} from "../wormhole/types";
 
 const MAX_FILE_SIZE_MB = 200;
 const MB = 1000 ** 2;

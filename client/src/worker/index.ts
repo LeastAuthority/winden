@@ -15,7 +15,7 @@ import {
   SEND_FILE_RESULT_OK,
   SEND_TEXT,
   WASM_READY,
-} from "../app/actions";
+} from "../app/util/actions";
 import { TransferProgress } from "../app/wormhole/types";
 import Client from "./client";
 import Go from "./go";

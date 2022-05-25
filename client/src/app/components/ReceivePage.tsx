@@ -1,5 +1,5 @@
 import React from "react";
-import { useWormhole } from "../useWormhole";
+import { useWormhole } from "../hooks/useWormhole";
 import { CodeInput } from "./CodeInput";
 
 type Props = {};
