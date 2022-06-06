@@ -1,5 +1,13 @@
-import React from "react";
-import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import {
+  Link,
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useParams,
+} from "react-router-dom";
+import { useWormhole } from "../hooks/useWormhole";
 import { browserIsProbablySafari } from "../util/browserIsProbablySafari";
 import styles from "./App.module.css";
 import Button from "./Button";
@@ -8,6 +16,25 @@ import ReceivePage from "./ReceivePage";
 import SendPage from "./SendPage";
 
 type Props = {};
+
+function ValidateCodePage() {
+  const wormhole = useWormhole();
+  let params = useParams();
+  let code = params.code?.match(/\d+/);
+
+  if (!code) {
+    return <NotFoundPage />;
+  }
+
+  useEffect(() => {
+    // TODO: no timeout hack to wait for initiialize
+    setTimeout(() => {
+      wormhole?.saveFile(params.code!);
+    }, 2000);
+  }, []);
+
+  return wormhole?.fileMeta ? <ReceivePage /> : <div>loading...</div>;
+}
 
 export function App({}: Props) {
   const location = useLocation();
@@ -42,6 +69,7 @@ export function App({}: Props) {
             <Route path="/" element={<Navigate replace to="s" />} />
             <Route path="s" element={<SendPage />} />
             <Route path="r" element={<ReceivePage />} />
+            <Route path="/:code" element={<ValidateCodePage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
