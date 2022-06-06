@@ -19,4 +19,16 @@ describe("The application", () => {
     const content = await $("main");
     await expect(content).toHaveTextContaining("hello-world.txt");
   });
+
+  it("1C", async () => {
+    await Page.open();
+    await Page.uploadFiles(
+      "/usr/src/app/test/files/hello-world-2.txt",
+      "/usr/src/app/test/files/hello-world.txt"
+    );
+
+    const content = await $("main");
+    await expect(content).toHaveTextContaining("hello-world-2.txt");
+    await expect(content).not.toHaveTextContaining("hello-world.txt");
+  });
 });
