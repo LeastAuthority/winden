@@ -3,6 +3,26 @@ import * as Page from "../pageobjects/page";
 import { hashFile } from "../util/hashFile";
 import { waitForFileExists } from "../util/waitForFileExists";
 
+async function testTransferSuccess(fileName: string, timeout?: number) {
+  const originalFilePath = `/usr/src/app/test/files/${fileName}`;
+  const receivedFilePath = path.join(global.downloadDir, fileName);
+
+  await Page.open();
+  const _sendWindow = await browser.getWindowHandle();
+  await Page.uploadFiles(originalFilePath);
+  const input = await $("input[readonly='']");
+  const codeUrl = await input.getValue();
+  const _receiveWindow = await browser.newWindow(codeUrl);
+  await browser.waitUntil(() => $("button").isExisting());
+  await (await $("button")).click();
+  await browser.call(() =>
+    waitForFileExists(receivedFilePath, timeout || 60000)
+  );
+  const originalHash = await hashFile(originalFilePath);
+  const receivedHash = await hashFile(receivedFilePath);
+  expect(originalHash).toBe(receivedHash);
+}
+
 describe("The application", () => {
   it("loads", async () => {
     await Page.open();
@@ -35,21 +55,23 @@ describe("The application", () => {
     await expect(content).not.toHaveTextContaining("hello-world.txt");
   });
 
-  it.only("1D", async () => {
-    const originalFilePath = "/usr/src/app/test/files/hello-world.txt";
-    const receivedFilePath = path.join(global.downloadDir, "hello-world.txt");
-
-    await Page.open();
-    const _sendWindow = await browser.getWindowHandle();
-    await Page.uploadFiles(originalFilePath);
-    const input = await $("input[readonly='']");
-    const codeUrl = await input.getValue();
-    const _receiveWindow = await browser.newWindow(codeUrl);
-    await browser.waitUntil(() => $("button").isExisting());
-    await (await $("button")).click();
-    await browser.call(() => waitForFileExists(receivedFilePath, 60000));
-    const originalHash = await hashFile(originalFilePath);
-    const receivedHash = await hashFile(receivedFilePath);
-    expect(originalHash).toBe(receivedHash);
+  it("1D", async () => {
+    await testTransferSuccess("hello-world.txt");
   });
+
+  it("1E", async () => {
+    await testTransferSuccess("sizes/20MB");
+  });
+
+  it("1F", async () => {
+    await testTransferSuccess("sizes/300MB", 60 * 1000 * 3); // 3 minute timeout
+  });
+
+  // it("1G", async () => {
+  //   await testTransferSuccess("sizes/4.2GB");
+  // });
+
+  // it("1H", async () => {
+  //   await testTransferSuccess("sizes/4.3GB");
+  // });
 });
