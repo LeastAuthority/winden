@@ -37,9 +37,9 @@ export const WormholeContext = React.createContext<{
 
 export function WormholeProvider(props: Props) {
   const defaultConfig: ClientConfig = {
-    rendezvousURL: "ws://localhost:4000/v1",
+    rendezvousURL: `ws://${window.location.hostname}:4000/v1`,
     // process.env["VUE_APP_STAGE_MAILBOX_URL"] || "ws://localhost:4000/v1",
-    transitRelayURL: "ws://localhost:4002",
+    transitRelayURL: `ws://${window.location.hostname}:4002`,
     // process.env["VUE_APP_STAGE_RELAY_URL"] || "ws://localhost:4002",
     passPhraseComponentLength: 2,
   };
@@ -85,10 +85,12 @@ export function WormholeProvider(props: Props) {
     opts?: TransferOptions
   ): Promise<TransferProgress | SendFileError> {
     if (!client.current) {
+      console.error("Not initialized");
       return SendFileError.CLIENT_NOT_INITIALIZED;
     }
 
     if (opts?.size && opts?.size > MAX_FILE_SIZE_BYTES) {
+      console.error("File too large");
       return SendFileError.FILE_TOO_LARGE;
     }
 
@@ -117,7 +119,6 @@ export function WormholeProvider(props: Props) {
       return done;
     })
       .then(() => {
-        alert("done!");
         updateProgress(-1);
       })
       .catch((error: string) => Promise.reject(detectErrorType(error)));
@@ -126,6 +127,7 @@ export function WormholeProvider(props: Props) {
 
   function saveFile(code: string): Promise<TransferProgress> | SaveFileError {
     if (!client.current) {
+      console.error("Not initialized");
       return SaveFileError.CLIENT_NOT_INITIALIZED;
     }
     const opts = {

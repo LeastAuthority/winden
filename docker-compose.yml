@@ -23,6 +23,8 @@ services:
       - relay
   # Selenium services
   chrome:
+    ports:
+      - "5900:5900"
     image: selenium/node-chrome:4.1.3-20220405
     shm_size: 2gb
     depends_on:
@@ -34,6 +36,8 @@ services:
     profiles:
       - e2e
   edge:
+    ports:
+      - "5901:5900"
     image: selenium/node-edge:4.1.3-20220405
     shm_size: 2gb
     depends_on:
@@ -45,6 +49,8 @@ services:
     profiles:
       - e2e
   firefox:
+    ports:
+      - "5902:5900"
     image: selenium/node-firefox:4.1.3-20220405
     shm_size: 2gb
     depends_on:
@@ -72,6 +78,8 @@ services:
       - e2e
   client-e2e:
     build: ./client-e2e
+    env_file:
+      - ./client-e2e/.env
     volumes:
       - ./client-e2e:/usr/src/app
     depends_on:

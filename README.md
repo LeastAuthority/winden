@@ -58,6 +58,16 @@ docker-compose down
 
 ## Testing
 
+### Setup
+
+The e2e tests run on the selenium docker containers. They will run the test against the `client` running on the host.
+To get the containers to connect to be able to connect to the host, we need to add the host's local IP to the environment:
+
+1. Create an empty file `./client-e2e/.env`.
+2. Inside `./client-e2e/.env`, insert `HOST_IP=<YOUR_IP_HERE>` (you could find your local IP through `ifconfig` or similar)
+
+### Running tests
+
 Run the unit and integration tests using the following:
 
 ```sh
@@ -68,7 +78,7 @@ Run the end-to-end tests with the following
 
 ```sh
 # Run the tests. This would also start the selenium hub if it's not running yet.
-docker-compose up client-e2e
+docker-compose run --rm client-e2e
 
 # Once you're done working with the e2e tests, stop the containers running the selenium hub.
 docker-compose --profile e2e down
@@ -77,6 +87,9 @@ docker-compose --profile e2e down
 ### Debugging end-to-end tests
 
 See https://github.com/SeleniumHQ/docker-selenium#debugging
+And https://webdriver.io/docs/api/browser/debug/
+
+> If you run the WDIO testrunner make sure you increase the timeout property of the test framework you are using (e.g. Mocha or Jasmine) in order to prevent test termination due to a test timeout. Also avoid executing the command with multiple capabilities running at the same time.
 
 ## Codebase Architecture
 

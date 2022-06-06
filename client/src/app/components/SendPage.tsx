@@ -27,7 +27,13 @@ export default function SendPage({}: Props) {
     <div data-testid="send-page-container" className={styles.container}>
       {wormhole?.fileMeta ? (
         <div data-testid="send-page-code-section">
-          <h3>send this code: {wormhole.code}</h3>
+          <h3>ready to send</h3>
+          {wormhole.fileMeta.name}
+          <input
+            readOnly
+            type="text"
+            value={`${window.location.protocol}//${window.location.host}/#/${wormhole.code}`}
+          />
           <button data-testid="send-page-cancel-button" onClick={handleCancel}>
             Cancel
           </button>
