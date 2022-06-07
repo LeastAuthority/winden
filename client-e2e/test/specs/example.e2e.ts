@@ -74,4 +74,13 @@ describe("The application", () => {
   // it("1H", async () => {
   //   await testTransferSuccess("sizes/4.3GB");
   // });
+
+  it("2.B", async () => {
+    await Page.open();
+    await (await Page.receiveButton()).click();
+    const input = await Page.receiveCodeInput();
+    input.click();
+    await browser.keys(["7-gui rev "]);
+    await expect(input).toHaveValue("7-guitarist-revenge");
+  });
 });

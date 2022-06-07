@@ -17,3 +17,11 @@ export async function uploadFiles(...files: string[]) {
   );
   await $("input[type=file]").setValue(remoteFilePaths.join("\n"));
 }
+
+export function receiveButton() {
+  return $("span*=Receive");
+}
+
+export function receiveCodeInput() {
+  return $("input[data-testid=code-input]");
+}
