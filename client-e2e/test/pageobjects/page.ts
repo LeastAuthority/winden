@@ -1,5 +1,7 @@
+export const homePageUrl = `http://${process.env.HOST_IP}:8080`;
+
 export function open() {
-  return browser.url(`http://${process.env.HOST_IP}:8080`);
+  return browser.url(homePageUrl);
 }
 
 export async function uploadFiles(...files: string[]) {
@@ -24,4 +26,8 @@ export function receiveButton() {
 
 export function receiveCodeInput() {
   return $("input[data-testid=code-input]");
+}
+
+export function submitCodeButton() {
+  return $("span=Next");
 }

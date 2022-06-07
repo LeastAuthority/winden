@@ -1,5 +1,6 @@
 import * as path from "path";
 import * as Page from "../pageobjects/page";
+import { homePageUrl } from "../pageobjects/page";
 import { hashFile } from "../util/hashFile";
 import { waitForFileExists } from "../util/waitForFileExists";
 
@@ -67,13 +68,13 @@ describe("The application", () => {
     await testTransferSuccess("sizes/300MB", 60 * 1000 * 3); // 3 minute timeout
   });
 
-  // it("1G", async () => {
-  //   await testTransferSuccess("sizes/4.2GB");
-  // });
+  it.skip("1G", async () => {
+    await testTransferSuccess("sizes/4.2GB");
+  });
 
-  // it("1H", async () => {
-  //   await testTransferSuccess("sizes/4.3GB");
-  // });
+  it.skip("1H", async () => {
+    await testTransferSuccess("sizes/4.3GB");
+  });
 
   it("2.B", async () => {
     await Page.open();
@@ -94,6 +95,47 @@ describe("The application", () => {
     await content.click();
     await expect(content).toHaveTextContaining(
       "Please use a code with the number-word-word format."
+    );
+  });
+
+  it.skip("2.D", async () => {
+    await Page.open();
+    await (await Page.receiveButton()).click();
+    const input = await Page.receiveCodeInput();
+    await input.click();
+    await browser.keys(["7-guitarist-revenge"]);
+    await (await Page.submitCodeButton()).click();
+    await browser.waitUntil(
+      async () => (await $("body").getText()).includes("bad code error"),
+      {
+        timeout: 10000,
+        timeoutMsg: "expected bad code error",
+      }
+    );
+  });
+
+  it.skip("2.E", async () => {
+    await Page.open();
+    await Page.uploadFiles("/usr/src/app/test/files/hello-world.txt");
+    const receiveUrl = await (await $("input[readonly='']")).getValue();
+    const re = new RegExp(
+      `^http://${process.env.HOST_IP}:8080/#/(\\d+)-\\w+-\\w+$`
+    );
+    const nameplate = parseInt(receiveUrl.match(re)[1]);
+
+    const _receiveWindow = await browser.newWindow(homePageUrl);
+    await (await Page.receiveButton()).click();
+    const input = await Page.receiveCodeInput();
+    await input.click();
+    // very high change the 2 words are not guitarist-revenge
+    await browser.keys([`${nameplate}-guitarist-revenge`]);
+    await (await Page.submitCodeButton()).click();
+    await browser.waitUntil(
+      async () => (await $("body").getText()).includes("bad code error"),
+      {
+        timeout: 10000,
+        timeoutMsg: "expected bad code error",
+      }
     );
   });
 });
