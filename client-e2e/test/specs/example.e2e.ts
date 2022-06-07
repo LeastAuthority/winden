@@ -79,8 +79,21 @@ describe("The application", () => {
     await Page.open();
     await (await Page.receiveButton()).click();
     const input = await Page.receiveCodeInput();
-    input.click();
+    await input.click();
     await browser.keys(["7-gui rev "]);
     await expect(input).toHaveValue("7-guitarist-revenge");
+  });
+
+  it("2.C", async () => {
+    await Page.open();
+    await (await Page.receiveButton()).click();
+    const input = await Page.receiveCodeInput();
+    await input.click();
+    await browser.keys(["revenge-guitarist-7"]);
+    const content = await $("main");
+    await content.click();
+    await expect(content).toHaveTextContaining(
+      "Please use a code with the number-word-word format."
+    );
   });
 });
