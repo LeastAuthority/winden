@@ -1,4 +1,5 @@
-import React, { useCallback } from "react";
+import { Modal, Text } from "@mantine/core";
+import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useWormhole } from "../hooks/useWormhole";
 import Button from "./Button";
@@ -6,16 +7,28 @@ import styles from "./SendPage.module.css";
 
 type Props = {};
 
+const enum ModalState {
+  NONE,
+  FILE_TOO_LARGE,
+  UPLOAD_FAILED,
+}
+
 export default function SendPage({}: Props) {
   const wormhole = useWormhole();
+  const [modalState, setModalState] = useState<ModalState>(ModalState.NONE);
 
   function handleCancel() {
     // TODO
   }
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    if (acceptedFiles[0]) {
+    const file = acceptedFiles[0];
+    if (file && file.size <= 200 * 1000 * 1000) {
       wormhole?.sendFile(acceptedFiles[0]);
+    } else if (file) {
+      setModalState(ModalState.FILE_TOO_LARGE);
+    } else {
+      setModalState(ModalState.UNKNOWN_FILE);
     }
   }, []);
   const { getRootProps, getInputProps, open } = useDropzone({
@@ -25,6 +38,25 @@ export default function SendPage({}: Props) {
 
   return (
     <div data-testid="send-page-container" className={styles.container}>
+      <Modal
+        centered
+        opened={modalState === ModalState.FILE_TOO_LARGE}
+        onClose={() => setModalState(ModalState.NONE)}
+        title="Large file sizes: coming soon"
+      >
+        <Text>
+          In this development state, this product only supports file sizes of up
+          to 200 MB. Please select a smaller file.
+        </Text>
+      </Modal>
+      <Modal
+        centered
+        opened={modalState === ModalState.UPLOAD_FAILED}
+        onClose={() => setModalState(ModalState.NONE)}
+        title="Error"
+      >
+        <Text>Failed to upload file.</Text>
+      </Modal>
       {wormhole?.fileMeta ? (
         <div data-testid="send-page-code-section">
           <h3>ready to send</h3>

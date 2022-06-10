@@ -27,6 +27,20 @@ async function testTransferSuccess(fileName: string, timeout?: number) {
   await expect(originalHash).toBe(receivedHash);
 }
 
+async function testTransferFailure(fileName: string, timeout?: number) {
+  const originalFilePath = path.join("/usr/src/app/test/files/", fileName);
+  const receivedFilePath = path.join(
+    global.downloadDir,
+    path.basename(fileName)
+  );
+
+  await Page.open();
+  const _sendWindow = await browser.getWindowHandle();
+  await Page.uploadFiles(originalFilePath);
+  const content = await $("body");
+  await expect(content).toHaveTextContaining("Large file sizes: coming soon");
+}
+
 async function testTimeoutSuccess(timeoutMs: number) {
   const originalFilePath = `/usr/src/app/test/files/hello-world.txt`;
   const receivedFilePath = path.join(global.downloadDir, "hello-world.txt");
@@ -91,15 +105,15 @@ describe("The application", () => {
   });
 
   it("1F", async () => {
-    await testTransferSuccess("sizes/300MB", 60 * 1000 * 3); // 3 minute timeout
+    await testTransferFailure("sizes/300MB");
   });
 
-  it.skip("1G", async () => {
-    await testTransferSuccess("sizes/4.2GB");
+  it("1G", async () => {
+    await testTransferFailure("sizes/4.2GB");
   });
 
-  it.skip("1H", async () => {
-    await testTransferSuccess("sizes/4.3GB");
+  it("1H", async () => {
+    await testTransferFailure("sizes/4.3GB");
   });
 
   it("2.B", async () => {

@@ -4,6 +4,9 @@
     "jsx": "react",
     "sourceMap": true,
     "strict": true,
+    "paths": {
+      "@ionic/vue": ["./src/app/types/ionic.d.ts"]
+    },
     "plugins": [{ "name": "typescript-plugin-css-modules" }]
   }
 }
