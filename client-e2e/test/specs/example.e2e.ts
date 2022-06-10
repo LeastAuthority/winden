@@ -173,7 +173,7 @@ describe("The application", () => {
     await testTimeoutSuccess(20 * 60 * 1000);
   });
 
-  it.skip("3.C", async () => {
-    await testTimeoutSuccess(2 * 60 * 60 * 1000);
-  });
+  // it.skip("3.C", async () => {
+  //   await testTimeoutSuccess(2 * 60 * 60 * 1000);
+  // });
 });
