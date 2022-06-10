@@ -5,8 +5,11 @@ import { hashFile } from "../util/hashFile";
 import { waitForFileExists } from "../util/waitForFileExists";
 
 async function testTransferSuccess(fileName: string, timeout?: number) {
-  const originalFilePath = `/usr/src/app/test/files/${fileName}`;
-  const receivedFilePath = path.join(global.downloadDir, fileName);
+  const originalFilePath = path.join("/usr/src/app/test/files/", fileName);
+  const receivedFilePath = path.join(
+    global.downloadDir,
+    path.basename(fileName)
+  );
 
   await Page.open();
   const _sendWindow = await browser.getWindowHandle();
@@ -21,7 +24,30 @@ async function testTransferSuccess(fileName: string, timeout?: number) {
   );
   const originalHash = await hashFile(originalFilePath);
   const receivedHash = await hashFile(receivedFilePath);
-  expect(originalHash).toBe(receivedHash);
+  await expect(originalHash).toBe(receivedHash);
+}
+
+async function testTimeoutSuccess(timeoutMs: number) {
+  const originalFilePath = `/usr/src/app/test/files/hello-world.txt`;
+  const receivedFilePath = path.join(global.downloadDir, "hello-world.txt");
+
+  await Page.open();
+  const _sendWindow = await browser.getWindowHandle();
+  await Page.uploadFiles(originalFilePath);
+  const input = await $("input[readonly='']");
+  const codeUrl = await input.getValue();
+  const _receiveWindow = await browser.newWindow(codeUrl);
+  await browser.waitUntil(() => $("button").isExisting());
+
+  await browser.pause(timeoutMs);
+
+  await (await $("button")).click();
+  await browser.call(
+    () => waitForFileExists(receivedFilePath, 10000) // 10 seconds
+  );
+  const originalHash = await hashFile(originalFilePath);
+  const receivedHash = await hashFile(receivedFilePath);
+  await expect(originalHash).toBe(receivedHash);
 }
 
 describe("The application", () => {
@@ -137,5 +163,17 @@ describe("The application", () => {
         timeoutMsg: "expected bad code error",
       }
     );
+  });
+
+  it.skip("3.A", async () => {
+    await testTimeoutSuccess(5 * 60 * 1000);
+  });
+
+  it.skip("3.B", async () => {
+    await testTimeoutSuccess(20 * 60 * 1000);
+  });
+
+  it.skip("3.C", async () => {
+    await testTimeoutSuccess(2 * 60 * 60 * 1000);
   });
 });

@@ -278,10 +278,11 @@ export default class ClientWorker implements ClientInterface {
         .catch(reject);
     });
 
-    // NOTE: self hosted mitm doesn't seem to work in non-localhost http connections
-    if (window.location.protocol !== "http:") {
-      streamSaver.mitm = `${window.location.protocol}//${window.location.host}/mitm.html`;
-    }
+    // NOTE NOTE: mitm doesn't seem to be used when @ionic/vue is imported
+    // // NOTE: self hosted mitm doesn't seem to work in non-localhost http connections
+    // if (window.location.protocol !== "http:") {
+    //   streamSaver.mitm = `${window.location.protocol}//${window.location.host}/mitm.html`;
+    // }
 
     const writer = streamSaver
       .createWriteStream(name, {
