@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useEffect, useRef, useState } from "react";
+import React, { PropsWithChildren, useRef, useState } from "react";
 import { detectErrorType } from "../util/detectErrorType";
 import { durationToClosesUnit } from "../util/durationToClosestUnit";
 import ClientWorker from "../wormhole/client_worker";
@@ -13,90 +13,49 @@ const MB = 1000 ** 2;
 const MAX_FILE_SIZE_BYTES = MB * MAX_FILE_SIZE_MB;
 const updateProgressETAFrequency = 10;
 
+const defaultConfig: ClientConfig = {
+  rendezvousURL: `ws://${window.location.hostname}:4000/v1`,
+  // process.env["VUE_APP_STAGE_MAILBOX_URL"] || "ws://localhost:4000/v1",
+  transitRelayURL: `ws://${window.location.hostname}:4002`,
+  // process.env["VUE_APP_STAGE_RELAY_URL"] || "ws://localhost:4002",
+  passPhraseComponentLength: 2,
+};
+
 const enum SendFileError {
-  CLIENT_NOT_INITIALIZED,
   FILE_TOO_LARGE,
 }
 
-const enum SaveFileError {
-  CLIENT_NOT_INITIALIZED,
-}
+const enum SaveFileError {}
 
 type Props = PropsWithChildren<{}>;
 
-export const WormholeContext = React.createContext<{
-  code: string;
-  fileMeta: Record<string, any> | null;
-  progressETA: string;
-  saveFile: (code: string) => Promise<TransferProgress> | SaveFileError;
-  sendFile: (
-    file: File,
-    opts?: TransferOptions
-  ) => Promise<TransferProgress | SendFileError>;
-} | null>(null);
+class Transfer {
+  private client = new ClientWorker(defaultConfig);
+  private progressBegin = 0;
+  private progressCounter = 0;
 
-export function WormholeProvider(props: Props) {
-  const defaultConfig: ClientConfig = {
-    rendezvousURL: `ws://${window.location.hostname}:4000/v1`,
-    // process.env["VUE_APP_STAGE_MAILBOX_URL"] || "ws://localhost:4000/v1",
-    transitRelayURL: `ws://${window.location.hostname}:4002`,
-    // process.env["VUE_APP_STAGE_RELAY_URL"] || "ws://localhost:4002",
-    passPhraseComponentLength: 2,
-  };
-  const client = useRef<ClientWorker | null>(null);
+  private onUpload: (file: Record<string, any>, code?: string) => void;
+  private onEta: (eta: number) => void;
 
-  // NOTE: this might just be hardcoded actually.
-  // in the original code, newClient is called only once. also, in development environment there's seemingly dead code that dispatches setConfig.
-  // so AFAIK this could be removed.
-  const [config, setConfig] = useState(defaultConfig);
-  const [progress, setProgress] = useState(-1);
-  const [progressCounter, setProgressCounter] = useState(0);
-  const [progressBegin, setProgressBegin] = useState(0);
-  const [progressETASeconds, setProgressETASeconds] = useState(0);
-
-  const progressETA =
-    progress >= 1 ? "" : durationToClosesUnit(progressETASeconds);
-
-  // NOTE: maybe code and filemeta can be combined values in a state machine.
-  // seems like these values are only non null when a user uploaded a file for transfer.
-  // but receiving also sets file meta, but it has a bit of extra details too.
-  // maybe i could separate their types.
-  const [code, setCode] = useState("");
-  const [fileMeta, setFileMeta] = useState<Record<string, any> | null>(null);
-  const [progressTimeoutCancel, setProgressTimeoutCancel] =
-    useState<Function | null>(null);
-  const [progressHung, setProgressHung] = useState(false);
-
-  useEffect(() => {
-    client.current = new ClientWorker(defaultConfig);
-  }, [config]);
-
-  function updateProgress(sentRatio: number): void {
-    if (progressBegin === 0) {
-      setProgressBegin(Date.now());
-    }
-
-    setProgress(sentRatio);
-    setProgressCounter(progressCounter + 1);
+  constructor(
+    onUpload: (file: Record<string, any>, code?: string) => void,
+    onEta: (eta: number) => void
+  ) {
+    this.onUpload = onUpload;
+    this.onEta = onEta;
   }
 
-  async function sendFile(
+  public async sendFile(
     file: File,
     opts?: TransferOptions
   ): Promise<TransferProgress | SendFileError> {
-    if (!client.current) {
-      console.error("Not initialized");
-      return SendFileError.CLIENT_NOT_INITIALIZED;
-    }
-
     if (opts?.size && opts?.size > MAX_FILE_SIZE_BYTES) {
       console.error("File too large");
       return SendFileError.FILE_TOO_LARGE;
     }
 
     const progressFunc = (sentBytes: number, totalBytes: number) => {
-      updateProgress(sentBytes / totalBytes);
-      updateProgressETA(sentBytes, totalBytes);
+      this.updateProgressETA(sentBytes, totalBytes);
     };
 
     if (typeof opts === "undefined") {
@@ -111,80 +70,110 @@ export function WormholeProvider(props: Props) {
       };
     }
 
-    const p = client.current.sendFile(file, opts);
+    const p = this.client.sendFile(file, opts);
     p.then(({ code, done }) => {
-      const { name, size } = file;
-      setCode(code || "");
-      setFileMeta({ name, size });
+      this.onUpload(file, code);
       return done;
     })
       .then(() => {
-        updateProgress(-1);
+        this.resetProgress();
       })
       .catch((error: string) => Promise.reject(detectErrorType(error)));
     return p;
   }
 
-  function saveFile(code: string): Promise<TransferProgress> | SaveFileError {
-    if (!client.current) {
-      console.error("Not initialized");
-      return SaveFileError.CLIENT_NOT_INITIALIZED;
-    }
+  public saveFile(code: string): Promise<TransferProgress> | SaveFileError {
     const opts = {
       progressFunc: (sentBytes: number, totalBytes: number) => {
-        // TODO: refactor
-        if (progressTimeoutCancel) {
-          progressTimeoutCancel();
-          setProgressHung(false);
-        }
-
-        updateProgress(sentBytes / totalBytes);
-        updateProgressETA(sentBytes, totalBytes);
-
-        // TODO: refactor
-        const timeoutID = window.setTimeout(() => {
-          setProgressHung(true);
-        }, 500);
-        const cancel = () => {
-          window.clearTimeout(timeoutID);
-        };
-        setProgressTimeoutCancel(cancel);
+        this.updateProgressETA(sentBytes, totalBytes);
       },
     };
 
-    const p = client.current.saveFile(code.toLowerCase(), opts);
-    p.then(({ name, size, accept, done }) => {
-      setFileMeta({ name, size, accept, done });
-      // TODO: refactor
-      return done;
+    const p = this.client.saveFile(code.toLowerCase(), opts);
+    p.then((file) => {
+      this.onUpload(file);
+      return file.done;
     })
       .then(() => {
-        updateProgress(-1);
+        this.resetProgress();
       })
       .catch((error: string) => {
-        alert("why");
+        console.error("Failed to receive file");
         Promise.reject(detectErrorType(error));
       });
     return p;
   }
 
-  function updateProgressETA(sentBytes: number, totalBytes: number) {
-    if (progressTimeoutCancel) {
-      progressTimeoutCancel();
+  private updateProgressETA(sentBytes: number, totalBytes: number) {
+    if (this.progressBegin === 0) {
+      this.progressBegin = Date.now();
     }
+    this.progressCounter += 1;
 
     const now = Date.now();
-    const secSinceBegin = (now - progressBegin) / 1000;
+    const secSinceBegin = (now - this.progressBegin) / 1000;
     const bytesPerSecond = sentBytes / secSinceBegin;
     const bytesRemaining = totalBytes - sentBytes;
-    if (progressCounter % updateProgressETAFrequency === 0) {
-      setProgressETASeconds(Math.ceil(bytesRemaining / bytesPerSecond));
+    if (this.progressCounter % updateProgressETAFrequency === 0) {
+      this.onEta(Math.ceil(bytesRemaining / bytesPerSecond));
     }
+  }
+
+  private resetProgress() {
+    this.progressBegin = 0;
+    this.progressCounter = 0;
+    this.onEta(0);
+  }
+}
+
+export const WormholeContext = React.createContext<{
+  code?: string;
+  fileMeta: Record<string, any> | null;
+  progressEta: string;
+  saveFile: (code: string) => Promise<TransferProgress> | SaveFileError;
+  sendFile: (
+    file: File,
+    opts?: TransferOptions
+  ) => Promise<TransferProgress | SendFileError>;
+} | null>(null);
+
+export function WormholeProvider(props: Props) {
+  const [fileMeta, setFileMeta] = useState<Record<string, any> | null>(null);
+  const [code, setCode] = useState<string | undefined>();
+  const [progressEta, setProgressEta] = useState(0);
+
+  const client = useRef<Transfer>(
+    new Transfer(
+      (file, code) => {
+        setFileMeta(file);
+        setCode(code);
+      },
+      (eta) => {
+        setProgressEta(eta);
+      }
+    )
+  );
+
+  function sendFile(
+    file: File,
+    opts?: TransferOptions
+  ): Promise<TransferProgress | SendFileError> {
+    return client.current.sendFile(file, opts);
+  }
+
+  function saveFile(code: string): Promise<TransferProgress> | SaveFileError {
+    return client.current.saveFile(code);
   }
 
   return (
     <WormholeContext.Provider
-      value={{ code, fileMeta, progressETA, saveFile, sendFile }}
+      value={{
+        code,
+        fileMeta,
+        progressEta: durationToClosesUnit(progressEta),
+        saveFile,
+        sendFile,
+      }}
     >
       {props.children}
     </WormholeContext.Provider>
