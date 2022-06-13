@@ -1,6 +1,7 @@
 import { Modal, Text } from "@mantine/core";
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { useCancelModal } from "../hooks/useCancelModal";
 import { useWormhole } from "../hooks/useWormhole";
 import Button from "./Button";
 import styles from "./SendPage.module.css";
@@ -16,6 +17,7 @@ const enum ModalState {
 export default function SendPage({}: Props) {
   const wormhole = useWormhole();
   const [modalState, setModalState] = useState<ModalState>(ModalState.NONE);
+  const [cancelModal, setCancelModal] = useCancelModal();
 
   function handleCancel() {
     // TODO
@@ -28,7 +30,7 @@ export default function SendPage({}: Props) {
     } else if (file) {
       setModalState(ModalState.FILE_TOO_LARGE);
     } else {
-      setModalState(ModalState.UNKNOWN_FILE);
+      setModalState(ModalState.UPLOAD_FAILED);
     }
   }, []);
   const { getRootProps, getInputProps, open } = useDropzone({
@@ -57,7 +59,21 @@ export default function SendPage({}: Props) {
       >
         <Text>Failed to upload file.</Text>
       </Modal>
-      {wormhole?.fileMeta ? (
+      <Modal
+        centered
+        opened={cancelModal}
+        onClose={() => setCancelModal(false)}
+        title="Transfer cancelled"
+      >
+        <Text>The transfer has been cancelled by the receiver.</Text>
+      </Modal>
+      {wormhole?.done ? (
+        <div>
+          Confetti emoji <button onClick={() => wormhole.reset()}>Okay</button>
+        </div>
+      ) : wormhole?.progressEta ? (
+        <div>PROGRESS: {wormhole.progressEta}</div>
+      ) : wormhole?.fileMeta ? (
         <div data-testid="send-page-code-section">
           <h3>ready to send</h3>
           {wormhole.fileMeta.name}
