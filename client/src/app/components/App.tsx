@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Link,
   Navigate,
@@ -7,8 +7,10 @@ import {
   useLocation,
   useParams,
 } from "react-router-dom";
+import { useError } from "../hooks/useError";
 import { useWormhole } from "../hooks/useWormhole";
 import { browserIsProbablySafari } from "../util/browserIsProbablySafari";
+import { detectErrorType } from "../util/errors";
 import styles from "./App.module.css";
 import Button from "./Button";
 import NotFoundPage from "./NotFoundPage";
@@ -21,6 +23,7 @@ function ValidateCodePage() {
   const wormhole = useWormhole();
   let params = useParams();
   let code = params.code?.match(/\d+/);
+  const error = useError();
 
   if (!code) {
     return <NotFoundPage />;
@@ -29,7 +32,9 @@ function ValidateCodePage() {
   useEffect(() => {
     // TODO: no timeout hack to wait for initiialize
     setTimeout(() => {
-      wormhole?.saveFile(params.code!);
+      wormhole?.saveFile(params.code!).catch((e) => {
+        error?.setError(detectErrorType(e));
+      });
     }, 2000);
   }, []);
 

@@ -2,7 +2,9 @@ import { Modal, Text } from "@mantine/core";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useCancelModal } from "../hooks/useCancelModal";
+import { useError } from "../hooks/useError";
 import { useWormhole } from "../hooks/useWormhole";
+import { detectErrorType } from "../util/errors";
 import { CodeInput } from "./CodeInput";
 
 type Props = {};
@@ -11,6 +13,12 @@ export default function ReceivePage({}: Props) {
   const wormhole = useWormhole();
   const [cancelModal, setCancelModal] = useCancelModal();
   const navigate = useNavigate();
+  const error = useError();
+
+  function handleCancel() {
+    navigate("/r", { replace: true });
+    window.location.reload();
+  }
 
   return wormhole?.done ? (
     <div>
@@ -25,7 +33,12 @@ export default function ReceivePage({}: Props) {
       </button>
     </div>
   ) : wormhole?.progressEta ? (
-    <div>PROGRESS: {wormhole.progressEta}</div>
+    <div>
+      <div>PROGRESS: {wormhole.progressEta}</div>
+      <button data-testid="send-page-cancel-button" onClick={handleCancel}>
+        Cancel
+      </button>
+    </div>
   ) : wormhole?.fileMeta ? (
     <div>
       <div>{wormhole.progressEta}</div>
@@ -34,10 +47,24 @@ export default function ReceivePage({}: Props) {
         {wormhole.fileMeta.size} bytes.
       </div>
       <div>
-        <button onClick={() => wormhole.fileMeta?.accept()}>
+        <button
+          onClick={() =>
+            wormhole.fileMeta?.accept().catch((e: any) => {
+              if (e.includes("unexpected EOF")) {
+                navigate("/r?cancel=", { replace: true });
+                window.location.reload();
+              } else {
+                error?.setError(detectErrorType(e));
+              }
+            })
+          }
+        >
           Accept and download
         </button>
       </div>
+      <button data-testid="send-page-cancel-button" onClick={handleCancel}>
+        Cancel
+      </button>
     </div>
   ) : (
     <div data-testid="receive-page-container">
@@ -51,7 +78,13 @@ export default function ReceivePage({}: Props) {
       </Modal>
       <h2>Receive files in real-time</h2>
       <h3>Always end-to-end encrypted.</h3>
-      <CodeInput onSubmit={(code) => wormhole?.saveFile(code)} />
+      <CodeInput
+        onSubmit={(code) =>
+          wormhole?.saveFile(code).catch((e) => {
+            error?.setError(detectErrorType(e));
+          })
+        }
+      />
     </div>
   );
 }

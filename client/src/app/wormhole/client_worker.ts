@@ -151,11 +151,12 @@ export default class ClientWorker implements ClientInterface {
     resolve();
   }
 
-  private _handleSendFileResultError({ id, error }: RPCMessage): void {
-    const {
-      result: { reject },
-    } = this.pending[id];
-    reject(error);
+  private async _handleSendFileResultError({
+    id,
+    error,
+  }: RPCMessage): Promise<void> {
+    window.history.pushState({}, "", "/#/s?cancel=");
+    window.location.reload();
   }
 
   private _handleFileProgress({ id, sentBytes, totalBytes }: RPCMessage): void {

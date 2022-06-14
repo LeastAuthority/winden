@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useRef, useState } from "react";
-import { detectErrorType } from "../util/detectErrorType";
+import { detectErrorType } from "../util/errors";
 import { durationToClosesUnit } from "../util/durationToClosestUnit";
 import ClientWorker from "../wormhole/client_worker";
 import {
@@ -7,6 +7,7 @@ import {
   TransferOptions,
   TransferProgress,
 } from "../wormhole/types";
+import { useError } from "../hooks/useError";
 
 const MAX_FILE_SIZE_MB = 200;
 const MB = 1000 ** 2;
@@ -20,12 +21,6 @@ const defaultConfig: ClientConfig = {
   // process.env["VUE_APP_STAGE_RELAY_URL"] || "ws://localhost:4002",
   passPhraseComponentLength: 2,
 };
-
-const enum SendFileError {
-  FILE_TOO_LARGE,
-}
-
-const enum SaveFileError {}
 
 type Props = PropsWithChildren<{}>;
 
@@ -51,12 +46,7 @@ class Transfer {
   public async sendFile(
     file: File,
     opts?: TransferOptions
-  ): Promise<TransferProgress | SendFileError> {
-    if (opts?.size && opts?.size > MAX_FILE_SIZE_BYTES) {
-      console.error("File too large");
-      return SendFileError.FILE_TOO_LARGE;
-    }
-
+  ): Promise<TransferProgress> {
     const progressFunc = (sentBytes: number, totalBytes: number) => {
       this.updateProgressETA(sentBytes, totalBytes);
     };
@@ -77,16 +67,15 @@ class Transfer {
     p.then(({ code, done }) => {
       this.onUpload(file, code);
       return done;
-    })
-      .then(() => {
-        this.resetProgress();
-        this.onDone();
-      })
-      .catch((error: string) => Promise.reject(detectErrorType(error)));
+    }).then(() => {
+      this.resetProgress();
+      this.onDone();
+    });
+
     return p;
   }
 
-  public saveFile(code: string): Promise<TransferProgress> | SaveFileError {
+  public saveFile(code: string): Promise<TransferProgress> {
     const opts = {
       progressFunc: (sentBytes: number, totalBytes: number) => {
         this.updateProgressETA(sentBytes, totalBytes);
@@ -97,15 +86,11 @@ class Transfer {
     p.then((file) => {
       this.onUpload(file);
       return file.done;
-    })
-      .then(() => {
-        this.resetProgress();
-        this.onDone();
-      })
-      .catch((error: string) => {
-        console.error("Failed to receive file");
-        Promise.reject(detectErrorType(error));
-      });
+    }).then(() => {
+      this.resetProgress();
+      this.onDone();
+    });
+
     return p;
   }
 
@@ -135,11 +120,11 @@ export const WormholeContext = React.createContext<{
   code?: string;
   fileMeta: Record<string, any> | null;
   progressEta: string | null;
-  saveFile: (code: string) => Promise<TransferProgress> | SaveFileError;
+  saveFile: (code: string) => Promise<TransferProgress | void>;
   sendFile: (
     file: File,
     opts?: TransferOptions
-  ) => Promise<TransferProgress | SendFileError>;
+  ) => Promise<TransferProgress | void>;
   done: boolean;
   reset: () => void;
 } | null>(null);
@@ -149,6 +134,7 @@ export function WormholeProvider(props: Props) {
   const [code, setCode] = useState<string | undefined>();
   const [progressEta, setProgressEta] = useState<number | null>(null);
   const [done, setDone] = useState(false);
+  const error = useError();
 
   const client = useRef<Transfer>(
     new Transfer(
@@ -165,15 +151,19 @@ export function WormholeProvider(props: Props) {
     )
   );
 
-  function sendFile(
+  async function sendFile(
     file: File,
     opts?: TransferOptions
-  ): Promise<TransferProgress | SendFileError> {
-    return client.current.sendFile(file, opts);
+  ): Promise<TransferProgress | void> {
+    return client.current.sendFile(file, opts).catch((e: any) => {
+      error?.setError(detectErrorType(e));
+    });
   }
 
-  function saveFile(code: string): Promise<TransferProgress> | SaveFileError {
-    return client.current.saveFile(code);
+  async function saveFile(code: string): Promise<TransferProgress | void> {
+    return client.current.saveFile(code).catch((e: any) => {
+      error?.setError(detectErrorType(e));
+    });
   }
 
   function reset() {
