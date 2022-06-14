@@ -10,7 +10,7 @@ type Props = React.PropsWithChildren<{}>;
 
 export function ErrorProvider(props: Props) {
   const [error, setError] = useState<ErrorTypes | null>(null);
-  const errorText = error ? errorContent(error) : null;
+  const errorText = error !== null ? errorContent(error) : null;
 
   useEffect(() => {
     console.log(error);
@@ -20,7 +20,7 @@ export function ErrorProvider(props: Props) {
     <ErrorContext.Provider value={{ setError }}>
       {props.children}
       <Modal
-        opened={!!error}
+        opened={error !== null}
         onClose={() => {
           setError(null);
         }}

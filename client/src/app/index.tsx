@@ -9,13 +9,13 @@ import { ErrorProvider } from "./components/ErrorProvider";
 import { WormholeProvider } from "./components/WormholeProvider";
 
 ReactDOM.render(
-  <WormholeProvider>
-    <ErrorProvider>
+  <ErrorProvider>
+    <WormholeProvider>
       <HashRouter>
         <Background />
         <App />
       </HashRouter>
-    </ErrorProvider>
-  </WormholeProvider>,
+    </WormholeProvider>
+  </ErrorProvider>,
   document.querySelector("#app")
 );
