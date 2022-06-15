@@ -85,7 +85,7 @@ export default function SendPage({}: Props) {
         </div>
       ) : wormhole?.fileMeta ? (
         <div data-testid="send-page-code-section">
-          <h3>ready to send</h3>
+          <h3>Ready to send!</h3>
           {wormhole.fileMeta.name}
           <input
             readOnly

@@ -116,6 +116,14 @@ describe("The application", () => {
     await testTransferFailure("sizes/4.3GB");
   });
 
+  it("1I", async () => {
+    await Page.open();
+    await Page.uploadFiles("/usr/src/app/test/files/hello-world.txt");
+    await (await $("button*=Cancel")).click();
+    await Page.uploadFiles("/usr/src/app/test/files/hello-world.txt");
+    await expect(await $("main")).toHaveTextContaining("Ready to send!");
+  });
+
   it("2.B", async () => {
     await Page.open();
     await (await Page.receiveButton()).click();
