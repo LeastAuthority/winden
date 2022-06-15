@@ -190,4 +190,84 @@ describe("The application", () => {
   // it.skip("3.C", async () => {
   //   await testTimeoutSuccess(2 * 60 * 60 * 1000);
   // });
+
+  describe("Receiver cancellation workaround", () => {
+    describe("cancelling during transfer", () => {
+      it("Sends the receiver and sender back. The sender gets an error message", async () => {
+        await Page.open();
+        const sendWindow = await browser.getWindowHandle();
+        await Page.uploadFiles("/usr/src/app/test/files/sizes/20MB");
+        const input = await $("input[readonly='']");
+        const codeUrl = await input.getValue();
+        const _receiveWindow = await browser.newWindow(codeUrl);
+        await browser.waitUntil(() => $("button").isExisting());
+        await (await $("button")).click();
+
+        await (await $("button*=Cancel")).click();
+        await expect(await $("main")).toHaveTextContaining(
+          "Receive files in real-time"
+        );
+        browser.switchToWindow(sendWindow);
+        await expect(await $("body")).toHaveTextContaining(
+          "The transfer has been cancelled"
+        );
+      });
+    });
+
+    describe("cancelling before transfer", () => {
+      it("sends the receiver back", async () => {
+        await Page.open();
+        const _sendWindow = await browser.getWindowHandle();
+        await Page.uploadFiles("/usr/src/app/test/files/sizes/20MB");
+        const input = await $("input[readonly='']");
+        const codeUrl = await input.getValue();
+        const _receiveWindow = await browser.newWindow(codeUrl);
+        await (await $("button*=Cancel")).click();
+        await expect(await $("main")).toHaveTextContaining(
+          "Receive files in real-time"
+        );
+      });
+    });
+  });
+
+  describe("Sender cancellation workaround", () => {
+    describe("cancelling during transfer", () => {
+      it("Sends the receiver and sender back. The receiver gets an error message", async () => {
+        await Page.open();
+        const sendWindow = await browser.getWindowHandle();
+        await Page.uploadFiles("/usr/src/app/test/files/sizes/20MB");
+        const input = await $("input[readonly='']");
+        const codeUrl = await input.getValue();
+        const receiveWindow = await browser.newWindow(codeUrl);
+        await browser.waitUntil(() => $("button").isExisting());
+        await (await $("button")).click();
+
+        browser.switchToWindow(sendWindow);
+        await (await $("button*=Cancel")).click();
+        await expect(await $("main")).toHaveTextContaining(
+          "Send files in real-time"
+        );
+        browser.switchToWindow(receiveWindow);
+        await expect(await $("body")).toHaveTextContaining(
+          "The transfer has been cancelled"
+        );
+      });
+    });
+
+    describe("cancelling before transfer", () => {
+      it.only("sends the sender back", async () => {
+        await Page.open();
+        const sendWindow = await browser.getWindowHandle();
+        await Page.uploadFiles("/usr/src/app/test/files/sizes/20MB");
+        const input = await $("input[readonly='']");
+        const codeUrl = await input.getValue();
+        const _receiveWindow = await browser.newWindow(codeUrl);
+        browser.switchToWindow(sendWindow);
+        await (await $("button*=Cancel")).click();
+        await expect(await $("main")).toHaveTextContaining(
+          "Send files in real-time"
+        );
+      });
+    });
+  });
 });
