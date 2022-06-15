@@ -162,7 +162,7 @@ describe("The application", () => {
     );
   });
 
-  it.skip("2.E", async () => {
+  it("2.E", async () => {
     await Page.open();
     await Page.uploadFiles("/usr/src/app/test/files/hello-world.txt");
     const receiveUrl = await (await $("input[readonly='']")).getValue();
@@ -179,7 +179,12 @@ describe("The application", () => {
     await browser.keys([`${nameplate}-guitarist-revenge`]);
     await (await Page.submitCodeButton()).click();
     await browser.waitUntil(
-      async () => (await $("body").getText()).includes("bad code error"),
+      async () =>
+        (
+          await $("body").getText()
+        ).includes(
+          "Either the sender is no longer connected, or the code was already used."
+        ),
       {
         timeout: 10000,
         timeoutMsg: "expected bad code error",

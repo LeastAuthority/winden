@@ -47,10 +47,10 @@ export function errorContent(type: ErrorTypes): {
     }
     case ErrorTypes.BAD_CODE: {
       return {
-        title: "",
+        title: "Oops...",
         description: [
-          "If you’re sure this is the right code: Either the sender is no longer connected, or the code was already used." +
-            "Please ask the sender for a new code and for them to stay connected until you get the file.",
+          "If you’re sure this is the right code: Either the sender is no longer connected, or the code was already used.",
+          "Please ask the sender for a new code and for them to stay connected until you get the file.",
         ],
       };
     }
