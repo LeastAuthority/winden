@@ -191,6 +191,20 @@ describe("The application", () => {
   //   await testTimeoutSuccess(2 * 60 * 60 * 1000);
   // });
 
+  it("5.A", async () => {
+    await Page.open();
+    const sendWindow = await browser.getWindowHandle();
+    await Page.uploadFiles("/usr/src/app/test/files/sizes/20MB");
+    const input = await $("input[readonly='']");
+    const codeUrl = await input.getValue();
+
+    await (await $("button*=Cancel")).click();
+
+    const _receiveWindow = await browser.newWindow(codeUrl);
+    await browser.pause(30000);
+    await expect(await $("button")).not.toBeExisting();
+  });
+
   describe("Receiver cancellation workaround", () => {
     describe("cancelling during transfer", () => {
       it("Sends the receiver and sender back. The sender gets an error message", async () => {
@@ -255,7 +269,7 @@ describe("The application", () => {
     });
 
     describe("cancelling before transfer", () => {
-      it.only("sends the sender back", async () => {
+      it("sends the sender back", async () => {
         await Page.open();
         const sendWindow = await browser.getWindowHandle();
         await Page.uploadFiles("/usr/src/app/test/files/sizes/20MB");
