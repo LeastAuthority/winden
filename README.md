@@ -4,7 +4,9 @@ Transfer is a graphical interface for doing file transfer via the Magic Wormhole
 
 ## Status
 
-This web app is in 'alpha' state, and **not ready for production use**.
+Refactoring original code: https://github.com/LeastAuthority/Transfer and switching to ReactJS.
+Core repository is currently in ***evaluation stage***.
+The web app is in 'alpha' state, and **not ready for production use**.
 
 ## Development Setup
 
