@@ -1,4 +1,5 @@
 import type { Options } from "@wdio/types";
+import { execSync } from "child_process";
 import * as fs from "fs";
 import * as fsExtra from "fs-extra";
 
@@ -29,6 +30,12 @@ export const config: Options.Testrunner = {
     },
     {
       browserName: "firefox",
+      "moz:firefoxOptions": {
+        prefs: {
+          "browser.download.dir": global.downloadDir,
+          "browser.download.folderList": 2,
+        },
+      },
     },
     {
       browserName: "MicrosoftEdge",
@@ -48,8 +55,9 @@ export const config: Options.Testrunner = {
   },
   onPrepare: function (_config, _capabilities) {
     fs.chownSync(global.downloadDir, 1200, 1201);
+    execSync("/usr/src/app/scripts/generate-sized-test-files.sh");
   },
-  onComplete: function () {
+  beforeTest: function () {
     fsExtra.emptyDirSync(global.downloadDir);
   },
 };
