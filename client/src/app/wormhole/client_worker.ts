@@ -151,11 +151,12 @@ export default class ClientWorker implements ClientInterface {
     resolve();
   }
 
-  private _handleSendFileResultError({ id, error }: RPCMessage): void {
-    const {
-      result: { reject },
-    } = this.pending[id];
-    reject(error);
+  private async _handleSendFileResultError({
+    id,
+    error,
+  }: RPCMessage): Promise<void> {
+    window.history.pushState({}, "", "/#/s?cancel=");
+    window.location.reload();
   }
 
   private _handleFileProgress({ id, sentBytes, totalBytes }: RPCMessage): void {
@@ -278,7 +279,11 @@ export default class ClientWorker implements ClientInterface {
         .catch(reject);
     });
 
-    streamSaver.mitm = "http://localhost:8080/mitm.html";
+    // NOTE NOTE: mitm doesn't seem to be used when @ionic/vue is imported
+    // // NOTE: self hosted mitm doesn't seem to work in non-localhost http connections
+    // if (window.location.protocol !== "http:") {
+    //   streamSaver.mitm = `${window.location.protocol}//${window.location.host}/mitm.html`;
+    // }
 
     const writer = streamSaver
       .createWriteStream(name, {

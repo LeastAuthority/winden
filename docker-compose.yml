@@ -23,6 +23,10 @@ services:
       - relay
   # Selenium services
   chrome:
+    volumes:
+      - test-downloads:/tmp/test-downloads
+    ports:
+      - "5900:5900"
     image: selenium/node-chrome:4.1.3-20220405
     shm_size: 2gb
     depends_on:
@@ -31,9 +35,12 @@ services:
       - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_SESSION_TIMEOUT=1800
     profiles:
       - e2e
   edge:
+    ports:
+      - "5901:5900"
     image: selenium/node-edge:4.1.3-20220405
     shm_size: 2gb
     depends_on:
@@ -42,9 +49,12 @@ services:
       - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_SESSION_TIMEOUT=1800
     profiles:
       - e2e
   firefox:
+    ports:
+      - "5902:5900"
     image: selenium/node-firefox:4.1.3-20220405
     shm_size: 2gb
     depends_on:
@@ -53,6 +63,7 @@ services:
       - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_SESSION_TIMEOUT=1800
     profiles:
       - e2e
   selenium-hub:
@@ -72,8 +83,11 @@ services:
       - e2e
   client-e2e:
     build: ./client-e2e
+    env_file:
+      - ./client-e2e/.env
     volumes:
       - ./client-e2e:/usr/src/app
+      - test-downloads:/tmp/test-downloads
     depends_on:
       client:
         condition: service_started
@@ -87,3 +101,5 @@ services:
         condition: service_healthy
     profiles:
       - e2e
+volumes:
+  test-downloads:
