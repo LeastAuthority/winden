@@ -21,9 +21,11 @@ async function testTransferSuccess(fileName: string, timeout?: number) {
   await browser.call(() =>
     waitForFileExists(receivedFilePath, timeout || 60000)
   );
-  const originalHash = await hashFile(originalFilePath);
-  const receivedHash = await hashFile(receivedFilePath);
-  await expect(originalHash).toBe(receivedHash);
+  await browser.waitUntil(async () => {
+    const originalHash = await hashFile(originalFilePath);
+    const receivedHash = await hashFile(receivedFilePath);
+    return originalHash === receivedHash;
+  });
 }
 
 async function testTransferFailure(fileName: string, timeout?: number) {
@@ -78,8 +80,7 @@ describe("Send flow", () => {
   });
 
   describe("when uploading a file with the size of 20MB", () => {
-    // FIXME: firefox stops working if this test runs
-    it.skip("will transfer successfully", async () => {
+    it("will transfer successfully", async () => {
       await testTransferSuccess("sizes/20MB");
     });
   });
