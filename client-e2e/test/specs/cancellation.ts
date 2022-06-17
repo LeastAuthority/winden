@@ -19,7 +19,10 @@ describe("Cancellation", () => {
 
   describe("Receiver cancellation workaround", () => {
     describe("cancelling during transfer", () => {
-      it("Sends the receiver and sender back. The sender gets an error message", async () => {
+      it("Sends the receiver and sender back. The sender gets an error message", async function () {
+        // FIXME: flaky test that times out
+        this.retries(2);
+
         await Page.open();
         const sendWindow = await browser.getWindowHandle();
         await Page.uploadFiles("/usr/src/app/test/files/sizes/20MB");
@@ -45,7 +48,7 @@ describe("Cancellation", () => {
 
     describe("cancelling before transfer", () => {
       it("sends the receiver back", async function () {
-        // FIXME: flaky test on firefox
+        // FIXME: flaky test that times out
         this.retries(2);
 
         await Page.open();
@@ -65,7 +68,10 @@ describe("Cancellation", () => {
 
   describe("Sender cancellation workaround", () => {
     describe("cancelling during transfer", () => {
-      it("Sends the receiver and sender back. The receiver gets an error message", async () => {
+      it("Sends the receiver and sender back. The receiver gets an error message", async function () {
+        // FIXME: flaky test that times out
+        this.retries(2);
+
         await Page.open();
         const sendWindow = await browser.getWindowHandle();
         await Page.uploadFiles("/usr/src/app/test/files/sizes/20MB");
@@ -91,7 +97,10 @@ describe("Cancellation", () => {
     });
 
     describe("cancelling before transfer", () => {
-      it("sends the sender back", async () => {
+      it("sends the sender back", async function () {
+        // FIXME: flaky test that times out
+        this.retries(2);
+
         await Page.open();
         const sendWindow = await browser.getWindowHandle();
         await Page.uploadFiles("/usr/src/app/test/files/sizes/20MB");
