@@ -17,17 +17,17 @@ export const config: Options.Testrunner = {
   specs: ["./test/specs/**/*.ts"],
   maxInstances: 10,
   capabilities: [
-    // {
-    //   browserName: "chrome",
-    //   acceptInsecureCerts: true,
-    //   "goog:chromeOptions": {
-    //     prefs: {
-    //       directory_upgrade: true,
-    //       prompt_for_download: false,
-    //       "download.default_directory": global.downloadDir,
-    //     },
-    //   },
-    // },
+    {
+      browserName: "chrome",
+      acceptInsecureCerts: true,
+      "goog:chromeOptions": {
+        prefs: {
+          directory_upgrade: true,
+          prompt_for_download: false,
+          "download.default_directory": global.downloadDir,
+        },
+      },
+    },
     {
       browserName: "firefox",
       "moz:firefoxOptions": {
@@ -37,9 +37,16 @@ export const config: Options.Testrunner = {
         },
       },
     },
-    // {
-    //   browserName: "MicrosoftEdge",
-    // },
+    {
+      browserName: "MicrosoftEdge",
+      "ms:edgeOptions": {
+        prefs: {
+          directory_upgrade: true,
+          prompt_for_download: false,
+          "download.default_directory": global.downloadDir,
+        },
+      },
+    },
   ],
   logLevel: "info",
   bail: 0,
