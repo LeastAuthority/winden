@@ -3,6 +3,7 @@ const exec = require("child_process").exec;
 const gulp = require("gulp");
 const connect = require("gulp-connect");
 const webpack = require("webpack-stream");
+const Dotenv = require("dotenv-webpack");
 
 const webpackConfig = {
   mode: "development",
@@ -28,6 +29,7 @@ const webpackConfig = {
       },
     ],
   },
+  plugins: [new Dotenv()],
 };
 
 const javascript = () =>

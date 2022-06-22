@@ -15,10 +15,10 @@ const MAX_FILE_SIZE_BYTES = MB * MAX_FILE_SIZE_MB;
 const updateProgressETAFrequency = 10;
 
 const defaultConfig: ClientConfig = {
-  rendezvousURL: `ws://${window.location.hostname}:4000/v1`,
-  // process.env["VUE_APP_STAGE_MAILBOX_URL"] || "ws://localhost:4000/v1",
-  transitRelayURL: `ws://${window.location.hostname}:4002`,
-  // process.env["VUE_APP_STAGE_RELAY_URL"] || "ws://localhost:4002",
+  rendezvousURL:
+    process.env["MAILBOX_URL"] || `ws://${window.location.hostname}:4000/v1`,
+  transitRelayURL:
+    process.env["RELAY_URL"] || `ws://${window.location.hostname}:4002`,
   passPhraseComponentLength: 2,
 };
 
