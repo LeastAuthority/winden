@@ -1,13 +1,12 @@
 import React, { PropsWithChildren, useRef, useState } from "react";
+import { useError } from "../hooks/useError";
 import { detectErrorType } from "../util/errors";
-import { durationToClosesUnit } from "../util/durationToClosestUnit";
 import ClientWorker from "../wormhole/client_worker";
 import {
   ClientConfig,
   TransferOptions,
   TransferProgress,
 } from "../wormhole/types";
-import { useError } from "../hooks/useError";
 
 const MAX_FILE_SIZE_MB = 200;
 const MB = 1000 ** 2;
@@ -32,15 +31,18 @@ class Transfer {
   private onUpload: (file: Record<string, any>, code?: string) => void;
   private onEta: (eta: number | null) => void;
   private onDone: () => void;
+  private onBytes: (bytes: number) => void;
 
   constructor(
     onUpload: (file: Record<string, any>, code?: string) => void,
     onEta: (eta: number | null) => void,
-    onDone: () => void
+    onDone: () => void,
+    onBytes: (bytes: number) => void
   ) {
     this.onUpload = onUpload;
     this.onEta = onEta;
     this.onDone = onDone;
+    this.onBytes = onBytes;
   }
 
   public async sendFile(
@@ -48,6 +50,7 @@ class Transfer {
     opts?: TransferOptions
   ): Promise<TransferProgress> {
     const progressFunc = (sentBytes: number, totalBytes: number) => {
+      this.onBytes(sentBytes);
       this.updateProgressETA(sentBytes, totalBytes);
     };
 
@@ -78,6 +81,7 @@ class Transfer {
   public saveFile(code: string): Promise<TransferProgress> {
     const opts = {
       progressFunc: (sentBytes: number, totalBytes: number) => {
+        this.onBytes(sentBytes);
         this.updateProgressETA(sentBytes, totalBytes);
       },
     };
@@ -119,7 +123,7 @@ class Transfer {
 export const WormholeContext = React.createContext<{
   code?: string;
   fileMeta: Record<string, any> | null;
-  progressEta: string | null;
+  progressEta: number | null;
   saveFile: (code: string) => Promise<TransferProgress | void>;
   sendFile: (
     file: File,
@@ -127,6 +131,7 @@ export const WormholeContext = React.createContext<{
   ) => Promise<TransferProgress | void>;
   done: boolean;
   reset: () => void;
+  bytesSent: number;
 } | null>(null);
 
 export function WormholeProvider(props: Props) {
@@ -135,6 +140,7 @@ export function WormholeProvider(props: Props) {
   const [progressEta, setProgressEta] = useState<number | null>(null);
   const [done, setDone] = useState(false);
   const error = useError();
+  const [bytesSent, setBytesSent] = useState(0);
 
   const client = useRef<Transfer>(
     new Transfer(
@@ -147,6 +153,9 @@ export function WormholeProvider(props: Props) {
       },
       () => {
         setDone(true);
+      },
+      (bytes: number) => {
+        setBytesSent(bytes);
       }
     )
   );
@@ -178,11 +187,12 @@ export function WormholeProvider(props: Props) {
       value={{
         code,
         fileMeta,
-        progressEta: progressEta ? durationToClosesUnit(progressEta) : null,
+        progressEta: progressEta || null,
         saveFile,
         sendFile,
         done,
         reset,
+        bytesSent,
       }}
     >
       {props.children}

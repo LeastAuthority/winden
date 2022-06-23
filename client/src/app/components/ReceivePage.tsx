@@ -1,4 +1,4 @@
-import { Modal, Text } from "@mantine/core";
+import { Modal, Progress, Text } from "@mantine/core";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useCancelModal } from "../hooks/useCancelModal";
@@ -6,6 +6,7 @@ import { useError } from "../hooks/useError";
 import { useWormhole } from "../hooks/useWormhole";
 import { detectErrorType } from "../util/errors";
 import { CodeInput } from "./CodeInput";
+import { durationToClosestUnit } from "../util/durationToClosestUnit";
 
 type Props = {};
 
@@ -32,10 +33,18 @@ export default function ReceivePage({}: Props) {
         Okay
       </button>
     </div>
-  ) : wormhole?.progressEta ? (
+  ) : wormhole?.progressEta && wormhole?.fileMeta ? (
     <div>
-      <div>PROGRESS: {wormhole.progressEta}</div>
-      <button data-testid="send-page-cancel-button" onClick={handleCancel}>
+      <Progress
+        size="xl"
+        value={(wormhole.bytesSent / wormhole.fileMeta.size) * 100}
+      />
+      <div>
+        {wormhole.progressEta > 1
+          ? durationToClosestUnit(wormhole.progressEta)
+          : "Waiting for sender to complete transfer..."}
+      </div>
+      <button data-testid="receive-page-cancel-button" onClick={handleCancel}>
         Cancel
       </button>
     </div>
