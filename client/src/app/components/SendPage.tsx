@@ -2,16 +2,18 @@ import {
   ActionIcon,
   Box,
   Button,
+  Group,
   Modal,
   Progress,
   Stack,
   Text,
   Title,
 } from "@mantine/core";
+import { useClipboard } from "@mantine/hooks";
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useNavigate } from "react-router-dom";
-import { Send } from "tabler-icons-react";
+import { Files, Send } from "tabler-icons-react";
 import { useCancelModal } from "../hooks/useCancelModal";
 import { useWormhole } from "../hooks/useWormhole";
 import { durationToClosestUnit } from "../util/durationToClosestUnit";
@@ -32,6 +34,7 @@ export default function SendPage({}: Props) {
   const [modalState, setModalState] = useState<ModalState>(ModalState.NONE);
   const [cancelModal, setCancelModal] = useCancelModal();
   const navigate = useNavigate();
+  const clipboard = useClipboard({ timeout: 2000 });
 
   function handleCancel() {
     navigate("/s", { replace: true });
@@ -122,18 +125,47 @@ export default function SendPage({}: Props) {
           </button>
         </>
       ) : wormhole?.fileMeta ? (
-        <div data-testid="send-page-code-section">
-          <h3>Ready to send!</h3>
-          <FileLabel />
-          <input
-            readOnly
-            type="text"
-            value={`${window.location.protocol}//${window.location.host}/#/${wormhole.code}`}
-          />
-          <button data-testid="send-page-cancel-button" onClick={handleCancel}>
-            Cancel
-          </button>
-        </div>
+        <>
+          <Title order={1}>Ready to send!</Title>
+          <Stack align="center" data-testid="send-page-code-section">
+            <FileLabel />
+            <Text weight="bold" color="gray">
+              1. Keep this tab open
+            </Text>
+            <Text color="gray">Files are sent directly from your device.</Text>
+            <Text color="gray">
+              The link/code expires once you close the tab.
+            </Text>
+            <Text weight="bold" color="gray">
+              2. Give the receiver the link below
+            </Text>
+            <Group position="center">
+              <input
+                readOnly
+                type="text"
+                value={`${window.location.protocol}//${window.location.host}/#/${wormhole.code}`}
+              />
+              <Button
+                color={clipboard.copied ? "green" : "blue"}
+                disabled={clipboard.copied}
+                onClick={() =>
+                  clipboard.copy(
+                    `${window.location.protocol}//${window.location.host}/#/${wormhole.code}`
+                  )
+                }
+              >
+                <Files />
+                {clipboard.copied ? "Link copied!" : "Copy"}
+              </Button>
+            </Group>
+            <Button
+              data-testid="send-page-cancel-button"
+              onClick={handleCancel}
+            >
+              Cancel
+            </Button>
+          </Stack>
+        </>
       ) : (
         <div
           data-testid="send-page-upload-section"
