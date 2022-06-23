@@ -1,6 +1,16 @@
-import { Modal, Progress, Text, Title } from "@mantine/core";
+import {
+  ActionIcon,
+  Box,
+  Button,
+  Modal,
+  Progress,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { Download } from "tabler-icons-react";
 import { useCancelModal } from "../hooks/useCancelModal";
 import { useError } from "../hooks/useError";
 import { useWormhole } from "../hooks/useWormhole";
@@ -23,17 +33,30 @@ export default function ReceivePage({}: Props) {
   }
 
   return wormhole?.done ? (
-    <div>
-      Confetti emoji{" "}
-      <button
-        onClick={() => {
-          wormhole.reset();
-          navigate("/r", { replace: true });
-        }}
-      >
-        Okay
-      </button>
-    </div>
+    <>
+      <Title order={1}>Received!</Title>
+      <Stack align="center">
+        <FileLabel />
+        <Box
+          sx={(theme) => ({
+            fontSize: 60,
+          })}
+        >
+          🎉
+        </Box>
+        <Button
+          onClick={() => {
+            wormhole.reset();
+            navigate("/r", { replace: true });
+          }}
+        >
+          <ActionIcon>
+            <Download />
+          </ActionIcon>{" "}
+          Receive more
+        </Button>
+      </Stack>
+    </>
   ) : wormhole?.progressEta && wormhole?.fileMeta ? (
     <>
       <Title order={1}>Receiving...</Title>

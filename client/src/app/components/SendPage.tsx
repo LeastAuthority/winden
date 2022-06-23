@@ -1,11 +1,21 @@
-import { Modal, Progress, Text, Title } from "@mantine/core";
+import {
+  ActionIcon,
+  Box,
+  Button,
+  Modal,
+  Progress,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useNavigate } from "react-router-dom";
+import { Send } from "tabler-icons-react";
 import { useCancelModal } from "../hooks/useCancelModal";
 import { useWormhole } from "../hooks/useWormhole";
 import { durationToClosestUnit } from "../util/durationToClosestUnit";
-import Button from "./Button";
+// import Button from "./Button";
 import FileLabel from "./FileLabel";
 import styles from "./SendPage.module.css";
 
@@ -75,9 +85,25 @@ export default function SendPage({}: Props) {
         <Text>The transfer has been cancelled by the receiver.</Text>
       </Modal>
       {wormhole?.done ? (
-        <div>
-          Confetti emoji <button onClick={() => wormhole.reset()}>Okay</button>
-        </div>
+        <>
+          <Title order={1}>Sent!</Title>
+          <Stack align="center">
+            <FileLabel />
+            <Box
+              sx={(theme) => ({
+                fontSize: 60,
+              })}
+            >
+              🎉
+            </Box>
+            <Button onClick={() => wormhole.reset()}>
+              <ActionIcon>
+                <Send />
+              </ActionIcon>{" "}
+              Send more
+            </Button>
+          </Stack>
+        </>
       ) : wormhole?.progressEta && wormhole?.fileMeta ? (
         <>
           <Title order={1}>Sending...</Title>
