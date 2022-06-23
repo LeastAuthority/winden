@@ -1,12 +1,13 @@
-import { Modal, Progress, Text } from "@mantine/core";
+import { Modal, Progress, Text, Title } from "@mantine/core";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useCancelModal } from "../hooks/useCancelModal";
 import { useError } from "../hooks/useError";
 import { useWormhole } from "../hooks/useWormhole";
+import { durationToClosestUnit } from "../util/durationToClosestUnit";
 import { detectErrorType } from "../util/errors";
 import { CodeInput } from "./CodeInput";
-import { durationToClosestUnit } from "../util/durationToClosestUnit";
+import FileLabel from "./FileLabel";
 
 type Props = {};
 
@@ -34,7 +35,9 @@ export default function ReceivePage({}: Props) {
       </button>
     </div>
   ) : wormhole?.progressEta && wormhole?.fileMeta ? (
-    <div>
+    <>
+      <Title order={1}>Receiving...</Title>
+      <FileLabel />
       <Progress
         size="xl"
         value={(wormhole.bytesSent / wormhole.fileMeta.size) * 100}
@@ -47,14 +50,10 @@ export default function ReceivePage({}: Props) {
       <button data-testid="receive-page-cancel-button" onClick={handleCancel}>
         Cancel
       </button>
-    </div>
+    </>
   ) : wormhole?.fileMeta ? (
     <div>
-      <div>{wormhole.progressEta}</div>
-      <div>
-        You will download {wormhole.fileMeta.name} which has{" "}
-        {wormhole.fileMeta.size} bytes.
-      </div>
+      <FileLabel />
       <div>
         <button
           onClick={() =>

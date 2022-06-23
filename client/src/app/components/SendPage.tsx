@@ -1,4 +1,4 @@
-import { Modal, Progress, Text } from "@mantine/core";
+import { Modal, Progress, Text, Title } from "@mantine/core";
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,7 @@ import { useCancelModal } from "../hooks/useCancelModal";
 import { useWormhole } from "../hooks/useWormhole";
 import { durationToClosestUnit } from "../util/durationToClosestUnit";
 import Button from "./Button";
+import FileLabel from "./FileLabel";
 import styles from "./SendPage.module.css";
 
 type Props = {};
@@ -78,7 +79,9 @@ export default function SendPage({}: Props) {
           Confetti emoji <button onClick={() => wormhole.reset()}>Okay</button>
         </div>
       ) : wormhole?.progressEta && wormhole?.fileMeta ? (
-        <div>
+        <>
+          <Title order={1}>Sending...</Title>
+          <FileLabel />
           <Progress
             size="xl"
             value={(wormhole.bytesSent / wormhole.fileMeta.size) * 100}
@@ -91,11 +94,11 @@ export default function SendPage({}: Props) {
           <button data-testid="send-page-cancel-button" onClick={handleCancel}>
             Cancel
           </button>
-        </div>
+        </>
       ) : wormhole?.fileMeta ? (
         <div data-testid="send-page-code-section">
           <h3>Ready to send!</h3>
-          {wormhole.fileMeta.name}
+          <FileLabel />
           <input
             readOnly
             type="text"
