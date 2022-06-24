@@ -1,5 +1,4 @@
 import {
-  ActionIcon,
   Box,
   Button,
   Group,
@@ -13,7 +12,7 @@ import { useClipboard } from "@mantine/hooks";
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useNavigate } from "react-router-dom";
-import { Files, Send } from "tabler-icons-react";
+import { Files, Send, X } from "tabler-icons-react";
 import { useCancelModal } from "../hooks/useCancelModal";
 import { useWormhole } from "../hooks/useWormhole";
 import { durationToClosestUnit } from "../util/durationToClosestUnit";
@@ -100,10 +99,7 @@ export default function SendPage({}: Props) {
               🎉
             </Box>
             <Button onClick={() => wormhole.reset()}>
-              <ActionIcon>
-                <Send />
-              </ActionIcon>{" "}
-              Send more
+              <Send /> Send more
             </Button>
           </Stack>
         </>
@@ -120,9 +116,9 @@ export default function SendPage({}: Props) {
               ? durationToClosestUnit(wormhole.progressEta)
               : "Waiting for receiver to complete transfer..."}
           </div>
-          <button data-testid="send-page-cancel-button" onClick={handleCancel}>
-            Cancel
-          </button>
+          <Button data-testid="send-page-cancel-button" onClick={handleCancel}>
+            <X /> Cancel
+          </Button>
         </>
       ) : wormhole?.fileMeta ? (
         <>
@@ -162,7 +158,7 @@ export default function SendPage({}: Props) {
               data-testid="send-page-cancel-button"
               onClick={handleCancel}
             >
-              Cancel
+              <X /> Cancel
             </Button>
           </Stack>
         </>

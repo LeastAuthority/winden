@@ -1,5 +1,4 @@
 import {
-  ActionIcon,
   Box,
   Button,
   Modal,
@@ -10,7 +9,7 @@ import {
 } from "@mantine/core";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Download } from "tabler-icons-react";
+import { Download, X } from "tabler-icons-react";
 import { useCancelModal } from "../hooks/useCancelModal";
 import { useError } from "../hooks/useError";
 import { useWormhole } from "../hooks/useWormhole";
@@ -50,10 +49,7 @@ export default function ReceivePage({}: Props) {
             navigate("/r", { replace: true });
           }}
         >
-          <ActionIcon>
-            <Download />
-          </ActionIcon>{" "}
-          Receive more
+          <Download /> Receive more
         </Button>
       </Stack>
     </>
@@ -70,33 +66,36 @@ export default function ReceivePage({}: Props) {
           ? durationToClosestUnit(wormhole.progressEta)
           : "Waiting for sender to complete transfer..."}
       </div>
-      <button data-testid="receive-page-cancel-button" onClick={handleCancel}>
-        Cancel
-      </button>
+      <Button data-testid="receive-page-cancel-button" onClick={handleCancel}>
+        <X /> Cancel
+      </Button>
     </>
   ) : wormhole?.fileMeta ? (
-    <div>
-      <FileLabel />
-      <div>
-        <button
-          onClick={() =>
-            wormhole.fileMeta?.accept().catch((e: any) => {
-              if (e.includes("unexpected EOF")) {
-                navigate("/r?cancel=", { replace: true });
-                window.location.reload();
-              } else {
-                error?.setError(detectErrorType(e));
-              }
-            })
-          }
-        >
-          Accept and download
-        </button>
-      </div>
-      <button data-testid="send-page-cancel-button" onClick={handleCancel}>
-        Cancel
-      </button>
-    </div>
+    <>
+      <Title order={1}>Ready to download</Title>
+      <Stack align="center">
+        <FileLabel />
+        <div>
+          <Button
+            onClick={() =>
+              wormhole.fileMeta?.accept().catch((e: any) => {
+                if (e.includes("unexpected EOF")) {
+                  navigate("/r?cancel=", { replace: true });
+                  window.location.reload();
+                } else {
+                  error?.setError(detectErrorType(e));
+                }
+              })
+            }
+          >
+            <Download /> Download
+          </Button>
+        </div>
+        <Button data-testid="send-page-cancel-button" onClick={handleCancel}>
+          <X /> Cancel
+        </Button>
+      </Stack>
+    </>
   ) : (
     <div data-testid="receive-page-container">
       <Modal
