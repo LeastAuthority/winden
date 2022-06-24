@@ -1,3 +1,4 @@
+import { Button } from "@mantine/core";
 import React, { useEffect } from "react";
 import {
   Link,
@@ -12,7 +13,6 @@ import { useWormhole } from "../hooks/useWormhole";
 import { browserIsProbablySafari } from "../util/browserIsProbablySafari";
 import { detectErrorType } from "../util/errors";
 import styles from "./App.module.css";
-import Button from "./Button";
 import NotFoundPage from "./NotFoundPage";
 import ReceivePage from "./ReceivePage";
 import SendPage from "./SendPage";

@@ -1,3 +1,4 @@
+import { Button } from "@mantine/core";
 import { Modifier } from "@popperjs/core";
 import classnames from "classnames";
 import React, { useState } from "react";
@@ -7,7 +8,6 @@ import { CODE_SEGMENT_DELIMITER } from "../util/constants";
 import { getCodeSuggestion } from "../util/getCodeSuggestion";
 import { spellCheckCodeWord } from "../util/spellCheckCodeWord";
 import { validateCode } from "../util/validateCode";
-import Button from "./Button";
 import styles from "./CodeInput.module.css";
 
 type Props = {
