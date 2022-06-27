@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 type Props = {};
 
-export default function NotFoundPage({}: Props) {
+export default function NotFoundScreen({}: Props) {
   return (
     <div data-testid="not-found-page-container">
       NotFoundPage{" "}

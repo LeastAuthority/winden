@@ -13,7 +13,7 @@ import { useWormhole } from "../hooks/useWormhole";
 import { browserIsProbablySafari } from "../util/browserIsProbablySafari";
 import { detectErrorType } from "../util/errors";
 import styles from "./App.module.css";
-import NotFoundPage from "./NotFoundPage";
+import NotFoundScreen from "./screens/NotFoundScreen";
 import ReceivePage from "./ReceivePage";
 import SendPage from "./SendPage";
 
@@ -26,7 +26,7 @@ function ValidateCodePage() {
   const error = useError();
 
   if (!code) {
-    return <NotFoundPage />;
+    return <NotFoundScreen />;
   }
 
   useEffect(() => {
@@ -75,7 +75,7 @@ export function App({}: Props) {
             <Route path="s" element={<SendPage />} />
             <Route path="r" element={<ReceivePage />} />
             <Route path="/:code" element={<ValidateCodePage />} />
-            <Route path="*" element={<NotFoundPage />} />
+            <Route path="*" element={<NotFoundScreen />} />
           </Routes>
         </main>
         <footer className={styles.footer}>
