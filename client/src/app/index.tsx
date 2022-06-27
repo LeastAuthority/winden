@@ -5,8 +5,8 @@ import ReactDOM from "react-dom";
 import { HashRouter } from "react-router-dom";
 import { App } from "./components/App";
 import Background from "./components/Background";
-import { ErrorProvider } from "./components/ErrorProvider";
-import { WormholeProvider } from "./components/WormholeProvider";
+import { ErrorProvider } from "./components/providers/ErrorProvider";
+import { WormholeProvider } from "./components/providers/WormholeProvider";
 
 ReactDOM.render(
   <ErrorProvider>

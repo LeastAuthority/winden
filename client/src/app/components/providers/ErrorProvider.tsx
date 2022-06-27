@@ -1,10 +1,11 @@
 import { Modal, Text } from "@mantine/core";
 import React, { useEffect, useState } from "react";
-import { errorContent, ErrorTypes } from "../util/errors";
+import { errorContent, ErrorTypes } from "../../util/errors";
 
-export const ErrorContext = React.createContext<{
-  setError: React.Dispatch<React.SetStateAction<ErrorTypes | null>>;
-} | null>(null);
+export const ErrorContext =
+  React.createContext<{
+    setError: React.Dispatch<React.SetStateAction<ErrorTypes | null>>;
+  } | null>(null);
 
 type Props = React.PropsWithChildren<{}>;
 
