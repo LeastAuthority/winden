@@ -8,8 +8,9 @@
   },
   "dependencies": {
     "@ionic/vue": "^5.4.0",
-    "@mantine/core": "^4.2.8",
-    "@mantine/hooks": "^4.2.8",
+    "@mantine/core": "^4.2.11",
+    "@mantine/dropzone": "^4.2.11",
+    "@mantine/hooks": "^4.2.11",
     "@popperjs/core": "^2.11.5",
     "bowser": "^2.11.0",
     "classnames": "^2.3.1",
