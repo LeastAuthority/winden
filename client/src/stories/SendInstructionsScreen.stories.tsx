@@ -5,7 +5,7 @@ import AppTemplate from "../app/components/AppTemplate";
 import { SendInstructionsScreenContent } from "../app/components/screens/send/SendInstructionsScreen";
 
 export default {
-  title: "screens/SendInstructionsScreenContent",
+  title: "screens/SendInstructionsScreen",
   component: SendInstructionsScreenContent,
   parameters: {
     layout: "fullscreen",

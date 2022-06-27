@@ -5,7 +5,7 @@ import AppTemplate from "../app/components/AppTemplate";
 import { ProgressScreenContent } from "../app/components/screens/ProgressScreen";
 
 export default {
-  title: "screens/ProgressScreenContent",
+  title: "screens/ProgressScreen",
   component: ProgressScreenContent,
   parameters: {
     layout: "fullscreen",

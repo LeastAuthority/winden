@@ -86,7 +86,7 @@ export function CodeInputContent(props: ContentProps) {
           type="text"
           value={props.code}
           onChange={props.onChange}
-          placeholder="Enter code here"
+          placeholder="Enter code here (E.g.: 7-guitarist-revenge)"
           onFocus={props.onFocus}
           onBlur={props.onBlur}
         />
