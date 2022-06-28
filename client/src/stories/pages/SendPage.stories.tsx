@@ -1,19 +1,19 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
-import AppTemplate from "../app/components/AppTemplate";
-import { WormholeContext } from "../app/components/providers/WormholeProvider";
-import { ReceivePageContent } from "../app/components/ReceivePage";
+import AppTemplate from "../../app/components/AppTemplate";
+import { WormholeContext } from "../../app/components/providers/WormholeProvider";
+import { SendPageContent } from "../../app/components/pages/SendPage";
 
 export default {
-  title: "pages/ReceivePage",
-  component: ReceivePageContent,
+  title: "pages/SendPage",
+  component: SendPageContent,
   parameters: {
     layout: "fullscreen",
   },
-} as ComponentMeta<typeof ReceivePageContent>;
+} as ComponentMeta<typeof SendPageContent>;
 
-const Template: ComponentStory<typeof ReceivePageContent> = (args) => (
+const Template: ComponentStory<typeof SendPageContent> = (args) => (
   <MemoryRouter initialEntries={["/"]}>
     <WormholeContext.Provider
       value={
@@ -26,7 +26,7 @@ const Template: ComponentStory<typeof ReceivePageContent> = (args) => (
       }
     >
       <AppTemplate>
-        <ReceivePageContent {...args} />
+        <SendPageContent {...args} />
       </AppTemplate>
     </WormholeContext.Provider>
   </MemoryRouter>

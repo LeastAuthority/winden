@@ -1,9 +1,9 @@
 import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import AppTemplate from "./AppTemplate";
-import ReceivePage from "./ReceivePage";
+import ReceivePage from "./pages/ReceivePage";
+import SendPage from "./pages/SendPage";
 import NotFoundScreen from "./screens/NotFoundScreen";
-import SendPage from "./SendPage";
 
 function ValidateCode() {
   return <div>TODO validate code and redirect to /r</div>;

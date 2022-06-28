@@ -1,8 +1,8 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
-import AppTemplate from "../app/components/AppTemplate";
-import SendCompleteScreen from "../app/components/screens/send/SendCompleteScreen";
+import AppTemplate from "../../../app/components/AppTemplate";
+import SendCompleteScreen from "../../../app/components/screens/send/SendCompleteScreen";
 
 export default {
   title: "screens/SendCompleteScreen",

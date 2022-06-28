@@ -1,8 +1,8 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
-import AppTemplate from "../app/components/AppTemplate";
-import { ReceiveBeginScreenContent } from "../app/components/screens/receive/ReceiveBeginScreen";
+import AppTemplate from "../../../app/components/AppTemplate";
+import { ReceiveBeginScreenContent } from "../../../app/components/screens/receive/ReceiveBeginScreen";
 
 export default {
   title: "screens/ReceiveBeginScreen",

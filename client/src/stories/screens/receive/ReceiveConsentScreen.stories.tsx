@@ -1,8 +1,8 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
-import AppTemplate from "../app/components/AppTemplate";
-import { ReceiveConsentScreenContent } from "../app/components/screens/receive/ReceiveConsentScreen";
+import AppTemplate from "../../../app/components/AppTemplate";
+import { ReceiveConsentScreenContent } from "../../../app/components/screens/receive/ReceiveConsentScreen";
 
 export default {
   title: "screens/ReceiveConsentScreen",

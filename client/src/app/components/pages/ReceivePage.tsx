@@ -1,8 +1,8 @@
 import React from "react";
-import ReceiveBeginScreen from "./screens/receive/ReceiveBeginScreen";
-import ReceiveCompleteScreen from "./screens/receive/ReceiveCompleteScreen";
-import ReceiveConsentScreen from "./screens/receive/ReceiveConsentScreen";
-import ReceiveProgressScreen from "./screens/receive/ReceiveProgressScreen";
+import ReceiveBeginScreen from "../screens/receive/ReceiveBeginScreen";
+import ReceiveCompleteScreen from "../screens/receive/ReceiveCompleteScreen";
+import ReceiveConsentScreen from "../screens/receive/ReceiveConsentScreen";
+import ReceiveProgressScreen from "../screens/receive/ReceiveProgressScreen";
 
 type Props = {
   step: "BEGIN" | "CONSENT" | "PROGRESS" | "DONE";
@@ -19,4 +19,9 @@ export function ReceivePageContent(props: Props) {
     case "DONE":
       return <ReceiveCompleteScreen />;
   }
+}
+
+export default function ReceivePage() {
+  // TODO
+  return <ReceivePageContent step="BEGIN" />;
 }

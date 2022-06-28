@@ -1,8 +1,8 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
-import AppTemplate from "../app/components/AppTemplate";
-import SendProgressScreen from "../app/components/screens/send/SendProgressScreen";
+import AppTemplate from "../../../app/components/AppTemplate";
+import SendProgressScreen from "../../../app/components/screens/send/SendProgressScreen";
 
 export default {
   title: "screens/SendProgressScreen",
