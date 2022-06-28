@@ -1,12 +1,12 @@
 import React, { PropsWithChildren, useRef, useState } from "react";
-import { useError } from "../hooks/useError";
-import { detectErrorType } from "../util/errors";
-import ClientWorker from "../wormhole/client_worker";
+import { useError } from "../../hooks/useError";
+import { detectErrorType } from "../../util/errors";
+import ClientWorker from "../../wormhole/client_worker";
 import {
   ClientConfig,
   TransferOptions,
   TransferProgress,
-} from "../wormhole/types";
+} from "../../wormhole/types";
 
 const MAX_FILE_SIZE_MB = 200;
 const MB = 1000 ** 2;
@@ -120,19 +120,20 @@ class Transfer {
   }
 }
 
-export const WormholeContext = React.createContext<{
-  code?: string;
-  fileMeta: Record<string, any> | null;
-  progressEta: number | null;
-  saveFile: (code: string) => Promise<TransferProgress | void>;
-  sendFile: (
-    file: File,
-    opts?: TransferOptions
-  ) => Promise<TransferProgress | void>;
-  done: boolean;
-  reset: () => void;
-  bytesSent: number;
-} | null>(null);
+export const WormholeContext =
+  React.createContext<{
+    code?: string;
+    fileMeta: Record<string, any> | null;
+    progressEta: number | null;
+    saveFile: (code: string) => Promise<TransferProgress | void>;
+    sendFile: (
+      file: File,
+      opts?: TransferOptions
+    ) => Promise<TransferProgress | void>;
+    done: boolean;
+    reset: () => void;
+    bytesSent: number;
+  } | null>(null);
 
 export function WormholeProvider(props: Props) {
   const [fileMeta, setFileMeta] = useState<Record<string, any> | null>(null);

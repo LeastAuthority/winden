@@ -1,14 +1,12 @@
+import { Button, Group, Paper, Space, Text, TextInput } from "@mantine/core";
 import { Modifier } from "@popperjs/core";
-import classnames from "classnames";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { usePopper } from "react-popper";
 import { applyCodeSuggestion } from "../util/applyCodeSuggestion";
 import { CODE_SEGMENT_DELIMITER } from "../util/constants";
 import { getCodeSuggestion } from "../util/getCodeSuggestion";
 import { spellCheckCodeWord } from "../util/spellCheckCodeWord";
-import { CodeErrorType, validateCode } from "../util/validateCode";
-import Button from "./Button";
-import styles from "./CodeInput.module.css";
+import { validateCode } from "../util/validateCode";
 
 type Props = {
   onSubmit?: (code: string) => void;
@@ -29,30 +27,40 @@ const sameWidth: Modifier<string, object> = {
   },
 };
 
-export function CodeInput(props: Props) {
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const [code, setCode] = useState("");
-  const [focused, setFocused] = useState(false);
-  const codeSuggestion = getCodeSuggestion(code);
+type ContentProps = {
+  code: string;
+  codeSuggestion: string | null;
+  focused: boolean;
+  touched: boolean;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onFocus: () => void;
+  onBlur: () => void;
+  onSubmit?: (code: string) => void;
+};
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const hasSpace = e.target.value.includes(" ");
-    if (hasSpace && codeSuggestion) {
-      setCode(applyCodeSuggestion(e.target.value, codeSuggestion));
-    } else if (!hasSpace) {
-      setCode(e.target.value);
+export function CodeInputContent(props: ContentProps) {
+  const [referenceElement, setReferenceElement] =
+    useState<HTMLElement | null>(null);
+  const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
+  const { styles: popperStyles, attributes } = usePopper(
+    referenceElement,
+    popperElement,
+    {
+      modifiers: [sameWidth],
     }
-  }
-
-  const [validationError, setValidationError] = useState<CodeErrorType | null>(
-    null
   );
+  const error = validateCode(props.code);
 
   const errorMessage = (() => {
-    const [codeNumber, codeFirstWord, codeSecondWord] = code.split(
+    if (!props.touched || props.focused) {
+      return "";
+    }
+    const [_codeNumber, codeFirstWord, codeSecondWord] = props.code.split(
       CODE_SEGMENT_DELIMITER
     );
-    switch (validationError) {
+    switch (error) {
+      case null:
+        return "";
       case "INVALID_FORMAT":
         return "Please use a code with the number-word-word format.";
       case "INVALID_FIRST_WORD":
@@ -68,57 +76,81 @@ export function CodeInput(props: Props) {
     }
   })();
 
-  function validate() {
-    setFocused(false);
-    setValidationError(validateCode(code));
-  }
-
-  const [referenceElement, setReferenceElement] = useState<HTMLElement | null>(
-    null
-  );
-  const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
-  const { styles: popperStyles, attributes } = usePopper(
-    referenceElement,
-    popperElement,
-    {
-      modifiers: [sameWidth],
-    }
-  );
-
   return (
-    <div data-testid="code-input-container" className={styles.container}>
-      <div ref={setReferenceElement} className={styles.inputRow}>
-        <input
+    <div data-testid="code-input-container">
+      <Group align="stretch" ref={setReferenceElement} spacing="md">
+        <TextInput
+          style={{ flex: 1 }}
           data-testid="code-input"
           type="text"
-          value={code}
-          onChange={handleChange}
-          placeholder="Enter code here"
-          onFocus={() => setFocused(true)}
-          onBlur={validate}
+          value={props.code}
+          onChange={props.onChange}
+          placeholder="Enter code here (E.g.: 7-guitarist-revenge)"
+          onFocus={props.onFocus}
+          onBlur={props.onBlur}
+          error={Boolean(errorMessage)}
         />
         <Button
-          className={styles.nextButton}
-          onClick={() => props.onSubmit && props.onSubmit(code)}
+          onClick={() => !error && props.onSubmit && props.onSubmit(props.code)}
         >
           Next
         </Button>
-      </div>
+      </Group>
       <div
         ref={setPopperElement}
-        style={popperStyles.popper}
+        style={{
+          ...popperStyles.popper,
+          visibility:
+            props.codeSuggestion && props.focused ? "visible" : "hidden",
+          opacity: props.codeSuggestion && props.focused ? 1 : 0,
+          transition: "opacity ease-in 0.2s",
+          zIndex: 9001,
+        }}
         {...attributes.popper}
-        className={classnames(styles.suggestion, {
-          [styles.inactive]: !codeSuggestion || !focused,
-        })}
       >
-        <span>{codeSuggestion}</span>
-        <span className={styles.suggestionLabel}>Press space to complete</span>
+        <Space h="sm" />
+        <Paper shadow="md" p="xs" withBorder>
+          <Group spacing="md" position="center">
+            <Text inline>{props.codeSuggestion}</Text>
+            <Paper shadow="xs" p="xs" withBorder>
+              <Text>Press space to complete</Text>
+            </Paper>
+          </Group>
+        </Paper>
       </div>
-      <div>{validationError}</div>
-      <div data-testid="code-error-message" className={styles.errorMessage}>
+      <Text data-testid="code-error-message" color="red">
         {errorMessage}
-      </div>
+      </Text>
     </div>
+  );
+}
+
+export function CodeInput(props: Props) {
+  const [code, setCode] = useState("");
+  const [focused, setFocused] = useState(false);
+  const codeSuggestion = getCodeSuggestion(code);
+  const [touched, setTouched] = useState(false);
+
+  return (
+    <CodeInputContent
+      code={code}
+      codeSuggestion={codeSuggestion}
+      focused={focused}
+      touched={touched}
+      onChange={(e) => {
+        const hasSpace = e.target.value.includes(" ");
+        if (hasSpace && codeSuggestion) {
+          setCode(applyCodeSuggestion(e.target.value, codeSuggestion));
+        } else if (!hasSpace) {
+          setCode(e.target.value);
+        }
+      }}
+      onFocus={() => {
+        setFocused(true);
+        setTouched(true);
+      }}
+      onBlur={() => setFocused(false)}
+      onSubmit={props.onSubmit}
+    />
   );
 }

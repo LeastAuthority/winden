@@ -11,7 +11,7 @@ services:
     ports:
       - "4001:4001" # TCP
       - "4002:4002" # WebSocket
-  client:
+  client: &client
     build: ./client
     volumes:
       - ./client:/usr/src/app
@@ -21,6 +21,12 @@ services:
     depends_on:
       - mailbox
       - relay
+  client-storybook:
+    <<: *client
+    ports:
+      - "6006:6006"
+    depends_on: []
+    command: "npm run storybook"
   # Selenium services
   chrome:
     volumes:
