@@ -2,6 +2,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import AppTemplate from "../../../app/components/AppTemplate";
+import { WormholeContext } from "../../../app/components/providers/WormholeProvider";
 import { SendInstructionsScreenContent } from "../../../app/components/screens/send/SendInstructionsScreen";
 
 export default {
@@ -16,9 +17,20 @@ const Template: ComponentStory<typeof SendInstructionsScreenContent> = (
   args
 ) => (
   <MemoryRouter initialEntries={["/"]}>
-    <AppTemplate>
-      <SendInstructionsScreenContent {...args} />
-    </AppTemplate>
+    <WormholeContext.Provider
+      value={
+        {
+          code: "7-guitarist-revenge",
+          fileMeta: { name: "hello-world.txt", size: "123" },
+          progressEta: 10,
+          bytesSent: 50,
+        } as any
+      }
+    >
+      <AppTemplate>
+        <SendInstructionsScreenContent {...args} />
+      </AppTemplate>
+    </WormholeContext.Provider>
   </MemoryRouter>
 );
 
