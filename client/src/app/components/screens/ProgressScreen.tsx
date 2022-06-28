@@ -47,21 +47,17 @@ export default function ProgressScreen(props: Props) {
   const wormhole = useWormhole();
   const navigate = useNavigate();
 
-  return (
-    wormhole &&
-    wormhole.fileMeta &&
-    wormhole.progressEta && (
-      <ProgressScreenContent
-        title={props.title}
-        waitText={props.waitText}
-        bytesSent={wormhole.bytesSent}
-        fileSize={wormhole.fileMeta.size}
-        eta={wormhole.progressEta}
-        onCancel={() => {
-          navigate("/s", { replace: true });
-          window.location.reload();
-        }}
-      />
-    )
-  );
+  return wormhole && wormhole.fileMeta && wormhole.progressEta ? (
+    <ProgressScreenContent
+      title={props.title}
+      waitText={props.waitText}
+      bytesSent={wormhole.bytesSent}
+      fileSize={wormhole.fileMeta.size}
+      eta={wormhole.progressEta}
+      onCancel={() => {
+        navigate("/s", { replace: true });
+        window.location.reload();
+      }}
+    />
+  ) : null;
 }

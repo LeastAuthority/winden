@@ -1,95 +1,26 @@
-import { Button } from "@mantine/core";
-import React, { useEffect } from "react";
-import {
-  Link,
-  Navigate,
-  Route,
-  Routes,
-  useLocation,
-  useParams,
-} from "react-router-dom";
-import { useError } from "../hooks/useError";
-import { useWormhole } from "../hooks/useWormhole";
-import { browserIsProbablySafari } from "../util/browserIsProbablySafari";
-import { detectErrorType } from "../util/errors";
-import styles from "./App.module.css";
-import NotFoundScreen from "./screens/NotFoundScreen";
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import AppTemplate from "./AppTemplate";
 import ReceivePage from "./ReceivePage";
+import NotFoundScreen from "./screens/NotFoundScreen";
 import SendPage from "./SendPage";
+
+function ValidateCode() {
+  return <div>TODO validate code and redirect to /r</div>;
+}
 
 type Props = {};
 
-function ValidateCodePage() {
-  const wormhole = useWormhole();
-  let params = useParams();
-  let code = params.code?.match(/\d+/);
-  const error = useError();
-
-  if (!code) {
-    return <NotFoundScreen />;
-  }
-
-  useEffect(() => {
-    // TODO: no timeout hack to wait for initiialize
-    setTimeout(() => {
-      wormhole?.saveFile(params.code!).catch((e) => {
-        error?.setError(detectErrorType(e));
-      });
-    }, 2000);
-  }, []);
-
-  return wormhole?.fileMeta ? <ReceivePage /> : <div>loading...</div>;
-}
-
-export function App({}: Props) {
-  const location = useLocation();
-
-  return browserIsProbablySafari ? (
-    <div>Safari not supported.</div>
-  ) : (
-    <div className={styles.container}>
-      <div className={styles.layout}>
-        <nav className={styles.navbar}>
-          <span className={styles.navbarTitle}>Transfer</span>
-          <div className={styles.spacer}></div>
-          {location.pathname === "/s" && (
-            <Link data-testid="go-to-receive-page" to="/r">
-              <Button>
-                <img className={styles.icon} src="/feather/download.svg" />
-                Receive
-              </Button>
-            </Link>
-          )}
-          {location.pathname === "/r" && (
-            <Link data-testid="go-to-send-page" to="/s">
-              <Button>
-                <img className={styles.icon} src="/feather/send.svg" />
-                Send
-              </Button>
-            </Link>
-          )}
-        </nav>
-        <main className={styles.content}>
-          <Routes>
-            <Route path="/" element={<Navigate replace to="s" />} />
-            <Route path="s" element={<SendPage />} />
-            <Route path="r" element={<ReceivePage />} />
-            <Route path="/:code" element={<ValidateCodePage />} />
-            <Route path="*" element={<NotFoundScreen />} />
-          </Routes>
-        </main>
-        <footer className={styles.footer}>
-          <span className={styles.footerLinks}>
-            <a>FAQ</a>
-            <a>Privacy</a>
-            <a>About Us</a>
-            <a>GitHub</a>
-          </span>
-          <span className={styles.footerLa}>
-            made with love for privacy by <img src="/la-logo.svg" />
-          </span>
-        </footer>
-      </div>
-    </div>
+export default function App({}: Props) {
+  return (
+    <AppTemplate>
+      <Routes>
+        <Route path="/" element={<Navigate replace to="s" />} />
+        <Route path="s" element={<SendPage />} />
+        <Route path="r" element={<ReceivePage />} />
+        <Route path="/:code" element={<ValidateCode />} />
+        <Route path="*" element={<NotFoundScreen />} />
+      </Routes>
+    </AppTemplate>
   );
 }

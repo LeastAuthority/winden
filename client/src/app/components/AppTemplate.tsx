@@ -1,12 +1,14 @@
 import { AppShell, Button, Group, Paper } from "@mantine/core";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Download, Send } from "tabler-icons-react";
 import Background from "./Background";
 
 type Props = React.PropsWithChildren<{}>;
 
 export default function AppTemplate(props: Props) {
+  const location = useLocation();
+
   return (
     <>
       <Background />

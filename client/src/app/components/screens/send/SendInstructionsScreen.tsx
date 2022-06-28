@@ -57,21 +57,19 @@ export default function SendInstructionsScreen({}: Props) {
   const clipboard = useClipboard({ timeout: 2000 });
   const navigate = useNavigate();
 
-  return (
-    wormhole?.code && (
-      <SendInstructionsScreenContent
-        code={wormhole.code}
-        copied={clipboard.copied}
-        onCopy={() =>
-          clipboard.copy(
-            `${window.location.protocol}//${window.location.host}/#/${wormhole.code}`
-          )
-        }
-        onCancel={() => {
-          navigate("/s", { replace: true });
-          window.location.reload();
-        }}
-      />
-    )
-  );
+  return wormhole?.code ? (
+    <SendInstructionsScreenContent
+      code={wormhole.code}
+      copied={clipboard.copied}
+      onCopy={() =>
+        clipboard.copy(
+          `${window.location.protocol}//${window.location.host}/#/${wormhole.code}`
+        )
+      }
+      onCancel={() => {
+        navigate("/s", { replace: true });
+        window.location.reload();
+      }}
+    />
+  ) : null;
 }
