@@ -1,6 +1,5 @@
-import { Button } from "@mantine/core";
+import { Button, Group, Paper, Space, Text, TextInput } from "@mantine/core";
 import { Modifier } from "@popperjs/core";
-import classnames from "classnames";
 import React, { useState } from "react";
 import { usePopper } from "react-popper";
 import { applyCodeSuggestion } from "../util/applyCodeSuggestion";
@@ -8,7 +7,6 @@ import { CODE_SEGMENT_DELIMITER } from "../util/constants";
 import { getCodeSuggestion } from "../util/getCodeSuggestion";
 import { spellCheckCodeWord } from "../util/spellCheckCodeWord";
 import { validateCode } from "../util/validateCode";
-import styles from "./CodeInput.module.css";
 
 type Props = {
   onSubmit?: (code: string) => void;
@@ -51,12 +49,12 @@ export function CodeInputContent(props: ContentProps) {
       modifiers: [sameWidth],
     }
   );
+  const error = validateCode(props.code);
 
   const errorMessage = (() => {
     if (props.focused) {
       return "";
     }
-    const error = validateCode(props.code);
     const [_codeNumber, codeFirstWord, codeSecondWord] = props.code.split(
       CODE_SEGMENT_DELIMITER
     );
@@ -79,9 +77,10 @@ export function CodeInputContent(props: ContentProps) {
   })();
 
   return (
-    <div data-testid="code-input-container" className={styles.container}>
-      <div ref={setReferenceElement} className={styles.inputRow}>
-        <input
+    <div data-testid="code-input-container">
+      <Group align="stretch" ref={setReferenceElement} spacing="md">
+        <TextInput
+          style={{ flex: 1 }}
           data-testid="code-input"
           type="text"
           value={props.code}
@@ -89,28 +88,38 @@ export function CodeInputContent(props: ContentProps) {
           placeholder="Enter code here (E.g.: 7-guitarist-revenge)"
           onFocus={props.onFocus}
           onBlur={props.onBlur}
+          error={Boolean(errorMessage)}
         />
         <Button
-          className={styles.nextButton}
-          onClick={() => props.onSubmit && props.onSubmit(props.code)}
+          onClick={() => !error && props.onSubmit && props.onSubmit(props.code)}
         >
           Next
         </Button>
-      </div>
+      </Group>
       <div
         ref={setPopperElement}
-        style={popperStyles.popper}
+        style={{
+          ...popperStyles.popper,
+          visibility:
+            props.codeSuggestion && props.focused ? "visible" : "hidden",
+          opacity: props.codeSuggestion && props.focused ? 1 : 0,
+          transition: "opacity ease-in 0.2s",
+        }}
         {...attributes.popper}
-        className={classnames(styles.suggestion, {
-          [styles.inactive]: !props.codeSuggestion || !props.focused,
-        })}
       >
-        <span>{props.codeSuggestion}</span>
-        <span className={styles.suggestionLabel}>Press space to complete</span>
+        <Space h="sm" />
+        <Paper shadow="md" p="xs">
+          <Group spacing="md" position="center">
+            <Text inline>{props.codeSuggestion}</Text>
+            <Paper shadow="xs" p="xs">
+              <Text>Press space to complete</Text>
+            </Paper>
+          </Group>
+        </Paper>
       </div>
-      <div data-testid="code-error-message" className={styles.errorMessage}>
+      <Text data-testid="code-error-message" color="red">
         {errorMessage}
-      </div>
+      </Text>
     </div>
   );
 }

@@ -38,6 +38,12 @@ Suggestion.args = {
   focused: true,
 };
 
+export const ValidFormat = Template.bind({});
+ValidFormat.args = {
+  ...Blank.args,
+  code: "7-guitarist-revenge",
+};
+
 export const InvalidFormat = Template.bind({});
 InvalidFormat.args = {
   ...Blank.args,
