@@ -7,4 +7,5 @@ module.exports = {
     "storybook-css-modules",
   ],
   framework: "@storybook/react",
+  staticDirs: ["../src/public"],
 };

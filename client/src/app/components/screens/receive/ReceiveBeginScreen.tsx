@@ -1,4 +1,4 @@
-import { Modal, Stack, Text, Title } from "@mantine/core";
+import { Modal, Space, Text, Title } from "@mantine/core";
 import React from "react";
 import { useCancelModal } from "../../../hooks/useCancelModal";
 import { useError } from "../../../hooks/useError";
@@ -23,8 +23,11 @@ export function ReceiveBeginScreenContent(props: ContentProps) {
       >
         <Text>The transfer has been cancelled by the sender.</Text>
       </Modal>
-      <Title order={1}>Receive files in real-time</Title>
-      <Title order={2}>Always end-to-end encrypted.</Title>
+      <Title order={2}>Receive files in real-time</Title>
+      <Text size="md" weight="bold" color="dimmed">
+        Always end-to-end encrypted.
+      </Text>
+      <Space h="md" />
       <CodeInput onSubmit={props.onSubmit} />
     </div>
   );

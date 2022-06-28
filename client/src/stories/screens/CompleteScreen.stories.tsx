@@ -35,6 +35,6 @@ const Template: ComponentStory<typeof CompleteScreen> = (args) => (
 
 export const Story = Template.bind({});
 Story.args = {
-  title: "Sending...",
+  title: "Sent/Received!",
   render: () => <Button>Send/Receive more</Button>,
 };

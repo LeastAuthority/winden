@@ -39,7 +39,6 @@ type ContentProps = {
 };
 
 export function CodeInputContent(props: ContentProps) {
-  // refs technically not pure
   const [referenceElement, setReferenceElement] =
     useState<HTMLElement | null>(null);
   const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
@@ -105,14 +104,15 @@ export function CodeInputContent(props: ContentProps) {
             props.codeSuggestion && props.focused ? "visible" : "hidden",
           opacity: props.codeSuggestion && props.focused ? 1 : 0,
           transition: "opacity ease-in 0.2s",
+          zIndex: 9001,
         }}
         {...attributes.popper}
       >
         <Space h="sm" />
-        <Paper shadow="md" p="xs">
+        <Paper shadow="md" p="xs" withBorder>
           <Group spacing="md" position="center">
             <Text inline>{props.codeSuggestion}</Text>
-            <Paper shadow="xs" p="xs">
+            <Paper shadow="xs" p="xs" withBorder>
               <Text>Press space to complete</Text>
             </Paper>
           </Group>

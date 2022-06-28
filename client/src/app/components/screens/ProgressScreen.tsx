@@ -1,4 +1,4 @@
-import { Button, Progress, Stack, Text, Title } from "@mantine/core";
+import { Button, Progress, Space, Stack, Text, Title } from "@mantine/core";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { X } from "tabler-icons-react";
@@ -15,11 +15,11 @@ type ContentProps = {
   onCancel: () => void;
 };
 
-// make generic with text props
 export function ProgressScreenContent(props: ContentProps) {
   return (
     <>
       <Title order={1}>{props.title}</Title>
+      <Space h="md" />
       <Stack align="center">
         <FileLabel />
         <Progress
@@ -30,7 +30,12 @@ export function ProgressScreenContent(props: ContentProps) {
         <Text>
           {props.eta > 1 ? durationToClosestUnit(props.eta) : props.waitText}
         </Text>
-        <Button data-testid="send-page-cancel-button" onClick={props.onCancel}>
+        <Button
+          data-testid="send-page-cancel-button"
+          onClick={props.onCancel}
+          variant="light"
+          color="dark"
+        >
           <X /> Cancel
         </Button>
       </Stack>

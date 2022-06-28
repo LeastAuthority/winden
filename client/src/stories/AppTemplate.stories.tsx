@@ -1,3 +1,4 @@
+import { Text } from "@mantine/core";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
@@ -14,10 +15,10 @@ export default {
 const Template: ComponentStory<typeof AppTemplate> = (args) => (
   <MemoryRouter initialEntries={["/"]}>
     <AppTemplate>
-      <div>
+      <Text>
         Components inside the <code>{"<AppTemplate />"}</code> component will be
         rendered in this white area.
-      </div>
+      </Text>
     </AppTemplate>
   </MemoryRouter>
 );

@@ -3,7 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import AppTemplate from "./AppTemplate";
 import ReceivePage from "./pages/ReceivePage";
 import SendPage from "./pages/SendPage";
-import NotFoundScreen from "./screens/NotFoundScreen";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function ValidateCode() {
   return <div>TODO validate code and redirect to /r</div>;
@@ -19,7 +19,7 @@ export default function App({}: Props) {
         <Route path="s" element={<SendPage />} />
         <Route path="r" element={<ReceivePage />} />
         <Route path="/:code" element={<ValidateCode />} />
-        <Route path="*" element={<NotFoundScreen />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </AppTemplate>
   );

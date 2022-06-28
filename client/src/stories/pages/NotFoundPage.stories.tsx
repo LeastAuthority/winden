@@ -2,20 +2,20 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import AppTemplate from "../../app/components/AppTemplate";
-import NotFoundScreen from "../../app/components/screens/NotFoundScreen";
+import NotFoundPage from "../../app/components/pages/NotFoundPage";
 
 export default {
-  title: "screens/NotFoundScreen",
-  component: NotFoundScreen,
+  title: "pages/NotFoundPage",
+  component: NotFoundPage,
   parameters: {
     layout: "fullscreen",
   },
-} as ComponentMeta<typeof NotFoundScreen>;
+} as ComponentMeta<typeof NotFoundPage>;
 
-const Template: ComponentStory<typeof NotFoundScreen> = (args) => (
+const Template: ComponentStory<typeof NotFoundPage> = (args) => (
   <MemoryRouter initialEntries={["/"]}>
     <AppTemplate>
-      <NotFoundScreen {...args} />
+      <NotFoundPage {...args} />
     </AppTemplate>
   </MemoryRouter>
 );

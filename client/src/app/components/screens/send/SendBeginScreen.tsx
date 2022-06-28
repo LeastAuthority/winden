@@ -1,4 +1,4 @@
-import { Group, Modal, Text, Title } from "@mantine/core";
+import { Group, Modal, Space, Text, Title } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import React, { useEffect, useState } from "react";
 import { FileRejection } from "react-dropzone";
@@ -49,11 +49,14 @@ export function SendBeginScreenContent(props: ContentProps) {
       >
         <Text>The transfer has been cancelled by the receiver.</Text>
       </Modal>
-      <Title order={1}>Send files in real-time</Title>
-      <Title order={2}>
+      <Title order={2}>Send files in real-time</Title>
+      <Text size="md" weight="bold" color="dimmed">
         We don’t store – and can’t read – your files. We simply transfer them.
-      </Title>
-      <Title order={2}>No sign-ups. No snooping. No nonsense. </Title>
+      </Text>
+      <Text size="md" weight="bold" color="dimmed">
+        No sign-ups. No snooping. No nonsense.{" "}
+      </Text>
+      <Space h="md" />
       <Dropzone
         onDrop={props.onDrop}
         onReject={props.onReject}

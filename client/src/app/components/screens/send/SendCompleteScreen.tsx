@@ -1,4 +1,4 @@
-import { Button } from "@mantine/core";
+import { Button, Space } from "@mantine/core";
 import React from "react";
 import { Send } from "tabler-icons-react";
 import { useWormhole } from "../../../hooks/useWormhole";
@@ -12,8 +12,16 @@ export default function SendCompleteScreen({}: Props) {
     <CompleteScreen
       title="Sent!"
       render={() => (
-        <Button onClick={() => wormhole?.reset()}>
-          <Send /> Send more
+        <Button
+          onClick={() => wormhole?.reset()}
+          variant="light"
+          color="dark"
+          pl="xs"
+          pr="md"
+        >
+          <Send />
+          <Space w="xs" />
+          Send more
         </Button>
       )}
     />

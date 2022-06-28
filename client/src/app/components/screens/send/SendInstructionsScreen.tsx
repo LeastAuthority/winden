@@ -1,4 +1,12 @@
-import { Button, Group, Stack, Text, Title } from "@mantine/core";
+import {
+  Button,
+  Group,
+  Space,
+  Stack,
+  Text,
+  TextInput,
+  Title,
+} from "@mantine/core";
 import { useClipboard } from "@mantine/hooks";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -28,22 +36,36 @@ export function SendInstructionsScreenContent(props: ContentProps) {
           2. Give the receiver the link below
         </Text>
         <Group position="center">
-          <input
+          <TextInput
+            style={{ width: "100%" }}
             readOnly
             type="text"
             value={`${window.location.protocol}//${window.location.host}/#/${props.code}`}
           />
           <Button
-            color={props.copied ? "green" : "blue"}
             disabled={props.copied}
             onClick={props.onCopy}
+            variant="light"
+            color="dark"
+            pl="xs"
+            pr="md"
           >
             <Files />
+            <Space w="xs" />
             {props.copied ? "Link copied!" : "Copy"}
           </Button>
         </Group>
-        <Button data-testid="send-page-cancel-button" onClick={props.onCancel}>
-          <X /> Cancel
+        <Button
+          data-testid="send-page-cancel-button"
+          onClick={props.onCancel}
+          variant="light"
+          color="dark"
+          pl="xs"
+          pr="md"
+        >
+          <X />
+          <Space w="xs" />
+          Cancel
         </Button>
       </Stack>
     </>
