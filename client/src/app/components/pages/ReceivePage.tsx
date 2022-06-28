@@ -1,4 +1,5 @@
 import React from "react";
+import { useWormhole } from "../../hooks/useWormhole";
 import ReceiveBeginScreen from "../screens/receive/ReceiveBeginScreen";
 import ReceiveCompleteScreen from "../screens/receive/ReceiveCompleteScreen";
 import ReceiveConsentScreen from "../screens/receive/ReceiveConsentScreen";
@@ -22,6 +23,19 @@ export function ReceivePageContent(props: Props) {
 }
 
 export default function ReceivePage() {
-  // TODO
-  return <ReceivePageContent step="BEGIN" />;
+  const wormhole = useWormhole();
+
+  return (
+    <ReceivePageContent
+      step={
+        wormhole?.done
+          ? "DONE"
+          : wormhole?.progressEta
+          ? "PROGRESS"
+          : wormhole?.fileMeta
+          ? "CONSENT"
+          : "BEGIN"
+      }
+    />
+  );
 }

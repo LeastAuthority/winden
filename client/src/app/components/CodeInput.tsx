@@ -31,6 +31,7 @@ type ContentProps = {
   code: string;
   codeSuggestion: string | null;
   focused: boolean;
+  touched: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onFocus: () => void;
   onBlur: () => void;
@@ -52,7 +53,7 @@ export function CodeInputContent(props: ContentProps) {
   const error = validateCode(props.code);
 
   const errorMessage = (() => {
-    if (props.focused) {
+    if (!props.touched || props.focused) {
       return "";
     }
     const [_codeNumber, codeFirstWord, codeSecondWord] = props.code.split(
@@ -128,12 +129,14 @@ export function CodeInput(props: Props) {
   const [code, setCode] = useState("");
   const [focused, setFocused] = useState(false);
   const codeSuggestion = getCodeSuggestion(code);
+  const [touched, setTouched] = useState(false);
 
   return (
     <CodeInputContent
       code={code}
       codeSuggestion={codeSuggestion}
       focused={focused}
+      touched={touched}
       onChange={(e) => {
         const hasSpace = e.target.value.includes(" ");
         if (hasSpace && codeSuggestion) {
@@ -142,7 +145,10 @@ export function CodeInput(props: Props) {
           setCode(e.target.value);
         }
       }}
-      onFocus={() => setFocused(true)}
+      onFocus={() => {
+        setFocused(true);
+        setTouched(true);
+      }}
       onBlur={() => setFocused(false)}
       onSubmit={props.onSubmit}
     />

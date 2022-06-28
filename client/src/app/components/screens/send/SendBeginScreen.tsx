@@ -1,21 +1,62 @@
-import { Group, Text, Title } from "@mantine/core";
+import { Group, Modal, Text, Title } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { FileRejection } from "react-dropzone";
 import { Upload } from "tabler-icons-react";
+import { useCancelModal } from "../../../hooks/useCancelModal";
+import { useWormhole } from "../../../hooks/useWormhole";
 
-type Props = {};
+type ModalState =
+  | "NONE"
+  | "TRANSFER_CANCELLED"
+  | "FILE_TOO_LARGE"
+  | "OTHER_ERROR";
 
-export default function SendBeginScreen({}: Props) {
+type ContentProps = {
+  modalState: ModalState;
+  onDrop: (files: File[]) => void;
+  onReject: (rejections: FileRejection[]) => void;
+  onModalClose: () => void;
+};
+
+export function SendBeginScreenContent(props: ContentProps) {
   return (
     <div data-testid="send-page-upload-section">
+      <Modal
+        centered
+        opened={props.modalState === "FILE_TOO_LARGE"}
+        onClose={props.onModalClose}
+        title="Large file sizes: coming soon"
+      >
+        <Text>
+          In this development state, this product only supports file sizes of up
+          to 200 MB. Please select a smaller file.
+        </Text>
+      </Modal>
+      <Modal
+        centered
+        opened={props.modalState === "OTHER_ERROR"}
+        onClose={props.onModalClose}
+        title="Error"
+      >
+        <Text>Failed to upload file.</Text>
+      </Modal>
+      <Modal
+        centered
+        opened={props.modalState === "TRANSFER_CANCELLED"}
+        onClose={props.onModalClose}
+        title="Transfer cancelled"
+      >
+        <Text>The transfer has been cancelled by the receiver.</Text>
+      </Modal>
       <Title order={1}>Send files in real-time</Title>
       <Title order={2}>
         We don’t store – and can’t read – your files. We simply transfer them.
       </Title>
       <Title order={2}>No sign-ups. No snooping. No nonsense. </Title>
       <Dropzone
-        onDrop={(files) => console.log("accepted files", files)}
-        onReject={(files) => console.log("rejected files", files)}
+        onDrop={props.onDrop}
+        onReject={props.onReject}
         maxSize={2 * 10 ** 8}
         accept={IMAGE_MIME_TYPE}
         multiple={false}
@@ -39,5 +80,36 @@ export default function SendBeginScreen({}: Props) {
         )}
       </Dropzone>
     </div>
+  );
+}
+
+type Props = {};
+
+export default function SendBeginScreen(props: Props) {
+  const wormhole = useWormhole();
+  const [modalState, setModalState] = useState<ModalState>("NONE");
+  const [cancelModal, setCancelModal] = useCancelModal();
+
+  useEffect(() => {
+    if (cancelModal) {
+      setModalState("TRANSFER_CANCELLED");
+    }
+  }, [cancelModal]);
+
+  return (
+    <SendBeginScreenContent
+      modalState={modalState}
+      onDrop={(files) => {
+        wormhole?.sendFile(files[0]);
+      }}
+      onReject={(rejections) => {
+        if (rejections[0]) {
+          setModalState("FILE_TOO_LARGE");
+        } else {
+          setModalState("OTHER_ERROR");
+        }
+      }}
+      onModalClose={() => setModalState("NONE")}
+    />
   );
 }

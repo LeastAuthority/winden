@@ -1,4 +1,5 @@
 import React from "react";
+import { useWormhole } from "../../hooks/useWormhole";
 import SendBeginScreen from "../screens/send/SendBeginScreen";
 import SendCompleteScreen from "../screens/send/SendCompleteScreen";
 import SendInstructionsScreen from "../screens/send/SendInstructionsScreen";
@@ -22,6 +23,19 @@ export function SendPageContent(props: Props) {
 }
 
 export default function SendPage() {
-  // TODO
-  return <SendPageContent step="BEGIN" />;
+  const wormhole = useWormhole();
+
+  return (
+    <SendPageContent
+      step={
+        wormhole?.done
+          ? "DONE"
+          : wormhole?.progressEta
+          ? "PROGRESS"
+          : wormhole?.fileMeta
+          ? "INSTRUCTIONS"
+          : "BEGIN"
+      }
+    />
+  );
 }
