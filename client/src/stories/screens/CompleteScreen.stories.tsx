@@ -2,9 +2,9 @@ import { Button } from "@mantine/core";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
-import AppTemplate from "../app/components/AppTemplate";
-import { WormholeContext } from "../app/components/providers/WormholeProvider";
-import CompleteScreen from "../app/components/screens/CompleteScreen";
+import AppTemplate from "../../app/components/AppTemplate";
+import { WormholeContext } from "../../app/components/providers/WormholeProvider";
+import CompleteScreen from "../../app/components/screens/CompleteScreen";
 
 export default {
   title: "screens/CompleteScreen",

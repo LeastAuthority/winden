@@ -6,7 +6,7 @@ import { WormholeContext } from "../../../app/components/providers/WormholeProvi
 import { ReceiveConsentScreenContent } from "../../../app/components/screens/receive/ReceiveConsentScreen";
 
 export default {
-  title: "screens/ReceiveConsentScreen",
+  title: "screens/receive/ReceiveConsentScreen",
   component: ReceiveConsentScreenContent,
   parameters: {
     layout: "fullscreen",

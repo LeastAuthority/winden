@@ -1,9 +1,9 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
-import AppTemplate from "../app/components/AppTemplate";
-import { WormholeContext } from "../app/components/providers/WormholeProvider";
-import { ProgressScreenContent } from "../app/components/screens/ProgressScreen";
+import AppTemplate from "../../app/components/AppTemplate";
+import { WormholeContext } from "../../app/components/providers/WormholeProvider";
+import { ProgressScreenContent } from "../../app/components/screens/ProgressScreen";
 
 export default {
   title: "screens/ProgressScreen",

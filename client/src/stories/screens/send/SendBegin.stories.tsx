@@ -5,7 +5,7 @@ import AppTemplate from "../../../app/components/AppTemplate";
 import SendBeginScreen from "../../../app/components/screens/send/SendBeginScreen";
 
 export default {
-  title: "screens/SendBeginScreen",
+  title: "screens/send/SendBeginScreen",
   component: SendBeginScreen,
   parameters: {
     layout: "fullscreen",

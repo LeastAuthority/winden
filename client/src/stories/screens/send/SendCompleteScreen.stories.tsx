@@ -6,7 +6,7 @@ import { WormholeContext } from "../../../app/components/providers/WormholeProvi
 import SendProgressScreen from "../../../app/components/screens/send/SendProgressScreen";
 
 export default {
-  title: "screens/SendProgressScreen",
+  title: "screens/send/SendProgressScreen",
   component: SendProgressScreen,
   parameters: {
     layout: "fullscreen",

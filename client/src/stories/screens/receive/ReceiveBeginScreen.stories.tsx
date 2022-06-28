@@ -5,7 +5,7 @@ import AppTemplate from "../../../app/components/AppTemplate";
 import { ReceiveBeginScreenContent } from "../../../app/components/screens/receive/ReceiveBeginScreen";
 
 export default {
-  title: "screens/ReceiveBeginScreen",
+  title: "screens/receive/ReceiveBeginScreen",
   component: ReceiveBeginScreenContent,
   parameters: {
     layout: "fullscreen",

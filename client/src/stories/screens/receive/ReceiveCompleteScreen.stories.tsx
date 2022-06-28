@@ -6,7 +6,7 @@ import { WormholeContext } from "../../../app/components/providers/WormholeProvi
 import ReceiveProgressScreen from "../../../app/components/screens/receive/ReceiveProgressScreen";
 
 export default {
-  title: "screens/ReceiveProgressScreen",
+  title: "screens/receive/ReceiveProgressScreen",
   component: ReceiveProgressScreen,
   parameters: {
     layout: "fullscreen",

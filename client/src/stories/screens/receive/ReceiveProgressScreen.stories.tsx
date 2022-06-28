@@ -6,7 +6,7 @@ import { WormholeContext } from "../../../app/components/providers/WormholeProvi
 import ReceiveCompleteScreen from "../../../app/components/screens/receive/ReceiveCompleteScreen";
 
 export default {
-  title: "screens/ReceiveCompleteScreen",
+  title: "screens/receive/ReceiveCompleteScreen",
   component: ReceiveCompleteScreen,
   parameters: {
     layout: "fullscreen",

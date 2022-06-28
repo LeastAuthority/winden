@@ -1,8 +1,8 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
-import AppTemplate from "../app/components/AppTemplate";
-import NotFoundScreen from "../app/components/screens/NotFoundScreen";
+import AppTemplate from "../../app/components/AppTemplate";
+import NotFoundScreen from "../../app/components/screens/NotFoundScreen";
 
 export default {
   title: "screens/NotFoundScreen",
