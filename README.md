@@ -5,7 +5,7 @@ Transfer is a graphical interface for doing file transfer via the Magic Wormhole
 ## Status
 
 Refactoring original code: https://github.com/LeastAuthority/Transfer and switching to ReactJS.
-Core repository is currently in ***evaluation stage***.
+Core repository is currently in **_evaluation stage_**.
 The web app is in 'alpha' state, and **not ready for production use**.
 
 ## Development Setup
@@ -36,6 +36,8 @@ git clone --recurse-submodules git@github.com:LeastAuthority/Transfer-rewrite.gi
 
 ```
 docker-compose build
+docker-compose run client npm i
+docker-compose run client-e2e npm i
 ```
 
 ### Run development environment
