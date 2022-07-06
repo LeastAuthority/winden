@@ -13,15 +13,18 @@ import {
   Title,
 } from "@mantine/core";
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Download, Send } from "tabler-icons-react";
 import { useStyles } from "../hooks/useStyles";
+import { useWormhole } from "../hooks/useWormhole";
 import Background from "./Background";
 
 type Props = React.PropsWithChildren<{}>;
 
 export default function AppTemplate(props: Props) {
+  const wormhole = useWormhole();
   const location = useLocation();
+  const navigate = useNavigate();
   const { classes } = useStyles();
 
   return (
@@ -36,21 +39,47 @@ export default function AppTemplate(props: Props) {
               <Group position="apart">
                 <Title order={1}>Transfer</Title>
                 {location.pathname === "/s" ? (
-                  <Link data-testid="go-to-receive-page" to="/r">
-                    <Button variant="light" color="dark" pl="xs" pr="md">
-                      <Download />
-                      <Space w="xs" />
-                      Receive
-                    </Button>
-                  </Link>
+                  <Button
+                    data-testid="go-to-receive-page"
+                    variant="light"
+                    color="dark"
+                    pl="xs"
+                    pr="md"
+                    onClick={() => {
+                      navigate("/r");
+                      if (wormhole?.fileMeta) {
+                        // cancellation workaround
+                        window.location.reload();
+                      } else {
+                        wormhole?.reset();
+                      }
+                    }}
+                  >
+                    <Download />
+                    <Space w="xs" />
+                    Receive
+                  </Button>
                 ) : (
-                  <Link data-testid="go-to-send-page" to="/s">
-                    <Button variant="light" color="dark" pl="xs" pr="md">
-                      <Send />
-                      <Space w="xs" />
-                      Send
-                    </Button>
-                  </Link>
+                  <Button
+                    data-testid="go-to-send-page"
+                    variant="light"
+                    color="dark"
+                    pl="xs"
+                    pr="md"
+                    onClick={() => {
+                      navigate("/s");
+                      if (wormhole?.fileMeta) {
+                        // cancellation workaround
+                        window.location.reload();
+                      } else {
+                        wormhole?.reset();
+                      }
+                    }}
+                  >
+                    <Send />
+                    <Space w="xs" />
+                    Send
+                  </Button>
                 )}
               </Group>
               <Space h="lg" />

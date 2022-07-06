@@ -45,9 +45,10 @@ export function SendBeginScreenContent(props: ContentProps) {
         centered
         opened={props.modalState === "TRANSFER_CANCELLED"}
         onClose={props.onModalClose}
-        title="Transfer cancelled"
+        title="Transfer failed"
       >
-        <Text>The transfer has been cancelled by the receiver.</Text>
+        <Text>The transfer was cancelled or interrupted.</Text>
+        <Text>Please try again.</Text>
       </Modal>
       <Title order={2}>Send files in real-time</Title>
       <Text size="md" weight="bold" color="dimmed">
