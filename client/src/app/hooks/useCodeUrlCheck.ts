@@ -15,8 +15,11 @@ export function useCodeUrlCheck() {
     if (!validateCode(code)) {
       codeInput?.setValue(code);
       codeInput?.setSubmitting(true);
-      wormhole?.saveFile(code);
       navigate("/r", { replace: true });
+      // HACK: have a better way to wait for wormhole to initialize
+      setTimeout(() => {
+        wormhole?.saveFile(code);
+      }, 2000);
     }
   }, [location.pathname]);
 }
