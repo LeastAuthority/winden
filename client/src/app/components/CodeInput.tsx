@@ -2,15 +2,12 @@ import { Button, Group, Paper, Space, Text, TextInput } from "@mantine/core";
 import { Modifier } from "@popperjs/core";
 import React, { useState } from "react";
 import { usePopper } from "react-popper";
+import { useCodeInput } from "../hooks/useCodeInput";
 import { applyCodeSuggestion } from "../util/applyCodeSuggestion";
 import { CODE_SEGMENT_DELIMITER } from "../util/constants";
 import { getCodeSuggestion } from "../util/getCodeSuggestion";
 import { spellCheckCodeWord } from "../util/spellCheckCodeWord";
 import { validateCode } from "../util/validateCode";
-
-type Props = {
-  onSubmit?: (code: string) => void;
-};
 
 const sameWidth: Modifier<string, object> = {
   name: "sameWidth",
@@ -32,6 +29,7 @@ type ContentProps = {
   codeSuggestion: string | null;
   focused: boolean;
   touched: boolean;
+  submitting: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onFocus: () => void;
   onBlur: () => void;
@@ -89,9 +87,11 @@ export function CodeInputContent(props: ContentProps) {
           onFocus={props.onFocus}
           onBlur={props.onBlur}
           error={Boolean(errorMessage)}
+          disabled={props.submitting}
         />
         <Button
           onClick={() => !error && props.onSubmit && props.onSubmit(props.code)}
+          loading={props.submitting}
         >
           Next
         </Button>
@@ -125,24 +125,32 @@ export function CodeInputContent(props: ContentProps) {
   );
 }
 
+type Props = {
+  onSubmit?: (code: string) => void;
+  submitting?: boolean;
+};
+
 export function CodeInput(props: Props) {
-  const [code, setCode] = useState("");
   const [focused, setFocused] = useState(false);
-  const codeSuggestion = getCodeSuggestion(code);
+  const codeInput = useCodeInput();
+  const codeSuggestion = getCodeSuggestion(codeInput?.value || "");
   const [touched, setTouched] = useState(false);
 
   return (
     <CodeInputContent
-      code={code}
+      code={codeInput?.value || ""}
       codeSuggestion={codeSuggestion}
       focused={focused}
       touched={touched}
+      submitting={props.submitting || false}
       onChange={(e) => {
         const hasSpace = e.target.value.includes(" ");
         if (hasSpace && codeSuggestion) {
-          setCode(applyCodeSuggestion(e.target.value, codeSuggestion));
+          codeInput?.setValue(
+            applyCodeSuggestion(e.target.value, codeSuggestion)
+          );
         } else if (!hasSpace) {
-          setCode(e.target.value);
+          codeInput?.setValue(e.target.value);
         }
       }}
       onFocus={() => {

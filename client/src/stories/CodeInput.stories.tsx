@@ -17,6 +17,7 @@ Blank.args = {
   codeSuggestion: "",
   focused: false,
   touched: false,
+  submitting: false,
   onChange: () => {
     console.log("onChange");
   },

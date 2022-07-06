@@ -1,6 +1,7 @@
 import { Modal, Space, Text, Title } from "@mantine/core";
 import React from "react";
 import { useCancelModal } from "../../../hooks/useCancelModal";
+import { useCodeInput } from "../../../hooks/useCodeInput";
 import { useError } from "../../../hooks/useError";
 import { useWormhole } from "../../../hooks/useWormhole";
 import { detectErrorType } from "../../../util/errors";
@@ -10,6 +11,7 @@ type ContentProps = {
   cancelModalOpen: boolean;
   onCancelModalClose: () => void;
   onSubmit: (code: string) => void;
+  submitting: boolean;
 };
 
 export function ReceiveBeginScreenContent(props: ContentProps) {
@@ -28,7 +30,7 @@ export function ReceiveBeginScreenContent(props: ContentProps) {
         Always end-to-end encrypted.
       </Text>
       <Space h="md" />
-      <CodeInput onSubmit={props.onSubmit} />
+      <CodeInput onSubmit={props.onSubmit} submitting={props.submitting} />
     </div>
   );
 }
@@ -39,16 +41,26 @@ export default function ReceiveBeginScreen({}: Props) {
   const [cancelModal, setCancelModal] = useCancelModal();
   const wormhole = useWormhole();
   const error = useError();
+  const codeInput = useCodeInput();
 
   return (
     <ReceiveBeginScreenContent
       cancelModalOpen={cancelModal}
       onCancelModalClose={() => setCancelModal(false)}
-      onSubmit={(code) =>
-        wormhole?.saveFile(code).catch((e) => {
-          error?.setError(detectErrorType(e));
-        })
-      }
+      onSubmit={(code) => {
+        if (wormhole) {
+          codeInput?.setSubmitting(true);
+          wormhole
+            .saveFile(code)
+            .catch((e) => {
+              error?.setError(detectErrorType(e));
+            })
+            .finally(() => {
+              codeInput?.setSubmitting(false);
+            });
+        }
+      }}
+      submitting={codeInput?.submitting || false}
     />
   );
 }
