@@ -61,7 +61,6 @@ export function SendBeginScreenContent(props: ContentProps) {
         onDrop={props.onDrop}
         onReject={props.onReject}
         maxSize={2 * 10 ** 8}
-        accept={IMAGE_MIME_TYPE}
         multiple={false}
       >
         {(status) => (
