@@ -1,6 +1,5 @@
 import { Button, Progress, Space, Stack, Text, Title } from "@mantine/core";
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { X } from "tabler-icons-react";
 import { useWormhole } from "../../hooks/useWormhole";
 import { durationToClosestUnit } from "../../util/durationToClosestUnit";
@@ -46,11 +45,11 @@ export function ProgressScreenContent(props: ContentProps) {
 type Props = {
   title: string;
   waitText: string;
+  onCancel: () => void;
 };
 
 export default function ProgressScreen(props: Props) {
   const wormhole = useWormhole();
-  const navigate = useNavigate();
 
   return wormhole && wormhole.fileMeta && wormhole.progressEta ? (
     <ProgressScreenContent
@@ -59,10 +58,7 @@ export default function ProgressScreen(props: Props) {
       bytesSent={wormhole.bytesSent}
       fileSize={wormhole.fileMeta.size}
       eta={wormhole.progressEta}
-      onCancel={() => {
-        navigate("/s", { replace: true });
-        window.location.reload();
-      }}
+      onCancel={props.onCancel}
     />
   ) : null;
 }

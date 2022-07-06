@@ -3,17 +3,17 @@ import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import AppTemplate from "../../../app/components/AppTemplate";
 import { WormholeContext } from "../../../app/components/providers/WormholeProvider";
-import ReceiveCompleteScreen from "../../../app/components/screens/receive/ReceiveCompleteScreen";
+import ReceiveProgressScreen from "../../../app/components/screens/receive/ReceiveProgressScreen";
 
 export default {
-  title: "screens/receive/ReceiveCompleteScreen",
-  component: ReceiveCompleteScreen,
+  title: "screens/receive/ReceiveProgressScreen",
+  component: ReceiveProgressScreen,
   parameters: {
     layout: "fullscreen",
   },
-} as ComponentMeta<typeof ReceiveCompleteScreen>;
+} as ComponentMeta<typeof ReceiveProgressScreen>;
 
-const Template: ComponentStory<typeof ReceiveCompleteScreen> = (args) => (
+const Template: ComponentStory<typeof ReceiveProgressScreen> = (args) => (
   <MemoryRouter initialEntries={["/"]}>
     <WormholeContext.Provider
       value={
@@ -26,7 +26,7 @@ const Template: ComponentStory<typeof ReceiveCompleteScreen> = (args) => (
       }
     >
       <AppTemplate>
-        <ReceiveCompleteScreen {...args} />
+        <ReceiveProgressScreen {...args} />
       </AppTemplate>
     </WormholeContext.Provider>
   </MemoryRouter>
