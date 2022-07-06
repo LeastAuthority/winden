@@ -13,7 +13,7 @@ describe("Cancellation", () => {
 
       const _receiveWindow = await browser.newWindow(codeUrl);
       await browser.pause(30000);
-      await expect(await $("button")).not.toBeExisting();
+      await expect(await $("button*=Download")).not.toBeExisting();
     });
   });
 
@@ -29,9 +29,8 @@ describe("Cancellation", () => {
         const input = await $("input[readonly='']");
         const codeUrl = await input.getValue();
         const _receiveWindow = await browser.newWindow(codeUrl);
-        await browser.waitUntil(() => $("button").isExisting());
-        await (await $("button")).click();
-
+        await browser.waitUntil(() => $("button*=Download").isExisting());
+        await (await $("button*=Download")).click();
         await browser.waitUntil(() => $("button*=Cancel").isExisting());
         await (await $("button*=Cancel")).click();
         await expect(await $("main")).toHaveTextContaining(
@@ -39,9 +38,7 @@ describe("Cancellation", () => {
         );
         await browser.switchToWindow(sendWindow);
         await browser.waitUntil(async () =>
-          (
-            await $("body").getText()
-          ).includes("The transfer has been cancelled")
+          (await $("body").getText()).includes("Transfer failed")
         );
       });
     });
@@ -78,8 +75,8 @@ describe("Cancellation", () => {
         const input = await $("input[readonly='']");
         const codeUrl = await input.getValue();
         const receiveWindow = await browser.newWindow(codeUrl);
-        await browser.waitUntil(() => $("button").isExisting());
-        await (await $("button")).click();
+        await browser.waitUntil(() => $("button*=Download").isExisting());
+        await (await $("button*=Download")).click();
 
         await browser.switchToWindow(sendWindow);
         await browser.waitUntil(() => $("button*=Cancel").isExisting());
@@ -89,9 +86,7 @@ describe("Cancellation", () => {
         );
         await browser.switchToWindow(receiveWindow);
         await browser.waitUntil(async () =>
-          (
-            await $("body").getText()
-          ).includes("The transfer has been cancelled")
+          (await $("body").getText()).includes("Transfer failed")
         );
       });
     });

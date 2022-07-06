@@ -16,8 +16,8 @@ async function testTransferSuccess(fileName: string, timeout?: number) {
   const input = await $("input[readonly='']");
   const codeUrl = await input.getValue();
   const _receiveWindow = await browser.newWindow(codeUrl);
-  await browser.waitUntil(() => $("button").isExisting());
-  await (await $("button")).click();
+  await browser.waitUntil(() => $("button*=Download").isExisting());
+  await (await $("button*=Download")).click();
   await browser.call(() =>
     waitForFileExists(receivedFilePath, timeout || 60000)
   );
@@ -59,20 +59,6 @@ describe("Send flow", () => {
     });
   });
 
-  describe("on uploading multiple files", () => {
-    it("will only upload the first file", async () => {
-      await Page.open();
-      await Page.uploadFiles(
-        "/usr/src/app/test/files/hello-world-2.txt",
-        "/usr/src/app/test/files/hello-world.txt"
-      );
-
-      const content = await $("main");
-      await expect(content).toHaveTextContaining("hello-world-2.txt");
-      await expect(content).not.toHaveTextContaining("hello-world.txt");
-    });
-  });
-
   describe("when uploading a file less than 1MB", () => {
     it("will transfer successfully", async () => {
       await testTransferSuccess("hello-world.txt");
@@ -92,13 +78,15 @@ describe("Send flow", () => {
   });
 
   describe("when uploading a file with the size of 4.2GB", () => {
-    it("will tell the user that the file is too large", async () => {
+    it("will tell the user that the file is too large", async function () {
+      this.timeout(120000);
       await testTransferFailure("sizes/4.2GB");
     });
   });
 
   describe("when uploading a file with the size of 4.3GB", () => {
-    it("will tell the user that the file is too large", async () => {
+    it("will tell the user that the file is too large", async function () {
+      this.timeout(120000);
       await testTransferFailure("sizes/4.3GB");
     });
   });
