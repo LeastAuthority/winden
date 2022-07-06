@@ -5,6 +5,7 @@ import ReceivePage from "./pages/ReceivePage";
 import SendPage from "./pages/SendPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import { useCodeUrlCheck } from "../hooks/useCodeUrlCheck";
+import SafariCheckModal from "./SafariCheckModal";
 
 type Props = {};
 
@@ -13,6 +14,7 @@ export default function App({}: Props) {
 
   return (
     <AppTemplate>
+      <SafariCheckModal />
       <Routes>
         <Route path="/" element={<Navigate replace to="s" />} />
         <Route path="s" element={<SendPage />} />
