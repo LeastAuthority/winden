@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useRef, useState } from "react";
+import React, { PropsWithChildren, useEffect, useRef, useState } from "react";
 import { useError } from "../../hooks/useError";
 import { detectErrorType } from "../../util/errors";
 import ClientWorker from "../../wormhole/client_worker";
@@ -143,8 +143,9 @@ export function WormholeProvider(props: Props) {
   const error = useError();
   const [bytesSent, setBytesSent] = useState(0);
 
-  const client = useRef<Transfer>(
-    new Transfer(
+  const client = useRef<Transfer>();
+  useEffect(() => {
+    client.current = new Transfer(
       (file, code) => {
         setFileMeta(file);
         setCode(code);
@@ -158,20 +159,20 @@ export function WormholeProvider(props: Props) {
       (bytes: number) => {
         setBytesSent(bytes);
       }
-    )
-  );
+    );
+  }, []);
 
   async function sendFile(
     file: File,
     opts?: TransferOptions
   ): Promise<TransferProgress | void> {
-    return client.current.sendFile(file, opts).catch((e: any) => {
+    return client.current?.sendFile(file, opts).catch((e: any) => {
       error?.setError(detectErrorType(e));
     });
   }
 
   async function saveFile(code: string): Promise<TransferProgress | void> {
-    return client.current.saveFile(code).catch((e: any) => {
+    return client.current?.saveFile(code).catch((e: any) => {
       error?.setError(detectErrorType(e));
     });
   }
