@@ -95,6 +95,31 @@ And https://webdriver.io/docs/api/browser/debug/
 
 > If you run the WDIO testrunner make sure you increase the timeout property of the test framework you are using (e.g. Mocha or Jasmine) in order to prevent test termination due to a test timeout. Also avoid executing the command with multiple capabilities running at the same time.
 
+## Deploying to playground
+
+We build and deploy by running a gulp task inside a docker container. You will need to provide your AWS credentials to the container. We do this through the `.env` file.
+
+- Create `client/.env`
+- Fill it with the following: (Replace placeholders in angle brackets with the appropriate values)
+
+```
+AWS_ACCESS_KEY_ID=<YOUR_ACCESS_KEY>
+AWS_SECRET_ACCESS_KEY=<YOUR_SECRET_ACCESS_KEY>
+AWS_DEFAULT_REGION=<REGION>
+
+S3_BUCKET=<URL>
+CDF_DISTRIBUTION_ID=<ID>
+
+MAILBOX_URL="wss://mailbox.w3.leastauthority.com/v1"
+RELAY_URL="wss://relay.w3.leastauthority.com:443"
+```
+
+Now you can deploy by running the following:
+
+```
+docker-compose run client gulp deploy_playground
+```
+
 ## Codebase Architecture
 
 See [ARCHITECTURE.md](/ARCHITECTURE.md) for an in-depth look at the codebase structure.
