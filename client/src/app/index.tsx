@@ -10,13 +10,13 @@ import { WormholeProvider } from "./components/providers/WormholeProvider";
 
 ReactDOM.render(
   <ErrorProvider>
-    <WormholeProvider>
-      <CodeInputProvider>
+    <CodeInputProvider>
+      <WormholeProvider>
         <HashRouter>
           <App />
         </HashRouter>
-      </CodeInputProvider>
-    </WormholeProvider>
+      </WormholeProvider>
+    </CodeInputProvider>
   </ErrorProvider>,
   document.querySelector("#app")
 );

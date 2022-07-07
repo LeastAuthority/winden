@@ -1,4 +1,5 @@
 import React, { PropsWithChildren, useEffect, useRef, useState } from "react";
+import { useCodeInput } from "../../hooks/useCodeInput";
 import { useError } from "../../hooks/useError";
 import { detectErrorType } from "../../util/errors";
 import ClientWorker from "../../wormhole/client_worker";
@@ -142,6 +143,7 @@ export function WormholeProvider(props: Props) {
   const [done, setDone] = useState(false);
   const error = useError();
   const [bytesSent, setBytesSent] = useState(0);
+  const codeInput = useCodeInput();
 
   const client = useRef<Transfer>();
   useEffect(() => {
@@ -178,6 +180,8 @@ export function WormholeProvider(props: Props) {
   }
 
   function reset() {
+    codeInput?.setValue("");
+    codeInput?.setSubmitting(false);
     setFileMeta(null);
     setCode(undefined);
     setProgressEta(null);
