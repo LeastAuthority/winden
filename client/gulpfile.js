@@ -1,9 +1,11 @@
 const del = require("del");
-const exec = require("child_process").exec;
+const { exec, execSync } = require("child_process");
 const gulp = require("gulp");
 const connect = require("gulp-connect");
 const webpack = require("webpack-stream");
 const Dotenv = require("dotenv-webpack");
+
+require("dotenv").config();
 
 const webpackConfig = {
   mode: "development",
@@ -80,11 +82,28 @@ const watch = () => {
 
 const clean = () => del("dist");
 
+const deploy_playground = (cb) => {
+  execSync(`aws s3 sync ./dist ${process.env.S3_BUCKET}`);
+  execSync(`aws cloudfront create-invalidation \
+    --distribution-id ${process.env.CDF_DISTRIBUTION_ID} \
+    --paths /index.html \
+     /wormhole.wasm \
+     /worker/main.js`);
+  cb();
+};
+
 exports.javascript = javascript;
 exports.worker = worker;
 exports.public = public;
 exports.wasm = wasm;
 exports.watch = watch;
 exports.clean = clean;
+exports.deploy_playground = gulp.series(
+  public,
+  javascript,
+  worker,
+  wasm,
+  deploy_playground
+);
 
-exports.default = gulp.parallel(javascript, public, wasm);
+exports.default = gulp.series(public, javascript, worker, wasm);

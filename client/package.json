@@ -49,6 +49,7 @@
     "babel-loader": "^8.2.5",
     "css-loader": "^6.7.1",
     "del": "^6.0.0",
+    "dotenv": "^16.0.1",
     "dotenv-webpack": "^7.1.0",
     "gulp": "^4.0.2",
     "gulp-connect": "^5.7.0",
