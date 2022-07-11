@@ -4,7 +4,7 @@
   "scripts": {
     "test": "jest",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook -o dist/storybook"
   },
   "dependencies": {
     "@ionic/vue": "^5.4.0",

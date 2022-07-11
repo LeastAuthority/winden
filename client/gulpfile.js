@@ -53,8 +53,19 @@ const worker = () =>
     .pipe(gulp.dest("dist/worker"))
     .pipe(connect.reload());
 
+const storybook = (cb) => {
+  execSync("npm run build-storybook");
+  cb();
+};
+
 const publicClean = () =>
-  del(["dist/*", "!dist/app", "!dist/worker", "!dist/wormhole.wasm"]);
+  del([
+    "dist/*",
+    "!dist/app",
+    "!dist/storybook",
+    "!dist/worker",
+    "!dist/wormhole.wasm",
+  ]);
 const publicCopy = () =>
   gulp.src("src/public/**/*").pipe(gulp.dest("dist")).pipe(connect.reload());
 const public = gulp.series(publicClean, publicCopy);
@@ -103,7 +114,8 @@ exports.deploy_playground = gulp.series(
   javascript,
   worker,
   wasm,
+  storybook,
   deploy_playground
 );
 
-exports.default = gulp.series(public, javascript, worker, wasm);
+exports.default = gulp.series(public, javascript, worker, wasm, storybook);
