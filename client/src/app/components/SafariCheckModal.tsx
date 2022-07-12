@@ -5,7 +5,9 @@ import { browserIsProbablySafari } from "../util/browserIsProbablySafari";
 type Props = {};
 
 export default function SafariCheckModal({}: Props) {
-  const [opened, setOpened] = useState(!!browserIsProbablySafari);
+  const [opened, setOpened] = useState(
+    process.env.NODE_ENV === "production" && !!browserIsProbablySafari
+  );
 
   return (
     <Modal
