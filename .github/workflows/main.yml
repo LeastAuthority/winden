@@ -23,9 +23,6 @@ jobs:
       - name: Install docker and docker-compose
         run: sudo apt-get install docker docker-compose
 
-      - name: start docker
-        run: sudo systemctl start docker
-
       - name: setup Go toolchain
         uses: actions/setup-go@v1
         with:
