@@ -12,9 +12,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
-      - name: checkout and update submodules
-        run: git submodule update --init --recursive
+        with:
+            submodules: recursive
 
       - name: setup npm, yarn etc.
         uses: actions/setup-node@v2
