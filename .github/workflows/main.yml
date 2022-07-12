@@ -1,0 +1,59 @@
+name: transfer-repo-CI
+on: [push, pull_request]
+jobs:
+  build:
+    name: Build/Test
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        go-version: [1.16.2]
+        os: [ubuntu-latest]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: checkout and update submodules
+        run: git submodule update --init --recursive
+
+      - name: setup npm, yarn etc.
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install docker and docker-compose
+        run: sudo apt-get install docker docker-compose
+
+      - name: setup Go toolchain
+        uses: actions/setup-go@v1
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Setup docker images
+        run: docker-compose build
+
+      - name: build client
+        uses: docker-compose run client npm i
+
+      - name: build client-e2e
+        uses: docker-compose --profile e2e run client-e2e npm i
+
+      - name: run container in the background
+        run: docker-compose up -d client
+
+      - name: setup for running tests
+        run: |
+          cat <<EOF >> ./client-e2e/.env
+          HOST_IP=localhost
+          EOF
+
+      - name: run unit and integration tests
+        run: docker-compose run client npm run test
+
+      - name: run  end-to-end test
+        run: |
+          docker-compose run --rm client-e2e
+          docker-compose --profile e2e down
+
+      - name: stop the containers
+        run: docker-compose down
