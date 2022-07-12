@@ -33,10 +33,10 @@ jobs:
         run: docker-compose build
 
       - name: build client
-        uses: docker-compose run client npm i
+        run: docker-compose run client npm i
 
       - name: build client-e2e
-        uses: docker-compose --profile e2e run client-e2e npm i
+        run: docker-compose --profile e2e run client-e2e npm i
 
       - name: run container in the background
         run: docker-compose up -d client
