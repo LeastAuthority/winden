@@ -21,7 +21,7 @@ jobs:
           node-version: '16'
 
       - name: Install docker and docker-compose
-        run: sudo apt-get install docker.io docker-compose
+        run: sudo apt-get install docker-compose
 
       - name: setup Go toolchain
         uses: actions/setup-go@v1
