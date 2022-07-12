@@ -28,6 +28,12 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
 
+      - name: setup for running tests
+        run: |
+          cat <<EOF >> ./client-e2e/.env
+          HOST_IP=localhost
+          EOF
+
       - name: Setup docker images
         run: docker-compose build
 
@@ -40,11 +46,6 @@ jobs:
       - name: run container in the background
         run: docker-compose up -d client
 
-      - name: setup for running tests
-        run: |
-          cat <<EOF >> ./client-e2e/.env
-          HOST_IP=localhost
-          EOF
 
       - name: run unit and integration tests
         run: docker-compose run client npm run test
