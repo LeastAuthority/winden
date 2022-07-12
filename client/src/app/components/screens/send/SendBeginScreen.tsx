@@ -61,7 +61,9 @@ export function SendBeginScreenContent(props: ContentProps) {
       <Dropzone
         onDrop={props.onDrop}
         onReject={props.onReject}
-        maxSize={2 * 10 ** 8}
+        maxSize={
+          process.env.NODE_ENV === "production" ? 2 * 10 ** 8 : undefined
+        }
         multiple={false}
       >
         {(status) => (
