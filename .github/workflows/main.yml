@@ -35,7 +35,7 @@ jobs:
           EOF
 
       - name: Setup docker images
-        run: docker-compose build
+        run: sudo docker-compose build
 
       - name: build client
         run: docker-compose run client npm i
