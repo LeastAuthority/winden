@@ -66,10 +66,7 @@ const worker = () =>
     .pipe(gulp.dest("dist/worker"))
     .pipe(connect.reload());
 
-const storybook = (cb) => {
-  execSync("npm run build-storybook");
-  cb();
-};
+const storybook = () => exec("npm run build-storybook");
 
 const publicClean = () =>
   del([
