@@ -4,6 +4,7 @@ const gulp = require("gulp");
 const connect = require("gulp-connect");
 const webpack = require("webpack-stream");
 const Dotenv = require("dotenv-webpack");
+const SentryPlugin = require("@sentry/webpack-plugin");
 
 require("dotenv").config();
 
@@ -31,7 +32,19 @@ const webpackConfig = {
       },
     ],
   },
-  plugins: [new Dotenv()],
+  plugins: [
+    new Dotenv(),
+    ...(process.env.NODE_ENV === "staging"
+      ? [
+          new SentryPlugin({
+            release: process.env.RELEASE,
+            include: "./dist",
+            org: "least-authority",
+            project: "transfer-rewrite",
+          }),
+        ]
+      : []),
+  ],
 };
 
 const javascript = () =>

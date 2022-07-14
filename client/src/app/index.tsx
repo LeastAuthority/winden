@@ -29,6 +29,7 @@ Sentry.init({
     }),
   ],
   tracesSampleRate: 1.0,
+  release: process.env.RELEASE,
 });
 
 ReactDOM.render(
