@@ -60,6 +60,12 @@ docker-compose logs -f
 docker-compose down
 ```
 
+### Storybook
+
+```
+docker-compose run -p 6006:6006 client npm run storybook
+```
+
 ## Testing
 
 ### Setup
