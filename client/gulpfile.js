@@ -120,6 +120,7 @@ exports.javascript = javascript;
 exports.worker = worker;
 exports.public = public;
 exports.wasm = wasm;
+exports.storybook = storybook;
 exports.watch = watch;
 exports.clean = clean;
 exports.deploy_playground = gulp.series(
