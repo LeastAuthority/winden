@@ -34,7 +34,7 @@ const webpackConfig = {
   },
   plugins: [
     new Dotenv(),
-    ...(process.env.NODE_ENV === "staging"
+    ...(process.env.NODE_ENV === "playground"
       ? [
           new SentryPlugin({
             release: process.env.RELEASE,
