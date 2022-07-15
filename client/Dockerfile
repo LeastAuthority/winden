@@ -15,10 +15,12 @@ COPY --from=golang:1.16-alpine /usr/local/go/ /usr/local/go/
 # USER node
 
 
-RUN mkdir ~/.npm-global
-RUN npm config set prefix ‘~/.npm-global’
-ENV PATH="~/.npm-global/bin:$PATH"
+# RUN mkdir ~/.npm-global
+# RUN npm config set prefix ‘~/.npm-global’
+#ENV PATH="~/.npm-global/bin:$PATH"
 ENV PATH="/usr/local/go/bin:${PATH}"
+
+RUN chown -R "${USER}" /root/.npm
 
 COPY package.json .
 COPY package-lock.json .
