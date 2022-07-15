@@ -8,8 +8,9 @@ RUN npm install --global gulp-cli
 COPY --from=golang:1.16-alpine /usr/local/go/ /usr/local/go/
 
 RUN npm install --location=global @sentry/cli
-RUN chown -R node /usr/src/app/client
 
+RUN mkdir -p /usr/src/app/client
+RUN chown -R node:node /usr/src/app/client
 USER node
 
 RUN mkdir ~/.npm-global
