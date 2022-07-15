@@ -33,10 +33,7 @@ jobs:
         run: docker-compose build
 
       - name: build client
-        run: |
-          sudo chown -R $USER:$GROUP ~/.npm
-          sudo chown -R $USER:$GROUP ~/.config
-          docker-compose run client npm i
+        run: docker-compose run client npm i
 
       - name: build client-e2e
         run: docker-compose --profile e2e run client-e2e npm i
