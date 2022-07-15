@@ -1,6 +1,7 @@
 FROM node:16-alpine
 
 WORKDIR /usr/src/app/client
+USER node
 
 RUN apk add aws-cli git
 
