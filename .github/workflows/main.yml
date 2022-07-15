@@ -38,7 +38,7 @@ jobs:
         run: docker-compose build
 
       - name: build client
-        run: docker-compose run client npm i
+        run: docker-compose run client npm i --unsafe-perm
 
       - name: build client-e2e
         run: docker-compose --profile e2e run client-e2e npm i
