@@ -1,9 +1,10 @@
 FROM node:16-alpine
 
 WORKDIR /usr/src/app/client
-USER node
 
-RUN sudo apk add aws-cli git
+RUN apk add aws-cli git
+
+USER node
 
 RUN npm config set unsafe-perm true
 RUN npm install --global gulp-cli
