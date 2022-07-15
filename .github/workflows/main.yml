@@ -23,11 +23,6 @@ jobs:
       - name: Install docker and docker-compose
         run: sudo apt-get install docker-compose
 
-      - name: setup Go toolchain
-        uses: actions/setup-go@v1
-        with:
-          go-version: ${{ matrix.go-version }}
-
       - name: setup for running tests
         run: |
           cat <<EOF >> ./client-e2e/.env
