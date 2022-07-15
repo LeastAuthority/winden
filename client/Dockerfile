@@ -7,7 +7,7 @@ RUN apk add aws-cli git
 RUN npm install --global gulp-cli
 COPY --from=golang:1.16-alpine /usr/local/go/ /usr/local/go/
 
-RUN npm install --global sentry-cli
+RUN npm install --location=global @sentry/cli
 
 USER node
 
