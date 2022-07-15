@@ -38,11 +38,10 @@ jobs:
       - name: build client-e2e
         run: docker-compose --profile e2e run client-e2e npm i
 
-      - name: run container in the background
-        run: docker-compose --profile e2e up -d client
-
       - name: run unit and integration tests
-        run: docker-compose --profile e2e run client npm run test
+        run: |
+          docker-compose --profile e2e up -d client
+          docker-compose --profile e2e run client npm run test
 
       - name: run  end-to-end tests
         run: |
