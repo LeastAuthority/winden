@@ -25,8 +25,10 @@ jobs:
 
       - name: setup for running tests
         run: |
+          IP=$(/sbin/ip route | awk '/default/ { print $3 }')
+          printf "HOST_IP address is: %s\n" "$HOST_IP"
           cat <<EOF >> ./client-e2e/.env
-          HOST_IP=host.docker.internal
+          HOST_IP="$IP"
           EOF
 
       - name: Setup docker images
