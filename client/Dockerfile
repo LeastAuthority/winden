@@ -9,7 +9,7 @@ COPY --from=golang:1.16-alpine /usr/local/go/ /usr/local/go/
 ENV PATH="/usr/local/go/bin:${PATH}"
 COPY package.json .
 COPY package-lock.json .
-RUN npm install
+RUN npm install --unsafe-perm
 COPY . .
 
 EXPOSE 8080
