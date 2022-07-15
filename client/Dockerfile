@@ -1,6 +1,6 @@
 FROM node:16-alpine
 
-WORKDIR /usr/src/app/client
+# WORKDIR /usr/src/app/client
 
 RUN apk add aws-cli git
 
@@ -10,6 +10,7 @@ COPY --from=golang:1.16-alpine /usr/local/go/ /usr/local/go/
 RUN npm install --location=global @sentry/cli
 
 RUN mkdir -p /usr/src/app/client
+WORKDIR /usr/src/app/client
 RUN chown -R node:node /usr/src/app/client
 USER node
 
