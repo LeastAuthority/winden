@@ -43,6 +43,11 @@ jobs:
           docker-compose --profile e2e up -d client
           docker-compose --profile e2e run client npm run test
 
+      - name: show IP addresses
+        run: |
+          ip addr show
+          /sbin/ifconfig
+
       - name: run  end-to-end tests
         run: |
           docker-compose --profile e2e run --rm client-e2e
