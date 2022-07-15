@@ -46,8 +46,8 @@ jobs:
 
       - name: run  end-to-end tests
         run: |
-          docker-compose run --rm client-e2e
+          docker-compose --profile e2e run --rm client-e2e
           docker-compose --profile e2e down
 
       - name: stop the containers
-        run: docker-compose down
+        run: docker-compose --profile e2e down
