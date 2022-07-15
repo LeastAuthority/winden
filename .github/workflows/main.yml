@@ -26,7 +26,8 @@ jobs:
       - name: setup for running tests
         run: |
           cat <<EOF >> ./client-e2e/.env
-          HOST_IP=localhost
+          IP=$(/sbin/ip route|awk '/default/ { print $3 }')
+          HOST_IP=$IP
           EOF
 
       - name: Setup docker images
