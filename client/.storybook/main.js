@@ -9,11 +9,15 @@ module.exports = {
   framework: "@storybook/react",
   staticDirs: ["../src/public"],
   webpackFinal: async (config, { configType }) => {
-    config.output.publicPath = "/storybook/";
+    if (configType !== "DEVELOPMENT") {
+      config.output.publicPath = "/storybook/";
+    }
     return config;
   },
-  managerWebpack: async (config) => {
-    config.output.publicPath = "/storybook/";
+  managerWebpack: async (config, { configType }) => {
+    if (configType !== "DEVELOPMENT") {
+      config.output.publicPath = "/storybook/";
+    }
     return config;
   },
 };

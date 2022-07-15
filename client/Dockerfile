@@ -1,8 +1,8 @@
 FROM node:16-alpine
 
-WORKDIR /usr/src/app
+WORKDIR /usr/src/app/client
 
-RUN apk add aws-cli
+RUN apk add aws-cli git
 
 RUN npm install --global gulp-cli
 COPY --from=golang:1.16-alpine /usr/local/go/ /usr/local/go/

@@ -4,6 +4,7 @@ const gulp = require("gulp");
 const connect = require("gulp-connect");
 const webpack = require("webpack-stream");
 const Dotenv = require("dotenv-webpack");
+const SentryPlugin = require("@sentry/webpack-plugin");
 
 require("dotenv").config();
 
@@ -31,7 +32,19 @@ const webpackConfig = {
       },
     ],
   },
-  plugins: [new Dotenv()],
+  plugins: [
+    new Dotenv(),
+    ...(process.env.NODE_ENV === "playground"
+      ? [
+          new SentryPlugin({
+            release: process.env.RELEASE,
+            include: "./dist",
+            org: "least-authority",
+            project: "transfer-rewrite",
+          }),
+        ]
+      : []),
+  ],
 };
 
 const javascript = () =>
@@ -53,10 +66,7 @@ const worker = () =>
     .pipe(gulp.dest("dist/worker"))
     .pipe(connect.reload());
 
-const storybook = (cb) => {
-  execSync("npm run build-storybook");
-  cb();
-};
+const storybook = () => exec("npm run build-storybook");
 
 const publicClean = () =>
   del([
@@ -107,6 +117,7 @@ exports.javascript = javascript;
 exports.worker = worker;
 exports.public = public;
 exports.wasm = wasm;
+exports.storybook = storybook;
 exports.watch = watch;
 exports.clean = clean;
 exports.deploy_playground = gulp.series(

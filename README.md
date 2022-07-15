@@ -60,6 +60,12 @@ docker-compose logs -f
 docker-compose down
 ```
 
+### Storybook
+
+```
+docker-compose run -p 6006:6006 client npm run storybook
+```
+
 ## Testing
 
 ### Setup
@@ -75,7 +81,10 @@ To get the containers to connect to be able to connect to the host, we need to a
 Run the unit and integration tests using the following:
 
 ```sh
+# run tests once
 docker-compose run client npm run test
+# or automatically re-run tests when editing a file
+docker-compose run client npm run test -- --watch
 ```
 
 Run the end-to-end tests with the following
