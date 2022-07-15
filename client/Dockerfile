@@ -20,7 +20,7 @@ ENV SENTRYCLI_SKIP_DOWNLOAD=1
 #ENV PATH="~/.npm-global/bin:$PATH"
 ENV PATH="/usr/local/go/bin:${PATH}"
 
-RUN chown -R "${USER}" /root/.npm
+# RUN chown -R root /root/.npm
 
 COPY package.json .
 COPY package-lock.json .
