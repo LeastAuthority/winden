@@ -46,11 +46,10 @@ jobs:
       - name: run container in the background
         run: docker-compose up -d client
 
-
       - name: run unit and integration tests
         run: docker-compose run client npm run test
 
-      - name: run  end-to-end test
+      - name: run  end-to-end tests
         run: |
           docker-compose run --rm client-e2e
           docker-compose --profile e2e down
