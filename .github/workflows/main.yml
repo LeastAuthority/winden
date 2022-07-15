@@ -25,7 +25,7 @@ jobs:
 
       - name: setup for running tests
         run: |
-          IP=$(ip address show  eth0 | grep inet | cut -d ' ' -f 6 | head -n1)
+          IP=$(ip address show  eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f1 | head -n1)
           printf "HOST_IP address is: %s\n" "$HOST_IP"
           cat <<EOF >> ./client-e2e/.env
           HOST_IP="$IP"
