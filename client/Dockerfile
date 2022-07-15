@@ -8,7 +8,7 @@ RUN npm -g config set user root
 RUN npm install --global gulp-cli
 COPY --from=golang:1.16-alpine /usr/local/go/ /usr/local/go/
 
-RUN npm install --location=global @sentry/cli
+# RUN npm install --location=global @sentry/cli
 
 # RUN mkdir -p /usr/src/app/client
 # RUN chown -R node:node /usr/src/app/client
@@ -22,7 +22,7 @@ ENV PATH="/usr/local/go/bin:${PATH}"
 
 COPY package.json .
 COPY package-lock.json .
-RUN npm install --unsafe-perm
+RUN npm install --location=global --unsafe-perm
 COPY . .
 
 EXPOSE 8080
