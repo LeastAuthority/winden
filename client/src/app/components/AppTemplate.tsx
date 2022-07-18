@@ -6,6 +6,7 @@ import {
   Container,
   Group,
   Image,
+  MantineProvider,
   Paper,
   Space,
   Stack,
@@ -28,7 +29,15 @@ export default function AppTemplate(props: Props) {
   const { classes } = useStyles();
 
   return (
-    <>
+    <MantineProvider
+      theme={{
+        fontFamily: "Poppins, sans-serif",
+        headings: {
+          fontFamily: "Poppins, sans-serif",
+          fontWeight: 700,
+        },
+      }}
+    >
       <Background />
       <Container size="lg">
         <AppShell
@@ -140,6 +149,6 @@ export default function AppTemplate(props: Props) {
           </Paper>
         </AppShell>
       </Container>
-    </>
+    </MantineProvider>
   );
 }
