@@ -21,7 +21,9 @@ jobs:
           node-version: '16'
 
       - name: Install docker and docker-compose
-        run: sudo apt-get install docker-compose
+        run: |
+           sudo curl -o /usr/local/bin/docker-compose -L "https://github.com/docker/compose/releases/download/v2.6.1/docker-compose-linux-x86_64"
+           sudo chmod +x /usr/local/bin/docker-compose
 
       - name: setup for running tests
         run: |
