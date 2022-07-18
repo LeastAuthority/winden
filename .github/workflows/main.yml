@@ -32,7 +32,7 @@ jobs:
           EOF
 
       - name: Setup docker images
-        run: docker-compose build
+        run: docker-compose --profile e2e build
 
       - name: build client
         run: docker-compose --profile e2e run client npm i
