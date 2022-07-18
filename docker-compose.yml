@@ -24,10 +24,11 @@ services:
   # Selenium services
   chrome:
     volumes:
-      - test-downloads:/tmp/test-downloads
+      - test-downloads:/home/seluser/downloads
     ports:
       - "5900:5900"
-    image: selenium/node-chrome:4.1.3-20220405
+    build:
+      dockerfile: ./client-e2e/images/Dockerfile.chrome
     shm_size: 2gb
     depends_on:
       - selenium-hub
@@ -40,10 +41,11 @@ services:
       - e2e
   edge:
     volumes:
-      - test-downloads:/tmp/test-downloads
+      - test-downloads:/home/seluser/downloads
     ports:
       - "5901:5900"
-    image: selenium/node-edge:4.1.3-20220405
+    build:
+      dockerfile: ./client-e2e/images/Dockerfile.edge
     shm_size: 2gb
     depends_on:
       - selenium-hub
@@ -56,10 +58,11 @@ services:
       - e2e
   firefox:
     volumes:
-      - test-downloads:/tmp/test-downloads
+      - test-downloads:/home/seluser/downloads
     ports:
       - "5902:5900"
-    image: selenium/node-firefox:4.1.3-20220405
+    build:
+      dockerfile: ./client-e2e/images/Dockerfile.firefox
     shm_size: 2gb
     depends_on:
       - selenium-hub
@@ -91,7 +94,7 @@ services:
       - ./client-e2e/.env
     volumes:
       - ./client-e2e:/usr/src/app
-      - test-downloads:/tmp/test-downloads
+      - test-downloads:/home/node/downloads
     depends_on:
       client:
         condition: service_started

@@ -3,7 +3,8 @@ import { execSync } from "child_process";
 import * as fs from "fs";
 import * as fsExtra from "fs-extra";
 
-global.downloadDir = "/tmp/test-downloads";
+global.downloadDirBrowser = "/home/seluser/downloads";
+global.downloadDir = "/home/node/downloads";
 
 export const config: Options.Testrunner = {
   hostname: "selenium-hub",
@@ -22,9 +23,10 @@ export const config: Options.Testrunner = {
       acceptInsecureCerts: true,
       "goog:chromeOptions": {
         prefs: {
-          directory_upgrade: true,
-          prompt_for_download: false,
-          "download.default_directory": global.downloadDir,
+          "download.default_directory": global.downloadDirBrowser,
+          "download.directory_upgrade": true,
+          "download.prompt_for_download": false,
+          "savefile.default_directory": global.downloadDirBrowser,
         },
       },
     },
@@ -32,7 +34,7 @@ export const config: Options.Testrunner = {
       browserName: "firefox",
       "moz:firefoxOptions": {
         prefs: {
-          "browser.download.dir": global.downloadDir,
+          "browser.download.dir": global.downloadDirBrowser,
           "browser.download.folderList": 2,
         },
       },
@@ -41,9 +43,10 @@ export const config: Options.Testrunner = {
       browserName: "MicrosoftEdge",
       "ms:edgeOptions": {
         prefs: {
-          directory_upgrade: true,
-          prompt_for_download: false,
-          "download.default_directory": global.downloadDir,
+          "download.default_directory": global.downloadDirBrowser,
+          "download.directory_upgrade": true,
+          "download.prompt_for_download": false,
+          "savefile.default_directory": global.downloadDirBrowser,
         },
       },
     },
@@ -61,7 +64,6 @@ export const config: Options.Testrunner = {
     timeout: 60000,
   },
   onPrepare: function (_config, _capabilities) {
-    fs.chownSync(global.downloadDir, 1200, 1201);
     execSync("/usr/src/app/scripts/generate-sized-test-files.sh");
   },
   beforeTest: function () {
