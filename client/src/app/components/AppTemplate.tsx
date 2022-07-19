@@ -6,7 +6,6 @@ import {
   Container,
   Group,
   Image,
-  MantineProvider,
   Paper,
   Space,
   Stack,
@@ -19,6 +18,7 @@ import { Download, Send } from "tabler-icons-react";
 import { useStyles } from "../hooks/useStyles";
 import { useWormhole } from "../hooks/useWormhole";
 import Background from "./Background";
+import ThemeProvider from "./providers/ThemeProvider";
 
 type Props = React.PropsWithChildren<{}>;
 
@@ -29,15 +29,7 @@ export default function AppTemplate(props: Props) {
   const { classes } = useStyles();
 
   return (
-    <MantineProvider
-      theme={{
-        fontFamily: "Poppins, sans-serif",
-        headings: {
-          fontFamily: "Poppins, sans-serif",
-          fontWeight: 700,
-        },
-      }}
-    >
+    <ThemeProvider>
       <Background />
       <Container size="lg">
         <AppShell
@@ -149,6 +141,6 @@ export default function AppTemplate(props: Props) {
           </Paper>
         </AppShell>
       </Container>
-    </MantineProvider>
+    </ThemeProvider>
   );
 }

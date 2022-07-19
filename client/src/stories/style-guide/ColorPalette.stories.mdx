@@ -1,0 +1,55 @@
+import { Table, useMantineTheme } from "@mantine/core";
+import { Meta } from "@storybook/addon-docs";
+import ThemeProvider from "../../app/components/providers/ThemeProvider";
+
+<Meta title="Style Guide/Color Palette" />
+
+export const PaletteTable = () => {
+  const theme = useMantineTheme();
+  const elements = Object.keys(theme.other.colors).map((x) => ({
+    name: x,
+    hexCode: theme.other.colors[x],
+  }));
+  const rows = elements.map((element) => (
+    <tr key={element.name}>
+      <td>
+        <span
+          style={{
+            display: "inline-block",
+            width: 32,
+            height: 32,
+            backgroundColor: element.hexCode,
+          }}
+        ></span>
+      </td>
+      <td>{element.name}</td>
+      <td>{element.hexCode}</td>
+    </tr>
+  ));
+  return (
+    <Table>
+      <thead>
+        <tr>
+          <th>Preview</th>
+          <th>Color name</th>
+          <th>Hex code</th>
+        </tr>
+      </thead>
+      <tbody>{rows}</tbody>
+    </Table>
+  );
+  return <div>{JSON.stringify(theme.other)}</div>;
+};
+
+# Overview
+
+<ThemeProvider>
+  <PaletteTable />
+</ThemeProvider>
+
+# Notes
+
+- We don't follow the [10-color shade system](https://mantine.dev/theming/extend-theme/#default-colors) provided by Mantine. So instead of storing colors in `theme.colors`, we store them in the custom property `theme.other.colors`.
+- `darker-grey` is used as foreground for space-to-complete with a `light-grey` card
+- `medium-grey` is added in for cancel/navigation (still need to check saturation)
+- `progress-grey` is added in for filled progress bar (still need to check saturation)
