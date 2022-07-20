@@ -17,7 +17,7 @@ ENV PATH="/usr/local/go/bin:${PATH}"
 COPY package.json .
 COPY package-lock.json .
 ENV SENTRYCLI_USE_LOCAL=1
-RUN SENTRYCLI_USE_LOCAL=1 npm install --location=global --unsafe-perm
+RUN npm install --location=global --unsafe-perm
 COPY . .
 
 EXPOSE 8080
