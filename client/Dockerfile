@@ -11,12 +11,11 @@ COPY --from=golang:1.16-alpine /usr/local/go/ /usr/local/go/
 RUN npm install --location=global @sentry/cli
 ENV SENTRYCLI_SKIP_DOWNLOAD=1
 
-
 ENV PATH="/usr/local/go/bin:${PATH}"
 
 COPY package.json .
 COPY package-lock.json .
-ENV SENTRYCLI_USE_LOCAL=1
+ARG SENTRYCLI_USE_LOCAL=1
 RUN npm install --location=global --unsafe-perm
 COPY . .
 
