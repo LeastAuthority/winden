@@ -10,17 +10,9 @@ COPY --from=golang:1.16-alpine /usr/local/go/ /usr/local/go/
 
 RUN npm install --location=global @sentry/cli
 ENV SENTRYCLI_SKIP_DOWNLOAD=1
-# RUN mkdir -p /usr/src/app/client
-# RUN chown -R node:node /usr/src/app/client
-# USER node
 
 
-# RUN mkdir ~/.npm-global
-# RUN npm config set prefix ‘~/.npm-global’
-#ENV PATH="~/.npm-global/bin:$PATH"
 ENV PATH="/usr/local/go/bin:${PATH}"
-
-# RUN chown -R root /root/.npm
 
 COPY package.json .
 COPY package-lock.json .
