@@ -11,6 +11,7 @@ import { useClipboard } from "@mantine/hooks";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Files, X } from "tabler-icons-react";
+import { useStyles } from "../../../hooks/useStyles";
 import { useWormhole } from "../../../hooks/useWormhole";
 import FileLabel from "../../FileLabel";
 
@@ -22,33 +23,43 @@ type ContentProps = {
 };
 
 export function SendInstructionsScreenContent(props: ContentProps) {
+  const { classes } = useStyles();
+
   return (
     <>
-      <Title order={1}>Ready to send!</Title>
+      <Text className={classes.headerText}>Ready to send!</Text>
       <Stack align="center" data-testid="send-page-code-section">
         <FileLabel />
         <Text weight="bold" color="gray">
           1. Keep this tab open
         </Text>
-        <Text color="gray">Files are sent directly from your device.</Text>
-        <Text color="gray">The link/code expires once you close the tab.</Text>
+        <Text color="gray" align="center">
+          Files are sent directly from your device.
+          <br />
+          The link/code expires once you close the tab.
+        </Text>
         <Text weight="bold" color="gray">
           2. Give the receiver the link below
         </Text>
         <Group position="center">
           <TextInput
-            style={{ width: "100%" }}
+            sx={(theme) => ({ maxWidth: 380 })}
             readOnly
             type="text"
-            value={`${window.location.protocol}//${window.location.host}/#/${props.code}`}
+            value={`${window.location.host}/#/${props.code}`}
           />
           <Button
             disabled={props.copied}
             onClick={props.onCopy}
-            variant="light"
-            color="dark"
+            // variant="light"
+            // color="dark"
             pl="xs"
             pr="md"
+            sx={(theme) => ({
+              // TODO: shades are needed for hover events
+              backgroundColor: theme.other.colors.yellow,
+              color: theme.other.colors.black,
+            })}
           >
             <Files />
             <Space w="xs" />

@@ -1,6 +1,7 @@
-import { Button, Progress, Space, Stack, Text, Title } from "@mantine/core";
+import { Button, Progress, Space, Stack, Text } from "@mantine/core";
 import React from "react";
 import { X } from "tabler-icons-react";
+import { useStyles } from "../../hooks/useStyles";
 import { useWormhole } from "../../hooks/useWormhole";
 import { durationToClosestUnit } from "../../util/durationToClosestUnit";
 import FileLabel from "../FileLabel";
@@ -15,15 +16,17 @@ type ContentProps = {
 };
 
 export function ProgressScreenContent(props: ContentProps) {
+  const { classes } = useStyles();
+
   return (
     <>
-      <Title order={1}>{props.title}</Title>
+      <Text className={classes.headerText}>{props.title}</Text>
       <Space h="md" />
       <Stack align="center">
         <FileLabel />
         <Progress
           style={{ width: "100%" }}
-          size="xl"
+          size={32}
           value={(props.bytesSent / props.fileSize) * 100}
         />
         <Text>

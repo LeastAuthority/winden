@@ -1,10 +1,11 @@
 import { Group, Modal, Space, Text, Title } from "@mantine/core";
-import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import React, { useEffect, useState } from "react";
 import { FileRejection } from "react-dropzone";
 import { Upload } from "tabler-icons-react";
 import { useCancelModal } from "../../../hooks/useCancelModal";
+import { useStyles } from "../../../hooks/useStyles";
 import { useWormhole } from "../../../hooks/useWormhole";
+import Dropzone from "../../Dropzone";
 
 type ModalState =
   | "NONE"
@@ -20,8 +21,13 @@ type ContentProps = {
 };
 
 export function SendBeginScreenContent(props: ContentProps) {
+  const { classes } = useStyles();
+
   return (
-    <div data-testid="send-page-upload-section">
+    <div
+      data-testid="send-page-upload-section"
+      className={classes.sendPageSection}
+    >
       <Modal
         centered
         opened={props.modalState === "FILE_TOO_LARGE"}
@@ -50,15 +56,21 @@ export function SendBeginScreenContent(props: ContentProps) {
         <Text>The transfer was cancelled or interrupted.</Text>
         <Text>Please try again.</Text>
       </Modal>
-      <Title order={2}>Send files in real-time</Title>
-      <Text size="md" weight="bold" color="dimmed">
+      <Text className={classes.headerText}>Send files in real-time</Text>
+      <Text color="gray" weight={300}>
         We don’t store – and can’t read – your files. We simply transfer them.
       </Text>
-      <Text size="md" weight="bold" color="dimmed">
+      <Text color="gray" weight={300}>
         No sign-ups. No snooping. No nonsense.{" "}
       </Text>
       <Space h="md" />
-      <Dropzone
+      <Dropzone style={{ flex: 1 }} />
+      {/* <Dropzone
+        disabled
+        ml={-32 + 8}
+        mr={-32 + 8}
+        mb={-32 + 8}
+        // style={{ height: 640 }}
         onDrop={props.onDrop}
         onReject={props.onReject}
         maxSize={
@@ -83,7 +95,7 @@ export function SendBeginScreenContent(props: ContentProps) {
             </div>
           </Group>
         )}
-      </Dropzone>
+      </Dropzone> */}
     </div>
   );
 }

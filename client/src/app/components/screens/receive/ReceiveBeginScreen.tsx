@@ -3,6 +3,7 @@ import React from "react";
 import { useCancelModal } from "../../../hooks/useCancelModal";
 import { useCodeInput } from "../../../hooks/useCodeInput";
 import { useError } from "../../../hooks/useError";
+import { useStyles } from "../../../hooks/useStyles";
 import { useWormhole } from "../../../hooks/useWormhole";
 import { detectErrorType } from "../../../util/errors";
 import { CodeInput } from "../../CodeInput";
@@ -15,6 +16,8 @@ type ContentProps = {
 };
 
 export function ReceiveBeginScreenContent(props: ContentProps) {
+  const { classes } = useStyles();
+
   return (
     <div data-testid="receive-page-container">
       <Modal
@@ -26,8 +29,10 @@ export function ReceiveBeginScreenContent(props: ContentProps) {
         <Text>The transfer was cancelled or interrupted.</Text>
         <Text>Please try again.</Text>
       </Modal>
-      <Title order={2}>Receive files in real-time</Title>
-      <Text size="md" weight="bold" color="dimmed">
+      <Text className={classes.headerText} weight={300}>
+        Receive files in real-time
+      </Text>
+      <Text color="dimmed" weight={300}>
         Always end-to-end encrypted.
       </Text>
       <Space h="md" />

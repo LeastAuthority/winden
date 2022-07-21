@@ -1,5 +1,7 @@
+import { MantineThemeOther } from "@mantine/core";
+
 declare module "@mantine/core" {
-  export interface MantineThemeOther {
+  interface MantineThemeOther {
     colors: {
       black: string;
       "darker-grey": string;

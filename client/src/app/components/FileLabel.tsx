@@ -8,14 +8,14 @@ type ContentProps = { name: string; size: number };
 
 export function FileLabelContent(props: ContentProps) {
   return (
-    <Paper shadow="sm" p="md" withBorder>
+    <Paper p="md" withBorder>
       {props.name && props.size ? (
         <Group align="center">
           <File />
-          <Text component="span" weight="bold" color="dimmed">
+          <Text component="span" weight={500} color="dimmed">
             {props.name}
           </Text>
-          <Text component="span" color="dimmed">
+          <Text component="span" weight={500} color="dimmed">
             {" "}
             ({sizeToClosestUnit(props.size)})
           </Text>

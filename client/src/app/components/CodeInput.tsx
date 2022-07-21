@@ -76,9 +76,10 @@ export function CodeInputContent(props: ContentProps) {
 
   return (
     <div data-testid="code-input-container">
-      <Group align="stretch" ref={setReferenceElement} spacing="md">
+      <Group position="center" spacing="md">
         <TextInput
-          style={{ flex: 1 }}
+          ref={setReferenceElement}
+          style={{ flex: 1, maxWidth: 400 }}
           data-testid="code-input"
           type="text"
           value={props.code}
@@ -92,6 +93,11 @@ export function CodeInputContent(props: ContentProps) {
         <Button
           onClick={() => !error && props.onSubmit && props.onSubmit(props.code)}
           loading={props.submitting}
+          sx={(theme) => ({
+            // TODO: shades are needed for hover events
+            backgroundColor: theme.other.colors.yellow,
+            color: theme.other.colors.black,
+          })}
         >
           Next
         </Button>
@@ -109,17 +115,25 @@ export function CodeInputContent(props: ContentProps) {
         {...attributes.popper}
       >
         <Space h="sm" />
-        <Paper shadow="md" p="xs" withBorder>
+        <Paper p="xs" withBorder>
           <Group spacing="md" position="center">
             <Text inline>{props.codeSuggestion}</Text>
-            <Paper shadow="xs" p="xs" withBorder>
+            <Paper p="xs" withBorder>
               <Text>Press space to complete</Text>
             </Paper>
           </Group>
         </Paper>
       </div>
-      <Text data-testid="code-error-message" color="red">
-        {errorMessage}
+      {/* // TODO: red shade override */}
+      <Text
+        data-testid="code-error-message"
+        color="red"
+        align="center"
+        size="sm"
+        weight={300}
+      >
+        <Space h="sm" />
+        {errorMessage || <>&#8203;</>}
       </Text>
     </div>
   );

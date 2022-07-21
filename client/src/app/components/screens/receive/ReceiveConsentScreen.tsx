@@ -1,8 +1,9 @@
-import { Button, Group, Space, Stack, Title } from "@mantine/core";
+import { Button, Group, Space, Stack, Text } from "@mantine/core";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Download, X } from "tabler-icons-react";
 import { useError } from "../../../hooks/useError";
+import { useStyles } from "../../../hooks/useStyles";
 import { useWormhole } from "../../../hooks/useWormhole";
 import { detectErrorType } from "../../../util/errors";
 import FileLabel from "../../FileLabel";
@@ -13,25 +14,34 @@ type ContentProps = {
 };
 
 export function ReceiveConsentScreenContent(props: ContentProps) {
+  const { classes } = useStyles();
+
   return (
     <>
-      <Title order={2}>Ready to download</Title>
+      <Text className={classes.headerText}>Ready to download</Text>
       <Space h="md" />
       <Stack align="center">
         <FileLabel />
-        <Group>
-          <Button onClick={props.onAccept} color="blue">
-            <Download /> Download
-          </Button>
-          <Button
-            data-testid="send-page-cancel-button"
-            onClick={props.onCancel}
-            variant="light"
-            color="dark"
-          >
-            <X /> Cancel
-          </Button>
-        </Group>
+        <Button
+          onClick={props.onAccept}
+          color="blue"
+          sx={(theme) => ({
+            // TODO: shades are needed for hover events
+            backgroundColor: theme.other.colors.yellow,
+            color: theme.other.colors.black,
+          })}
+        >
+          <Download /> Download
+        </Button>
+        <Space h="xl" />
+        <Button
+          data-testid="send-page-cancel-button"
+          onClick={props.onCancel}
+          variant="light"
+          color="dark"
+        >
+          <X /> Cancel
+        </Button>
       </Stack>
     </>
   );

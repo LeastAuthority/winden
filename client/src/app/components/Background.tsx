@@ -1,12 +1,13 @@
 import React from "react";
-import styles from "./Background.module.css";
+import { useStyles } from "../hooks/useStyles";
 
 type Props = {};
 
 export default function Background({}: Props) {
+  const { classes } = useStyles();
   return (
-    <div className={styles.container}>
-      <div className={styles.circle}></div>
+    <div className={classes.container}>
+      <div className={classes.circle}></div>
     </div>
   );
 }
