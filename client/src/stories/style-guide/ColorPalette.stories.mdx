@@ -50,6 +50,7 @@ export const PaletteTable = () => {
 # Notes
 
 - We don't follow the [10-color shade system](https://mantine.dev/theming/extend-theme/#default-colors) provided by Mantine. So instead of storing colors in `theme.colors`, we store them in the custom property `theme.other.colors`.
+  - If a different shade of a color is needed, use the `theme.fn.darken` and `theme.fn.lighten` functions using an increment of `0.1` units.
 - `darker-grey` is used as foreground for space-to-complete with a `light-grey` card
 - `medium-grey` is added in for cancel/navigation (still need to check saturation)
 - `progress-grey` is added in for filled progress bar (still need to check saturation)
