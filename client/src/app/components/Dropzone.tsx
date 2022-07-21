@@ -23,17 +23,21 @@ export default function Dropzone(props: Props) {
       })}
     >
       <input {...getInputProps()} />
-      <Text color="gray" weight={600}>
+      <Text className={classes.grey} weight={600}>
         Drag & drop any file
       </Text>
-      <Text color="gray">up to 4GB</Text>
+      <Text className={classes.grey}>up to 4GB</Text>
       <Divider
         className={classes.dropzoneDivider}
         my="xs"
         label="or"
         labelPosition="center"
       />
-      <div role="button" onClick={open} className={classes.dropzoneButton}>
+      <div
+        role="button"
+        onClick={open}
+        className={classNames(classes.dropzoneButton, classes.secondary)}
+      >
         <Plus size={70} />
         <Text>Select</Text>
       </div>

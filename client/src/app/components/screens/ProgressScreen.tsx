@@ -30,14 +30,13 @@ export function ProgressScreenContent(props: ContentProps) {
           size={32}
           value={(props.bytesSent / props.fileSize) * 100}
         />
-        <Text>
+        <Text className={classes.grey}>
           {props.eta > 1 ? durationToClosestUnit(props.eta) : props.waitText}
         </Text>
         <Button
           data-testid="send-page-cancel-button"
           onClick={props.onCancel}
-          variant="light"
-          color="dark"
+          className={classes.secondary}
         >
           <X /> Cancel
         </Button>

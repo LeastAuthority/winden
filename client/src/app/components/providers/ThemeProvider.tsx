@@ -9,20 +9,20 @@ export default function ThemeProvider(props: Props) {
       withNormalizeCSS
       theme={{
         fontFamily: "Poppins, sans-serif",
-        colors: {
-          gray: [
-            "#111",
-            "#222",
-            "#6d6d6d", // darkmode dimmed
-            "#333",
-            "#c4c4c4", // OR separator border?
-            "#555",
-            "#6d6d6d", // dimmed
-            "#6d6d6d", // gray
-            "#000",
-            "#000",
-          ],
-        },
+        // colors: {
+        //   gray: [
+        //     "#111",
+        //     "#222",
+        //     "#6d6d6d", // darkmode dimmed
+        //     "#333",
+        //     "#c4c4c4", // OR separator border?
+        //     "#555",
+        //     "#6d6d6d", // dimmed
+        //     "#6d6d6d", // gray
+        //     "#000",
+        //     "#000",
+        //   ],
+        // },
         other: {
           colors: {
             black: "#282f39",
@@ -77,6 +77,7 @@ export default function ThemeProvider(props: Props) {
             body: {
               background: `linear-gradient(222.19deg, #f0f0f0 23.77%, #ffffff 98.02%)`,
               fontSize: `16px`,
+              color: theme.other.colors.black,
             },
             ".mantine-Paper-root": {
               borderColor: theme.other.colors["medium-grey"],
@@ -89,6 +90,12 @@ export default function ThemeProvider(props: Props) {
             },
             ".mantine-Progress-bar": {
               backgroundColor: theme.other.colors["progress-grey"],
+            },
+            ".mantine-Progress-root": {
+              backgroundColor: theme.other.colors["light-grey"],
+            },
+            ".mantine-TextInput-invalid": {
+              color: theme.other.colors["warning-red"],
             },
           },
         ]}

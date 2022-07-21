@@ -2,6 +2,25 @@ import { Center, createStyles } from "@mantine/core";
 
 export const useStyles = createStyles((theme) => {
   return {
+    dark: {
+      color: theme.other.colors.black,
+    },
+    darkGrey: {
+      color: theme.other.colors["darker-grey"],
+    },
+    grey: {
+      color: theme.other.colors["dark-grey"],
+    },
+    secondary: {
+      color: theme.other.colors.black,
+      backgroundColor: theme.other.colors["medium-grey"],
+      "&:hover": {
+        backgroundColor: theme.fn.darken(
+          theme.other.colors["medium-grey"],
+          0.1
+        ),
+      },
+    },
     fadeEnter: {
       opacity: 0,
       // transform: "translate(0, 25px)",
@@ -48,7 +67,6 @@ export const useStyles = createStyles((theme) => {
       flex: 1,
     },
     dropzoneButton: {
-      backgroundColor: theme.other.colors["medium-grey"],
       display: "inline-flex",
       flexDirection: "column",
       alignItems: "center",
@@ -56,6 +74,9 @@ export const useStyles = createStyles((theme) => {
       width: 135,
       height: 135,
       borderRadius: 4,
+      "&:active": {
+        transform: "translateY(1px)",
+      },
     },
     dropzoneDivider: {
       width: "25%",

@@ -34,7 +34,7 @@ export function ReceiveBeginScreenContent(props: ContentProps) {
         <Text className={classes.headerText} weight={300}>
           Receive files in real-time
         </Text>
-        <Text color="dimmed" weight={300}>
+        <Text className={classes.grey} weight={300}>
           Always end-to-end encrypted.
         </Text>
         <Space h="md" />

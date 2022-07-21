@@ -25,7 +25,6 @@ export function ReceiveConsentScreenContent(props: ContentProps) {
         <FileLabel />
         <Button
           onClick={props.onAccept}
-          color="blue"
           sx={(theme) => ({
             // TODO: shades are needed for hover events
             backgroundColor: theme.other.colors.yellow,
@@ -41,8 +40,7 @@ export function ReceiveConsentScreenContent(props: ContentProps) {
         <Button
           data-testid="send-page-cancel-button"
           onClick={props.onCancel}
-          variant="light"
-          color="dark"
+          className={classes.secondary}
         >
           <X /> Cancel
         </Button>

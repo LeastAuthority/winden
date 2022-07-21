@@ -11,6 +11,7 @@ import {
   Stack,
   Text,
 } from "@mantine/core";
+import classNames from "classnames";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
@@ -33,8 +34,7 @@ function Header() {
         {location.pathname === "/s" ? (
           <Button
             data-testid="go-to-receive-page"
-            variant="light"
-            color="dark"
+            className={classes.secondary}
             pl="xs"
             pr="md"
             onClick={() => {
@@ -54,8 +54,7 @@ function Header() {
         ) : (
           <Button
             data-testid="go-to-send-page"
-            variant="light"
-            color="dark"
+            className={classes.secondary}
             pl="xs"
             pr="md"
             onClick={() => {
@@ -88,16 +87,15 @@ function Footer() {
         <div style={{ width: "100%" }}>
           <Group position="apart" className={classes.footerLarge}>
             <Group position="apart" style={{ width: 380 }} ml={32}>
-              <Anchor color="dark">FAQ</Anchor>
-              <Anchor color="dark">Privacy</Anchor>
-              <Anchor color="dark">About Us</Anchor>
-              <Anchor color="dark">GitHub</Anchor>
+              <Anchor className={classes.dark}>FAQ</Anchor>
+              <Anchor className={classes.dark}>Privacy</Anchor>
+              <Anchor className={classes.dark}>About Us</Anchor>
+              <Anchor className={classes.dark}>GitHub</Anchor>
             </Group>
             <div style={{ flex: 1 }} />
             <Text
               size="sm"
-              className={classes.laMadeByTextLarge}
-              color="dimmed"
+              className={classNames(classes.grey, classes.laMadeByTextLarge)}
               weight="bold"
             >
               made with love for privacy by
@@ -106,24 +104,23 @@ function Footer() {
           </Group>
           <Stack className={classes.footerSmall}>
             <Group position="apart" mx="xl">
-              <Anchor size="sm" color="dark">
+              <Anchor size="sm" className={classes.dark}>
                 FAQ
               </Anchor>
-              <Anchor size="sm" color="dark">
+              <Anchor size="sm" className={classes.dark}>
                 Privacy
               </Anchor>
-              <Anchor size="sm" color="dark">
+              <Anchor size="sm" className={classes.dark}>
                 About Us
               </Anchor>
-              <Anchor size="sm" color="dark">
+              <Anchor size="sm" className={classes.dark}>
                 GitHub
               </Anchor>
             </Group>
             <Center>
               <Text
                 size="sm"
-                className={classes.laMadeByTextSmall}
-                color="dimmed"
+                className={classNames(classes.grey, classes.laMadeByTextSmall)}
                 weight="bold"
               >
                 made with love for privacy by

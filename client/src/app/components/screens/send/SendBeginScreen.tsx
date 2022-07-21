@@ -59,10 +59,10 @@ export function SendBeginScreenContent(props: ContentProps) {
           <Text>Please try again.</Text>
         </Modal>
         <Text className={classes.headerText}>Send files in real-time</Text>
-        <Text color="gray" weight={300}>
+        <Text className={classes.grey} weight={300}>
           We don’t store – and can’t read – your files. We simply transfer them.
         </Text>
-        <Text color="gray" weight={300}>
+        <Text className={classes.grey} weight={300}>
           No sign-ups. No snooping. No nonsense.{" "}
         </Text>
         <Space h="md" />

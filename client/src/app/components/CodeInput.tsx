@@ -3,6 +3,7 @@ import { Modifier } from "@popperjs/core";
 import React, { useState } from "react";
 import { usePopper } from "react-popper";
 import { useCodeInput } from "../hooks/useCodeInput";
+import { useStyles } from "../hooks/useStyles";
 import { applyCodeSuggestion } from "../util/applyCodeSuggestion";
 import { CODE_SEGMENT_DELIMITER } from "../util/constants";
 import { getCodeSuggestion } from "../util/getCodeSuggestion";
@@ -37,6 +38,7 @@ type ContentProps = {
 };
 
 export function CodeInputContent(props: ContentProps) {
+  const { classes } = useStyles();
   const [referenceElement, setReferenceElement] =
     useState<HTMLElement | null>(null);
   const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
@@ -120,9 +122,11 @@ export function CodeInputContent(props: ContentProps) {
         <Space h="sm" />
         <Paper p="xs" withBorder>
           <Group spacing="md" position="center">
-            <Text inline>{props.codeSuggestion}</Text>
+            <Text inline className={classes.darkGrey}>
+              {props.codeSuggestion}
+            </Text>
             <Paper p="xs" withBorder>
-              <Text>Press space to complete</Text>
+              <Text className={classes.darkGrey}>Press space to complete</Text>
             </Paper>
           </Group>
         </Paper>
@@ -130,7 +134,9 @@ export function CodeInputContent(props: ContentProps) {
       {/* // TODO: red shade override */}
       <Text
         data-testid="code-error-message"
-        color="red"
+        sx={(theme) => ({
+          color: theme.other.colors["warning-red"],
+        })}
         align="center"
         size="sm"
         weight={300}
