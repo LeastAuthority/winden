@@ -81,7 +81,15 @@ export function CodeInputContent(props: ContentProps) {
       <Group position="center" spacing="md">
         <TextInput
           ref={setReferenceElement}
-          style={{ flex: 1, maxWidth: 400 }}
+          style={{
+            flexGrow: 1,
+            maxWidth: 400, // if no placeholder, then 220px
+          }}
+          sx={(theme) => ({
+            input: {
+              textAlign: "center",
+            },
+          })}
           data-testid="code-input"
           type="text"
           value={props.code}

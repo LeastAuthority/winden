@@ -87,16 +87,24 @@ function Footer() {
         <div style={{ width: "100%" }}>
           <Group position="apart" className={classes.footerLarge}>
             <Group position="apart" style={{ width: 380 }} ml={32}>
-              <Anchor className={classes.dark}>FAQ</Anchor>
-              <Anchor className={classes.dark}>Privacy</Anchor>
-              <Anchor className={classes.dark}>About Us</Anchor>
-              <Anchor className={classes.dark}>GitHub</Anchor>
+              <Anchor className={classes.dark} weight={600}>
+                FAQ
+              </Anchor>
+              <Anchor className={classes.dark} weight={600}>
+                Privacy
+              </Anchor>
+              <Anchor className={classes.dark} weight={600}>
+                About Us
+              </Anchor>
+              <Anchor className={classes.dark} weight={600}>
+                GitHub
+              </Anchor>
             </Group>
             <div style={{ flex: 1 }} />
             <Text
               size="sm"
               className={classNames(classes.grey, classes.laMadeByTextLarge)}
-              weight="bold"
+              weight={600}
             >
               made with love for privacy by
             </Text>
@@ -104,16 +112,16 @@ function Footer() {
           </Group>
           <Stack className={classes.footerSmall}>
             <Group position="apart" mx="xl">
-              <Anchor size="sm" className={classes.dark}>
+              <Anchor size="sm" className={classes.dark} weight={600}>
                 FAQ
               </Anchor>
-              <Anchor size="sm" className={classes.dark}>
+              <Anchor size="sm" className={classes.dark} weight={600}>
                 Privacy
               </Anchor>
-              <Anchor size="sm" className={classes.dark}>
+              <Anchor size="sm" className={classes.dark} weight={600}>
                 About Us
               </Anchor>
-              <Anchor size="sm" className={classes.dark}>
+              <Anchor size="sm" className={classes.dark} weight={600}>
                 GitHub
               </Anchor>
             </Group>
