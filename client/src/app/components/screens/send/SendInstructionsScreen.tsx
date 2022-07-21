@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { Files, X } from "tabler-icons-react";
 import { useStyles } from "../../../hooks/useStyles";
 import { useWormhole } from "../../../hooks/useWormhole";
+import { Content } from "../../AppTemplate";
 import FileLabel from "../../FileLabel";
 
 type ContentProps = {
@@ -26,7 +27,7 @@ export function SendInstructionsScreenContent(props: ContentProps) {
   const { classes } = useStyles();
 
   return (
-    <>
+    <Content>
       <Text className={classes.headerText}>Ready to send!</Text>
       <Stack align="center" data-testid="send-page-code-section">
         <FileLabel />
@@ -79,7 +80,7 @@ export function SendInstructionsScreenContent(props: ContentProps) {
           Cancel
         </Button>
       </Stack>
-    </>
+    </Content>
   );
 }
 

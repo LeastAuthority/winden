@@ -6,6 +6,7 @@ import { useError } from "../../../hooks/useError";
 import { useStyles } from "../../../hooks/useStyles";
 import { useWormhole } from "../../../hooks/useWormhole";
 import { detectErrorType } from "../../../util/errors";
+import { Content } from "../../AppTemplate";
 import { CodeInput } from "../../CodeInput";
 
 type ContentProps = {
@@ -19,25 +20,27 @@ export function ReceiveBeginScreenContent(props: ContentProps) {
   const { classes } = useStyles();
 
   return (
-    <div data-testid="receive-page-container">
-      <Modal
-        centered
-        opened={props.cancelModalOpen}
-        onClose={props.onCancelModalClose}
-        title="Transfer failed"
-      >
-        <Text>The transfer was cancelled or interrupted.</Text>
-        <Text>Please try again.</Text>
-      </Modal>
-      <Text className={classes.headerText} weight={300}>
-        Receive files in real-time
-      </Text>
-      <Text color="dimmed" weight={300}>
-        Always end-to-end encrypted.
-      </Text>
-      <Space h="md" />
-      <CodeInput onSubmit={props.onSubmit} submitting={props.submitting} />
-    </div>
+    <Content>
+      <div data-testid="receive-page-container">
+        <Modal
+          centered
+          opened={props.cancelModalOpen}
+          onClose={props.onCancelModalClose}
+          title="Transfer failed"
+        >
+          <Text>The transfer was cancelled or interrupted.</Text>
+          <Text>Please try again.</Text>
+        </Modal>
+        <Text className={classes.headerText} weight={300}>
+          Receive files in real-time
+        </Text>
+        <Text color="dimmed" weight={300}>
+          Always end-to-end encrypted.
+        </Text>
+        <Space h="md" />
+        <CodeInput onSubmit={props.onSubmit} submitting={props.submitting} />
+      </div>
+    </Content>
   );
 }
 

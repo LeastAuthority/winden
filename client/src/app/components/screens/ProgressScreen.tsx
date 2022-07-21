@@ -4,6 +4,7 @@ import { X } from "tabler-icons-react";
 import { useStyles } from "../../hooks/useStyles";
 import { useWormhole } from "../../hooks/useWormhole";
 import { durationToClosestUnit } from "../../util/durationToClosestUnit";
+import { Content } from "../AppTemplate";
 import FileLabel from "../FileLabel";
 
 type ContentProps = {
@@ -19,7 +20,7 @@ export function ProgressScreenContent(props: ContentProps) {
   const { classes } = useStyles();
 
   return (
-    <>
+    <Content>
       <Text className={classes.headerText}>{props.title}</Text>
       <Space h="md" />
       <Stack align="center">
@@ -41,7 +42,7 @@ export function ProgressScreenContent(props: ContentProps) {
           <X /> Cancel
         </Button>
       </Stack>
-    </>
+    </Content>
   );
 }
 

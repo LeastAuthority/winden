@@ -6,6 +6,7 @@ import { useError } from "../../../hooks/useError";
 import { useStyles } from "../../../hooks/useStyles";
 import { useWormhole } from "../../../hooks/useWormhole";
 import { detectErrorType } from "../../../util/errors";
+import { Content } from "../../AppTemplate";
 import FileLabel from "../../FileLabel";
 
 type ContentProps = {
@@ -17,7 +18,7 @@ export function ReceiveConsentScreenContent(props: ContentProps) {
   const { classes } = useStyles();
 
   return (
-    <>
+    <Content>
       <Text className={classes.headerText}>Ready to download</Text>
       <Space h="md" />
       <Stack align="center">
@@ -29,6 +30,9 @@ export function ReceiveConsentScreenContent(props: ContentProps) {
             // TODO: shades are needed for hover events
             backgroundColor: theme.other.colors.yellow,
             color: theme.other.colors.black,
+            "&:hover": {
+              backgroundColor: theme.fn.darken(theme.other.colors.yellow, 0.1),
+            },
           })}
         >
           <Download /> Download
@@ -43,7 +47,7 @@ export function ReceiveConsentScreenContent(props: ContentProps) {
           <X /> Cancel
         </Button>
       </Stack>
-    </>
+    </Content>
   );
 }
 

@@ -5,6 +5,7 @@ import { Upload } from "tabler-icons-react";
 import { useCancelModal } from "../../../hooks/useCancelModal";
 import { useStyles } from "../../../hooks/useStyles";
 import { useWormhole } from "../../../hooks/useWormhole";
+import { Content } from "../../AppTemplate";
 import Dropzone from "../../Dropzone";
 
 type ModalState =
@@ -24,48 +25,49 @@ export function SendBeginScreenContent(props: ContentProps) {
   const { classes } = useStyles();
 
   return (
-    <div
-      data-testid="send-page-upload-section"
-      className={classes.sendPageSection}
-    >
-      <Modal
-        centered
-        opened={props.modalState === "FILE_TOO_LARGE"}
-        onClose={props.onModalClose}
-        title="Large file sizes: coming soon"
+    <Content fullHeight>
+      <div
+        data-testid="send-page-upload-section"
+        className={classes.sendPageSection}
       >
-        <Text>
-          In this development state, this product only supports file sizes of up
-          to 200 MB. Please select a smaller file.
+        <Modal
+          centered
+          opened={props.modalState === "FILE_TOO_LARGE"}
+          onClose={props.onModalClose}
+          title="Large file sizes: coming soon"
+        >
+          <Text>
+            In this development state, this product only supports file sizes of
+            up to 200 MB. Please select a smaller file.
+          </Text>
+        </Modal>
+        <Modal
+          centered
+          opened={props.modalState === "OTHER_ERROR"}
+          onClose={props.onModalClose}
+          title="Error"
+        >
+          <Text>Failed to upload file.</Text>
+        </Modal>
+        <Modal
+          centered
+          opened={props.modalState === "TRANSFER_CANCELLED"}
+          onClose={props.onModalClose}
+          title="Transfer failed"
+        >
+          <Text>The transfer was cancelled or interrupted.</Text>
+          <Text>Please try again.</Text>
+        </Modal>
+        <Text className={classes.headerText}>Send files in real-time</Text>
+        <Text color="gray" weight={300}>
+          We don’t store – and can’t read – your files. We simply transfer them.
         </Text>
-      </Modal>
-      <Modal
-        centered
-        opened={props.modalState === "OTHER_ERROR"}
-        onClose={props.onModalClose}
-        title="Error"
-      >
-        <Text>Failed to upload file.</Text>
-      </Modal>
-      <Modal
-        centered
-        opened={props.modalState === "TRANSFER_CANCELLED"}
-        onClose={props.onModalClose}
-        title="Transfer failed"
-      >
-        <Text>The transfer was cancelled or interrupted.</Text>
-        <Text>Please try again.</Text>
-      </Modal>
-      <Text className={classes.headerText}>Send files in real-time</Text>
-      <Text color="gray" weight={300}>
-        We don’t store – and can’t read – your files. We simply transfer them.
-      </Text>
-      <Text color="gray" weight={300}>
-        No sign-ups. No snooping. No nonsense.{" "}
-      </Text>
-      <Space h="md" />
-      <Dropzone style={{ flex: 1 }} />
-      {/* <Dropzone
+        <Text color="gray" weight={300}>
+          No sign-ups. No snooping. No nonsense.{" "}
+        </Text>
+        <Space h="md" />
+        <Dropzone style={{ flex: 1 }} />
+        {/* <Dropzone
         disabled
         ml={-32 + 8}
         mr={-32 + 8}
@@ -96,7 +98,8 @@ export function SendBeginScreenContent(props: ContentProps) {
           </Group>
         )}
       </Dropzone> */}
-    </div>
+      </div>
+    </Content>
   );
 }
 

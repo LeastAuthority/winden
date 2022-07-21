@@ -1,6 +1,7 @@
 import { Box, Space, Stack, Text } from "@mantine/core";
 import React from "react";
 import { useStyles } from "../../hooks/useStyles";
+import { Content } from "../AppTemplate";
 import FileLabel from "../FileLabel";
 
 type Props = {
@@ -12,7 +13,7 @@ export default function CompleteScreen(props: Props) {
   const { classes } = useStyles();
 
   return (
-    <>
+    <Content>
       <Text className={classes.headerText}>{props.title}</Text>
       <Space h="md" />
       <Stack align="center">
@@ -26,6 +27,6 @@ export default function CompleteScreen(props: Props) {
         </Box>
         {props.render()}
       </Stack>
-    </>
+    </Content>
   );
 }
