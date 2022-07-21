@@ -13,72 +13,93 @@ export const Overview = () => {
       size: "2.5rem for large screens, 2rem for medium screens, and 1.35rem for small screens",
       weight: "Bold 700",
       color: "#282f39",
+      notes: (
+        <ul>
+          <li>Use `classes.headerText` to apply styles.</li>
+          <li>
+            Font size depends on the screen width. The breakpoints are based on
+            when the longest title of a card will start to word wrap. This lets
+            us keep the titles to fit in one line.
+          </li>
+        </ul>
+      ),
     },
     {
       usage: "Left-aligned text [sub header]",
       size: "16px",
       weight: "Light 300",
       color: "#6d6d6d",
+      notes: "",
     },
     {
       usage: "Centered text [Instructions/status]",
       size: "16px",
       weight: "Bold 700",
       color: "#6d6d6d",
+      notes: "",
     },
     {
       usage: "File card",
       size: "16px",
       weight: "Medium 500",
       color: "#6d6d6d",
+      notes: "",
     },
     {
       usage: "Primary button [CTA-like]",
       size: "16px Sentence case",
       weight: "Semi-bold 600",
       color: "#282f39",
+      notes: "",
     },
     {
       usage: "Primary button [CTA-like] inactive",
       size: "16px Sentence case",
       weight: "Semi-bold 600",
       color: "#6d6d6d",
+      notes: "",
     },
     {
       usage: "Secondary button [medium grey background]",
       size: "16px Sentence case",
       weight: "Semi-bold 600",
       color: "#282f39",
+      notes: "",
     },
     {
       usage: "Navigation button",
       size: "16px all caps",
       weight: "Semi-bold 600",
       color: "#282f39",
+      notes: "",
     },
     {
       usage: "Form field [code]",
       size: "16px all lowercase [remove https://]",
       weight: "Medium 500",
       color: "#282f39",
+      notes: "",
     },
     {
       usage: "Form field when empty [code]",
       size: "16px all lowercase [remove https://]",
       weight: "Medium 500",
       color: "#6d6d6d",
+      notes: "",
     },
     {
       usage: "Form label [below field]",
       size: "14px",
       weight: "Light 300 ",
       color: "#6d6d6d",
+      notes: "",
     },
     {
       usage: "Footer menu",
       size: "16px on large screens, 14px on small screens",
       weight: "Semi-bold 600",
       color: "#6d6d6d",
+      notes: "",
     },
   ];
   const rows = items.map((item) => (
@@ -89,6 +110,7 @@ export const Overview = () => {
       <td style={{ backgroundColor: item.color, color: "white" }}>
         {item.color}
       </td>
+      <td>{item.notes}</td>
     </tr>
   ));
   return (
@@ -99,6 +121,7 @@ export const Overview = () => {
           <th>Size</th>
           <th>Weight</th>
           <th>Color</th>
+          <th>Notes</th>
         </tr>
       </thead>
       <tbody>{rows}</tbody>
@@ -118,44 +141,18 @@ The base font size is `16px`.
 
 <Overview />
 
-### Header text
+## Notes
 
-Used in the titles in a `<Content />` card.
+- We don't follow mantine's color system and instead store a custom color pallete. To use grey text, use `classes.grey` instead of the `color` prop.
 
-Use `classes.headerText` to apply styles.
+```tsx
+// right
+// - Note: `classes` come from the useCommonStyles hook
+<Text className={classes.grey} />
 
-The size of this text can be `2.5rem`, `2rem`, or `1.35rem` depending on the screen width. The breakpoints are based on when the longest title of a card will start to word wrap. This lets us keep the titles to fit in one line.
+// wrong
+<Text color="gray" />
+<Text color="dimmed" />
+```
 
-### Left-aligned text
-
-Used for the sub-header of a `<Content />` card.
-
-### Centered text
-
-Used in the instructions and status information in a card
-
-### File card
-
-Used in the `<FileLabel />` component.
-
-### Primary button
-
-The primary call-to-action (CTA) button. Text inside these buttons should be in Sentence case.
-
-### Inactive primary button
-
-Text inside these buttons should be in Sentence case.
-
-### Secondary button
-
-Text inside these buttons should be in Sentence case.
-
-### Navigation button
-
-Text inside these buttons should be in UPPERCASE.
-
-### Form field [code]
-
-Used in the code input
-
-### Footer menu
+- Similarly, use `classes.darkGrey` for darker text, and `classes.dark` for black text.

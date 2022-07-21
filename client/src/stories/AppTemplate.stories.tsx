@@ -18,8 +18,8 @@ const Template: ComponentStory<typeof AppTemplate> = (args) => (
       <Content>
         <Text>
           Components inside the <code>{"<AppTemplate />"}</code> component will
-          be rendered here. Use with {"<Content />"} if you want the content in
-          a card.
+          be rendered here. Use with <code>{"<Content />"}</code> if you want
+          the content in a card.
         </Text>
       </Content>
     </AppTemplate>
