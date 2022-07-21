@@ -2,7 +2,7 @@ import { Text } from "@mantine/core";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
-import AppTemplate from "../app/components/AppTemplate";
+import AppTemplate, { Content } from "../app/components/AppTemplate";
 
 export default {
   title: "AppTemplate",
@@ -15,10 +15,13 @@ export default {
 const Template: ComponentStory<typeof AppTemplate> = (args) => (
   <MemoryRouter initialEntries={["/"]}>
     <AppTemplate>
-      <Text>
-        Components inside the <code>{"<AppTemplate />"}</code> component will be
-        rendered in this white area.
-      </Text>
+      <Content>
+        <Text>
+          Components inside the <code>{"<AppTemplate />"}</code> component will
+          be rendered here. Use with {"<Content />"} if you want the content in
+          a card.
+        </Text>
+      </Content>
     </AppTemplate>
   </MemoryRouter>
 );
