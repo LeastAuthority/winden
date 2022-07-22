@@ -1,11 +1,14 @@
 import { Divider, Text } from "@mantine/core";
 import classNames from "classnames";
 import React from "react";
-import { useDropzone } from "react-dropzone";
+import { FileRejection, useDropzone } from "react-dropzone";
 import { Plus } from "tabler-icons-react";
 import { useStyles } from "../hooks/useStyles";
 
-type Props = React.HTMLProps<HTMLDivElement>;
+type Props = {
+  onDrop: (files: File[]) => void;
+  onReject: (rejections: FileRejection[]) => void;
+};
 
 export default function Dropzone(props: Props) {
   const { classes } = useStyles();
@@ -13,13 +16,16 @@ export default function Dropzone(props: Props) {
   const { getRootProps, getInputProps, open } = useDropzone({
     noClick: true,
     noKeyboard: true,
+    maxFiles: 1,
+    maxSize: process.env.NODE_ENV === "production" ? 2 * 10 ** 8 : undefined,
+    onDropAccepted: props.onDrop,
+    onDropRejected: props.onReject,
   });
 
   return (
     <div
-      {...props}
       {...getRootProps({
-        className: classNames(props.className, classes.dropzone),
+        className: classNames(classes.dropzone),
       })}
     >
       <input {...getInputProps()} />

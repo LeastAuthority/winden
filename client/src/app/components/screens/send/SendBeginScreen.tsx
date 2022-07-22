@@ -1,7 +1,6 @@
-import { Group, Modal, Space, Text, Title } from "@mantine/core";
+import { Modal, Space, Text } from "@mantine/core";
 import React, { useEffect, useState } from "react";
 import { FileRejection } from "react-dropzone";
-import { Upload } from "tabler-icons-react";
 import { useCancelModal } from "../../../hooks/useCancelModal";
 import { useStyles } from "../../../hooks/useStyles";
 import { useWormhole } from "../../../hooks/useWormhole";
@@ -66,38 +65,7 @@ export function SendBeginScreenContent(props: ContentProps) {
           No sign-ups. No snooping. No nonsense.{" "}
         </Text>
         <Space h="md" />
-        <Dropzone style={{ flex: 1 }} />
-        {/* <Dropzone
-        disabled
-        ml={-32 + 8}
-        mr={-32 + 8}
-        mb={-32 + 8}
-        // style={{ height: 640 }}
-        onDrop={props.onDrop}
-        onReject={props.onReject}
-        maxSize={
-          process.env.NODE_ENV === "production" ? 2 * 10 ** 8 : undefined
-        }
-        multiple={false}
-      >
-        {(status) => (
-          <Group
-            position="center"
-            spacing="xl"
-            style={{ minHeight: 220, pointerEvents: "none" }}
-          >
-            <Upload />
-            <div>
-              <Text size="xl" inline>
-                Drag file here or click to select file
-              </Text>
-              <Text size="sm" color="dimmed" inline mt={7}>
-                File should not exceed 200MB
-              </Text>
-            </div>
-          </Group>
-        )}
-      </Dropzone> */}
+        <Dropzone onDrop={props.onDrop} onReject={props.onReject} />
       </div>
     </Content>
   );
