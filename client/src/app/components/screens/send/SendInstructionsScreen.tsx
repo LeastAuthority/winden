@@ -54,17 +54,7 @@ export function SendInstructionsScreenContent(props: ContentProps) {
             onClick={props.onCopy}
             pl="xs"
             pr="md"
-            sx={(theme) => ({
-              // TODO: shades are needed for hover events
-              backgroundColor: theme.other.colors.yellow,
-              color: theme.other.colors.black,
-              "&:hover": {
-                backgroundColor: theme.fn.darken(
-                  theme.other.colors.yellow,
-                  0.1
-                ),
-              },
-            })}
+            className={classes.primary}
           >
             <Files />
             <Space w="xs" />
