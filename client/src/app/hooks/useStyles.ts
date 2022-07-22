@@ -30,40 +30,57 @@ export const useStyles = createStyles((theme) => {
     },
     fadeEnter: {
       opacity: 0,
-      // transform: "translate(0, 25px)",
+      transform: "translate(0, 25px)",
       zIndex: 1,
     },
     fadeEnterActive: {
       opacity: 1,
-      // transform: "translate(0, 0)",
-
-      transition: "opacity 250ms ease-out, transform 300ms ease",
+      transform: "translate(0, 0)",
+      transition: "opacity 200ms ease-out, transform 200ms ease",
     },
     fadeExit: {
       opacity: 1,
-      // transform: "translate(0, 0)",
+      transform: "translate(0, 0)",
     },
     fadeExitActive: {
       opacity: 0,
-      // transform: "translate(0, 30px)",
-
-      transition: "opacity 250ms ease-out, transform 300ms ease",
+      transform: "translate(0, 30px)",
+      transition: "opacity 200ms ease-out, transform 200ms ease",
+    },
+    receiveEnter: {
+      opacity: 0,
+      transform: "translate(25px, 25px)",
+      zIndex: 1,
+    },
+    receiveEnterActive: {
+      opacity: 1,
+      transform: "translate(0, 0)",
+      transition: "opacity 200ms ease-out, transform 200ms ease",
+    },
+    receiveExit: {
+      opacity: 1,
+      transform: "translate(0, 0)",
+    },
+    receiveExitActive: {
+      opacity: 0,
+      transform: "translate(30px, 30px)",
+      transition: "opacity 200ms ease-out, transform 200ms ease",
     },
     // itemEnter: {
     //   opacity: 0,
-    //   transition: "opacity 300ms ease-in",
+    //   transition: "opacity 200ms ease-in",
     // },
     // itemEnterActive: {
     //   opacity: 1,
-    //   transition: "opacity 300ms ease-in",
+    //   transition: "opacity 200ms ease-in",
     // },
     // itemExit: {
     //   opacity: 1,
-    //   transition: "opacity 300ms ease-in",
+    //   transition: "opacity 200ms ease-in",
     // },
     // itemExitActive: {
     //   opacity: 0,
-    //   transition: "opacity 300ms ease-in",
+    //   transition: "opacity 200ms ease-in",
     // },
     appShell: {
       height: "100vh",
@@ -105,6 +122,7 @@ export const useStyles = createStyles((theme) => {
         margin: -8,
       },
       marginTop: 0,
+      flex: 1,
     },
     content: {
       // height: "100%",

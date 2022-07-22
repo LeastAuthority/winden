@@ -146,30 +146,30 @@ export function Content(props: ContentProps) {
   const location = useLocation();
 
   return (
-    <SwitchTransition>
-      {/* // TODO route based animation instead of all of them the same */}
-      {/* <CSSTransition
-        key={location.key}
-        classNames={{
-          enter: classes.fadeEnter,
-          enterActive: classes.fadeEnterActive,
-          exit: classes.fadeExit,
-          exitActive: classes.fadeExitActive,
-        }}
-        timeout={300}
-      > */}
-      {/* <div style={{ position: "relative" }}> */}
+    <div
+      style={{
+        gridRow: 1,
+        gridColumn: 1,
+      }}
+    >
       <Paper
         // withBorder
         // shadow="md"
         className={classes.content}
-        style={props.fullHeight ? { height: "100%" } : {}}
+        // style={{
+        //   position: "absolute",
+        //   top: 0,
+        //   left: 0,
+        //   width: "100%",
+        //   height: "100%",
+        // }}
+        style={{
+          ...(props.fullHeight ? { height: "100%" } : {}),
+        }}
       >
         {props.children}
       </Paper>
-      {/* </div> */}
-      {/* </CSSTransition> */}
-    </SwitchTransition>
+    </div>
   );
 }
 
@@ -193,6 +193,11 @@ export default function AppTemplate(props: Props) {
             },
             body: {
               height: "100%",
+            },
+            main: {
+              display: "grid",
+              gridTemplateRows: "1fr",
+              gridTemplateColumns: "1fr",
             },
           }}
           padding={0}
