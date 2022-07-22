@@ -103,14 +103,7 @@ export function CodeInputContent(props: ContentProps) {
         <Button
           onClick={() => !error && props.onSubmit && props.onSubmit(props.code)}
           loading={props.submitting}
-          sx={(theme) => ({
-            // TODO: shades are needed for hover events
-            backgroundColor: theme.other.colors.yellow,
-            color: theme.other.colors.black,
-            "&:hover": {
-              backgroundColor: theme.fn.darken(theme.other.colors.yellow, 0.1),
-            },
-          })}
+          className={classes.primary}
         >
           Next
         </Button>
@@ -139,7 +132,6 @@ export function CodeInputContent(props: ContentProps) {
           </Group>
         </Paper>
       </div>
-      {/* // TODO: red shade override */}
       <Text
         data-testid="code-error-message"
         sx={(theme) => ({
