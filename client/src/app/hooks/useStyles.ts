@@ -28,21 +28,21 @@ export const useStyles = createStyles((theme) => {
         ),
       },
     },
-    fadeEnter: {
+    defaultEnter: {
       opacity: 0,
       transform: "translate(0, 25px)",
       zIndex: 1,
     },
-    fadeEnterActive: {
+    defaultEnterActive: {
       opacity: 1,
       transform: "translate(0, 0)",
       transition: "opacity 200ms ease-out, transform 200ms ease",
     },
-    fadeExit: {
+    defaultExit: {
       opacity: 1,
       transform: "translate(0, 0)",
     },
-    fadeExitActive: {
+    defaultExitActive: {
       opacity: 0,
       transform: "translate(0, 30px)",
       transition: "opacity 200ms ease-out, transform 200ms ease",
@@ -66,22 +66,6 @@ export const useStyles = createStyles((theme) => {
       transform: "translate(30px, 30px)",
       transition: "opacity 200ms ease-out, transform 200ms ease",
     },
-    // itemEnter: {
-    //   opacity: 0,
-    //   transition: "opacity 200ms ease-in",
-    // },
-    // itemEnterActive: {
-    //   opacity: 1,
-    //   transition: "opacity 200ms ease-in",
-    // },
-    // itemExit: {
-    //   opacity: 1,
-    //   transition: "opacity 200ms ease-in",
-    // },
-    // itemExitActive: {
-    //   opacity: 0,
-    //   transition: "opacity 200ms ease-in",
-    // },
     appShell: {
       height: "100vh",
       display: "flex",
@@ -125,7 +109,6 @@ export const useStyles = createStyles((theme) => {
       flex: 1,
     },
     content: {
-      // height: "100%",
       padding: 32,
       "@media (max-width: 620px)": {
         padding: 24,

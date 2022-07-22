@@ -83,7 +83,7 @@ export function CodeInputContent(props: ContentProps) {
           ref={setReferenceElement}
           style={{
             flexGrow: 1,
-            maxWidth: 400, // if no placeholder, then 220px
+            maxWidth: 400,
           }}
           sx={(theme) => ({
             input: {

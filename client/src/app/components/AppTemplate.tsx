@@ -14,7 +14,6 @@ import {
 import classNames from "classnames";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { SwitchTransition } from "react-transition-group";
 import { Download, Send } from "tabler-icons-react";
 import { useStyles } from "../hooks/useStyles";
 import { useWormhole } from "../hooks/useWormhole";
@@ -143,7 +142,6 @@ type ContentProps = React.PropsWithChildren<{
 
 export function Content(props: ContentProps) {
   const { classes } = useStyles();
-  const location = useLocation();
 
   return (
     <div
@@ -153,19 +151,8 @@ export function Content(props: ContentProps) {
       }}
     >
       <Paper
-        // withBorder
-        // shadow="md"
         className={classes.content}
-        // style={{
-        //   position: "absolute",
-        //   top: 0,
-        //   left: 0,
-        //   width: "100%",
-        //   height: "100%",
-        // }}
-        style={{
-          ...(props.fullHeight ? { height: "100%" } : {}),
-        }}
+        style={props.fullHeight ? { height: "100%" } : {}}
       >
         {props.children}
       </Paper>
@@ -176,14 +163,11 @@ export function Content(props: ContentProps) {
 type Props = React.PropsWithChildren<{}>;
 
 export default function AppTemplate(props: Props) {
-  const { classes } = useStyles();
-
   return (
     <>
       <Background />
       <Container size="lg">
         <AppShell
-          // classNames={{ root: classes.appShell, body: classes.appShellBody }}
           styles={{
             root: {
               height: "100vh",

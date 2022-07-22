@@ -15,7 +15,7 @@ export default function App({}: Props) {
   useCodeUrlCheck();
   const location = useLocation();
   const { classes } = useStyles();
-  const variant = location.pathname == "/r" ? "receive" : "fade";
+  const variant = location.pathname == "/r" ? "receive" : "default";
 
   return (
     <AppTemplate>
