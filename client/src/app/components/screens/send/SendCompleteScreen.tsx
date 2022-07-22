@@ -1,4 +1,4 @@
-import { Button, Space } from "@mantine/core";
+import { Button } from "@mantine/core";
 import React from "react";
 import { Send } from "tabler-icons-react";
 import { useStyles } from "../../../hooks/useStyles";
@@ -16,13 +16,10 @@ export default function SendCompleteScreen({}: Props) {
       title="Sent!"
       render={() => (
         <Button
+          leftIcon={<Send />}
           onClick={() => wormhole?.reset()}
           className={classes.secondary}
-          pl="xs"
-          pr="md"
         >
-          <Send />
-          <Space w="xs" />
           Send more
         </Button>
       )}

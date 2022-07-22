@@ -1,4 +1,4 @@
-import { Button, Space } from "@mantine/core";
+import { Button } from "@mantine/core";
 import React from "react";
 import { Download } from "tabler-icons-react";
 import { useStyles } from "../../../hooks/useStyles";
@@ -16,13 +16,10 @@ export default function ReceiveCompleteScreen({}: Props) {
       title="Received!"
       render={() => (
         <Button
+          leftIcon={<Download />}
           onClick={() => wormhole?.reset()}
           className={classes.secondary}
-          pl="xs"
-          pr="md"
         >
-          <Download />
-          <Space w="xs" />
           Receive more
         </Button>
       )}

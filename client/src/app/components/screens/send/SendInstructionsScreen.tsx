@@ -1,12 +1,4 @@
-import {
-  Button,
-  Group,
-  Space,
-  Stack,
-  Text,
-  TextInput,
-  Title,
-} from "@mantine/core";
+import { Button, Group, Stack, Text, TextInput } from "@mantine/core";
 import { useClipboard } from "@mantine/hooks";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -50,26 +42,20 @@ export function SendInstructionsScreenContent(props: ContentProps) {
             value={`${window.location.host}/#/${props.code}`}
           />
           <Button
+            leftIcon={<Files />}
             disabled={props.copied}
             onClick={props.onCopy}
-            pl="xs"
-            pr="md"
             className={classes.primary}
           >
-            <Files />
-            <Space w="xs" />
             {props.copied ? "Link copied!" : "Copy"}
           </Button>
         </Group>
         <Button
+          leftIcon={<X />}
           data-testid="send-page-cancel-button"
           onClick={props.onCancel}
           className={classes.secondary}
-          pl="xs"
-          pr="md"
         >
-          <X />
-          <Space w="xs" />
           Cancel
         </Button>
       </Stack>

@@ -34,11 +34,12 @@ export function ProgressScreenContent(props: ContentProps) {
           {props.eta > 1 ? durationToClosestUnit(props.eta) : props.waitText}
         </Text>
         <Button
+          leftIcon={<X />}
           data-testid="send-page-cancel-button"
           onClick={props.onCancel}
           className={classes.secondary}
         >
-          <X /> Cancel
+          Cancel
         </Button>
       </Stack>
     </Content>

@@ -1,4 +1,4 @@
-import { Button, Group, Space, Stack, Text } from "@mantine/core";
+import { Button, Space, Stack, Text } from "@mantine/core";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Download, X } from "tabler-icons-react";
@@ -23,16 +23,21 @@ export function ReceiveConsentScreenContent(props: ContentProps) {
       <Space h="md" />
       <Stack align="center">
         <FileLabel />
-        <Button onClick={props.onAccept} className={classes.primary}>
-          <Download /> Download
+        <Button
+          leftIcon={<Download />}
+          onClick={props.onAccept}
+          className={classes.primary}
+        >
+          Download
         </Button>
         <Space h="xl" />
         <Button
+          leftIcon={<X />}
           data-testid="send-page-cancel-button"
           onClick={props.onCancel}
           className={classes.secondary}
         >
-          <X /> Cancel
+          Cancel
         </Button>
       </Stack>
     </Content>

@@ -14,7 +14,7 @@ import {
 import classNames from "classnames";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { CSSTransition, SwitchTransition } from "react-transition-group";
+import { SwitchTransition } from "react-transition-group";
 import { Download, Send } from "tabler-icons-react";
 import { useStyles } from "../hooks/useStyles";
 import { useWormhole } from "../hooks/useWormhole";
@@ -33,10 +33,9 @@ function Header() {
         <Text className={classes.headerText}>Transfer</Text>
         {location.pathname === "/s" ? (
           <Button
+            leftIcon={<Download />}
             data-testid="go-to-receive-page"
             className={classes.secondary}
-            pl="xs"
-            pr="md"
             onClick={() => {
               navigate("/r");
               if (wormhole?.fileMeta) {
@@ -47,16 +46,13 @@ function Header() {
               }
             }}
           >
-            <Download />
-            <Space w="xs" />
             RECEIVE
           </Button>
         ) : (
           <Button
+            leftIcon={<Send />}
             data-testid="go-to-send-page"
             className={classes.secondary}
-            pl="xs"
-            pr="md"
             onClick={() => {
               navigate("/s");
               if (wormhole?.fileMeta) {
@@ -67,8 +63,6 @@ function Header() {
               }
             }}
           >
-            <Send />
-            <Space w="xs" />
             SEND
           </Button>
         )}
