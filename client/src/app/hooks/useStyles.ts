@@ -11,6 +11,13 @@ export const useStyles = createStyles((theme) => {
     grey: {
       color: theme.other.colors["dark-grey"],
     },
+    primary: {
+      backgroundColor: theme.other.colors.yellow,
+      color: theme.other.colors.black,
+      "&:hover": {
+        backgroundColor: theme.fn.darken(theme.other.colors.yellow, 0.1),
+      },
+    },
     secondary: {
       color: theme.other.colors.black,
       backgroundColor: theme.other.colors["medium-grey"],

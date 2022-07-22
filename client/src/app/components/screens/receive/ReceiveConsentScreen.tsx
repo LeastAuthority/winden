@@ -23,17 +23,7 @@ export function ReceiveConsentScreenContent(props: ContentProps) {
       <Space h="md" />
       <Stack align="center">
         <FileLabel />
-        <Button
-          onClick={props.onAccept}
-          sx={(theme) => ({
-            // TODO: shades are needed for hover events
-            backgroundColor: theme.other.colors.yellow,
-            color: theme.other.colors.black,
-            "&:hover": {
-              backgroundColor: theme.fn.darken(theme.other.colors.yellow, 0.1),
-            },
-          })}
-        >
+        <Button onClick={props.onAccept} className={classes.primary}>
           <Download /> Download
         </Button>
         <Space h="xl" />
