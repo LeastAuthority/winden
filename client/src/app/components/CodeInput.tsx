@@ -3,7 +3,7 @@ import { Modifier } from "@popperjs/core";
 import React, { useState } from "react";
 import { usePopper } from "react-popper";
 import { useCodeInput } from "../hooks/useCodeInput";
-import { useStyles } from "../hooks/useStyles";
+import { useCommonStyles } from "../hooks/useCommonStyles";
 import { applyCodeSuggestion } from "../util/applyCodeSuggestion";
 import { CODE_SEGMENT_DELIMITER } from "../util/constants";
 import { getCodeSuggestion } from "../util/getCodeSuggestion";
@@ -38,7 +38,7 @@ type ContentProps = {
 };
 
 export function CodeInputContent(props: ContentProps) {
-  const { classes } = useStyles();
+  const { classes } = useCommonStyles();
   const [referenceElement, setReferenceElement] =
     useState<HTMLElement | null>(null);
   const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
@@ -153,7 +153,7 @@ type Props = {
   submitting?: boolean;
 };
 
-export function CodeInput(props: Props) {
+export default function CodeInput(props: Props) {
   const [focused, setFocused] = useState(false);
   const codeInput = useCodeInput();
   const codeSuggestion = getCodeSuggestion(codeInput?.value || "");

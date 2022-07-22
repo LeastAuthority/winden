@@ -5,7 +5,7 @@ import { MemoryRouter } from "react-router-dom";
 import AppTemplate from "../../app/components/AppTemplate";
 import { WormholeContext } from "../../app/components/providers/WormholeProvider";
 import CompleteScreen from "../../app/components/screens/CompleteScreen";
-import { useStyles } from "../../app/hooks/useStyles";
+import { useCommonStyles } from "../../app/hooks/useCommonStyles";
 
 export default {
   title: "screens/CompleteScreen",
@@ -38,7 +38,7 @@ export const Story = Template.bind({});
 Story.args = {
   title: "Sent/Received!",
   render: () => {
-    const { classes } = useStyles();
+    const { classes } = useCommonStyles();
     return <Button className={classes.secondary}>Send/Receive more</Button>;
   },
 };

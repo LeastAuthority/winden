@@ -3,10 +3,10 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Download, X } from "tabler-icons-react";
 import { useError } from "../../../hooks/useError";
-import { useStyles } from "../../../hooks/useStyles";
+import { useCommonStyles } from "../../../hooks/useCommonStyles";
 import { useWormhole } from "../../../hooks/useWormhole";
 import { detectErrorType } from "../../../util/errors";
-import { Content } from "../../AppTemplate";
+import Content from "../../Content";
 import FileLabel from "../../FileLabel";
 
 type ContentProps = {
@@ -15,7 +15,7 @@ type ContentProps = {
 };
 
 export function ReceiveConsentScreenContent(props: ContentProps) {
-  const { classes } = useStyles();
+  const { classes } = useCommonStyles();
 
   return (
     <Content>

@@ -9,7 +9,7 @@ export const ErrorContext =
 
 type Props = React.PropsWithChildren<{}>;
 
-export function ErrorProvider(props: Props) {
+export default function ErrorProvider(props: Props) {
   const [error, setError] = useState<ErrorTypes | null>(null);
   const errorText = error !== null ? errorContent(error) : null;
 

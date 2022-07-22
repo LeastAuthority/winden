@@ -1,7 +1,7 @@
 import { Button } from "@mantine/core";
 import React from "react";
 import { Send } from "tabler-icons-react";
-import { useStyles } from "../../../hooks/useStyles";
+import { useCommonStyles } from "../../../hooks/useCommonStyles";
 import { useWormhole } from "../../../hooks/useWormhole";
 import CompleteScreen from "../CompleteScreen";
 
@@ -9,7 +9,7 @@ type Props = {};
 
 export default function SendCompleteScreen({}: Props) {
   const wormhole = useWormhole();
-  const { classes } = useStyles();
+  const { classes } = useCommonStyles();
 
   return (
     <CompleteScreen

@@ -3,9 +3,9 @@ import { useClipboard } from "@mantine/hooks";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Files, X } from "tabler-icons-react";
-import { useStyles } from "../../../hooks/useStyles";
+import { useCommonStyles } from "../../../hooks/useCommonStyles";
 import { useWormhole } from "../../../hooks/useWormhole";
-import { Content } from "../../AppTemplate";
+import Content from "../../Content";
 import FileLabel from "../../FileLabel";
 
 type ContentProps = {
@@ -16,7 +16,7 @@ type ContentProps = {
 };
 
 export function SendInstructionsScreenContent(props: ContentProps) {
-  const { classes } = useStyles();
+  const { classes } = useCommonStyles();
 
   return (
     <Content>

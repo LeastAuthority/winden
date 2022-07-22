@@ -1,10 +1,10 @@
 import { Button, Progress, Space, Stack, Text } from "@mantine/core";
 import React from "react";
 import { X } from "tabler-icons-react";
-import { useStyles } from "../../hooks/useStyles";
+import { useCommonStyles } from "../../hooks/useCommonStyles";
 import { useWormhole } from "../../hooks/useWormhole";
 import { durationToClosestUnit } from "../../util/durationToClosestUnit";
-import { Content } from "../AppTemplate";
+import Content from "../Content";
 import FileLabel from "../FileLabel";
 
 type ContentProps = {
@@ -17,7 +17,7 @@ type ContentProps = {
 };
 
 export function ProgressScreenContent(props: ContentProps) {
-  const { classes } = useStyles();
+  const { classes } = useCommonStyles();
 
   return (
     <Content>

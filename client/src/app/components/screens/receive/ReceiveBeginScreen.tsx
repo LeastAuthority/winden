@@ -1,13 +1,13 @@
-import { Modal, Space, Text, Title } from "@mantine/core";
+import { Modal, Space, Text } from "@mantine/core";
 import React from "react";
 import { useCancelModal } from "../../../hooks/useCancelModal";
 import { useCodeInput } from "../../../hooks/useCodeInput";
+import { useCommonStyles } from "../../../hooks/useCommonStyles";
 import { useError } from "../../../hooks/useError";
-import { useStyles } from "../../../hooks/useStyles";
 import { useWormhole } from "../../../hooks/useWormhole";
 import { detectErrorType } from "../../../util/errors";
-import { Content } from "../../AppTemplate";
-import { CodeInput } from "../../CodeInput";
+import CodeInput from "../../CodeInput";
+import Content from "../../Content";
 
 type ContentProps = {
   cancelModalOpen: boolean;
@@ -17,7 +17,7 @@ type ContentProps = {
 };
 
 export function ReceiveBeginScreenContent(props: ContentProps) {
-  const { classes } = useStyles();
+  const { classes } = useCommonStyles();
 
   return (
     <Content>

@@ -1,14 +1,14 @@
 import { Group, Paper, Skeleton, Text } from "@mantine/core";
 import React from "react";
 import { File } from "tabler-icons-react";
-import { useStyles } from "../hooks/useStyles";
+import { useCommonStyles } from "../hooks/useCommonStyles";
 import { useWormhole } from "../hooks/useWormhole";
 import { sizeToClosestUnit } from "../util/sizeToClosestUnit";
 
 type ContentProps = { name: string; size: number };
 
 export function FileLabelContent(props: ContentProps) {
-  const { classes } = useStyles();
+  const { classes } = useCommonStyles();
 
   return (
     <Paper p="md" withBorder>

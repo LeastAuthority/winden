@@ -12,9 +12,9 @@ import {
 } from "react-router-dom";
 import App from "./components/App";
 import CodeInputProvider from "./components/providers/CodeInputProvider";
-import { ErrorProvider } from "./components/providers/ErrorProvider";
+import ErrorProvider from "./components/providers/ErrorProvider";
 import ThemeProvider from "./components/providers/ThemeProvider";
-import { WormholeProvider } from "./components/providers/WormholeProvider";
+import WormholeProvider from "./components/providers/WormholeProvider";
 
 Sentry.init({
   dsn: process.env["SENTRY_DSN"],

@@ -1,7 +1,7 @@
 import { Box, Space, Stack, Text } from "@mantine/core";
 import React from "react";
-import { useStyles } from "../../hooks/useStyles";
-import { Content } from "../AppTemplate";
+import { useCommonStyles } from "../../hooks/useCommonStyles";
+import Content from "../Content";
 import FileLabel from "../FileLabel";
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
 };
 
 export default function CompleteScreen(props: Props) {
-  const { classes } = useStyles();
+  const { classes } = useCommonStyles();
 
   return (
     <Content>
@@ -19,7 +19,7 @@ export default function CompleteScreen(props: Props) {
       <Stack align="center">
         <FileLabel />
         <Box
-          sx={(theme) => ({
+          sx={(_theme) => ({
             fontSize: 60,
           })}
         >

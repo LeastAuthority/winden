@@ -1,13 +1,13 @@
 import { Button, Stack, Text } from "@mantine/core";
 import React from "react";
 import { Link } from "react-router-dom";
-import { useStyles } from "../../hooks/useStyles";
-import { Content } from "../AppTemplate";
+import { useCommonStyles } from "../../hooks/useCommonStyles";
+import Content from "../Content";
 
 type Props = {};
 
 export default function NotFoundPage({}: Props) {
-  const { classes } = useStyles();
+  const { classes } = useCommonStyles();
 
   return (
     <Content>

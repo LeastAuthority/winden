@@ -1,11 +1,19 @@
-import { Modal, Space, Text } from "@mantine/core";
+import { createStyles, Modal, Space, Text } from "@mantine/core";
 import React, { useEffect, useState } from "react";
 import { FileRejection } from "react-dropzone";
 import { useCancelModal } from "../../../hooks/useCancelModal";
-import { useStyles } from "../../../hooks/useStyles";
+import { useCommonStyles } from "../../../hooks/useCommonStyles";
 import { useWormhole } from "../../../hooks/useWormhole";
-import { Content } from "../../AppTemplate";
+import Content from "../../Content";
 import Dropzone from "../../Dropzone";
+
+const useStyles = createStyles((_theme) => ({
+  sendPageSection: {
+    display: "flex",
+    flexDirection: "column",
+    height: "100%",
+  },
+}));
 
 type ModalState =
   | "NONE"
@@ -21,6 +29,7 @@ type ContentProps = {
 };
 
 export function SendBeginScreenContent(props: ContentProps) {
+  const { classes: commonClasses } = useCommonStyles();
   const { classes } = useStyles();
 
   return (
@@ -57,11 +66,13 @@ export function SendBeginScreenContent(props: ContentProps) {
           <Text>The transfer was cancelled or interrupted.</Text>
           <Text>Please try again.</Text>
         </Modal>
-        <Text className={classes.headerText}>Send files in real-time</Text>
-        <Text className={classes.grey} weight={300}>
+        <Text className={commonClasses.headerText}>
+          Send files in real-time
+        </Text>
+        <Text className={commonClasses.grey} weight={300}>
           We don’t store – and can’t read – your files. We simply transfer them.
         </Text>
-        <Text className={classes.grey} weight={300}>
+        <Text className={commonClasses.grey} weight={300}>
           No sign-ups. No snooping. No nonsense.{" "}
         </Text>
         <Space h="md" />
@@ -76,7 +87,7 @@ type Props = {};
 export default function SendBeginScreen(props: Props) {
   const wormhole = useWormhole();
   const [modalState, setModalState] = useState<ModalState>("NONE");
-  const [cancelModal, setCancelModal] = useCancelModal();
+  const [cancelModal, _setCancelModal] = useCancelModal();
 
   useEffect(() => {
     if (cancelModal) {
