@@ -83,6 +83,42 @@ export default function ThemeProvider(props: Props) {
             ".mantine-Progress-bar": {
               backgroundColor: theme.other.colors["progress-grey"],
             },
+            ".transition-container-default > .transition-item-enter": {
+              opacity: 0,
+              transform: "translate(30px, 0)",
+            },
+            ".transition-container-default > .transition-item-enter-active": {
+              opacity: 1,
+              transform: "translate(0px, 0)",
+              transition: "opacity 200ms ease-in, transform 200ms ease",
+            },
+            ".transition-container-default > .transition-item-exit": {
+              opacity: 1,
+              transform: "translate(0px, 0)",
+            },
+            ".transition-container-default > .transition-item-exit-active": {
+              opacity: 0,
+              transform: "translate(-30px, 0)",
+              transition: "opacity 200ms ease-in, transform 200ms ease",
+            },
+            ".transition-container-send > .transition-item-enter": {
+              opacity: 0,
+              transform: "translate(-30px, 0)",
+            },
+            ".transition-container-send > .transition-item-enter-active": {
+              opacity: 1,
+              transform: "translate(0, 0)",
+              transition: "opacity 200ms ease-in, transform 200ms ease",
+            },
+            ".transition-container-send > .transition-item-exit": {
+              opacity: 1,
+              transform: "translate(0px, 0)",
+            },
+            ".transition-container-send > .transition-item-exit-active": {
+              opacity: 0,
+              transform: "translate(30px, 0)",
+              transition: "opacity 200ms ease-in, transform 200ms ease",
+            },
           },
         ]}
       />
