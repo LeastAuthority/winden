@@ -1,4 +1,4 @@
-import { createStyles } from "@mantine/core";
+import { useReducedMotion } from "@mantine/hooks";
 import React from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
@@ -14,6 +14,7 @@ type Props = {};
 export default function App({}: Props) {
   useCodeUrlCheck();
   const location = useLocation();
+  const reduceMotion = useReducedMotion();
 
   return (
     <AppTemplate>
@@ -23,6 +24,8 @@ export default function App({}: Props) {
           key={location.key}
           timeout={200}
           classNames="transition-item"
+          enter={!reduceMotion}
+          exit={!reduceMotion}
         >
           <Routes location={location}>
             <Route path="/" element={<Navigate replace to="s" />} />
