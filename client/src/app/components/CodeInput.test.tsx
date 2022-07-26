@@ -98,4 +98,62 @@ describe("<CodeInput />", () => {
       "First word is not recognized. Did you mean: guitarist"
     );
   });
+
+  test("pressing the next button with a valid code calls onSubmit", async () => {
+    const onSubmit = jest.fn();
+    const user = userEvent.setup();
+    render(
+      <CodeInputProvider>
+        <CodeInput onSubmit={onSubmit} />
+      </CodeInputProvider>
+    );
+    const input = screen.getByTestId("code-input");
+    const button = screen.getByTestId("code-input-submit");
+    await user.type(input, "7-guitarist-revenge");
+    await user.click(button);
+    expect(onSubmit).toHaveBeenCalledTimes(1);
+    expect(onSubmit).toHaveBeenCalledWith("7-guitarist-revenge");
+  });
+
+  test("pressing the next button with an invalid code does not call onSubmit", async () => {
+    const onSubmit = jest.fn();
+    const user = userEvent.setup();
+    render(
+      <CodeInputProvider>
+        <CodeInput onSubmit={onSubmit} />
+      </CodeInputProvider>
+    );
+    const input = screen.getByTestId("code-input");
+    const button = screen.getByTestId("code-input-submit");
+    await user.type(input, "asdf");
+    await user.click(button);
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
+  test("pressing enter in the text input with a valid code calls onSubmit", async () => {
+    const onSubmit = jest.fn();
+    const user = userEvent.setup();
+    render(
+      <CodeInputProvider>
+        <CodeInput onSubmit={onSubmit} />
+      </CodeInputProvider>
+    );
+    const input = screen.getByTestId("code-input");
+    await user.type(input, "7-guitarist-revenge{Enter}");
+    expect(onSubmit).toHaveBeenCalledTimes(1);
+    expect(onSubmit).toHaveBeenCalledWith("7-guitarist-revenge");
+  });
+
+  test("pressing enter in the text input with an invalid code does not call onSubmit", async () => {
+    const onSubmit = jest.fn();
+    const user = userEvent.setup();
+    render(
+      <CodeInputProvider>
+        <CodeInput onSubmit={onSubmit} />
+      </CodeInputProvider>
+    );
+    const input = screen.getByTestId("code-input");
+    await user.type(input, "asdf{Enter}");
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
 });

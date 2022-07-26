@@ -74,6 +74,8 @@ export function CodeInputContent(props: ContentProps) {
     }
   })();
 
+  const onSubmit = () => !error && props.onSubmit && props.onSubmit(props.code);
+
   return (
     <div data-testid="code-input-container">
       <Group align="stretch" ref={setReferenceElement} spacing="md">
@@ -88,9 +90,15 @@ export function CodeInputContent(props: ContentProps) {
           onBlur={props.onBlur}
           error={Boolean(errorMessage)}
           disabled={props.submitting}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              onSubmit();
+            }
+          }}
         />
         <Button
-          onClick={() => !error && props.onSubmit && props.onSubmit(props.code)}
+          data-testid="code-input-submit"
+          onClick={() => onSubmit()}
           loading={props.submitting}
         >
           Next
