@@ -7,7 +7,7 @@ import { applyCodeSuggestion } from "../util/applyCodeSuggestion";
 import { CODE_SEGMENT_DELIMITER } from "../util/constants";
 import { getCodeSuggestion } from "../util/getCodeSuggestion";
 import { spellCheckCodeWord } from "../util/spellCheckCodeWord";
-import { validateCode } from "../util/validateCode";
+import { CodeErrorType, validateCode } from "../util/validateCode";
 
 const sameWidth: Modifier<string, object> = {
   name: "sameWidth",
@@ -29,7 +29,9 @@ type ContentProps = {
   codeSuggestion: string | null;
   focused: boolean;
   touched: boolean;
+  showError: boolean;
   submitting: boolean;
+  errorType: CodeErrorType | null;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onFocus: () => void;
   onBlur: () => void;
@@ -47,16 +49,15 @@ export function CodeInputContent(props: ContentProps) {
       modifiers: [sameWidth],
     }
   );
-  const error = validateCode(props.code);
 
   const errorMessage = (() => {
-    if (!props.touched || props.focused) {
+    if (!props.touched || !props.showError) {
       return "";
     }
     const [_codeNumber, codeFirstWord, codeSecondWord] = props.code.split(
       CODE_SEGMENT_DELIMITER
     );
-    switch (error) {
+    switch (props.errorType) {
       case null:
         return "";
       case "INVALID_FORMAT":
@@ -88,9 +89,19 @@ export function CodeInputContent(props: ContentProps) {
           onBlur={props.onBlur}
           error={Boolean(errorMessage)}
           disabled={props.submitting}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && props.onSubmit) {
+              props.onSubmit(props.code);
+            }
+          }}
         />
         <Button
-          onClick={() => !error && props.onSubmit && props.onSubmit(props.code)}
+          data-testid="code-input-submit"
+          onClick={() => {
+            if (props.onSubmit) {
+              props.onSubmit(props.code);
+            }
+          }}
           loading={props.submitting}
         >
           Next
@@ -135,15 +146,22 @@ export function CodeInput(props: Props) {
   const codeInput = useCodeInput();
   const codeSuggestion = getCodeSuggestion(codeInput?.value || "");
   const [touched, setTouched] = useState(false);
+  const [showError, setShowError] = useState(false);
+
+  const code = codeInput?.value || "";
+  const error = validateCode(code);
 
   return (
     <CodeInputContent
-      code={codeInput?.value || ""}
+      code={code}
       codeSuggestion={codeSuggestion}
       focused={focused}
       touched={touched}
+      showError={showError}
+      errorType={error}
       submitting={props.submitting || false}
       onChange={(e) => {
+        setShowError(false);
         const hasSpace = e.target.value.includes(" ");
         if (hasSpace && codeSuggestion) {
           codeInput?.setValue(
@@ -154,11 +172,20 @@ export function CodeInput(props: Props) {
         }
       }}
       onFocus={() => {
+        setShowError(false);
         setFocused(true);
         setTouched(true);
       }}
-      onBlur={() => setFocused(false)}
-      onSubmit={props.onSubmit}
+      onBlur={() => {
+        setShowError(true);
+        setFocused(false);
+      }}
+      onSubmit={() => {
+        setShowError(true);
+        if (!error && props.onSubmit) {
+          props.onSubmit(code);
+        }
+      }}
     />
   );
 }
