@@ -1,0 +1,113 @@
+version: "3.9"
+services:
+  mailbox:
+    build:
+      context: ./mailbox
+    ports:
+      - "4000:4000" # WebSocket
+  relay:
+    build:
+      context: ./relay
+    ports:
+      - "4001:4001" # TCP
+      - "4002:4002" # WebSocket
+  client:
+    build: ./client
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - "8080:8080" # DevServer
+      - "35729:35729" # LiveReload
+    depends_on:
+      - mailbox
+      - relay
+  # Selenium services
+  # for local run on M1 chip machine
+  chrome-m1:
+    volumes:
+      - test-downloads:/home/seluser/downloads
+    ports:
+      - "5900:5900"
+    build:
+      dockerfile: ./client-e2e/images/Dockerfile.chrome-m1
+    shm_size: 2gb
+    depends_on:
+      - selenium-hub-m1
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_SESSION_TIMEOUT=1800
+    profiles:
+      - e2e
+  edge:
+    volumes:
+      - test-downloads:/home/seluser/downloads
+    ports:
+      - "5901:5900"
+    build:
+      dockerfile: ./client-e2e/images/Dockerfile.edge
+    shm_size: 2gb
+    depends_on:
+      - selenium-hub-m1
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_SESSION_TIMEOUT=1800
+    profiles:
+      - e2e
+  firefox-m1:
+    volumes:
+      - test-downloads:/home/seluser/downloads
+    ports:
+      - "5902:5900"
+    build:
+      dockerfile: ./client-e2e/images/Dockerfile.firefox-m1
+    shm_size: 2gb
+    depends_on:
+      - selenium-hub-m1
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_SESSION_TIMEOUT=1800
+    profiles:
+      - e2e
+  selenium-hub-m1:
+    image: seleniarm/hub
+    container_name: selenium-hub
+    ports:
+      - "4442:4442"
+      - "4443:4443"
+      - "4444:4444"
+    healthcheck:
+      test:
+        ["CMD", "/opt/bin/check-grid.sh", "--host", "0.0.0.0", "--port", "4444"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+    profiles:
+      - e2e
+  client-e2e:
+    build: ./client-e2e
+    env_file:
+      - ./client-e2e/.env
+    volumes:
+      - ./client-e2e:/usr/src/app
+      - test-downloads:/home/node/downloads
+    depends_on:
+      client:
+        condition: service_started
+      chrome-m1:
+        condition: service_started
+      firefox-m1:
+        condition: service_started
+      edge:
+        condition: service_started
+      selenium-hub-m1:
+        condition: service_healthy
+    profiles:
+      - e2e
+volumes:
+  test-downloads:
