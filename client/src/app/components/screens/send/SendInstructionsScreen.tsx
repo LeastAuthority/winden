@@ -1,4 +1,4 @@
-import { Button, Group, Stack, Text, TextInput } from "@mantine/core";
+import { Button, Group, Space, Stack, Text, TextInput } from "@mantine/core";
 import { useClipboard } from "@mantine/hooks";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +21,7 @@ export function SendInstructionsScreenContent(props: ContentProps) {
   return (
     <Content>
       <Text className={classes.headerText}>Ready to send!</Text>
+      <Space h="xs" />
       <Stack align="center" data-testid="send-page-code-section">
         <FileLabel />
         <Text weight="bold" className={classes.grey}>
@@ -34,9 +35,23 @@ export function SendInstructionsScreenContent(props: ContentProps) {
         <Text weight="bold" className={classes.grey}>
           2. Give the receiver the link below
         </Text>
-        <Group position="center">
+        <Group
+          position="center"
+          style={{
+            width: "100%",
+          }}
+        >
           <TextInput
-            sx={(theme) => ({ maxWidth: 380 })}
+            styles={{
+              root: {
+                flexGrow: "1 !important" as any,
+                maxWidth: 400,
+              },
+              input: {
+                width: "100%",
+                textAlign: "center",
+              },
+            }}
             readOnly
             type="text"
             value={`${window.location.host}/#/${props.code}`}
