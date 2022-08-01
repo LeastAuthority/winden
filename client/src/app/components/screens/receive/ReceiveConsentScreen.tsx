@@ -1,5 +1,5 @@
 import { Button, Group, Space, Stack, Title } from "@mantine/core";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Download, X } from "tabler-icons-react";
 import { useError } from "../../../hooks/useError";
@@ -8,6 +8,7 @@ import { detectErrorType } from "../../../util/errors";
 import FileLabel from "../../FileLabel";
 
 type ContentProps = {
+  submitting: boolean;
   onAccept: () => void;
   onCancel: () => void;
 };
@@ -20,7 +21,11 @@ export function ReceiveConsentScreenContent(props: ContentProps) {
       <Stack align="center">
         <FileLabel />
         <Group>
-          <Button onClick={props.onAccept} color="blue">
+          <Button
+            onClick={props.onAccept}
+            loading={props.submitting}
+            color="blue"
+          >
             <Download /> Download
           </Button>
           <Button
@@ -43,19 +48,27 @@ export default function ReceiveConsentScreen({}: Props) {
   const wormhole = useWormhole();
   const error = useError();
   const navigate = useNavigate();
+  const [submitting, setSubmitting] = useState(false);
 
   return (
     <ReceiveConsentScreenContent
-      onAccept={() =>
-        wormhole?.fileMeta?.accept().catch((e: any) => {
-          if (e.includes("unexpected EOF")) {
-            navigate("/r?cancel=", { replace: true });
-            window.location.reload();
-          } else {
-            error?.setError(detectErrorType(e));
-          }
-        })
-      }
+      submitting={submitting}
+      onAccept={() => {
+        setSubmitting(true);
+        wormhole?.fileMeta
+          ?.accept()
+          .catch((e: any) => {
+            if (e.includes("unexpected EOF")) {
+              navigate("/r?cancel=", { replace: true });
+              window.location.reload();
+            } else {
+              error?.setError(detectErrorType(e));
+            }
+          })
+          .finally(() => {
+            setSubmitting(false);
+          });
+      }}
       onCancel={() => {
         navigate("/r", { replace: true });
         window.location.reload();
