@@ -14,6 +14,7 @@ import {
   SEND_FILE_RESULT_ERROR,
   SEND_FILE_RESULT_OK,
   SEND_TEXT,
+  WASM_EXITED,
   WASM_READY,
 } from "../app/util/actions";
 import { TransferProgress } from "../app/wormhole/types";
@@ -152,6 +153,10 @@ if (!browserIsProbablySafari) {
     };
 
     const go = new Go();
+    go.exit = (code: number) => {
+      console.warn(`Go exited with code ${code}`);
+      rpc!.rpc(WASM_EXITED);
+    };
     let wasm: { instance: WebAssembly.Instance };
     if (typeof WebAssembly.instantiateStreaming === "undefined") {
       const wasmData = await (await wasmPromise).arrayBuffer();

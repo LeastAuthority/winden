@@ -4,6 +4,7 @@ export const enum ErrorTypes {
   MAILBOX,
   RELAY,
   INTERRUPT,
+  WASM_EXITED,
 }
 
 const ServerErrorMsg =
@@ -72,6 +73,15 @@ export function errorContent(type: ErrorTypes): {
         description: [
           "There was an issue with either your or the receiver's connection.",
           "Please try again with a new code.",
+        ],
+      };
+    }
+    case ErrorTypes.WASM_EXITED: {
+      return {
+        title: "Oops...",
+        description: [
+          "An unexpected error occurred.",
+          "Please refresh the page before trying again.",
         ],
       };
     }
