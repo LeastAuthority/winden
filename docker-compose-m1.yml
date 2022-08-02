@@ -40,23 +40,6 @@ services:
       - SE_NODE_SESSION_TIMEOUT=1800
     profiles:
       - e2e
-  edge:
-    volumes:
-      - test-downloads:/home/seluser/downloads
-    ports:
-      - "5901:5900"
-    build:
-      dockerfile: ./client-e2e/images/Dockerfile.edge
-    shm_size: 2gb
-    depends_on:
-      - selenium-hub-m1
-    environment:
-      - SE_EVENT_BUS_HOST=selenium-hub
-      - SE_EVENT_BUS_PUBLISH_PORT=4442
-      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-      - SE_NODE_SESSION_TIMEOUT=1800
-    profiles:
-      - e2e
   firefox-m1:
     volumes:
       - test-downloads:/home/seluser/downloads
@@ -102,8 +85,6 @@ services:
       chrome-m1:
         condition: service_started
       firefox-m1:
-        condition: service_started
-      edge:
         condition: service_started
       selenium-hub-m1:
         condition: service_healthy

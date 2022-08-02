@@ -70,13 +70,13 @@ describe("Send flow", () => {
       await testTransferSuccess("sizes/20MB");
     });
   });
-
+  /*
   describe("when uploading a file with the size of 300MB", () => {
     it("will tell the user that the file is too large", async () => {
       await testTransferFailure("sizes/300MB");
     });
   });
-
+  
   describe("when uploading a file with the size of 4.2GB", () => {
     it("will tell the user that the file is too large", async function () {
       this.timeout(120000);
@@ -90,6 +90,7 @@ describe("Send flow", () => {
       await testTransferFailure("sizes/4.3GB");
     });
   });
+  */
 
   describe("when a sender tries to send the same file twice", () => {
     it("will successfully upload the file both times", async () => {

@@ -1,7 +1,7 @@
 import * as Page from "../pageobjects/page";
 
 describe("Cancellation", () => {
-  describe("when sender cancels transfer before receiver enters the code", () => {
+  describe("when Sender cancels transfer before Receiver enters the code", () => {
     it("will prevent the receiver from getting the file", async () => {
       await Page.open();
       const sendWindow = await browser.getWindowHandle();
@@ -10,10 +10,17 @@ describe("Cancellation", () => {
       const codeUrl = await input.getValue();
 
       await (await $("button*=Cancel")).click();
-
+      // sender
+      await expect(await $("main")).toHaveTextContaining(
+        "Send files in real-time"
+      );
+      // receiver
       const _receiveWindow = await browser.newWindow(codeUrl);
       await browser.pause(30000);
       await expect(await $("button*=Download")).not.toBeExisting();
+
+      // TBD missing timeout functionality, because now Receiver hanging indefinatly 
+
     });
   });
 
@@ -28,17 +35,27 @@ describe("Cancellation", () => {
         await Page.uploadFiles("/usr/src/app/test/files/sizes/20MB");
         const input = await $("input[readonly='']");
         const codeUrl = await input.getValue();
+        
         const _receiveWindow = await browser.newWindow(codeUrl);
         await browser.waitUntil(() => $("button*=Download").isExisting());
         await (await $("button*=Download")).click();
+
+        await browser.pause(2000);
+        
         await browser.waitUntil(() => $("button*=Cancel").isExisting());
         await (await $("button*=Cancel")).click();
+        // receiver
         await expect(await $("main")).toHaveTextContaining(
           "Receive files in real-time"
         );
         await browser.switchToWindow(sendWindow);
+        // sender
         await browser.waitUntil(async () =>
           (await $("body").getText()).includes("Transfer failed")
+        );
+
+        expect($("main")).not.toHaveTextContaining(
+          "Send files in real-time"
         );
       });
     });
@@ -54,11 +71,16 @@ describe("Cancellation", () => {
         const input = await $("input[readonly='']");
         const codeUrl = await input.getValue();
         const _receiveWindow = await browser.newWindow(codeUrl);
+        // receiver
         await browser.waitUntil(() => $("button*=Cancel").isExisting());
         await (await $("button*=Cancel")).click();
         await expect(await $("main")).toHaveTextContaining(
           "Receive files in real-time"
         );
+        // sender
+        
+        // ADD sender windows check. Currently it is hanging
+
       });
     });
   });
@@ -77,17 +99,19 @@ describe("Cancellation", () => {
         const receiveWindow = await browser.newWindow(codeUrl);
         await browser.waitUntil(() => $("button*=Download").isExisting());
         await (await $("button*=Download")).click();
-
+        // sender
         await browser.switchToWindow(sendWindow);
         await browser.waitUntil(() => $("button*=Cancel").isExisting());
         await (await $("button*=Cancel")).click();
         await expect(await $("main")).toHaveTextContaining(
           "Send files in real-time"
         );
+        // receiver
         await browser.switchToWindow(receiveWindow);
         await browser.waitUntil(async () =>
           (await $("body").getText()).includes("Transfer failed")
         );
+
       });
     });
 
@@ -103,6 +127,7 @@ describe("Cancellation", () => {
         const codeUrl = await input.getValue();
         const _receiveWindow = await browser.newWindow(codeUrl);
         await browser.switchToWindow(sendWindow);
+        // sender
         await browser.waitUntil(() => $("button*=Cancel").isExisting());
         await (await $("button*=Cancel")).click();
         await expect(await $("main")).toHaveTextContaining(
