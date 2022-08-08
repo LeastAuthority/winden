@@ -4,10 +4,16 @@ import Client from "../worker/client";
 import Go from "../worker/go";
 import { NewTestFile } from "./util";
 
+const config = {
+  rendezvousURL: process.env["MAILBOX_URL"] || `ws://192.168.0.191:4000/v1`,
+  transitRelayURL: process.env["RELAY_URL"] || `ws://192.168.0.191:4002`,
+  passPhraseComponentLength: 2,
+};
+
 beforeAll(async () => {
   const go = new Go();
   const wasmData = fs.readFileSync(
-    path.join(__dirname, "..", "..", "public", "assets", "wormhole.wasm")
+    path.join(__dirname, "../../dist/wormhole.wasm")
   );
   await WebAssembly.instantiate(wasmData, go.importObject).then((result) => {
     go.run(result.instance);
@@ -25,11 +31,11 @@ describe("Cancellation", () => {
   describe("Send-side cancellation", () => {
     it("should do things", async () => {
       const readLimit = 1024 * 4; // 8 KiB
-      const sender = new Client();
+      const sender = new Client(config);
       const file = NewTestFile(filename, testFileSize);
       // const {code, cancel, done} = await sender.sendFile(file as unknown as File);
       const senderObj = await sender.sendFile(file as unknown as File);
-      const receiver = new Client();
+      const receiver = new Client(config);
       const reader = await receiver.recvFile(senderObj.code!);
       const result = new Uint8Array(testFileSize);
 
@@ -73,7 +79,7 @@ describe("Cancellation", () => {
   describe.skip("Send-side cancellation before receiver has connected", () => {
     it("should do things", async () => {
       const readLimit = 1024 * 4; // 8 KiB
-      const sender = new Client();
+      const sender = new Client(config);
       const file = NewTestFile(filename, testFileSize);
       const senderObj = await sender.sendFile(file as unknown as File);
       console.log(`Got code: ${senderObj.code}`);
@@ -96,11 +102,11 @@ describe("Cancellation", () => {
     it("should do things", async () => {
       // NB: must be multiples of read buffer size.
       const readLimit = 1024 * 8; // 8 KiB
-      const sender = new Client();
+      const sender = new Client(config);
       const file = NewTestFile(filename, testFileSize);
       const { code, done } = await sender.sendFile(file as unknown as File);
 
-      const receiver = new Client();
+      const receiver = new Client(config);
       const reader = await receiver.recvFile(code!);
       const result = new Uint8Array(testFileSize);
       // const readByteCount = await reader.readAll(result)

@@ -6,16 +6,22 @@ import { initGo, mockReadFn, NewTestFile } from "./util";
 const testFileSize = 1024 * 256; // 256KiB
 const testBufferSize = 1024 * 16; // 4KiB
 
+const config = {
+  rendezvousURL: process.env["MAILBOX_URL"] || `ws://192.168.0.191:4000/v1`,
+  transitRelayURL: process.env["RELAY_URL"] || `ws://192.168.0.191:4002`,
+  passPhraseComponentLength: 2,
+};
+
 describe("Client", () => {
   beforeAll(initGo);
 
   describe("#recvFile", () => {
     it("should return a reader", async () => {
-      const sender = new Client();
+      const sender = new Client(config);
       const file = NewTestFile("test-file.txt", testFileSize);
       const { code } = await sender.sendFile(file as unknown as File);
 
-      const receiver = new Client();
+      const receiver = new Client(config);
       const reader = await receiver.recvFile(code!);
 
       const buf = new Uint8Array(new ArrayBuffer(testBufferSize));

@@ -20,14 +20,7 @@ export function newTestFile(name: string, size = 1024): TestFile {
 
 export async function initGo() {
   const go = new Go();
-  const wasmPath = path.join(
-    __dirname,
-    "..",
-    "..",
-    "public",
-    "assets",
-    "wormhole.wasm"
-  );
+  const wasmPath = path.join(__dirname, "../../dist/wormhole.wasm");
   await WebAssembly.instantiate(
     fs.readFileSync(wasmPath),
     go.importObject
