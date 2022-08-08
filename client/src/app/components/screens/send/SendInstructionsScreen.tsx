@@ -7,10 +7,10 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
-import { useClipboard } from "@mantine/hooks";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Files, X } from "tabler-icons-react";
+import { useClipboard } from "../../../hooks/useClipboard";
 import { useWormhole } from "../../../hooks/useWormhole";
 import FileLabel from "../../FileLabel";
 

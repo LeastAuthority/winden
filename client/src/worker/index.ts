@@ -1,4 +1,3 @@
-import Bowser from "bowser";
 import { RpcProvider } from "worker-rpc";
 import {
   FREE,
@@ -20,11 +19,6 @@ import {
 import { TransferProgress } from "../app/wormhole/types";
 import Client from "./client";
 import Go from "./go";
-
-const browser = Bowser.getParser(self.navigator.userAgent);
-const browserIsProbablySafari = browser.satisfies({
-  safari: ">0",
-});
 
 const wasmPromise = fetch("/wormhole.wasm");
 let rpc: RpcProvider | undefined = undefined;
@@ -140,74 +134,69 @@ async function handleReceiveFileData({ id }: RPCMessage): Promise<void> {
   }
 }
 
-if (!browserIsProbablySafari) {
-  onmessage = async function (event) {
-    if (!isRPCMessage(event.data)) {
-      throw new Error(`unexpected event: ${JSON.stringify(event, null, "  ")}`);
-    }
+onmessage = async function (event) {
+  if (!isRPCMessage(event.data)) {
+    throw new Error(`unexpected event: ${JSON.stringify(event, null, "  ")}`);
+  }
 
-    // NB: unregister worker message handler.
-    //  (use message channel port instead)
-    onmessage = () => {
-      // NB: noop
-    };
-
-    const go = new Go();
-    go.exit = (code: number) => {
-      console.warn(`Go exited with code ${code}`);
-      rpc!.rpc(WASM_EXITED);
-    };
-    let wasm: { instance: WebAssembly.Instance };
-    if (typeof WebAssembly.instantiateStreaming === "undefined") {
-      const wasmData = await (await wasmPromise).arrayBuffer();
-      wasm = await WebAssembly.instantiate(wasmData, go.importObject);
-    } else {
-      wasm = await WebAssembly.instantiateStreaming(
-        wasmPromise,
-        go.importObject
-      );
-    }
-    go.run(wasm.instance);
-
-    client = new Client(event.data.config);
-    port = event.ports[0];
-    port.postMessage({
-      action: WASM_READY,
-      goClient: client.goClient,
-    });
-
-    rpc = new RpcProvider((message: any, transfer: any[] | undefined) => {
-      typeof transfer === "undefined"
-        ? port.postMessage(message)
-        : port.postMessage(message, transfer);
-    });
-
-    rpc.registerRpcHandler<RPCMessage, string>(SEND_TEXT, async ({ text }) => {
-      return client.sendText(text);
-    });
-    rpc.registerRpcHandler<RPCMessage, string>(RECV_TEXT, async ({ code }) => {
-      return client.recvText(code);
-    });
-    // TODO: be more specific with types!
-    rpc.registerRpcHandler<RPCMessage, Record<string, any>>(
-      SEND_FILE,
-      handleSendFile
-    );
-    rpc.registerRpcHandler<RPCMessage, void>(
-      SEND_FILE_CANCEL,
-      handleSendFileCancel
-    );
-    // TODO: be more specific with types!
-    rpc.registerRpcHandler<RPCMessage, Record<string, any>>(
-      RECV_FILE,
-      handleReceiveFile
-    );
-    rpc.registerRpcHandler<RPCMessage, void>(
-      RECV_FILE_DATA,
-      handleReceiveFileData
-    );
-    rpc.registerRpcHandler<RPCMessage, void>(FREE, () => client.free());
-
-    port.onmessage = (event: MessageEvent) => rpc!.dispatch(event.data);
+  // NB: unregister worker message handler.
+  //  (use message channel port instead)
+  onmessage = () => {
+    // NB: noop
   };
-}
+
+  const go = new Go();
+  go.exit = (code: number) => {
+    console.warn(`Go exited with code ${code}`);
+    rpc!.rpc(WASM_EXITED);
+  };
+  let wasm: { instance: WebAssembly.Instance };
+  if (typeof WebAssembly.instantiateStreaming === "undefined") {
+    const wasmData = await (await wasmPromise).arrayBuffer();
+    wasm = await WebAssembly.instantiate(wasmData, go.importObject);
+  } else {
+    wasm = await WebAssembly.instantiateStreaming(wasmPromise, go.importObject);
+  }
+  go.run(wasm.instance);
+
+  client = new Client(event.data.config);
+  port = event.ports[0];
+  port.postMessage({
+    action: WASM_READY,
+    goClient: client.goClient,
+  });
+
+  rpc = new RpcProvider((message: any, transfer: any[] | undefined) => {
+    typeof transfer === "undefined"
+      ? port.postMessage(message)
+      : port.postMessage(message, transfer);
+  });
+
+  rpc.registerRpcHandler<RPCMessage, string>(SEND_TEXT, async ({ text }) => {
+    return client.sendText(text);
+  });
+  rpc.registerRpcHandler<RPCMessage, string>(RECV_TEXT, async ({ code }) => {
+    return client.recvText(code);
+  });
+  // TODO: be more specific with types!
+  rpc.registerRpcHandler<RPCMessage, Record<string, any>>(
+    SEND_FILE,
+    handleSendFile
+  );
+  rpc.registerRpcHandler<RPCMessage, void>(
+    SEND_FILE_CANCEL,
+    handleSendFileCancel
+  );
+  // TODO: be more specific with types!
+  rpc.registerRpcHandler<RPCMessage, Record<string, any>>(
+    RECV_FILE,
+    handleReceiveFile
+  );
+  rpc.registerRpcHandler<RPCMessage, void>(
+    RECV_FILE_DATA,
+    handleReceiveFileData
+  );
+  rpc.registerRpcHandler<RPCMessage, void>(FREE, () => client.free());
+
+  port.onmessage = (event: MessageEvent) => rpc!.dispatch(event.data);
+};
