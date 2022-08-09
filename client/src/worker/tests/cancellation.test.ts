@@ -28,7 +28,7 @@ describe("Cancellation", () => {
   const testFileSize = 1024 * 256; // 256 KiB
   const testBufferSize = 1024 * 4;
 
-  describe("Send-side cancellation", () => {
+  describe.skip("Send-side cancellation", () => {
     it("should do things", async () => {
       const readLimit = 1024 * 4; // 8 KiB
       const sender = new Client(config);
