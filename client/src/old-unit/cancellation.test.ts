@@ -5,8 +5,8 @@ import Go from "../worker/go";
 import { NewTestFile } from "./util";
 
 const config = {
-  rendezvousURL: process.env["MAILBOX_URL"] || `ws://192.168.0.191:4000/v1`,
-  transitRelayURL: process.env["RELAY_URL"] || `ws://192.168.0.191:4002`,
+  rendezvousURL: process.env["MAILBOX_URL"] || `ws://mailbox:4000/v1`,
+  transitRelayURL: process.env["RELAY_URL"] || `ws://relay:4002`,
   passPhraseComponentLength: 2,
 };
 
