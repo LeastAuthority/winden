@@ -42,27 +42,17 @@ describe("Cancellation", () => {
       let readByteCount = 0;
       for (let n = 0, rxDone = false; !rxDone; ) {
         const buffer = new Uint8Array(new ArrayBuffer(1024 * 4));
-        try {
-          [n, rxDone] = await reader.read(buffer);
-          result.set(buffer.slice(0, n), readByteCount);
-          readByteCount += n;
+        [n, rxDone] = await reader.read(buffer);
+        result.set(buffer.slice(0, n), readByteCount);
+        readByteCount += n;
 
-          if (readByteCount >= readLimit) {
-            break;
-          }
-        } catch (error) {
-          console.log(`ERROR | n: ${n} | rxdone: ${rxDone}`);
-          console.error(error);
+        if (readByteCount >= readLimit) {
+          break;
         }
       }
 
       await new Promise((f) => setTimeout(f, 1000));
-      try {
-        await expect(senderObj.cancel).rejects.toBe("context canceled");
-      } catch (error) {
-        console.log("ERROR");
-        console.error(error);
-      }
+      await expect(senderObj.cancel).rejects.toBe("context canceled");
 
       const buffer = new Uint8Array(new ArrayBuffer(testBufferSize));
       expect(readByteCount).toEqual(readLimit);
@@ -84,12 +74,7 @@ describe("Cancellation", () => {
       const senderObj = await sender.sendFile(file as unknown as File);
       console.log(`Got code: ${senderObj.code}`);
 
-      try {
-        await expect(senderObj.cancel).resolves.toBe("cancelled");
-      } catch (error) {
-        console.log("ERROR");
-        console.error(error);
-      }
+      await expect(senderObj.cancel).resolves.toBe("cancelled");
 
       // await expect(senderObj.done).rejects.toBe('context cancelled');
       // console.log(senderObj.done);
@@ -115,16 +100,12 @@ describe("Cancellation", () => {
       const rxDone = false;
       for (let n = 0, rxDone = false; !rxDone; ) {
         const buffer = new Uint8Array(new ArrayBuffer(1024 * 4));
-        try {
-          [n, rxDone] = await reader.read(buffer);
-          result.set(buffer.slice(0, n), readByteCount);
-          readByteCount += n;
+        [n, rxDone] = await reader.read(buffer);
+        result.set(buffer.slice(0, n), readByteCount);
+        readByteCount += n;
 
-          if (readByteCount >= readLimit) {
-            break;
-          }
-        } catch (error) {
-          console.error("got an error in this place", error);
+        if (readByteCount >= readLimit) {
+          break;
         }
       }
 
