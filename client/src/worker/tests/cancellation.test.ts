@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
-import Client from "../worker/client";
-import Go from "../worker/go";
+import Client from "../client";
+import Go from "../go";
 import { NewTestFile } from "./util";
 
 const config = {
@@ -13,7 +13,7 @@ const config = {
 beforeAll(async () => {
   const go = new Go();
   const wasmData = fs.readFileSync(
-    path.join(__dirname, "../../dist/wormhole.wasm")
+    path.join(__dirname, "../../../dist/wormhole.wasm")
   );
   await WebAssembly.instantiate(wasmData, go.importObject).then((result) => {
     go.run(result.instance);

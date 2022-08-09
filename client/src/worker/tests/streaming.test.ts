@@ -1,5 +1,5 @@
-import { FileStreamReader } from "../app/wormhole/streaming";
-import Client from "../worker/client";
+import { FileStreamReader } from "../../app/wormhole/streaming";
+import Client from "../client";
 import { initGo, mockReadFn, NewTestFile } from "./util";
 
 // TODO: test weird file sizes!

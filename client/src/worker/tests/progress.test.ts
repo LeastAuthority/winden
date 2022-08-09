@@ -1,4 +1,4 @@
-import Client from "../worker/client";
+import Client from "../client";
 import { initGo, NewTestFile } from "./util";
 
 const testFileSize = 1024 ** 2; // 1MiB
