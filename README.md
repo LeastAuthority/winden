@@ -14,7 +14,7 @@ Follow these steps to get the whole setup running on a local computer for easy d
 
 ### Cloning
 
-```
+```sh
 git clone git@github.com:LeastAuthority/Transfer-rewrite.git
 cd Transfer
 git submodule init
@@ -23,7 +23,7 @@ git submodule update --recursive
 
 or you can do it in one step:
 
-```
+```sh
 git clone --recurse-submodules git@github.com:LeastAuthority/Transfer-rewrite.git
 ```
 
@@ -34,7 +34,7 @@ git clone --recurse-submodules git@github.com:LeastAuthority/Transfer-rewrite.gi
 
 ### Setup docker images
 
-```
+```sh
 docker-compose build
 docker-compose run client npm i
 docker-compose run client-e2e npm i
@@ -42,11 +42,18 @@ docker-compose run client-e2e npm i
 
 ### Run development environment
 
-```
-docker-compose up -d client
-```
+The following command will run `gulp watch` in the `client` container. `gulp watch` essentially does the following:
 
-Server should now be running at http://localhost:8080
+- rebuild the Javascript bundle whenever changes are made to the Javascript/Typescript source files
+- rebuilds the WASM module whenever changes are made to the `wormhole-willam` source files
+- serve the output at localhost:8080 and automatically refresh the page on any change.
+
+Learn more about the build system at [ARCHITECTURE.md](ARCHITECTURE.md#build-process)
+
+```sh
+docker-compose up -d client
+docker-compose run -p 8080:8080 client gulp watch # equivalent command
+```
 
 ### View logs
 
@@ -56,13 +63,13 @@ docker-compose logs -f
 
 ### Stop development environment
 
-```
+```sh
 docker-compose down
 ```
 
 ### Storybook
 
-```
+```sh
 docker-compose run -p 6006:6006 client npm run storybook
 ```
 
@@ -111,7 +118,7 @@ We build and deploy by running a gulp task inside a docker container. You will n
 - Create `client/.env`
 - Fill it with the following: (Replace placeholders in angle brackets with the appropriate values)
 
-```
+```sh
 AWS_ACCESS_KEY_ID=<YOUR_ACCESS_KEY>
 AWS_SECRET_ACCESS_KEY=<YOUR_SECRET_ACCESS_KEY>
 AWS_DEFAULT_REGION=<REGION>
@@ -125,7 +132,7 @@ RELAY_URL="wss://relay.w3.leastauthority.com:443"
 
 Now you can deploy by running the following:
 
-```
+```sh
 docker-compose run client gulp deploy_playground
 ```
 
