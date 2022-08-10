@@ -45,7 +45,7 @@ docker-compose run client-e2e npm i
 The following command will run `gulp watch` in the `client` container. `gulp watch` essentially does the following:
 
 - rebuild the Javascript bundle whenever changes are made to the Javascript/Typescript source files
-- rebuilds the WASM module whenever changes are made to the `wormhole-willam` source files
+- rebuild the WASM module whenever changes are made to the `wormhole-willam` source files
 - serve the output at localhost:8080 and automatically refresh the page on any change.
 
 Learn more about the build system at [ARCHITECTURE.md](ARCHITECTURE.md#build-process)
