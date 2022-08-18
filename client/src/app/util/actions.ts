@@ -20,6 +20,7 @@ export const RECV_FILE_ERROR = "client/recv_file/error";
 export const RECV_FILE_READ_ERROR = "client/recv_file/read/error";
 export const FREE = "client/free";
 export const SAVE_FILE = "client/save_file";
+export const SAVE_FILE_CANCEL = "client/save_file_cancel";
 
 export const SET_FILE_META = "set_file_meta";
 export const ACCEPT_FILE = "accept_file";

@@ -7,6 +7,7 @@ import {
   RECV_FILE_PROGRESS,
   RECV_TEXT,
   RPCMessage,
+  SAVE_FILE_CANCEL,
   SEND_FILE,
   SEND_FILE_CANCEL,
   SEND_FILE_PROGRESS,
@@ -134,6 +135,10 @@ async function handleReceiveFileData({ id }: RPCMessage): Promise<void> {
   }
 }
 
+async function handleSaveFileCancel({ id }: RPCMessage): Promise<void> {
+  return receiving[id].reader.cancel();
+}
+
 onmessage = async function (event) {
   if (!isRPCMessage(event.data)) {
     throw new Error(`unexpected event: ${JSON.stringify(event, null, "  ")}`);
@@ -196,6 +201,7 @@ onmessage = async function (event) {
     RECV_FILE_DATA,
     handleReceiveFileData
   );
+  rpc.registerRpcHandler(SAVE_FILE_CANCEL, handleSaveFileCancel);
   rpc.registerRpcHandler<RPCMessage, void>(FREE, () => client.free());
 
   port.onmessage = (event: MessageEvent) => rpc!.dispatch(event.data);

@@ -9,6 +9,7 @@ import {
   RECV_FILE_PROGRESS,
   RECV_TEXT,
   RPCMessage,
+  SAVE_FILE_CANCEL,
   SEND_FILE,
   SEND_FILE_CANCEL,
   SEND_FILE_PROGRESS,
@@ -225,7 +226,6 @@ export default class ClientWorker implements ClientInterface {
       };
       this.pending[id].done = { resolve, reject };
     });
-    const cancel = () => this.rpc!.rpc(SEND_FILE_CANCEL);
     return new Promise<TransferProgress>((resolve, reject) => {
       // TODO: be more specific with types!
       this.rpc!.rpc<RPCMessage, any>(SEND_FILE, {
@@ -233,7 +233,7 @@ export default class ClientWorker implements ClientInterface {
         file,
       })
         .then(({ code }) => {
-          resolve({ code, cancel, done });
+          resolve({ id, code, done });
         })
         .catch((reason) => {
           // console.log(reason);
@@ -307,7 +307,11 @@ export default class ClientWorker implements ClientInterface {
     const accept = async (): Promise<void> => {
       return this.rpc!.rpc(RECV_FILE_DATA, { id });
     };
-    return { name, size, done, accept, cancel: () => this._reset() };
+    return { name, size, done, accept, id };
+  }
+
+  public async cancelSave(id: number) {
+    return this.rpc!.rpc(SAVE_FILE_CANCEL, { id });
   }
 
   public async free(): Promise<void> {

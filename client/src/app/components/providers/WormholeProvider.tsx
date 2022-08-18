@@ -121,6 +121,10 @@ class Transfer {
     this.progressCounter = 0;
     this.onEta(null);
   }
+
+  public cancelSave(id: number) {
+    return this.client.cancelSave(id);
+  }
 }
 
 export const WormholeContext =
@@ -136,6 +140,7 @@ export const WormholeContext =
     done: boolean;
     reset: () => void;
     bytesSent: number;
+    cancelSave: () => Promise<void>;
   } | null>(null);
 
 export function WormholeProvider(props: Props) {
@@ -145,6 +150,8 @@ export function WormholeProvider(props: Props) {
   const [done, setDone] = useState(false);
   const error = useError();
   const [bytesSent, setBytesSent] = useState(0);
+  // TODO: handle multiple ids to allow multiple file transfer
+  const [currentId, setCurrentId] = useState(0);
   const codeInput = useCodeInput();
 
   const client = useRef<Transfer>();
@@ -179,9 +186,19 @@ export function WormholeProvider(props: Props) {
   }
 
   async function saveFile(code: string): Promise<TransferProgress | void> {
-    return client.current?.saveFile(code).catch((e: any) => {
-      error?.setError(detectErrorType(e));
-    });
+    return client.current
+      ?.saveFile(code)
+      .then(({ id }) => {
+        setCurrentId(id);
+      })
+      .catch((e: any) => {
+        error?.setError(detectErrorType(e));
+      });
+  }
+
+  async function cancelSave() {
+    await client.current?.cancelSave(currentId);
+    reset();
   }
 
   function reset() {
@@ -204,6 +221,7 @@ export function WormholeProvider(props: Props) {
         done,
         reset,
         bytesSent,
+        cancelSave,
       }}
     >
       {props.children}
