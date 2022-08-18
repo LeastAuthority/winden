@@ -55,19 +55,9 @@ export default function ReceiveConsentScreen({}: Props) {
       submitting={submitting}
       onAccept={() => {
         setSubmitting(true);
-        wormhole?.fileMeta
-          ?.accept()
-          .catch((e: any) => {
-            if (e.includes("unexpected EOF")) {
-              navigate("/r?cancel=", { replace: true });
-              window.location.reload();
-            } else {
-              error?.setError(detectErrorType(e));
-            }
-          })
-          .finally(() => {
-            setSubmitting(false);
-          });
+        wormhole?.fileMeta?.accept().finally(() => {
+          setSubmitting(false);
+        });
       }}
       onCancel={() => {
         navigate("/r", { replace: true });
