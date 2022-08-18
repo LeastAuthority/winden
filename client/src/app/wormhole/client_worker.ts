@@ -314,6 +314,10 @@ export default class ClientWorker implements ClientInterface {
     return this.rpc!.rpc(SAVE_FILE_CANCEL, { id });
   }
 
+  public async cancelSend(id: number) {
+    return this.rpc!.rpc(SEND_FILE_CANCEL, { id });
+  }
+
   public async free(): Promise<void> {
     await this.ready;
     return this.rpc!.rpc(FREE);
