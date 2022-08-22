@@ -14,7 +14,7 @@ import {
   Title,
 } from "@mantine/core";
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Download, Send } from "tabler-icons-react";
 import { useStyles } from "../hooks/useStyles";
 import { useWormhole } from "../hooks/useWormhole";
@@ -99,10 +99,22 @@ export default function AppTemplate(props: Props) {
               <Space h="lg" />
               <Group position="apart" className={classes.footerLarge}>
                 <Group position="apart" style={{ width: 380 }} ml="lg">
-                  <Anchor color="dark">FAQ</Anchor>
-                  <Anchor color="dark">Privacy</Anchor>
-                  <Anchor color="dark">About Us</Anchor>
-                  <Anchor color="dark">GitHub</Anchor>
+                  <Anchor component={Link} to="/faq" color="dark">
+                    FAQ
+                  </Anchor>
+                  <Anchor component={Link} to="/privacy" color="dark">
+                    Privacy
+                  </Anchor>
+                  <Anchor component={Link} to="/about" color="dark">
+                    About Us
+                  </Anchor>
+                  <Anchor
+                    color="dark"
+                    href="https://github.com/leastauthority/transfer-rewrite"
+                    target="_blank"
+                  >
+                    GitHub
+                  </Anchor>
                 </Group>
                 <div style={{ flex: 1 }} />
                 <Text
