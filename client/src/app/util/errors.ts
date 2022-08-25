@@ -5,6 +5,7 @@ export const enum ErrorTypes {
   RELAY,
   INTERRUPT,
   WASM_EXITED,
+  SENDER_CANCELLED,
 }
 
 const ServerErrorMsg =
@@ -84,6 +85,14 @@ export function errorContent(type: ErrorTypes): {
           "Please refresh the page before trying again.",
         ],
       };
+    }
+    case ErrorTypes.SENDER_CANCELLED: {
+      return {
+        title: "cancel",
+        description: [
+          "sender cancel"
+        ]
+      }
     }
   }
 }

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Download, X } from "tabler-icons-react";
 import { useError } from "../../../hooks/useError";
 import { useWormhole } from "../../../hooks/useWormhole";
-import { detectErrorType } from "../../../util/errors";
+import { ErrorTypes } from "../../../util/errors";
 import FileLabel from "../../FileLabel";
 
 type ContentProps = {
@@ -47,7 +47,6 @@ type Props = {};
 export default function ReceiveConsentScreen({}: Props) {
   const wormhole = useWormhole();
   const error = useError();
-  const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
 
   return (
@@ -55,7 +54,10 @@ export default function ReceiveConsentScreen({}: Props) {
       submitting={submitting}
       onAccept={() => {
         setSubmitting(true);
-        wormhole?.fileMeta?.accept().finally(() => {
+        wormhole?.fileMeta?.accept().catch(() => {
+          error?.setError(ErrorTypes.SENDER_CANCELLED)
+          wormhole.cancelSave();
+        }).finally(() => {
           setSubmitting(false);
         });
       }}
