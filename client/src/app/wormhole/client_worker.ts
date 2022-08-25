@@ -40,10 +40,16 @@ export default class ClientWorker implements ClientInterface {
 
   private readonly config?: ClientConfig;
   private onWasmExit?: () => void;
+  private onReceiverCancel?: () => void;
 
-  constructor(config?: ClientConfig, onWasmExit?: () => void) {
+  constructor(
+    config?: ClientConfig,
+    onWasmExit?: () => void,
+    onReceiverCancel?: () => void
+  ) {
     this.config = config;
     this.onWasmExit = onWasmExit;
+    this.onReceiverCancel = onReceiverCancel;
     this.initialize();
   }
 
@@ -162,10 +168,13 @@ export default class ClientWorker implements ClientInterface {
   }
 
   private _handleSendFileResultError({ id, error }: RPCMessage): void {
-    const {
-      result: { reject },
-    } = this.pending[id];
-    reject(error);
+    if (
+      error ===
+        'failed to write: WebSocket closed: status = StatusNormalClosure and reason = ""' &&
+      this.onReceiverCancel
+    ) {
+      this.onReceiverCancel();
+    }
   }
 
   private _handleFileProgress({ id, sentBytes, totalBytes }: RPCMessage): void {

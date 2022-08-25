@@ -6,6 +6,7 @@ export const enum ErrorTypes {
   INTERRUPT,
   WASM_EXITED,
   SENDER_CANCELLED,
+  RECEIVER_CANCELLED
 }
 
 const ServerErrorMsg =
@@ -91,6 +92,14 @@ export function errorContent(type: ErrorTypes): {
         title: "cancel",
         description: [
           "sender cancel"
+        ]
+      }
+    }
+    case ErrorTypes.RECEIVER_CANCELLED: {
+      return {
+        title: "cancel",
+        description: [
+          "receiver cancel"
         ]
       }
     }

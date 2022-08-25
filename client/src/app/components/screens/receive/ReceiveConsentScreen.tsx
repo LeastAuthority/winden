@@ -54,12 +54,17 @@ export default function ReceiveConsentScreen({}: Props) {
       submitting={submitting}
       onAccept={() => {
         setSubmitting(true);
-        wormhole?.fileMeta?.accept().catch(() => {
-          error?.setError(ErrorTypes.SENDER_CANCELLED)
-          wormhole.cancelSave();
-        }).finally(() => {
-          setSubmitting(false);
-        });
+        wormhole?.fileMeta
+          ?.accept()
+          .catch((e: any) => {
+            if (e === "unexpected EOF") {
+              error?.setError(ErrorTypes.SENDER_CANCELLED);
+              wormhole.cancelSave();
+            }
+          })
+          .finally(() => {
+            setSubmitting(false);
+          });
       }}
       onCancel={() => {
         wormhole?.cancelSave();
