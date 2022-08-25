@@ -6,7 +6,7 @@ export const enum ErrorTypes {
   INTERRUPT,
   WASM_EXITED,
   SENDER_CANCELLED,
-  RECEIVER_CANCELLED
+  RECEIVER_CANCELLED,
 }
 
 const ServerErrorMsg =
@@ -87,21 +87,15 @@ export function errorContent(type: ErrorTypes): {
         ],
       };
     }
-    case ErrorTypes.SENDER_CANCELLED: {
-      return {
-        title: "cancel",
-        description: [
-          "sender cancel"
-        ]
-      }
-    }
+    case ErrorTypes.SENDER_CANCELLED:
     case ErrorTypes.RECEIVER_CANCELLED: {
       return {
-        title: "cancel",
+        title: "Transfer failed",
         description: [
-          "receiver cancel"
-        ]
-      }
+          "The transfer was cancelled or interrupted.",
+          "Please try again.",
+        ],
+      };
     }
   }
 }
