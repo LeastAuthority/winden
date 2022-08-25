@@ -89,8 +89,7 @@ export default function SendInstructionsScreen({}: Props) {
         )
       }
       onCancel={() => {
-        navigate("/s", { replace: true });
-        window.location.reload();
+        wormhole.cancelSend();
       }}
     />
   ) : null;

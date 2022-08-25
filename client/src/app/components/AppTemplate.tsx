@@ -11,7 +11,7 @@ import {
   Space,
   Stack,
   Text,
-  Title,
+  Title
 } from "@mantine/core";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -54,14 +54,11 @@ export default function AppTemplate(props: Props) {
                     color="dark"
                     pl="xs"
                     pr="md"
-                    onClick={() => {
-                      navigate("/r");
+                    onClick={async () => {
                       if (wormhole?.fileMeta) {
-                        // cancellation workaround
-                        window.location.reload();
-                      } else {
-                        wormhole?.reset();
+                        await wormhole?.cancelSend();
                       }
+                      navigate("/r");
                     }}
                   >
                     <Download />
@@ -75,14 +72,11 @@ export default function AppTemplate(props: Props) {
                     color="dark"
                     pl="xs"
                     pr="md"
-                    onClick={() => {
-                      navigate("/s");
+                    onClick={async () => {
                       if (wormhole?.fileMeta) {
-                        // cancellation workaround
-                        window.location.reload();
-                      } else {
-                        wormhole?.reset();
+                        await wormhole?.cancelSave()
                       }
+                      navigate("/s");
                     }}
                   >
                     <Send />
