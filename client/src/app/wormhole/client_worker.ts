@@ -169,8 +169,7 @@ export default class ClientWorker implements ClientInterface {
 
   private _handleSendFileResultError({ id, error }: RPCMessage): void {
     if (
-      error ===
-        'failed to write: WebSocket closed: status = StatusNormalClosure and reason = ""' &&
+      /failed to write: WebSocket closed: (unclean|status)/.test(error) &&
       this.onReceiverCancel
     ) {
       this.onReceiverCancel();
