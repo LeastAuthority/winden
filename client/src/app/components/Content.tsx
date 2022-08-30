@@ -4,12 +4,12 @@ import { ContentProps } from "./AppTemplate";
 
 const useStyles = createStyles((_theme) => ({
   content: {
-    padding: 32,
+    padding: 40,
     "@media (max-width: 620px)": {
-      padding: 24,
+      padding: 30,
     },
     "@media (max-width: 500px)": {
-      padding: 16,
+      padding: 20,
     },
   },
 }));
@@ -27,6 +27,8 @@ export default function Content(props: ContentProps) {
       <Paper
         className={classes.content}
         style={props.fullHeight ? { height: "100%" } : {}}
+        withBorder
+        radius={10}
       >
         {props.children}
       </Paper>
