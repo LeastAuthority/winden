@@ -1,26 +1,42 @@
-import { Button, Group, Space, Text } from "@mantine/core";
+import { Button, createStyles, Group, Space, Text } from "@mantine/core";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Download, Send } from "tabler-icons-react";
 import { useCommonStyles } from "../hooks/useCommonStyles";
 import { useWormhole } from "../hooks/useWormhole";
 
+const useStyles = createStyles((theme) => ({
+  headerTextSuper: {
+    fontWeight: "lighter",
+    fontSize: 20,
+    color: theme.other.colors["dark-grey"],
+  },
+}));
+
 export default function Header() {
   const wormhole = useWormhole();
   const location = useLocation();
   const navigate = useNavigate();
-  const { classes } = useCommonStyles();
+  const { classes: commonClasses } = useCommonStyles();
+  const { classes } = useStyles();
 
   return (
     <>
       <Space h="lg" />
       <Group position="apart">
-        <Text className={classes.headerText}>Transfer</Text>
+        <Group align="start" spacing="xs">
+          <Text className={commonClasses.headerText} component="span">
+            Transfer
+          </Text>
+          <Text className={classes.headerTextSuper} component="span">
+            BETA
+          </Text>
+        </Group>
         {location.pathname === "/s" ? (
           <Button
             leftIcon={<Download />}
             data-testid="go-to-receive-page"
-            className={classes.secondary}
+            className={commonClasses.secondary}
             onClick={() => {
               navigate("/r");
               if (wormhole?.fileMeta) {
@@ -37,7 +53,7 @@ export default function Header() {
           <Button
             leftIcon={<Send />}
             data-testid="go-to-send-page"
-            className={classes.secondary}
+            className={commonClasses.secondary}
             onClick={() => {
               navigate("/s");
               if (wormhole?.fileMeta) {
