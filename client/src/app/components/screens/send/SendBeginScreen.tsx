@@ -1,6 +1,8 @@
-import { createStyles, Modal, Space, Text } from "@mantine/core";
+import { Anchor, createStyles, Modal, Space, Text } from "@mantine/core";
+import classnames from "classnames";
 import React, { useEffect, useState } from "react";
 import { FileRejection } from "react-dropzone";
+import { Link } from "react-router-dom";
 import { useCancelModal } from "../../../hooks/useCancelModal";
 import { useCommonStyles } from "../../../hooks/useCommonStyles";
 import { useWormhole } from "../../../hooks/useWormhole";
@@ -69,11 +71,21 @@ export function SendBeginScreenContent(props: ContentProps) {
         <Text className={commonClasses.headerText}>
           Send files in real-time
         </Text>
-        <Text className={commonClasses.grey} weight={300}>
-          We don’t store – and can’t read – your files. We simply transfer them.
+        <Text
+          className={classnames(commonClasses.grey, commonClasses.textLine)}
+          weight={400}
+        >
+          We don’t store and <i>can’t read</i> your files. We simply transfer
+          them.{" "}
+          <Anchor component={Link} to="/about">
+            Learn more.
+          </Anchor>
         </Text>
-        <Text className={commonClasses.grey} weight={300}>
-          No sign-ups. No snooping. No nonsense.{" "}
+        <Text
+          className={classnames(commonClasses.grey, commonClasses.textLine)}
+          weight={400}
+        >
+          No sign-ups. No snooping. No nonsense.
         </Text>
         <Space h="md" />
         <Dropzone onDrop={props.onDrop} onReject={props.onReject} />

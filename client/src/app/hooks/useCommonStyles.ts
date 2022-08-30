@@ -28,6 +28,13 @@ export const useCommonStyles = createStyles((theme) => {
         ),
       },
     },
+    tertiary: {
+      color: theme.other.colors.black,
+      backgroundColor: theme.other.colors.tertiary,
+      "&:hover": {
+        backgroundColor: theme.fn.darken(theme.other.colors.tertiary, 0.1),
+      },
+    },
     headerText: {
       fontSize: "2.5rem",
       fontWeight: 700,
@@ -38,6 +45,9 @@ export const useCommonStyles = createStyles((theme) => {
       "@media (max-width: 500px)": {
         fontSize: "1.35rem",
       },
+    },
+    textLine: {
+      lineHeight: 2.5,
     },
   };
 });

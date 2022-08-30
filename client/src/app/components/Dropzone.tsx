@@ -30,14 +30,6 @@ const useStyles = createStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
     padding: 32,
-    margin: -24,
-    "@media (max-width: 620px)": {
-      margin: -16,
-    },
-    "@media (max-width: 500px)": {
-      margin: -8,
-    },
-    marginTop: 0,
     flex: 1,
   },
 }));
@@ -80,7 +72,7 @@ export default function Dropzone(props: Props) {
       <div
         role="button"
         onClick={open}
-        className={classNames(classes.dropzoneButton, commonClasses.secondary)}
+        className={classNames(classes.dropzoneButton, commonClasses.tertiary)}
       >
         <Plus size={70} />
         <Text>Select</Text>

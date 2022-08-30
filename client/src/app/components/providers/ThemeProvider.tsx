@@ -83,6 +83,9 @@ export default function ThemeProvider(props: Props) {
             ".mantine-Progress-bar": {
               backgroundColor: theme.other.colors["progress-grey"],
             },
+            ".mantine-Anchor-root": {
+              color: theme.other.colors.tertiary,
+            },
             ".transition-container-default > .transition-item-enter": {
               opacity: 0,
               transform: "translate(30px, 0)",
