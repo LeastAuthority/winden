@@ -14,8 +14,7 @@ type Props = React.PropsWithChildren<{}>;
 export default function AppTemplate(props: Props) {
   const location = useLocation();
   return (
-    <>
-      <Background />
+    <Background>
       <Container size="lg">
         <AppShell
           classNames={{
@@ -47,6 +46,6 @@ export default function AppTemplate(props: Props) {
           {props.children}
         </AppShell>
       </Container>
-    </>
+    </Background>
   );
 }
