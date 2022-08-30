@@ -1,4 +1,4 @@
-import { Button, createStyles, Divider, Text } from "@mantine/core";
+import { Button, createStyles, Divider, Stack, Text } from "@mantine/core";
 import classNames from "classnames";
 import React from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
@@ -74,8 +74,10 @@ export default function Dropzone(props: Props) {
         className={classNames(classes.dropzoneButton)}
         color="tertiary"
       >
-        <Plus size={70} />
-        <Text>Select</Text>
+        <Stack spacing={0}>
+          <Plus size={70} />
+          <Text>Select</Text>
+        </Stack>
       </Button>
     </div>
   );

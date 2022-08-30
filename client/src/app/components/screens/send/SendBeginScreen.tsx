@@ -78,7 +78,7 @@ export function SendBeginScreenContent(props: ContentProps) {
         >
           We don’t store and <i>can’t read</i> your files. We simply transfer
           them.{" "}
-          <Anchor component={Link} to="/about">
+          <Anchor component={Link} to="/about" color="tertiary">
             Learn more.
           </Anchor>
         </Text>
