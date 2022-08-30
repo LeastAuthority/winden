@@ -1,4 +1,4 @@
-import { createStyles, Divider, Text } from "@mantine/core";
+import { Button, createStyles, Divider, Text } from "@mantine/core";
 import classNames from "classnames";
 import React from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
@@ -22,8 +22,8 @@ const useStyles = createStyles((theme) => ({
     width: "25%",
   },
   dropzone: {
-    backgroundColor: theme.other.colors["light-grey"],
-    border: `4px dashed ${theme.other.colors["dark-grey"]}`,
+    backgroundColor: theme.colors["light-grey"][6],
+    border: `4px dashed ${theme.colors["dark-grey"][6]}`,
     borderRadius: 4,
     display: "flex",
     flexDirection: "column",
@@ -59,24 +59,24 @@ export default function Dropzone(props: Props) {
       })}
     >
       <input {...getInputProps()} />
-      <Text className={commonClasses.grey} weight={600}>
+      <Text color="dark-grey" weight={600}>
         Drag & drop any file
       </Text>
-      <Text className={commonClasses.grey}>up to 4GB</Text>
+      <Text color="dark-grey">up to 4GB</Text>
       <Divider
         className={classes.dropzoneDivider}
         my="xs"
         label="or"
         labelPosition="center"
       />
-      <div
-        role="button"
+      <Button
         onClick={open}
-        className={classNames(classes.dropzoneButton, commonClasses.tertiary)}
+        className={classNames(classes.dropzoneButton)}
+        color="tertiary"
       >
         <Plus size={70} />
         <Text>Select</Text>
-      </div>
+      </Button>
     </div>
   );
 }

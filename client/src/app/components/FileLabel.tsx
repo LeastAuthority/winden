@@ -15,10 +15,10 @@ export function FileLabelContent(props: ContentProps) {
       {props.name && props.size ? (
         <Group align="center">
           <File />
-          <Text component="span" weight={500} className={classes.grey}>
+          <Text component="span" weight={500} color="dark-grey">
             {props.name}
           </Text>
-          <Text component="span" weight={500} className={classes.grey}>
+          <Text component="span" weight={500} color="dark-grey">
             {" "}
             ({sizeToClosestUnit(props.size)})
           </Text>

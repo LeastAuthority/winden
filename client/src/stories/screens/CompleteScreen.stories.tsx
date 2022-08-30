@@ -38,7 +38,6 @@ export const Story = Template.bind({});
 Story.args = {
   title: "Sent/Received!",
   render: () => {
-    const { classes } = useCommonStyles();
-    return <Button className={classes.secondary}>Send/Receive more</Button>;
+    return <Button color="medium-grey">Send/Receive more</Button>;
   },
 };

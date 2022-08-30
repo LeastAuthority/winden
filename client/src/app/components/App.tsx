@@ -8,7 +8,6 @@ import Navigate from "./Navigate";
 import NotFoundPage from "./pages/NotFoundPage";
 import ReceivePage from "./pages/ReceivePage";
 import SendPage from "./pages/SendPage";
-import SafariCheckModal from "./SafariCheckModal";
 
 type Props = {};
 
@@ -19,7 +18,6 @@ export default function App({}: Props) {
 
   return (
     <AppTemplate>
-      <SafariCheckModal />
       <TransitionGroup component={null}>
         <CSSTransition
           key={location.key}

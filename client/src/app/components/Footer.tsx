@@ -47,26 +47,24 @@ export default function Footer() {
         <div style={{ width: "100%" }}>
           <Group position="apart" className={classes.footerLarge}>
             <Group position="apart" style={{ width: 380 }} ml={32}>
-              <Anchor className={commonClasses.dark} weight={600}>
+              <Anchor color="black" weight={600}>
                 FAQ
               </Anchor>
-              <Anchor className={commonClasses.dark} weight={600}>
+              <Anchor color="black" weight={600}>
                 Privacy
               </Anchor>
-              <Anchor className={commonClasses.dark} weight={600}>
+              <Anchor color="black" weight={600}>
                 About Us
               </Anchor>
-              <Anchor className={commonClasses.dark} weight={600}>
+              <Anchor color="black" weight={600}>
                 GitHub
               </Anchor>
             </Group>
             <div style={{ flex: 1 }} />
             <Text
               size="sm"
-              className={classNames(
-                commonClasses.grey,
-                classes.laMadeByTextLarge
-              )}
+              color="dark-grey"
+              className={classNames(classes.laMadeByTextLarge)}
               weight={600}
             >
               made with love for privacy by
@@ -75,26 +73,24 @@ export default function Footer() {
           </Group>
           <Stack className={classes.footerSmall}>
             <Group position="apart" mx="xl">
-              <Anchor size="sm" className={commonClasses.dark} weight={600}>
+              <Anchor size="sm" color="black" weight={600}>
                 FAQ
               </Anchor>
-              <Anchor size="sm" className={commonClasses.dark} weight={600}>
+              <Anchor size="sm" color="black" weight={600}>
                 Privacy
               </Anchor>
-              <Anchor size="sm" className={commonClasses.dark} weight={600}>
+              <Anchor size="sm" color="black" weight={600}>
                 About Us
               </Anchor>
-              <Anchor size="sm" className={commonClasses.dark} weight={600}>
+              <Anchor size="sm" color="black" weight={600}>
                 GitHub
               </Anchor>
             </Group>
             <Center>
               <Text
                 size="sm"
-                className={classNames(
-                  commonClasses.grey,
-                  classes.laMadeByTextSmall
-                )}
+                color="dark-grey"
+                className={classNames(classes.laMadeByTextSmall)}
                 weight="bold"
               >
                 made with love for privacy by

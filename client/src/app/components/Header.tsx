@@ -9,7 +9,7 @@ const useStyles = createStyles((theme) => ({
   headerTextSuper: {
     fontWeight: "lighter",
     fontSize: 20,
-    color: theme.other.colors["dark-grey"],
+    color: theme.colors["dark-grey"][6],
   },
 }));
 
@@ -36,7 +36,7 @@ export default function Header() {
           <Button
             leftIcon={<Download />}
             data-testid="go-to-receive-page"
-            className={commonClasses.secondary}
+            color="medium-grey"
             onClick={() => {
               navigate("/r");
               if (wormhole?.fileMeta) {
@@ -53,7 +53,7 @@ export default function Header() {
           <Button
             leftIcon={<Send />}
             data-testid="go-to-send-page"
-            className={commonClasses.secondary}
+            color="medium-grey"
             onClick={() => {
               navigate("/s");
               if (wormhole?.fileMeta) {

@@ -114,7 +114,7 @@ export function CodeInputContent(props: ContentProps) {
             }
           }}
           loading={props.submitting}
-          className={classes.primary}
+          color="yellow"
         >
           Next
         </Button>
@@ -134,11 +134,9 @@ export function CodeInputContent(props: ContentProps) {
         <Space h="sm" />
         <Paper p="xs" withBorder>
           <Group spacing="md" position="center">
-            <Text inline className={classes.darkGrey}>
-              {props.codeSuggestion}
-            </Text>
+            <Text inline>{props.codeSuggestion}</Text>
             <Paper p="xs" withBorder>
-              <Text className={classes.darkGrey}>Press space to complete</Text>
+              <Text>Press space to complete</Text>
             </Paper>
           </Group>
         </Paper>
@@ -146,7 +144,7 @@ export function CodeInputContent(props: ContentProps) {
       <Text
         data-testid="code-error-message"
         sx={(theme) => ({
-          color: theme.other.colors["warning-red"],
+          color: theme.colors["warning-red"][6],
         })}
         align="center"
         size="sm"

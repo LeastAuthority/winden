@@ -15,7 +15,7 @@ export default function NotFoundPage({}: Props) {
         <Stack align="center">
           <Text className={classes.headerText}>Page not found</Text>
           <Link data-testid="not-found-page-back-button" to="s">
-            <Button className={classes.secondary}>Back to home</Button>
+            <Button color="medium-grey">Back to home</Button>
           </Link>
         </Stack>
       </div>

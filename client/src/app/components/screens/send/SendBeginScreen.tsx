@@ -72,7 +72,8 @@ export function SendBeginScreenContent(props: ContentProps) {
           Send files in real-time
         </Text>
         <Text
-          className={classnames(commonClasses.grey, commonClasses.textLine)}
+          color="dark-grey"
+          className={classnames(commonClasses.textLine)}
           weight={400}
         >
           We don’t store and <i>can’t read</i> your files. We simply transfer
@@ -82,7 +83,8 @@ export function SendBeginScreenContent(props: ContentProps) {
           </Anchor>
         </Text>
         <Text
-          className={classnames(commonClasses.grey, commonClasses.textLine)}
+          color="dark-grey"
+          className={classnames(commonClasses.textLine)}
           weight={400}
         >
           No sign-ups. No snooping. No nonsense.

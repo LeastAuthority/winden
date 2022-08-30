@@ -18,7 +18,7 @@ export default function SendCompleteScreen({}: Props) {
         <Button
           leftIcon={<Send />}
           onClick={() => wormhole?.reset()}
-          className={classes.secondary}
+          color="medium-grey"
         >
           Send more
         </Button>

@@ -27,7 +27,7 @@ export function ReceiveConsentScreenContent(props: ContentProps) {
         <Button
           leftIcon={<Download />}
           onClick={props.onAccept}
-          className={classes.primary}
+          color="yellow"
           loading={props.submitting}
         >
           Download
@@ -37,7 +37,7 @@ export function ReceiveConsentScreenContent(props: ContentProps) {
           leftIcon={<X />}
           data-testid="send-page-cancel-button"
           onClick={props.onCancel}
-          className={classes.secondary}
+          color="medium-grey"
         >
           Cancel
         </Button>

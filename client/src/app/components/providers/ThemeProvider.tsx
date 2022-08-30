@@ -1,5 +1,9 @@
-import { Global, MantineProvider } from "@mantine/core";
+import { Global, MantineProvider, Tuple } from "@mantine/core";
 import React from "react";
+
+function sameShade(color: string) {
+  return Array(10).fill(color) as Tuple<string, 10>;
+}
 
 type Props = React.PropsWithChildren<{}>;
 
@@ -9,19 +13,29 @@ export default function ThemeProvider(props: Props) {
       withNormalizeCSS
       theme={{
         fontFamily: "Poppins, sans-serif",
-        other: {
-          colors: {
-            black: "#282f39",
-            "darker-grey": "#4f4f4f",
-            "dark-grey": "#6d6d6d",
-            "progress-grey": "#858789",
-            "medium-grey": "#c4c4c4",
-            "light-grey": "#efeff1",
-            tertiary: "#87b3fc",
-            yellow: "#ffc64e",
-            blue: "#00d4e5",
-            "warning-red": "#ff6f6f",
-          },
+        colors: {
+          // "bright-pink": [
+          //   "#F0BBDD",
+          //   "#ED9BCF",
+          //   "#EC7CC3",
+          //   "#ED5DB8",
+          //   "#F13EAF",
+          //   "#F71FA7",
+          //   "#FF00A1",
+          //   "#E00890",
+          //   "#C50E82",
+          //   "#AD1374",
+          // ],
+          black: sameShade("#282f39"),
+          "darker-grey": sameShade("#4f4f4f"),
+          "dark-grey": sameShade("#6d6d6d"),
+          "progress-grey": sameShade("#858789"),
+          "medium-grey": sameShade("#c4c4c4"),
+          "light-grey": sameShade("#efeff1"),
+          tertiary: sameShade("#87b3fc"),
+          yellow: sameShade("#ffc64e"),
+          blue: sameShade("#00d4e5"),
+          "warning-red": sameShade("#ff6f6f"),
         },
       }}
     >
@@ -63,28 +77,10 @@ export default function ThemeProvider(props: Props) {
             body: {
               background: `linear-gradient(222.19deg, #f0f0f0 23.77%, #ffffff 98.02%)`,
               fontSize: `16px`,
-              color: theme.other.colors.black,
+              color: theme.colors.black[6],
             },
-            ".mantine-Paper-root": {
-              borderColor: theme.other.colors["medium-grey"],
-            },
-            ".mantine-TextInput-input": {
-              borderColor: theme.other.colors["medium-grey"],
-              "&:focus": {
-                borderColor: theme.other.colors.blue,
-              },
-            },
-            ".mantine-TextInput-invalid": {
-              color: theme.other.colors["warning-red"],
-            },
-            ".mantine-Progress-root": {
-              backgroundColor: theme.other.colors["light-grey"],
-            },
-            ".mantine-Progress-bar": {
-              backgroundColor: theme.other.colors["progress-grey"],
-            },
-            ".mantine-Anchor-root": {
-              color: theme.other.colors.tertiary,
+            ".mantine-Button-root": {
+              color: theme.colors.black[6],
             },
             ".transition-container-default > .transition-item-enter": {
               opacity: 0,
