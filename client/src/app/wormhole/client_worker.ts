@@ -15,6 +15,7 @@ import {
   SEND_FILE_RESULT_ERROR,
   SEND_FILE_RESULT_OK,
   SEND_TEXT,
+  WASM_EXITED,
   WASM_READY,
 } from "../util/actions";
 import { SENDER_TIMEOUT } from "../util/constants";
@@ -37,9 +38,11 @@ export default class ClientWorker implements ClientInterface {
   protected worker: Worker | undefined = undefined;
 
   private readonly config?: ClientConfig;
+  private onWasmExit?: () => void;
 
-  constructor(config?: ClientConfig) {
+  constructor(config?: ClientConfig, onWasmExit?: () => void) {
     this.config = config;
+    this.onWasmExit = onWasmExit;
     this.initialize();
   }
 
@@ -106,6 +109,12 @@ export default class ClientWorker implements ClientInterface {
       RECV_FILE_DATA,
       this._handleRecvFileData.bind(this)
     );
+    if (this.onWasmExit) {
+      this.rpc!.registerRpcHandler<RPCMessage, void>(
+        WASM_EXITED,
+        this.onWasmExit.bind(this)
+      );
+    }
   }
 
   protected _registerSignalHandlers() {

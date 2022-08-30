@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useEffect, useRef, useState } from "react";
 import { useCodeInput } from "../../hooks/useCodeInput";
 import { useError } from "../../hooks/useError";
-import { detectErrorType } from "../../util/errors";
+import { detectErrorType, ErrorTypes } from "../../util/errors";
 import ClientWorker from "../../wormhole/client_worker";
 import {
   ClientConfig,
@@ -22,7 +22,7 @@ const defaultConfig: ClientConfig = {
 type Props = PropsWithChildren<{}>;
 
 class Transfer {
-  private client = new ClientWorker(defaultConfig);
+  private client: ClientWorker;
   private progressBegin = 0;
   private progressCounter = 0;
 
@@ -35,12 +35,14 @@ class Transfer {
     onUpload: (file: Record<string, any>, code?: string) => void,
     onEta: (eta: number | null) => void,
     onDone: () => void,
-    onBytes: (bytes: number) => void
+    onBytes: (bytes: number) => void,
+    onWasmExit: () => void
   ) {
     this.onUpload = onUpload;
     this.onEta = onEta;
     this.onDone = onDone;
     this.onBytes = onBytes;
+    this.client = new ClientWorker(defaultConfig, onWasmExit);
   }
 
   public async sendFile(
@@ -157,6 +159,9 @@ export default function WormholeProvider(props: Props) {
       },
       (bytes: number) => {
         setBytesSent(bytes);
+      },
+      () => {
+        error?.setError(ErrorTypes.WASM_EXITED);
       }
     );
   }, []);
