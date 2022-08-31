@@ -18,7 +18,7 @@ export default function ReceiveCompleteScreen({}: Props) {
         <Button
           leftIcon={<Download />}
           onClick={() => wormhole?.reset()}
-          color="medium-grey"
+          color="blue"
         >
           Receive more
         </Button>
