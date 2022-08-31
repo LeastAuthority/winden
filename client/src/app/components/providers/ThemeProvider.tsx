@@ -52,6 +52,13 @@ export default function ThemeProvider(props: Props) {
               },
             }),
           },
+          Progress: {
+            styles: (theme) => ({
+              root: {
+                height: 40,
+              },
+            }),
+          },
           TextInput: {
             styles: (theme) => ({
               input: {
