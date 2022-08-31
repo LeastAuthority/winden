@@ -47,7 +47,7 @@ export default function Header() {
               }
             }}
           >
-            RECEIVE
+            Receive
           </Button>
         ) : (
           <Button
@@ -64,7 +64,7 @@ export default function Header() {
               }
             }}
           >
-            SEND
+            Send
           </Button>
         )}
       </Group>
