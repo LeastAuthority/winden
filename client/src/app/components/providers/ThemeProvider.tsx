@@ -44,11 +44,21 @@ export default function ThemeProvider(props: Props) {
                 height: 50,
                 padding: "0 22px",
                 "&[data-disabled]": {
-                  backgroundColor: theme.fn.lighten(
-                    theme.colors[params.color][6],
-                    0.5
-                  ),
+                  backgroundColor:
+                    params.color &&
+                    theme.fn.lighten(theme.colors[params.color][6], 0.5),
                 },
+              },
+            }),
+          },
+          Modal: {
+            styles: (theme) => ({
+              header: {
+                fontSize: "1.25rem",
+                fontWeight: 700,
+              },
+              body: {
+                fontWeight: 400,
               },
             }),
           },
