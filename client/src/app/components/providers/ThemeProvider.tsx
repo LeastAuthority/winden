@@ -1,4 +1,9 @@
-import { Global, MantineProvider, Tuple } from "@mantine/core";
+import {
+  ButtonStylesParams,
+  Global,
+  MantineProvider,
+  Tuple,
+} from "@mantine/core";
 import React from "react";
 
 function sameShade(color: string) {
@@ -33,11 +38,17 @@ export default function ThemeProvider(props: Props) {
             }),
           },
           Button: {
-            styles: (theme) => ({
+            styles: (theme, params: ButtonStylesParams) => ({
               root: {
                 color: theme.colors.black[6],
                 height: 50,
                 padding: "0 22px",
+                "&[data-disabled]": {
+                  backgroundColor: theme.fn.lighten(
+                    theme.colors[params.color][6],
+                    0.5
+                  ),
+                },
               },
             }),
           },
