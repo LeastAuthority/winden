@@ -10,7 +10,6 @@ import {
 } from "@mantine/core";
 import classNames from "classnames";
 import React from "react";
-import { useCommonStyles } from "../hooks/useCommonStyles";
 
 const useStyles = createStyles((theme) => ({
   laMadeByTextLarge: {
@@ -37,7 +36,6 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function Footer() {
-  const { classes: commonClasses } = useCommonStyles();
   const { classes } = useStyles();
 
   return (
@@ -69,7 +67,9 @@ export default function Footer() {
             >
               made with love for privacy by
             </Text>
-            <Image height={30} fit="contain" src="/la-logo.svg" mr={32} />
+            <div>
+              <Image height={30} fit="contain" src="/la-logo.svg" mr={32} />
+            </div>
           </Group>
           <Stack className={classes.footerSmall}>
             <Group position="apart" mx="xl">
@@ -95,7 +95,9 @@ export default function Footer() {
               >
                 made with love for privacy by
               </Text>
-              <Image height={30} fit="contain" src="/la-logo.svg" />
+              <div>
+                <Image height={30} fit="contain" src="/la-logo.svg" />
+              </div>
             </Center>
           </Stack>
           <Space h="lg" />

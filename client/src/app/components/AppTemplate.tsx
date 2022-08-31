@@ -23,22 +23,6 @@ export default function AppTemplate(props: Props) {
                 ? "transition-container-send"
                 : "transition-container-default",
           }}
-          styles={{
-            root: {
-              height: "100vh",
-              minHeight: 640,
-              display: "flex",
-              flexDirection: "column",
-            },
-            body: {
-              height: "100%",
-            },
-            main: {
-              display: "grid",
-              gridTemplateRows: "1fr",
-              gridTemplateColumns: "1fr",
-            },
-          }}
           padding={0}
           header={<Header />}
           footer={<Footer />}

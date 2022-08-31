@@ -12,20 +12,38 @@ export default function ThemeProvider(props: Props) {
     <MantineProvider
       withNormalizeCSS
       theme={{
+        components: {
+          AppShell: {
+            styles: (theme) => ({
+              root: {
+                height: "100vh",
+                minHeight: 640,
+                display: "flex",
+                flexDirection: "column",
+              },
+              body: {
+                height: "100%",
+              },
+              main: {
+                display: "grid",
+                gridTemplateRows: "1fr",
+                gridTemplateColumns: "1fr",
+                minHeight: 0,
+              },
+            }),
+          },
+          Button: {
+            styles: (theme) => ({
+              root: {
+                color: theme.colors.black[6],
+                height: 50,
+                padding: "0 22px",
+              },
+            }),
+          },
+        },
         fontFamily: "Poppins, sans-serif",
         colors: {
-          // "bright-pink": [
-          //   "#F0BBDD",
-          //   "#ED9BCF",
-          //   "#EC7CC3",
-          //   "#ED5DB8",
-          //   "#F13EAF",
-          //   "#F71FA7",
-          //   "#FF00A1",
-          //   "#E00890",
-          //   "#C50E82",
-          //   "#AD1374",
-          // ],
           black: sameShade("#282f39"),
           "darker-grey": sameShade("#4f4f4f"),
           "dark-grey": sameShade("#6d6d6d"),
@@ -77,9 +95,6 @@ export default function ThemeProvider(props: Props) {
             body: {
               background: `linear-gradient(222.19deg, #f0f0f0 23.77%, #ffffff 98.02%)`,
               fontSize: `16px`,
-              color: theme.colors.black[6],
-            },
-            ".mantine-Button-root": {
               color: theme.colors.black[6],
             },
             ".transition-container-default > .transition-item-enter": {

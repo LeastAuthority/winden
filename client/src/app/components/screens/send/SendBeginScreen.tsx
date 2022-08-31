@@ -1,5 +1,4 @@
 import { Anchor, createStyles, Modal, Space, Text } from "@mantine/core";
-import classnames from "classnames";
 import React, { useEffect, useState } from "react";
 import { FileRejection } from "react-dropzone";
 import { Link } from "react-router-dom";
@@ -71,22 +70,14 @@ export function SendBeginScreenContent(props: ContentProps) {
         <Text className={commonClasses.headerText}>
           Send files in real-time
         </Text>
-        <Text
-          color="dark-grey"
-          className={classnames(commonClasses.textLine)}
-          weight={400}
-        >
+        <Text color="dark-grey" className={commonClasses.textLine} weight={400}>
           We don’t store and <i>can’t read</i> your files. We simply transfer
           them.{" "}
           <Anchor component={Link} to="/about" color="tertiary">
             Learn more.
           </Anchor>
         </Text>
-        <Text
-          color="dark-grey"
-          className={classnames(commonClasses.textLine)}
-          weight={400}
-        >
+        <Text color="dark-grey" className={commonClasses.textLine} weight={400}>
           No sign-ups. No snooping. No nonsense.
         </Text>
         <Space h="md" />
