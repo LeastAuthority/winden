@@ -32,7 +32,7 @@ export function ReceiveConsentScreenContent(props: ContentProps) {
         >
           Download
         </Button>
-        <Space h="xl" />
+        <Space h={87} />
         <Button
           leftIcon={<X />}
           data-testid="send-page-cancel-button"

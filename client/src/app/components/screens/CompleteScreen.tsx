@@ -25,6 +25,7 @@ export default function CompleteScreen(props: Props) {
         >
           🎉
         </Box>
+        <Space h={68} />
         {props.render()}
       </Stack>
     </Content>
