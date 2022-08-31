@@ -41,6 +41,15 @@ export default function ThemeProvider(props: Props) {
               },
             }),
           },
+          TextInput: {
+            styles: (theme) => ({
+              input: {
+                backgroundColor: theme.colors["light-grey"][6],
+                border: "none",
+                height: 50,
+              },
+            }),
+          },
         },
         fontFamily: "Poppins, sans-serif",
         colors: {
