@@ -35,6 +35,25 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
+function Links() {
+  return (
+    <>
+      <Anchor size="sm" color="black" weight={600}>
+        FAQ
+      </Anchor>
+      <Anchor size="sm" color="black" weight={600}>
+        Privacy
+      </Anchor>
+      <Anchor size="sm" color="black" weight={600}>
+        About Us
+      </Anchor>
+      <Anchor size="sm" color="black" weight={600}>
+        GitHub
+      </Anchor>
+    </>
+  );
+}
+
 export default function Footer() {
   const { classes } = useStyles();
 
@@ -45,18 +64,7 @@ export default function Footer() {
         <div style={{ width: "100%" }}>
           <Group position="apart" className={classes.footerLarge}>
             <Group position="apart" style={{ width: 380 }} ml={32}>
-              <Anchor color="black" weight={600}>
-                FAQ
-              </Anchor>
-              <Anchor color="black" weight={600}>
-                Privacy
-              </Anchor>
-              <Anchor color="black" weight={600}>
-                About Us
-              </Anchor>
-              <Anchor color="black" weight={600}>
-                GitHub
-              </Anchor>
+              <Links />
             </Group>
             <div style={{ flex: 1 }} />
             <Text
@@ -73,18 +81,7 @@ export default function Footer() {
           </Group>
           <Stack className={classes.footerSmall}>
             <Group position="apart" mx="xl">
-              <Anchor size="sm" color="black" weight={600}>
-                FAQ
-              </Anchor>
-              <Anchor size="sm" color="black" weight={600}>
-                Privacy
-              </Anchor>
-              <Anchor size="sm" color="black" weight={600}>
-                About Us
-              </Anchor>
-              <Anchor size="sm" color="black" weight={600}>
-                GitHub
-              </Anchor>
+              <Links />
             </Group>
             <Center>
               <Text

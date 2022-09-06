@@ -80,6 +80,10 @@ export default function ThemeProvider(props: Props) {
           },
         },
         fontFamily: "Poppins, sans-serif",
+        fontSizes: {
+          sm: 12.8,
+          md: 16,
+        },
         colors: {
           black: sameShade("#282f39"),
           "darker-grey": sameShade("#4f4f4f"),
