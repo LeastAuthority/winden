@@ -48,6 +48,16 @@ export default function ThemeProvider(props: Props) {
                     params.color &&
                     theme.fn.lighten(theme.colors[params.color][6], 0.5),
                 },
+                "&:hover": {
+                  backgroundColor:
+                    params.color &&
+                    theme.fn.darken(theme.colors[params.color][6], 0.1),
+                },
+                "&:active": {
+                  backgroundColor:
+                    params.color &&
+                    theme.fn.darken(theme.colors[params.color][6], 0.2),
+                },
               },
             }),
           },
