@@ -46,6 +46,11 @@ export default function Header() {
                 wormhole?.reset();
               }
             }}
+            styles={{
+              label: {
+                fontSize: 16,
+              },
+            }}
           >
             Receive
           </Button>
@@ -62,6 +67,11 @@ export default function Header() {
               } else {
                 wormhole?.reset();
               }
+            }}
+            styles={{
+              label: {
+                fontSize: 16,
+              },
             }}
           >
             Send

@@ -24,15 +24,31 @@ export function SendInstructionsScreenContent(props: ContentProps) {
       <Space h="xs" />
       <Stack align="center" data-testid="send-page-code-section">
         <FileLabel />
-        <Text weight="bold" color="dark-grey" className={classes.textLine}>
+        <Text
+          size={14.4}
+          weight={600}
+          color="dark-grey"
+          className={classes.textLine}
+        >
           1. Keep this tab open
         </Text>
-        <Text color="dark-grey" align="center" className={classes.textLine}>
+        <Text
+          size={14.4}
+          weight={400}
+          color="dark-grey"
+          align="center"
+          className={classes.textLine}
+        >
           Files are sent directly from your device.
           <br />
           The link/code expires once you close the tab.
         </Text>
-        <Text weight="bold" color="dark-grey" className={classes.textLine}>
+        <Text
+          size={14.4}
+          weight={600}
+          color="dark-grey"
+          className={classes.textLine}
+        >
           2. Give the receiver the link below
         </Text>
         <Group
@@ -50,6 +66,7 @@ export function SendInstructionsScreenContent(props: ContentProps) {
               input: {
                 width: "100%",
                 textAlign: "center",
+                fontSize: 14.4,
               },
             }}
             readOnly
