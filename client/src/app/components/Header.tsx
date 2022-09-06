@@ -1,4 +1,4 @@
-import { Button, createStyles, Group, Space, Text } from "@mantine/core";
+import { Button, createStyles, Group, Image, Space, Text } from "@mantine/core";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Download, Send } from "tabler-icons-react";
@@ -10,6 +10,8 @@ const useStyles = createStyles((theme) => ({
     fontWeight: "lighter",
     fontSize: 20,
     color: theme.colors["dark-grey"][6],
+    position: "relative",
+    bottom: 7,
   },
 }));
 
@@ -17,17 +19,18 @@ export default function Header() {
   const wormhole = useWormhole();
   const location = useLocation();
   const navigate = useNavigate();
-  const { classes: commonClasses } = useCommonStyles();
   const { classes } = useStyles();
 
   return (
     <>
       <Space h="lg" />
       <Group position="apart">
-        <Group align="start" spacing="xs">
-          <Text className={commonClasses.headerText} component="span">
-            Transfer
-          </Text>
+        <Group align="start" spacing={8}>
+          <Image
+            width={200}
+            fit="contain"
+            src="/LA_Winden_HorizontalLogo_Color.svg"
+          />
           <Text className={classes.headerTextSuper} component="span">
             BETA
           </Text>
