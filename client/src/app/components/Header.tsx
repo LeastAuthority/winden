@@ -6,6 +6,12 @@ import { useCommonStyles } from "../hooks/useCommonStyles";
 import { useWormhole } from "../hooks/useWormhole";
 
 const useStyles = createStyles((theme) => ({
+  container: {
+    margin: "0 40px",
+    [`@media (max-width: ${theme.breakpoints.sm - 1}px)`]: {
+      margin: 0,
+    },
+  },
   headerTextSuper: {
     fontWeight: "lighter",
     fontSize: 20,
@@ -22,7 +28,7 @@ export default function Header() {
   const { classes } = useStyles();
 
   return (
-    <>
+    <div className={classes.container}>
       <Space h="lg" />
       <Group position="apart">
         <Group align="start" spacing={8}>
@@ -82,6 +88,6 @@ export default function Header() {
         )}
       </Group>
       <Space h="lg" />
-    </>
+    </div>
   );
 }

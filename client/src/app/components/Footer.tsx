@@ -19,9 +19,9 @@ const useStyles = createStyles((theme) => ({
       },
   },
   laMadeByTextSmall: {
-    [`@media (max-width: ${theme.breakpoints.xs}px)`]: {
-      display: "none",
-    },
+    // [`@media (max-width: ${theme.breakpoints.xs}px)`]: {
+    //   display: "none",
+    // },
   },
   footerLarge: {
     [`@media (max-width: ${theme.breakpoints.sm - 1}px)`]: {
@@ -63,7 +63,7 @@ export default function Footer() {
       <div style={{ flex: 1, display: "flex", alignItems: "flex-end" }}>
         <div style={{ width: "100%" }}>
           <Group position="apart" className={classes.footerLarge}>
-            <Group position="apart" style={{ width: 380 }} ml={32}>
+            <Group position="apart" style={{ width: 380 }} ml={40}>
               <Links />
             </Group>
             <div style={{ flex: 1 }} />
@@ -76,11 +76,11 @@ export default function Footer() {
               made with love for privacy by
             </Text>
             <div>
-              <Image height={30} fit="contain" src="/la-logo.svg" mr={32} />
+              <Image height={30} fit="contain" src="/la-logo.svg" mr={40} />
             </div>
           </Group>
           <Stack className={classes.footerSmall}>
-            <Group position="apart" mx="xl">
+            <Group position="center" spacing={60}>
               <Links />
             </Group>
             <Center>
