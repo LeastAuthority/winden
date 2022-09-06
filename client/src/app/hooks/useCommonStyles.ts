@@ -6,6 +6,7 @@ export const useCommonStyles = createStyles((theme) => {
       fontSize: "2.5rem",
       fontWeight: 700,
       color: theme.colors.black,
+      lineHeight: 1,
       "@media (max-width: 620px)": {
         fontSize: "2rem",
       },
