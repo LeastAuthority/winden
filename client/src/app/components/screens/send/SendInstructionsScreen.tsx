@@ -21,34 +21,24 @@ export function SendInstructionsScreenContent(props: ContentProps) {
   return (
     <Content>
       <Text className={classes.headerText}>Ready to send!</Text>
-      <Space h="xs" />
-      <Stack align="center" data-testid="send-page-code-section">
+      <Stack align="center" spacing={0} data-testid="send-page-code-section">
         <FileLabel />
-        <Text
-          size={14.4}
-          weight={600}
-          color="dark-grey"
-          className={classes.textLine}
-        >
+        <Space h="md" />
+        <Text component="p" size={14.4} weight={600} color="dark-grey">
           1. Keep this tab open
         </Text>
         <Text
+          component="p"
           size={14.4}
           weight={400}
           color="dark-grey"
           align="center"
-          className={classes.textLine}
         >
           Files are sent directly from your device.
           <br />
           The link/code expires once you close the tab.
         </Text>
-        <Text
-          size={14.4}
-          weight={600}
-          color="dark-grey"
-          className={classes.textLine}
-        >
+        <Text component="p" size={14.4} weight={600} color="dark-grey">
           2. Give the receiver the link below
         </Text>
         <Group
@@ -82,6 +72,7 @@ export function SendInstructionsScreenContent(props: ContentProps) {
             {props.copied ? "Link copied!" : "Copy"}
           </Button>
         </Group>
+        <Space h="md" />
         <Button
           leftIcon={<X />}
           data-testid="send-page-cancel-button"

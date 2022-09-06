@@ -148,6 +148,11 @@ export default function ThemeProvider(props: Props) {
               fontSize: `16px`,
               color: theme.colors.black[6],
             },
+            p: {
+              margin: 0,
+              marginBottom: "1.1em",
+              lineHeight: 1.5,
+            },
             ".transition-container-default > .transition-item-enter": {
               opacity: 0,
               transform: "translate(30px, 0)",

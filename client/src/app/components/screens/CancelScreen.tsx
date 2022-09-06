@@ -13,18 +13,12 @@ export default function CancelScreen(props: Props) {
   return (
     <Content>
       <Text className={classes.headerText}>So close...</Text>
-      <Space h="md" />
-      <Stack align="center">
-        <Text
-          weight="bold"
-          color="dark-grey"
-          align="center"
-          className={classes.textLine}
-        >
+      <Stack spacing={0} align="center">
+        <Text component="p" weight="bold" color="dark-grey" align="center">
           The sender has cancelled this transfer.
         </Text>
 
-        <Text color="dark-grey" align="center" className={classes.textLine}>
+        <Text component="p" color="dark-grey" align="center">
           You can try again with a new link/code.
         </Text>
         {props.render()}

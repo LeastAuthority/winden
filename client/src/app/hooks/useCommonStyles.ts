@@ -4,6 +4,7 @@ export const useCommonStyles = createStyles((theme) => {
   return {
     headerText: {
       fontSize: "2.5rem",
+      marginBottom: "1.1rem",
       fontWeight: 700,
       color: theme.colors.black,
       lineHeight: 1,
@@ -13,9 +14,6 @@ export const useCommonStyles = createStyles((theme) => {
       "@media (max-width: 500px)": {
         fontSize: "1.35rem",
       },
-    },
-    textLine: {
-      lineHeight: 2.5,
     },
   };
 });
