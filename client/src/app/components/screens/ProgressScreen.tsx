@@ -31,7 +31,7 @@ export function ProgressScreenContent(props: ContentProps) {
           value={(props.bytesSent / props.fileSize) * 100}
           color="progress-grey"
         />
-        <Text color="dark-grey">
+        <Text size={14.4} weight={400} color="dark-grey">
           {props.eta > 1 ? durationToClosestUnit(props.eta) : props.waitText}
         </Text>
         <Button
