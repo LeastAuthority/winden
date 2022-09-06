@@ -87,6 +87,7 @@ export function CodeInputContent(props: ContentProps) {
           sx={(theme) => ({
             input: {
               textAlign: "center",
+              fontSize: 14.4,
             },
           })}
           data-testid="code-input"
