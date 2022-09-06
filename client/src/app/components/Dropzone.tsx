@@ -76,7 +76,9 @@ export default function Dropzone(props: Props) {
       >
         <Stack spacing={0}>
           <Plus size={70} />
-          <Text align="center">Select</Text>
+          <Text size={14.4} align="center">
+            Select
+          </Text>
         </Stack>
       </Button>
     </div>
