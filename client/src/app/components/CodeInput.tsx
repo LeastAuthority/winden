@@ -79,7 +79,10 @@ export function CodeInputContent(props: ContentProps) {
     <div data-testid="code-input-container">
       <Group position="center" spacing="md">
         <TextInput
-          ref={setReferenceElement}
+          ref={(e) => {
+            // TODO: better solution
+            setTimeout(() => setReferenceElement(e), 10);
+          }}
           style={{
             flexGrow: 1,
             maxWidth: 400,
