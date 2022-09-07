@@ -15,17 +15,15 @@ export default function CompleteScreen(props: Props) {
   return (
     <Content>
       <Text className={classes.headerText}>{props.title}</Text>
-      <Space h="md" />
       <Stack align="center">
         <FileLabel />
         <Box
           sx={(_theme) => ({
-            fontSize: 60,
+            fontSize: 80,
           })}
         >
           🎉
         </Box>
-        <Space h={68} />
         {props.render()}
       </Stack>
     </Content>

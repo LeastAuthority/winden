@@ -21,7 +21,6 @@ export function ReceiveConsentScreenContent(props: ContentProps) {
   return (
     <Content>
       <Text className={classes.headerText}>Ready to download</Text>
-      <Space h="md" />
       <Stack align="center">
         <FileLabel />
         <Button
@@ -32,7 +31,6 @@ export function ReceiveConsentScreenContent(props: ContentProps) {
         >
           Download
         </Button>
-        <Space h={87} />
         <Button
           leftIcon={<X />}
           data-testid="send-page-cancel-button"
