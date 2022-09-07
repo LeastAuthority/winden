@@ -3,7 +3,6 @@ import classNames from "classnames";
 import React from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
 import { Plus } from "tabler-icons-react";
-import { useCommonStyles } from "../hooks/useCommonStyles";
 
 const useStyles = createStyles((theme) => ({
   dropzoneButton: {
@@ -23,14 +22,33 @@ const useStyles = createStyles((theme) => ({
   },
   dropzone: {
     backgroundColor: theme.colors["light-grey"][6],
-    border: `4px dashed ${theme.colors["dark-grey"][6]}`,
+    display: "flex",
+    padding: 32,
+    flex: 1,
+    position: "relative",
+  },
+  dropzoneLayer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     borderRadius: 4,
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    padding: 32,
-    flex: 1,
+  },
+  dropzoneLayerTop: {
+    backgroundColor: theme.colors["tertiary"][6],
+    opacity: 0,
+    transition: "opacity 0.2s",
+  },
+  dropzoneLayerTopVisible: {
+    opacity: 0.8,
+  },
+  dropzoneLayerBottom: {
+    border: `4px dashed ${theme.colors["dark-grey"][6]}`,
   },
 }));
 
@@ -40,10 +58,9 @@ type Props = {
 };
 
 export default function Dropzone(props: Props) {
-  const { classes: commonClasses } = useCommonStyles();
   const { classes } = useStyles();
 
-  const { getRootProps, getInputProps, open } = useDropzone({
+  const { getRootProps, getInputProps, open, isDragActive } = useDropzone({
     noClick: true,
     noKeyboard: true,
     maxFiles: 1,
@@ -55,32 +72,46 @@ export default function Dropzone(props: Props) {
   return (
     <div
       {...getRootProps({
-        className: classNames(classes.dropzone),
+        className: classes.dropzone,
       })}
     >
-      <input {...getInputProps()} />
-      <Text color="dark-grey" weight={600}>
-        Drag & drop any file
-      </Text>
-      <Text color="dark-grey">up to 4GB</Text>
-      <Divider
-        className={classes.dropzoneDivider}
-        my="xs"
-        label="or"
-        labelPosition="center"
-      />
-      <Button
-        onClick={open}
-        className={classNames(classes.dropzoneButton)}
-        color="tertiary"
+      <div
+        className={classNames(
+          classes.dropzoneLayer,
+          classes.dropzoneLayerBottom
+        )}
       >
-        <Stack spacing={0}>
-          <Plus size={70} />
-          <Text size={14.4} align="center">
-            Select
-          </Text>
-        </Stack>
-      </Button>
+        <input {...getInputProps()} />
+        <Text color="dark-grey" weight={600}>
+          Drag & drop any file
+        </Text>
+        <Text color="dark-grey">up to 4GB</Text>
+        <Divider
+          className={classes.dropzoneDivider}
+          my="xs"
+          label="or"
+          labelPosition="center"
+        />
+        <Button
+          onClick={open}
+          className={classNames(classes.dropzoneButton)}
+          color="tertiary"
+        >
+          <Stack spacing={0}>
+            <Plus size={70} />
+            <Text size={14.4} align="center">
+              Select
+            </Text>
+          </Stack>
+        </Button>
+      </div>
+      <div
+        className={classNames(classes.dropzoneLayer, classes.dropzoneLayerTop, {
+          [classes.dropzoneLayerTopVisible]: isDragActive,
+        })}
+      >
+        <Text size={40}>Drop file here</Text>
+      </div>
     </div>
   );
 }
