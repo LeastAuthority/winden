@@ -51,9 +51,14 @@ const useStyles = createStyles((theme) => ({
     backgroundColor: theme.colors["tertiary"][6],
     opacity: 0,
     transition: "opacity 0.2s",
+    height: 0,
+    visibility: "hidden",
   },
   dropzoneLayerTopVisible: {
     opacity: 0.8,
+    display: "flex",
+    height: "auto",
+    visibility: "visible",
   },
   dropzoneLayerBottom: {
     border: `4px dashed ${theme.colors["dark-grey"][6]}`,
