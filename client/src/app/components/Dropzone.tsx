@@ -1,4 +1,12 @@
-import { Button, createStyles, Divider, Stack, Text } from "@mantine/core";
+import {
+  Button,
+  createStyles,
+  Divider,
+  Group,
+  Stack,
+  Text,
+} from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import classNames from "classnames";
 import React from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
@@ -59,6 +67,7 @@ type Props = {
 
 export default function Dropzone(props: Props) {
   const { classes } = useStyles();
+  const isNarrowScreen = useMediaQuery("(max-width: 575px)");
 
   const { getRootProps, getInputProps, open, isDragActive } = useDropzone({
     noClick: true,
@@ -69,7 +78,28 @@ export default function Dropzone(props: Props) {
     onDropRejected: props.onReject,
   });
 
-  return (
+  const button = (
+    <Group position="center">
+      <Button
+        onClick={open}
+        className={classNames(classes.dropzoneButton)}
+        color="tertiary"
+      >
+        <Stack spacing={0}>
+          <Text align="center">
+            <Plus size={70} />
+          </Text>
+          <Text size={14.4} align="center">
+            {isNarrowScreen ? "Select a file" : "Select"}
+          </Text>
+        </Stack>
+      </Button>
+    </Group>
+  );
+
+  return isNarrowScreen ? (
+    button
+  ) : (
     <div
       {...getRootProps({
         className: classes.dropzone,
@@ -92,18 +122,7 @@ export default function Dropzone(props: Props) {
           label="or"
           labelPosition="center"
         />
-        <Button
-          onClick={open}
-          className={classNames(classes.dropzoneButton)}
-          color="tertiary"
-        >
-          <Stack spacing={0}>
-            <Plus size={70} />
-            <Text size={14.4} align="center">
-              Select
-            </Text>
-          </Stack>
-        </Button>
+        {button}
       </div>
       <div
         className={classNames(classes.dropzoneLayer, classes.dropzoneLayerTop, {
