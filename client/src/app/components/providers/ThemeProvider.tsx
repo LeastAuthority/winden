@@ -22,9 +22,11 @@ export default function ThemeProvider(props: Props) {
             styles: (theme) => ({
               root: {
                 height: "100vh",
-                minHeight: 640,
                 display: "flex",
                 flexDirection: "column",
+                "@media (min-width: 576px)": {
+                  minHeight: 720,
+                },
               },
               body: {
                 height: "100%",
