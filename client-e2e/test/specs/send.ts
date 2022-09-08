@@ -72,20 +72,20 @@ describe("Send flow", () => {
   });
 
   describe("when uploading a file with the size of 300MB", () => {
-    it("will tell the user that the file is too large", async () => {
+    it.skip("will tell the user that the file is too large", async () => {
       await testTransferFailure("sizes/300MB");
     });
   });
 
   describe("when uploading a file with the size of 4.2GB", () => {
-    it("will tell the user that the file is too large", async function () {
+    it.skip("will tell the user that the file is too large", async function () {
       this.timeout(120000);
       await testTransferFailure("sizes/4.2GB");
     });
   });
 
   describe("when uploading a file with the size of 4.3GB", () => {
-    it("will tell the user that the file is too large", async function () {
+    it.skip("will tell the user that the file is too large", async function () {
       this.timeout(120000);
       await testTransferFailure("sizes/4.3GB");
     });
