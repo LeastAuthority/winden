@@ -54,6 +54,10 @@ jobs:
           docker-compose --profile e2e run --rm client-e2e
           ls client-e2e/reports/html-reports/      
 
+      - name: Sleep for 30 seconds
+        run: sleep 30s
+        shell: bash
+
       - name: Upload E2E reports
         uses: actions/upload-artifact@v3
         with:
