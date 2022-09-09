@@ -106,7 +106,7 @@ export const config: Options.Testrunner = {
         //@ts-ignore
         driver.logScreenshot(String.Format("Test Ended in {0}", result.error.stack));
   },
-  reporters: ['dot','spec',
+  reporters: ['spec',
         ["html-nice", {
             outputDir: './reports/html-reports/',
             filename: 'report.html',
