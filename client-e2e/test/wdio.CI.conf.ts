@@ -107,7 +107,7 @@ export const config: Options.Testrunner = {
             reportTitle: 'E2E tests report',
             linkScreenshots: true,
             //to show the report in a browser when done
-            showInBrowser: false,
+            showInBrowser: true,
             collapseTests: false,
             //to turn on screenshots after every test
             useOnAfterCommandForScreenshot: false,
@@ -121,6 +121,6 @@ export const config: Options.Testrunner = {
         (async () => {
             await reportAggregator.createReport();
         })();
-        const sleep = ms => new Promise(r => setTimeout(r, 15000));
+        //const sleep = ms => new Promise(r => setTimeout(r, 15000));
   },
 };
