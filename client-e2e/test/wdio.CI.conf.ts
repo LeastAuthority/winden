@@ -16,7 +16,7 @@ export const config: Options.Testrunner = {
     },
   },
   specs: ["./test/specs/**/*.ts"],
-  maxInstances: 10,
+  maxInstances: 1,
   capabilities: [
     {
       browserName: "chrome",
