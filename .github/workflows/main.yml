@@ -65,10 +65,11 @@ jobs:
       #    path: ${{ steps.extract.outputs.destination }}
       #    name: dist
 
-      - uses: actions/upload-artifact@v3
+      - name: Upload E2E reports
+        uses: actions/upload-artifact@v3
         with:
-            name: E2E reports
-            path: /usr/src/app/reports
+            name: e2e-reports
+            path: client-e2e/reports/
 
       - name: Stop the containers
         run: docker-compose --profile e2e down
