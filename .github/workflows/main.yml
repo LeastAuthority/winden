@@ -69,7 +69,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
             name: e2e-reports
-            path: client-e2e/reports/
+            path: client-e2e/reports/*
 
       - name: Stop the containers
         run: docker-compose --profile e2e down
