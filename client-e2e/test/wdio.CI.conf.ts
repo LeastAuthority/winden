@@ -7,6 +7,8 @@ import * as fsExtra from "fs-extra";
 
 import {ReportAggregator, HtmlReporter} from 'wdio-html-nice-reporter';
 import commands from "@rpii/wdio-commands";
+import {String, StringBuilder} from 'typescript-string-operations';
+
 let reportAggregator: ReportAggregator;
 var log4js = require("log4js");
 
