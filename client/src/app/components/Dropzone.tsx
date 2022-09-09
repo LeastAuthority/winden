@@ -102,40 +102,48 @@ export default function Dropzone(props: Props) {
     </Group>
   );
 
-  return isNarrowScreen ? (
-    button
-  ) : (
+  return (
     <div
       {...getRootProps({
-        className: classes.dropzone,
+        className: classNames({ [classes.dropzone]: !isNarrowScreen }),
       })}
     >
-      <div
-        className={classNames(
-          classes.dropzoneLayer,
-          classes.dropzoneLayerBottom
-        )}
-      >
-        <input {...getInputProps()} />
-        <Text color="dark-grey" weight={600}>
-          Drag & drop any file
-        </Text>
-        <Text color="dark-grey">up to 4GB</Text>
-        <Divider
-          className={classes.dropzoneDivider}
-          my="xs"
-          label="or"
-          labelPosition="center"
-        />
-        {button}
-      </div>
-      <div
-        className={classNames(classes.dropzoneLayer, classes.dropzoneLayerTop, {
-          [classes.dropzoneLayerTopVisible]: isDragActive,
-        })}
-      >
-        <Text size={40}>Drop file here</Text>
-      </div>
+      <input {...getInputProps()} />
+      {isNarrowScreen ? (
+        button
+      ) : (
+        <>
+          <div
+            className={classNames(
+              classes.dropzoneLayer,
+              classes.dropzoneLayerBottom
+            )}
+          >
+            <Text color="dark-grey" weight={600}>
+              Drag & drop any file
+            </Text>
+            <Text color="dark-grey">up to 4GB</Text>
+            <Divider
+              className={classes.dropzoneDivider}
+              my="xs"
+              label="or"
+              labelPosition="center"
+            />
+            {button}
+          </div>
+          <div
+            className={classNames(
+              classes.dropzoneLayer,
+              classes.dropzoneLayerTop,
+              {
+                [classes.dropzoneLayerTopVisible]: isDragActive,
+              }
+            )}
+          >
+            <Text size={40}>Drop file here</Text>
+          </div>
+        </>
+      )}
     </div>
   );
 }
