@@ -121,5 +121,6 @@ export const config: Options.Testrunner = {
         (async () => {
             await reportAggregator.createReport();
         })();
+        const sleep = ms => new Promise(r => setTimeout(r, 15000));
   },
 };
