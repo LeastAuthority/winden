@@ -52,18 +52,8 @@ jobs:
         #if: ${{ github.event_name == 'pull_request' }}
         run: |
           docker-compose --profile e2e run --rm client-e2e
-      
-      #- uses: shrink/actions-docker-extract@v1
-      #  id: extract
-      #  with:
-      #    image: client-e2e
-      #    path: /app/. 
- 
-      #- name: Upload Dist
-      #  uses: actions/upload-artifact@v2
-      #  with:
-      #    path: ${{ steps.extract.outputs.destination }}
-      #    name: dist
+          ls client-e2e/reports      
+          ls client-e2e
 
       - name: Upload E2E reports
         uses: actions/upload-artifact@v3
