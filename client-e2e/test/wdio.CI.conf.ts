@@ -84,6 +84,12 @@ export const config: Options.Testrunner = {
           });
         reportAggregator.clean();
   },
+  onComplete: function(exitCode, config, capabilities, results) {
+        (async () => {
+            await reportAggregator.createReport();
+        })();
+        //const sleep = ms => new Promise(r => setTimeout(r, 15000));
+  },
   before: function (capabilities, specs) {
 
         //@ts-ignore
@@ -100,7 +106,7 @@ export const config: Options.Testrunner = {
         //@ts-ignore
         driver.logScreenshot(String.Format("Test Ended in {0}", result.error.stack));
   },
-  reporters: ['spec',
+  reporters: ['dot','spec',
         ["html-nice", {
             outputDir: './reports/html-reports/',
             filename: 'report.html',
@@ -117,10 +123,4 @@ export const config: Options.Testrunner = {
         }
         ]
   ],
-  onComplete: function(exitCode, config, capabilities, results) {
-        (async () => {
-            await reportAggregator.createReport();
-        })();
-        //const sleep = ms => new Promise(r => setTimeout(r, 15000));
-  },
 };
