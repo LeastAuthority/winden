@@ -46,7 +46,7 @@ export const config: Options.Testrunner = {
           "browser.download.folderList": 2,
         },
       },
-    },*//*
+    },
     {
       browserName: "MicrosoftEdge",
       "ms:edgeOptions": {

@@ -49,6 +49,7 @@ jobs:
           docker-compose --profile e2e run client npm run test
 
       - name: run E2E tests
+        #if: ${{ github.event_name == 'pull_request' }}
         run: |
           docker-compose --profile e2e run --rm client-e2e
 
