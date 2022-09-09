@@ -53,6 +53,14 @@ jobs:
         run: |
           docker-compose --profile e2e run --rm client-e2e
           ls client-e2e/reports/html-reports/      
+          sleep 10
+          ls -al client-e2e/reports/html-reports/
+
+      - uses: actions/upload-artifact@v1
+          if: failure()
+          with:
+            name: logs
+            path: logs
 
       - name: Sleep for 30 seconds
         run: sleep 30s
