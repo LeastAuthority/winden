@@ -52,14 +52,13 @@ jobs:
         #if: ${{ github.event_name == 'pull_request' }}
         run: |
           docker-compose --profile e2e run --rm client-e2e
-          ls client-e2e/reports      
-          ls client-e2e
+          ls client-e2e/reports/html-reports/      
 
       - name: Upload E2E reports
         uses: actions/upload-artifact@v3
         with:
             name: e2e-reports
-            path: client-e2e/reports
+            path: client-e2e/reports/html-reports
 
       - name: Stop the containers
         run: docker-compose --profile e2e down
