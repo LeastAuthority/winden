@@ -9,6 +9,7 @@ import { useWormhole } from "../../../hooks/useWormhole";
 type ModalState =
   | "NONE"
   | "TRANSFER_CANCELLED"
+  | "DIRECTORIES_NOT_SUPPORTED"
   | "FILE_TOO_LARGE"
   | "OTHER_ERROR";
 
@@ -22,6 +23,17 @@ type ContentProps = {
 export function SendBeginScreenContent(props: ContentProps) {
   return (
     <div data-testid="send-page-upload-section">
+      <Modal
+        centered
+        opened={props.modalState === "DIRECTORIES_NOT_SUPPORTED"}
+        onClose={props.onModalClose}
+        title="Transfer of directories: coming soon"
+      >
+        <Text>
+          In this development state, this product only supports transferring one
+          file at a time. Please select a single file.
+        </Text>
+      </Modal>
       <Modal
         centered
         opened={props.modalState === "FILE_TOO_LARGE"}
@@ -108,7 +120,9 @@ export default function SendBeginScreen(props: Props) {
         wormhole?.sendFile(files[0]);
       }}
       onReject={(rejections) => {
-        if (rejections[0]) {
+        if (rejections.length > 1) {
+          setModalState("DIRECTORIES_NOT_SUPPORTED");
+        } else if (rejections.length == 1) {
           setModalState("FILE_TOO_LARGE");
         } else {
           setModalState("OTHER_ERROR");
