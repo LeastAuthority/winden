@@ -46,7 +46,7 @@ export default function AppTemplate(props: Props) {
             <>
               <Space h="lg" />
               <Group position="apart">
-                <Title order={1}>Transfer</Title>
+                <Title order={1}>Winden</Title>
                 {location.pathname === "/s" ? (
                   <Button
                     data-testid="go-to-receive-page"
