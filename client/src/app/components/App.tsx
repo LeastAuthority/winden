@@ -1,10 +1,9 @@
 import { useReducedMotion } from "@mantine/hooks";
 import React from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { useCodeUrlCheck } from "../hooks/useCodeUrlCheck";
 import AppTemplate from "./AppTemplate";
-import Navigate from "./Navigate";
 import NotFoundPage from "./pages/NotFoundPage";
 import ReceivePage from "./pages/ReceivePage";
 import SendPage from "./pages/SendPage";

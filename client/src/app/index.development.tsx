@@ -4,8 +4,8 @@ import { BrowserTracing } from "@sentry/tracing";
 import React from "react";
 import ReactDOM from "react-dom";
 import {
+  BrowserRouter,
   createRoutesFromChildren,
-  HashRouter,
   matchRoutes,
   useLocation,
   useNavigationType,
@@ -38,9 +38,9 @@ ReactDOM.render(
     <ThemeProvider>
       <ErrorProvider>
         <WormholeProvider>
-          <HashRouter>
+          <BrowserRouter>
             <App />
-          </HashRouter>
+          </BrowserRouter>
         </WormholeProvider>
       </ErrorProvider>
     </ThemeProvider>

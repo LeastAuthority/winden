@@ -171,7 +171,7 @@ export default class ClientWorker implements ClientInterface {
     error,
   }: RPCMessage): Promise<void> {
     if (error.includes("failed to write")) {
-      window.history.pushState({}, "", "/#/s?cancel=");
+      window.history.pushState({}, "", "/s?cancel=");
       window.location.reload();
     } else {
       this.onSendError && this.onSendError(`SendErr: ${error}`);

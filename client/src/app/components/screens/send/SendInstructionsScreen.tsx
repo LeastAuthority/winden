@@ -66,7 +66,7 @@ export function SendInstructionsScreenContent(props: ContentProps) {
             }}
             readOnly
             type="text"
-            value={`${window.location.host}/#/${props.code}`}
+            value={`${window.location.host}/#${props.code}`}
           />
           <Button
             leftIcon={<Files />}
@@ -103,7 +103,7 @@ export default function SendInstructionsScreen({}: Props) {
       copied={clipboard.copied}
       onCopy={() =>
         clipboard.copy(
-          `${window.location.protocol}//${window.location.host}/#/${wormhole.code}`
+          `${window.location.protocol}//${window.location.host}/#${wormhole.code}`
         )
       }
       onCancel={() => {
