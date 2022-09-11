@@ -18,5 +18,10 @@
     },
     "scripts": {
         "wdio": "wdio run test/wdio.CI.conf.ts"
+    },
+    "dependencies": {
+        "@log4js-node/log4js-api": "^1.0.2",
+        "copyfiles": "^2.4.1",
+        "image-to-base64": "^2.2.0"
     }
 }
