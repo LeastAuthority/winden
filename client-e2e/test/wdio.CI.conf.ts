@@ -15,6 +15,49 @@ var log4js = require("log4js");
 global.downloadDirBrowser = "/home/seluser/downloads";
 global.downloadDir = "/home/node/downloads";
 
+
+const LOG = require ('log4js') ;
+LOG.configure({
+    appenders: {
+        fileLog: {
+            type: 'file',
+            filename: "logs/html-reporter.log",
+            maxLogSize: 5000000,
+            level: 'debug'
+        },
+        debugLog: {
+            type: 'file',
+            filename: "logs/debug-html-reporter.log",
+            maxLogSize: 5000000,
+            level: 'debug'
+        },
+        out: {
+            type: 'stdout',
+            layout: {
+                type: "pattern",
+                pattern: "%[[%p]%] - %10.-100f{2} | %7.12l:%7.12o - %[%m%]"
+            }
+        },
+        filterOut: {
+            type: 'stdout',
+            layout: {
+                type: "pattern",
+                pattern: "%[[%p]%] - %10.-100f{2} | %7.12l:%7.12o - %[%m%]"
+            },
+            level: 'info'
+        }
+    },
+    categories: {
+        file: {appenders: ['fileLog'], level: 'info'},
+        default: {appenders: ['fileLog'], level: 'info'},
+        debug: {appenders: ['debugLog'], level: 'debug'}
+    }
+});
+
+
+
+let logger = LOG.getLogger("debug") ;
+
 export const config: Options.Testrunner = {
   hostname: "selenium-hub",
   autoCompileOpts: {
@@ -119,7 +162,7 @@ export const config: Options.Testrunner = {
             useOnAfterCommandForScreenshot: false,
 
             //to initialize the logger
-            LOG: log4js.getLogger("default")
+            LOG: logger
         }
         ]
   ],
