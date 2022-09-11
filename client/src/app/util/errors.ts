@@ -1,5 +1,6 @@
 export const enum ErrorTypes {
   RECV_CONNECTION_TIMEOUT,
+  SENDER_BAD_CODE,
   BAD_CODE,
   MAILBOX,
   RELAY,
@@ -11,7 +12,9 @@ const ServerErrorMsg =
   "Unfortunately, the site cannot connect to the [Product name] server. Please try again or let us know at support@domainname if the problem remains.";
 
 export function detectErrorType(error: string) {
-  if (/^decrypt message failed$/.test(error)) {
+  if (/^SendErr: decrypt message failed$/.test(error)) {
+    return ErrorTypes.SENDER_BAD_CODE;
+  } else if (/^decrypt message failed$/.test(error)) {
     return ErrorTypes.BAD_CODE;
   } else if (/.*$rendezvousURL.*/.test(error)) {
     return ErrorTypes.MAILBOX;
@@ -43,6 +46,15 @@ export function errorContent(type: ErrorTypes): {
         description: [
           "It looks like the connection between you and the sender was briefly lost.",
           "Please ask the sender for a new code.",
+        ],
+      };
+    }
+    case ErrorTypes.SENDER_BAD_CODE: {
+      return {
+        title: "Oops...",
+        description: [
+          "It looks like the number at the beginning of your code was entered by a receiver without following the right word combination.",
+          "Your transfer was cancelled. Please try again with a new code.",
         ],
       };
     }
