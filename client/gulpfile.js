@@ -49,11 +49,14 @@ const webpackConfig = {
 
 const javascript = () =>
   gulp
-    .src("src/app/index.tsx")
+    .src(`src/app/index.${process.env.NODE_ENV}.tsx`)
     .pipe(
       webpack({
         ...webpackConfig,
-        entry: ["web-streams-polyfill", "./src/app/index.tsx"],
+        entry: [
+          "web-streams-polyfill",
+          `./src/app/index.${process.env.NODE_ENV}.tsx`,
+        ],
       })
     )
     .pipe(gulp.dest("dist/app"))
