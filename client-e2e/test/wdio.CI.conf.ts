@@ -18,7 +18,9 @@ export const config: Options.Testrunner = {
     },
   },
   specs: ["./test/specs/**/*.ts"],
-  exclude: ["./test/specs/send-large-files.ts"],
+  exclude: ["./test/specs/send-large-files.ts",
+            "./test/specs/timeout.ts", 
+            ],
   maxInstances: 1,
   capabilities: [
     {
