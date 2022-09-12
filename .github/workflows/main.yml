@@ -1,4 +1,4 @@
-name: transfer-repo-CI
+name: Build and Test (CI)
 on: [push, pull_request]
 jobs:
   build:
@@ -15,7 +15,7 @@ jobs:
         with:
             submodules: recursive
 
-      - name: setup npm, yarn etc.
+      - name: Setup npm, yarn etc.
         uses: actions/setup-node@v2
         with:
           node-version: '16'
@@ -25,7 +25,7 @@ jobs:
            sudo curl -o /usr/local/bin/docker-compose -L "https://github.com/docker/compose/releases/download/v2.6.1/docker-compose-linux-x86_64"
            sudo chmod +x /usr/local/bin/docker-compose
 
-      - name: setup for running tests
+      - name: Setup for running tests
         run: |
           IP=$(ip address show  eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f1 | head -n1)
           printf "HOST_IP address is: %s\n" "$HOST_IP"
@@ -36,16 +36,21 @@ jobs:
       - name: Setup docker images
         run: docker-compose --profile e2e build
 
-      - name: build client
+      - name: Build client
         run: docker-compose --profile e2e run client npm i
 
-      - name: build client-e2e
+      - name: Build client-e2e
         run: docker-compose --profile e2e run client-e2e npm i
 
-      - name: run unit and integration tests
+      - name: Run UNIT and INTEGRATION tests
         run: |
           docker-compose --profile e2e up -d client
           docker-compose --profile e2e run client npm run test
 
-      - name: stop the containers
+      - name: Run E2E tests
+        #if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          docker-compose --profile e2e run --rm client-e2e
+
+      - name: Stop the containers
         run: docker-compose --profile e2e down

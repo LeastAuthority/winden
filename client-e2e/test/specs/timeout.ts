@@ -28,7 +28,7 @@ async function testTimeoutSuccess(timeoutMs: number) {
 
 describe("Time out", () => {
   describe("when the receiver waits 5 minutes before accepting the file", () => {
-    it.skip("will succeed in connecting and transferring", async () => {
+    it("will succeed in connecting and transferring", async () => {
       await testTimeoutSuccess(5 * 60 * 1000);
     });
   });
