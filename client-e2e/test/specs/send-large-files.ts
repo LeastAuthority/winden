@@ -42,23 +42,23 @@ async function testTransferFailure(fileName: string, timeout?: number) {
   await expect(content).toHaveTextContaining("Large file sizes: coming soon");
 }
 
-describe("Send flow", () => {
+describe("Send flow large files", () => {
 
   describe("when uploading a file with the size of 300MB", () => {
-    it.skip("will tell the user that the file is too large", async () => {
+    it("will tell the user that the file is too large", async () => {
       await testTransferFailure("sizes/300MB");
     });
   });
 
   describe("when uploading a file with the size of 4.2GB", () => {
-    it.skip("will tell the user that the file is too large", async function () {
+    it("will tell the user that the file is too large", async function () {
       this.timeout(120000);
       await testTransferFailure("sizes/4.2GB");
     });
   });
 
   describe("when uploading a file with the size of 4.3GB", () => {
-    it.skip("will tell the user that the file is too large", async function () {
+    it("will tell the user that the file is too large", async function () {
       this.timeout(120000);
       await testTransferFailure("sizes/4.3GB");
     });

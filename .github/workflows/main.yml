@@ -42,7 +42,6 @@ jobs:
       - name: Build client-e2e
         run: docker-compose --profile e2e run client-e2e npm i
 
-
       - name: Run UNIT and INTEGRATION tests
         run: |
           docker-compose --profile e2e up -d client
@@ -52,25 +51,6 @@ jobs:
         #if: ${{ github.event_name == 'pull_request' }}
         run: |
           docker-compose --profile e2e run --rm client-e2e
-          ls client-e2e/reports/html-reports/      
-          sleep 10
-          ls -al client-e2e/reports/html-reports/
-
-      - uses: actions/upload-artifact@v1
-        if: failure()
-        with:
-          name: logs
-          path: logs
-
-      - name: Sleep for 30 seconds
-        run: sleep 30s
-        shell: bash
-
-      - name: Upload E2E reports
-        uses: actions/upload-artifact@v3
-        with:
-            name: e2e-reports
-            path: client-e2e/reports/html-reports
 
       - name: Stop the containers
         run: docker-compose --profile e2e down
