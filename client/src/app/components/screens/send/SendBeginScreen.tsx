@@ -27,11 +27,12 @@ export function SendBeginScreenContent(props: ContentProps) {
         centered
         opened={props.modalState === "DIRECTORIES_NOT_SUPPORTED"}
         onClose={props.onModalClose}
-        title="Transfer of directories: coming soon"
+        title="One at a time please :)"
       >
         <Text>
-          In this development state, this product only supports transferring one
-          file at a time. Please select a single file.
+        As Winden is in development state, you can only send one file at a time. 
+
+        Please select a single file. 
         </Text>
       </Modal>
       <Modal
@@ -49,9 +50,10 @@ export function SendBeginScreenContent(props: ContentProps) {
         centered
         opened={props.modalState === "OTHER_ERROR"}
         onClose={props.onModalClose}
-        title="Error"
+        title="Oops..."
       >
-        <Text>Failed to upload file.</Text>
+        <Text>An unexpected error occurred.
+          Please refresh the page before trying again.</Text>
       </Modal>
       <Modal
         centered
