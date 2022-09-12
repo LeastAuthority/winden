@@ -1,0 +1,31 @@
+import { Modal, Text } from "@mantine/core";
+import React, { useEffect, useState } from "react";
+import { isValidBrowser } from "../util/isValidBrowser";
+
+type Props = React.PropsWithChildren<{}>;
+
+export default function BrowserValidator(props: Props) {
+  const [opened, setOpened] = useState(false);
+
+  useEffect(() => {
+    const isValid = isValidBrowser();
+    if (!isValid) {
+      setOpened(true);
+    }
+  }, []);
+
+  return (
+    <>
+      {
+        <Modal
+          opened={opened}
+          onClose={() => setOpened(false)}
+          title="Browser not supported"
+        >
+          <Text>This browser is not supported.</Text>
+        </Modal>
+      }
+      {props.children}
+    </>
+  );
+}
