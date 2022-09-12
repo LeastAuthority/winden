@@ -5,58 +5,8 @@ import { execSync } from "child_process";
 import * as fs from "fs";
 import * as fsExtra from "fs-extra";
 
-import {ReportAggregator, HtmlReporter} from 'wdio-html-nice-reporter';
-import commands from "@rpii/wdio-commands";
-import {String, StringBuilder} from 'typescript-string-operations';
-
-let reportAggregator: ReportAggregator;
-var log4js = require("log4js");
-
 global.downloadDirBrowser = "/home/seluser/downloads";
 global.downloadDir = "/home/node/downloads";
-
-
-const LOG = require ('log4js') ;
-LOG.configure({
-    appenders: {
-        fileLog: {
-            type: 'file',
-            filename: "logs/html-reporter.log",
-            maxLogSize: 5000000,
-            level: 'debug'
-        },
-        debugLog: {
-            type: 'file',
-            filename: "logs/debug-html-reporter.log",
-            maxLogSize: 5000000,
-            level: 'debug'
-        },
-        out: {
-            type: 'stdout',
-            layout: {
-                type: "pattern",
-                pattern: "%[[%p]%] - %10.-100f{2} | %7.12l:%7.12o - %[%m%]"
-            }
-        },
-        filterOut: {
-            type: 'stdout',
-            layout: {
-                type: "pattern",
-                pattern: "%[[%p]%] - %10.-100f{2} | %7.12l:%7.12o - %[%m%]"
-            },
-            level: 'info'
-        }
-    },
-    categories: {
-        file: {appenders: ['fileLog'], level: 'info'},
-        default: {appenders: ['fileLog'], level: 'info'},
-        debug: {appenders: ['debugLog'], level: 'debug'}
-    }
-});
-
-
-
-let logger = LOG.getLogger("debug") ;
 
 export const config: Options.Testrunner = {
   hostname: "selenium-hub",
@@ -67,8 +17,8 @@ export const config: Options.Testrunner = {
       project: "test/tsconfig.json",
     },
   },
-  //specs: ["./test/specs/**/*.ts"],
-  specs: ["./test/specs/receive.ts"],
+  specs: ["./test/specs/**/*.ts"],
+  exclude: ["./test/specs/test/send-large-files.ts"]
   maxInstances: 1,
   capabilities: [
     {
@@ -111,59 +61,15 @@ export const config: Options.Testrunner = {
   connectionRetryTimeout: 120000,
   connectionRetryCount: 3,
   framework: "mocha",
-  //reporters: ["spec"],
+  reporters: ["spec"],
   mochaOpts: {
     ui: "bdd",
     timeout: 60000,
   },
   onPrepare: function (config, capabilities) {
     execSync("/usr/src/app/scripts/generate-CI-test-files.sh");
-    reportAggregator = new ReportAggregator({
-            outputDir: './reports/html-reports/',
-            filename: 'master-report.html',
-            reportTitle: 'Master Report',
-            browserName: capabilities.browserName,
-            collapseTests: true
-          });
-        reportAggregator.clean();
-  },
-  onComplete: function(exitCode, config, capabilities, results) {
-        (async () => {
-            await reportAggregator.createReport();
-        })();
-        //const sleep = ms => new Promise(r => setTimeout(r, 15000));
-  },
-  before: function (capabilities, specs) {
-
-        //@ts-ignore
-        commands.addCommands(driver);
   },
   beforeTest: function () {
     fsExtra.emptyDirSync(global.downloadDir);
   },
-  afterTest: function (test: any, context: any, result: any) {
-        // if test passed, ignore, else take and save screenshot.
-        if (result.passed) {
-            return;
-        }
-        //@ts-ignore
-        driver.logScreenshot(String.Format("Test Ended in {0}", result.error.stack));
-  },
-  reporters: ['spec',
-        ["html-nice", {
-            outputDir: './reports/html-reports/',
-            filename: 'report.html',
-            reportTitle: 'E2E tests report',
-            linkScreenshots: true,
-            //to show the report in a browser when done
-            showInBrowser: true,
-            collapseTests: false,
-            //to turn on screenshots after every test
-            useOnAfterCommandForScreenshot: false,
-
-            //to initialize the logger
-            LOG: logger
-        }
-        ]
-  ],
 };
