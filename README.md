@@ -1,10 +1,9 @@
-# Transfer-rewrite
+# Winden
 
-Transfer is a graphical interface for doing file transfer via the Magic Wormhole protocol.
+Winden is a graphical interface for doing file transfer via the Magic Wormhole protocol.
 
 ## Status
 
-Refactoring original code: https://github.com/LeastAuthority/Transfer and switching to ReactJS.
 Core repository is currently in **_evaluation stage_**.
 The web app is in 'alpha' state, and **not ready for production use**.
 
@@ -15,8 +14,8 @@ Follow these steps to get the whole setup running on a local computer for easy d
 ### Cloning
 
 ```sh
-git clone git@github.com:LeastAuthority/Transfer-rewrite.git
-cd Transfer
+git clone git@github.com:LeastAuthority/winden.git
+cd winden
 git submodule init
 git submodule update --recursive
 ```
@@ -24,7 +23,7 @@ git submodule update --recursive
 or you can do it in one step:
 
 ```sh
-git clone --recurse-submodules git@github.com:LeastAuthority/Transfer-rewrite.git
+git clone --recurse-submodules git@github.com:LeastAuthority/winden.git
 ```
 
 ### System Prerequisites
