@@ -29,11 +29,8 @@ export function SendBeginScreenContent(props: ContentProps) {
         onClose={props.onModalClose}
         title="One at a time please :)"
       >
-        <Text>
-        As Winden is in development state, you can only send one file at a time. 
-
-        Please select a single file. 
-        </Text>
+        <Text>As Winden is in development state, you can only send one file at a time.</Text>
+        <Text>Please select a single file. </Text>
       </Modal>
       <Modal
         centered
@@ -43,8 +40,9 @@ export function SendBeginScreenContent(props: ContentProps) {
       >
         <Text>
           In this development state, this product only supports file sizes of up
-          to 200 MB. Please select a smaller file.
-        </Text>
+          to 200 MB. 
+        </Text>  
+        <Text>Please select a smaller file.</Text>
       </Modal>
       <Modal
         centered
