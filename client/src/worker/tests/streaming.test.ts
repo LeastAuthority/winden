@@ -12,7 +12,7 @@ const config = {
   passPhraseComponentLength: 2,
 };
 
-describe("Client", () => {
+describe.skip("Client", () => {
   beforeAll(initGo);
 
   describe("#recvFile", () => {
@@ -75,7 +75,7 @@ describe("Client", () => {
   // });
 });
 
-describe("Reader", () => {
+describe.skip("Reader", () => {
   describe("#read", () => {
     it("should call the read function passed to the constructor", async () => {
       const testFileName = "testfile";

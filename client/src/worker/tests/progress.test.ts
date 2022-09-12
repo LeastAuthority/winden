@@ -9,7 +9,7 @@ const config = {
   passPhraseComponentLength: 2,
 };
 
-describe("Send progress", () => {
+describe.skip("Send progress", () => {
   beforeAll(initGo);
 
   it("increments from 0 to total size", async () => {
