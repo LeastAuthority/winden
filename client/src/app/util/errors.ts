@@ -53,8 +53,8 @@ export function errorContent(type: ErrorTypes): {
       return {
         title: "Oops...",
         description: [
-          "It looks like the number at the beginning of your code was entered by a receiver without following the right word combination.",
-          "Your transfer was cancelled. Please try again with a new code.",
+          "The receiver has entered the wrong code. ",
+          "Please try sending the file again and provide the receiver with a new code.",
         ],
       };
     }
@@ -62,8 +62,11 @@ export function errorContent(type: ErrorTypes): {
       return {
         title: "Oops...",
         description: [
-          "If you’re sure this is the right code: Either the sender is no longer connected, or the code was already used.",
-          "Please ask the sender for a new code and for them to stay connected until you get the file.",
+          "Something went wrong. Possibly:",
+          "- The code is wrong; or",
+          "- The code was already used; or",
+          "- The sender is no longer connected.",
+          "Please try sending the file again and provide the receiver with a new code.",
         ],
       };
     }
