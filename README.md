@@ -125,7 +125,7 @@ NODE_ENV=development
 NODE_ENV=production
 ```
 
-## Deploying to playground
+## Deploying
 
 We build and deploy by running a gulp task inside a docker container. You will need to provide your AWS credentials to the container. We do this through the `.env` file.
 
@@ -140,16 +140,17 @@ AWS_DEFAULT_REGION=<REGION>
 S3_BUCKET=<URL>
 CDF_DISTRIBUTION_ID=<ID>
 
-MAILBOX_URL="wss://mailbox.w3.leastauthority.com/v1"
-RELAY_URL="wss://relay.w3.leastauthority.com:443"
+# use w3.leastauthority.com instead if deploying to playground
+MAILBOX_URL="wss://mailbox.w.leastauthority.com/v1"
+RELAY_URL="wss://relay.w.leastauthority.com:443"
 
-NODE_ENV=development
+NODE_ENV=production # or `development` if deploying to playground
 ```
 
 Now you can deploy by running the following:
 
 ```sh
-docker-compose run client gulp deploy_playground
+docker-compose run client gulp deploy
 ```
 
 Note that this gulp task will also create a new [build](#building) of the app.

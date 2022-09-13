@@ -106,7 +106,7 @@ const watch = () => {
 
 const clean = () => del("dist");
 
-const deploy_playground = (cb) => {
+const deploy = (cb) => {
   execSync(`aws s3 sync ./dist ${process.env.S3_BUCKET}`);
   execSync(`aws cloudfront create-invalidation \
     --distribution-id ${process.env.CDF_DISTRIBUTION_ID} \
@@ -123,13 +123,13 @@ exports.wasm = wasm;
 exports.storybook = storybook;
 exports.watch = watch;
 exports.clean = clean;
-exports.deploy_playground = gulp.series(
+exports.deploy = gulp.series(
   public,
   javascript,
   worker,
   wasm,
   storybook,
-  deploy_playground
+  deploy
 );
 
 exports.default = gulp.series(public, javascript, worker, wasm, storybook);
