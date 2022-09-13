@@ -1,6 +1,7 @@
 import {
   Anchor,
   Center,
+  Container,
   createStyles,
   Group,
   Image,
@@ -62,7 +63,7 @@ export default function Footer() {
       <Space h="lg" />
       <div style={{ flex: 1, display: "flex", alignItems: "flex-end" }}>
         <div style={{ width: "100%" }}>
-          <Group position="apart" className={classes.footerLarge}>
+          <Group position="apart" className={classes.footerLarge} spacing={0}>
             <Group position="apart" style={{ width: 380 }} ml={40}>
               <Links />
             </Group>
@@ -76,8 +77,9 @@ export default function Footer() {
               Made with love for privacy by
             </Text>
             <div>
-              <Image height={30} fit="contain" src="/la-logo.svg" mr={40} />
+              <Image height={30} fit="contain" src="/la-logo.svg" />
             </div>
+            <Space w={40} />
           </Group>
           <Stack className={classes.footerSmall}>
             <Group position="center" spacing={60}>
