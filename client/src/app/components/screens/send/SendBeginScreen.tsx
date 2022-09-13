@@ -19,6 +19,7 @@ const useStyles = createStyles((_theme) => ({
 type ModalState =
   | "NONE"
   | "TRANSFER_CANCELLED"
+  | "DIRECTORIES_NOT_SUPPORTED"
   | "FILE_TOO_LARGE"
   | "OTHER_ERROR";
 
@@ -41,22 +42,38 @@ export function SendBeginScreenContent(props: ContentProps) {
       >
         <Modal
           centered
+          opened={props.modalState === "DIRECTORIES_NOT_SUPPORTED"}
+          onClose={props.onModalClose}
+          title="One at a time please :)"
+        >
+          <Text>
+            As Winden is in development state, you can only send one file at a
+            time.
+          </Text>
+          <Text>Please select a single file. </Text>
+        </Modal>
+        <Modal
+          centered
           opened={props.modalState === "FILE_TOO_LARGE"}
           onClose={props.onModalClose}
           title="Large file sizes: coming soon"
         >
           <Text>
             In this development state, this product only supports file sizes of
-            up to 200 MB. Please select a smaller file.
+            up to 200 MB.
           </Text>
+          <Text>Please select a smaller file.</Text>
         </Modal>
         <Modal
           centered
           opened={props.modalState === "OTHER_ERROR"}
           onClose={props.onModalClose}
-          title="Error"
+          title="Oops..."
         >
-          <Text>Failed to upload file.</Text>
+          <Text>
+            An unexpected error occurred. Please refresh the page before trying
+            again.
+          </Text>
         </Modal>
         <Modal
           centered
@@ -107,7 +124,9 @@ export default function SendBeginScreen(props: Props) {
         wormhole?.sendFile(files[0]);
       }}
       onReject={(rejections) => {
-        if (rejections[0]) {
+        if (rejections.length > 1) {
+          setModalState("DIRECTORIES_NOT_SUPPORTED");
+        } else if (rejections.length == 1) {
           setModalState("FILE_TOO_LARGE");
         } else {
           setModalState("OTHER_ERROR");

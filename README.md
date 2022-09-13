@@ -1,10 +1,9 @@
-# Transfer-rewrite
+# Winden
 
-Transfer is a graphical interface for doing file transfer via the Magic Wormhole protocol.
+Winden is a graphical interface for doing file transfer via the Magic Wormhole protocol.
 
 ## Status
 
-Refactoring original code: https://github.com/LeastAuthority/Transfer and switching to ReactJS.
 Core repository is currently in **_evaluation stage_**.
 The web app is in 'alpha' state, and **not ready for production use**.
 
@@ -15,8 +14,8 @@ Follow these steps to get the whole setup running on a local computer for easy d
 ### Cloning
 
 ```sh
-git clone git@github.com:LeastAuthority/Transfer-rewrite.git
-cd Transfer
+git clone git@github.com:LeastAuthority/winden.git
+cd winden
 git submodule init
 git submodule update --recursive
 ```
@@ -24,7 +23,7 @@ git submodule update --recursive
 or you can do it in one step:
 
 ```sh
-git clone --recurse-submodules git@github.com:LeastAuthority/Transfer-rewrite.git
+git clone --recurse-submodules git@github.com:LeastAuthority/winden.git
 ```
 
 ### System Prerequisites
@@ -111,11 +110,26 @@ And https://webdriver.io/docs/api/browser/debug/
 
 > If you run the WDIO testrunner make sure you increase the timeout property of the test framework you are using (e.g. Mocha or Jasmine) in order to prevent test termination due to a test timeout. Also avoid executing the command with multiple capabilities running at the same time.
 
-## Deploying to playground
+## Building
+
+- Create `client/.env` if it does not exist already
+- Fill it with the following:
+
+```sh
+MAILBOX_URL="wss://mailbox.w3.leastauthority.com/v1"
+RELAY_URL="wss://relay.w3.leastauthority.com:443"
+
+# Use the following line for a development build
+NODE_ENV=development
+# Or use the following line instead for a production build
+NODE_ENV=production
+```
+
+## Deploying
 
 We build and deploy by running a gulp task inside a docker container. You will need to provide your AWS credentials to the container. We do this through the `.env` file.
 
-- Create `client/.env`
+- Create `client/.env` if it does not exist already
 - Fill it with the following: (Replace placeholders in angle brackets with the appropriate values)
 
 ```sh
@@ -126,15 +140,20 @@ AWS_DEFAULT_REGION=<REGION>
 S3_BUCKET=<URL>
 CDF_DISTRIBUTION_ID=<ID>
 
-MAILBOX_URL="wss://mailbox.w3.leastauthority.com/v1"
-RELAY_URL="wss://relay.w3.leastauthority.com:443"
+# use w3.leastauthority.com instead if deploying to playground
+MAILBOX_URL="wss://mailbox.w.leastauthority.com/v1"
+RELAY_URL="wss://relay.w.leastauthority.com:443"
+
+NODE_ENV=production # or `development` if deploying to playground
 ```
 
 Now you can deploy by running the following:
 
 ```sh
-docker-compose run client gulp deploy_playground
+docker-compose run client gulp deploy
 ```
+
+Note that this gulp task will also create a new [build](#building) of the app.
 
 ## Codebase Architecture
 
