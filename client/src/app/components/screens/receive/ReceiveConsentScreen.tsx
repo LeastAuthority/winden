@@ -21,7 +21,7 @@ export function ReceiveConsentScreenContent(props: ContentProps) {
   return (
     <Content>
       <Text className={classes.headerText}>Ready to download</Text>
-      <Stack align="center">
+      <Stack align="center" spacing={30}>
         <FileLabel />
         <Button
           leftIcon={<Download />}
