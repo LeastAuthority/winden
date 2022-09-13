@@ -73,7 +73,7 @@ export default function Footer() {
               className={classNames(classes.laMadeByTextLarge)}
               weight={600}
             >
-              made with love for privacy by
+              Made with love for privacy by
             </Text>
             <div>
               <Image height={30} fit="contain" src="/la-logo.svg" mr={40} />
@@ -90,7 +90,7 @@ export default function Footer() {
                 className={classNames(classes.laMadeByTextSmall)}
                 weight="bold"
               >
-                made with love for privacy by
+                Made with love for privacy by
               </Text>
               <div>
                 <Image height={30} fit="contain" src="/la-logo.svg" />
