@@ -23,7 +23,7 @@ export function ProgressScreenContent(props: ContentProps) {
     <Content>
       <Text className={classes.headerText}>{props.title}</Text>
       <Space h="md" />
-      <Stack align="center">
+      <Stack align="center" spacing={30}>
         <FileLabel />
         <Progress
           style={{ width: "100%" }}

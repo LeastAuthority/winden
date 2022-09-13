@@ -156,6 +156,9 @@ export default function ThemeProvider(props: Props) {
               marginBottom: "1.1em",
               lineHeight: 1.5,
             },
+            "p:last-of-type": {
+              marginBottom: 0,
+            },
             ".transition-container-default > .transition-item-enter": {
               opacity: 0,
               transform: "translate(30px, 0)",
