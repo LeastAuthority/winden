@@ -45,6 +45,7 @@ export default function ThemeProvider(props: Props) {
                 color: theme.colors.black[6],
                 height: 50,
                 padding: "0 22px",
+                transition: "background 200ms",
                 "&[data-disabled]": {
                   backgroundColor:
                     params.color &&
