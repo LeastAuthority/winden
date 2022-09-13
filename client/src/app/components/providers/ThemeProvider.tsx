@@ -50,13 +50,14 @@ export default function ThemeProvider(props: Props) {
                   backgroundColor:
                     params.color &&
                     theme.fn.lighten(theme.colors[params.color][6], 0.5),
+                  color: theme.colors["darker-grey"][6],
                 },
-                "&:hover": {
+                "&:hover:not([data-disabled])": {
                   backgroundColor:
                     params.color &&
                     theme.fn.darken(theme.colors[params.color][6], 0.1),
                 },
-                "&:active": {
+                "&:active:not([data-disabled])": {
                   backgroundColor:
                     params.color &&
                     theme.fn.darken(theme.colors[params.color][6], 0.2),
@@ -88,6 +89,9 @@ export default function ThemeProvider(props: Props) {
                 backgroundColor: theme.colors["light-grey"][6],
                 border: "none",
                 height: 50,
+                "&::placeholder": {
+                  color: theme.colors["darker-grey"][6],
+                },
               },
             }),
           },
