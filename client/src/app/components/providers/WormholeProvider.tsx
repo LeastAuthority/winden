@@ -39,13 +39,14 @@ class Transfer {
     onEta: (eta: number | null) => void,
     onDone: () => void,
     onBytes: (bytes: number) => void,
-    onWasmExit: () => void
+    onWasmExit: () => void,
+    onSendError: (error: string) => void
   ) {
     this.onUpload = onUpload;
     this.onEta = onEta;
     this.onDone = onDone;
     this.onBytes = onBytes;
-    this.client = new ClientWorker(defaultConfig, onWasmExit);
+    this.client = new ClientWorker(defaultConfig, onWasmExit, onSendError);
   }
 
   public async sendFile(
@@ -165,6 +166,9 @@ export function WormholeProvider(props: Props) {
       },
       () => {
         error?.setError(ErrorTypes.WASM_EXITED);
+      },
+      (err) => {
+        error?.setError(detectErrorType(err));
       }
     );
   }, []);

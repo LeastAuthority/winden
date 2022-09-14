@@ -39,10 +39,16 @@ export default class ClientWorker implements ClientInterface {
 
   private readonly config?: ClientConfig;
   private onWasmExit?: () => void;
+  private onSendError?: (error: string) => void;
 
-  constructor(config?: ClientConfig, onWasmExit?: () => void) {
+  constructor(
+    config?: ClientConfig,
+    onWasmExit?: () => void,
+    onSendError?: (error: string) => void
+  ) {
     this.config = config;
     this.onWasmExit = onWasmExit;
+    this.onSendError = onSendError;
     this.initialize();
   }
 
@@ -164,8 +170,12 @@ export default class ClientWorker implements ClientInterface {
     id,
     error,
   }: RPCMessage): Promise<void> {
-    window.history.pushState({}, "", "/#/s?cancel=");
-    window.location.reload();
+    if (error.includes("failed to write")) {
+      window.history.pushState({}, "", "/#/s?cancel=");
+      window.location.reload();
+    } else {
+      this.onSendError && this.onSendError(`SendErr: ${error}`);
+    }
   }
 
   private _handleFileProgress({ id, sentBytes, totalBytes }: RPCMessage): void {
