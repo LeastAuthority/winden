@@ -61,47 +61,46 @@ export default function Footer() {
   return (
     <>
       <Space h="lg" />
-      <div style={{ flex: 1, display: "flex", alignItems: "flex-end" }}>
-        <div style={{ width: "100%" }}>
-          <Group position="apart" className={classes.footerLarge} spacing={0}>
-            <Group position="apart" style={{ width: 380 }} ml={40}>
-              <Links />
-            </Group>
-            <div style={{ flex: 1 }} />
-            <Text
-              size="sm"
-              color="dark-grey"
-              className={classNames(classes.laMadeByTextLarge)}
-              weight={600}
-            >
-              Made with love for privacy by
-            </Text>
-            <div>
-              <Image height={30} fit="contain" src="/la-logo.svg" />
-            </div>
-            <Space w={40} />
-          </Group>
-          <Stack className={classes.footerSmall}>
-            <Group position="center" spacing={60}>
-              <Links />
-            </Group>
-            <Center>
-              <Text
-                size="sm"
-                color="dark-grey"
-                className={classNames(classes.laMadeByTextSmall)}
-                weight="bold"
-              >
-                Made with love for privacy by
-              </Text>
-              <div>
-                <Image height={30} fit="contain" src="/la-logo.svg" />
-              </div>
-            </Center>
-          </Stack>
-          <Space h="lg" />
+
+      <Group spacing={8} position="apart" className={classes.footerLarge}>
+        <Group position="apart" style={{ width: 380 }} ml={40}>
+          <Links />
+        </Group>
+        <div style={{ flex: 1 }} />
+        <Text
+          size="sm"
+          color="dark-grey"
+          className={classNames(classes.laMadeByTextLarge)}
+          weight={600}
+        >
+          Made with love for privacy by
+        </Text>
+        <div>
+          <Image width="auto" height={30} fit="contain" src="/la-logo.svg" />
         </div>
-      </div>
+        <Space w={40} />
+      </Group>
+
+      <Stack className={classes.footerSmall}>
+        <Group position="center" spacing={60}>
+          <Links />
+        </Group>
+        <Center>
+          <Text
+            size="sm"
+            color="dark-grey"
+            className={classNames(classes.laMadeByTextSmall)}
+            weight="bold"
+          >
+            Made with love for privacy by
+          </Text>
+          <div>
+            <Image width="auto" height={30} fit="contain" src="/la-logo.svg" />
+          </div>
+        </Center>
+      </Stack>
+
+      <Space h="lg" />
     </>
   );
 }
