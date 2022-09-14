@@ -1,6 +1,6 @@
 import { Button, createStyles, Group, Image, Space, Text } from "@mantine/core";
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Download, Send } from "tabler-icons-react";
 import { useCommonStyles } from "../hooks/useCommonStyles";
 import { useWormhole } from "../hooks/useWormhole";
@@ -32,11 +32,13 @@ export default function Header() {
       <Space h="lg" />
       <Group position="apart">
         <Group align="start" spacing={8}>
-          <Image
-            width={200}
-            fit="contain"
-            src="/LA_Winden_HorizontalLogo_Color.svg"
-          />
+          <Link to="/s">
+            <Image
+              width={200}
+              fit="contain"
+              src="/LA_Winden_HorizontalLogo_Color.svg"
+            />
+          </Link>
           <Text className={classes.headerTextSuper} component="span">
             BETA
           </Text>
