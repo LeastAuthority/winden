@@ -22,7 +22,7 @@ export default function BrowserValidator(props: Props) {
           onClose={() => setOpened(false)}
           title="Browser not supported"
         >
-          <Text>This browser is not supported.</Text>
+          <Text>Please use a browser we do support.</Text>
         </Modal>
       }
       {props.children}
