@@ -12,8 +12,9 @@ import {
 } from "react-router-dom";
 import App from "./components/App";
 import CodeInputProvider from "./components/providers/CodeInputProvider";
-import { ErrorProvider } from "./components/providers/ErrorProvider";
-import { WormholeProvider } from "./components/providers/WormholeProvider";
+import ErrorProvider from "./components/providers/ErrorProvider";
+import ThemeProvider from "./components/providers/ThemeProvider";
+import WormholeProvider from "./components/providers/WormholeProvider";
 
 Sentry.init({
   dsn: process.env["SENTRY_DSN"],
@@ -36,9 +37,11 @@ ReactDOM.render(
   <ErrorProvider>
     <CodeInputProvider>
       <WormholeProvider>
-        <HashRouter>
-          <App />
-        </HashRouter>
+        <ThemeProvider>
+          <HashRouter>
+            <App />
+          </HashRouter>
+        </ThemeProvider>
       </WormholeProvider>
     </CodeInputProvider>
   </ErrorProvider>,

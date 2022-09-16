@@ -1,12 +1,17 @@
+import { createStyles } from "@mantine/core";
 import React from "react";
-import styles from "./Background.module.css";
 
-type Props = {};
+const useStyles = createStyles((_theme) => ({
+  container: {
+    height: "100%",
+    width: "100%",
+    background: "linear-gradient(222.19deg, #F0F0F0 23.77%, #FFFFFF 98.02%)",
+  },
+}));
 
-export default function Background({}: Props) {
-  return (
-    <div className={styles.container}>
-      <div className={styles.circle}></div>
-    </div>
-  );
+type Props = React.PropsWithChildren<{}>;
+
+export default function Background(props: Props) {
+  const { classes } = useStyles();
+  return <div className={classes.container}>{props.children}</div>;
 }

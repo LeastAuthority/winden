@@ -9,9 +9,6 @@ import {
   TransferProgress,
 } from "../../wormhole/types";
 
-const MAX_FILE_SIZE_MB = 200;
-const MB = 1000 ** 2;
-const MAX_FILE_SIZE_BYTES = MB * MAX_FILE_SIZE_MB;
 const updateProgressETAFrequency = 10;
 
 const defaultConfig: ClientConfig = {
@@ -139,7 +136,7 @@ export const WormholeContext =
     bytesSent: number;
   } | null>(null);
 
-export function WormholeProvider(props: Props) {
+export default function WormholeProvider(props: Props) {
   const [fileMeta, setFileMeta] = useState<Record<string, any> | null>(null);
   const [code, setCode] = useState<string | undefined>();
   const [progressEta, setProgressEta] = useState<number | null>(null);

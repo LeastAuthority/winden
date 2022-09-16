@@ -66,7 +66,7 @@ export function errorContent(type: ErrorTypes): {
           "- The code is wrong; or",
           "- The code was already used; or",
           "- The sender is no longer connected.",
-          "Please try sending the file again and provide the receiver with a new code.",
+          "Please ask the sender for a new code and for them to stay connected until you get the file.",
         ],
       };
     }
