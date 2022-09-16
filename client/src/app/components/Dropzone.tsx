@@ -140,7 +140,7 @@ export default function Dropzone(props: Props) {
               }
             )}
           >
-            <Text size={40}>Drop file here</Text>
+            <Text size={40}>Drop here! &#x1F60E;</Text>
           </div>
         </>
       )}
