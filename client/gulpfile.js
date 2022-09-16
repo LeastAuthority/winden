@@ -123,6 +123,13 @@ exports.wasm = wasm;
 exports.storybook = storybook;
 exports.watch = watch;
 exports.clean = clean;
+exports.build = gulp.series(
+  public,
+  javascript,
+  worker,
+  wasm,
+  storybook
+);
 exports.deploy = gulp.series(
   public,
   javascript,
