@@ -77,9 +77,22 @@ export function CodeInputContent(props: ContentProps) {
 
   return (
     <div data-testid="code-input-container">
-      <Group align="stretch" ref={setReferenceElement} spacing="md">
+      <Group position="center" spacing="md">
         <TextInput
-          style={{ flex: 1 }}
+          ref={(e) => {
+            // TODO: better solution
+            setTimeout(() => setReferenceElement(e), 10);
+          }}
+          style={{
+            flexGrow: 1,
+            maxWidth: 400,
+          }}
+          sx={(theme) => ({
+            input: {
+              textAlign: "center",
+              fontSize: 14.4,
+            },
+          })}
           data-testid="code-input"
           type="text"
           value={props.code}
@@ -102,7 +115,9 @@ export function CodeInputContent(props: ContentProps) {
               props.onSubmit(props.code);
             }
           }}
+          disabled={Boolean(props.errorType)}
           loading={props.submitting}
+          color="yellow"
         >
           Next
         </Button>
@@ -120,17 +135,26 @@ export function CodeInputContent(props: ContentProps) {
         {...attributes.popper}
       >
         <Space h="sm" />
-        <Paper shadow="md" p="xs" withBorder>
+        <Paper p="xs" withBorder>
           <Group spacing="md" position="center">
             <Text inline>{props.codeSuggestion}</Text>
-            <Paper shadow="xs" p="xs" withBorder>
+            <Paper p="xs" withBorder>
               <Text>Press space to complete</Text>
             </Paper>
           </Group>
         </Paper>
       </div>
-      <Text data-testid="code-error-message" color="red">
-        {errorMessage}
+      <Text
+        data-testid="code-error-message"
+        sx={(theme) => ({
+          color: theme.colors["warning-red"][6],
+        })}
+        align="center"
+        size="sm"
+        weight={300}
+      >
+        <Space h="sm" />
+        {errorMessage || <>&#8203;</>}
       </Text>
     </div>
   );
@@ -141,7 +165,7 @@ type Props = {
   submitting?: boolean;
 };
 
-export function CodeInput(props: Props) {
+export default function CodeInput(props: Props) {
   const [focused, setFocused] = useState(false);
   const codeInput = useCodeInput();
   const codeSuggestion = getCodeSuggestion(codeInput?.value || "");

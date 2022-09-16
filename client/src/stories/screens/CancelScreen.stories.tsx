@@ -5,18 +5,17 @@ import { MemoryRouter } from "react-router-dom";
 import { QuestionMark } from "tabler-icons-react";
 import AppTemplate from "../../app/components/AppTemplate";
 import { WormholeContext } from "../../app/components/providers/WormholeProvider";
-import CompleteScreen from "../../app/components/screens/CompleteScreen";
-import { useCommonStyles } from "../../app/hooks/useCommonStyles";
+import CancelScreen from "../../app/components/screens/CancelScreen";
 
 export default {
-  title: "screens/CompleteScreen",
-  component: CompleteScreen,
+  title: "screens/CancelScreen",
+  component: CancelScreen,
   parameters: {
     layout: "fullscreen",
   },
-} as ComponentMeta<typeof CompleteScreen>;
+} as ComponentMeta<typeof CancelScreen>;
 
-const Template: ComponentStory<typeof CompleteScreen> = (args) => (
+const Template: ComponentStory<typeof CancelScreen> = (args) => (
   <MemoryRouter initialEntries={["/"]}>
     <WormholeContext.Provider
       value={
@@ -29,7 +28,7 @@ const Template: ComponentStory<typeof CompleteScreen> = (args) => (
       }
     >
       <AppTemplate>
-        <CompleteScreen {...args} />
+        <CancelScreen {...args} />
       </AppTemplate>
     </WormholeContext.Provider>
   </MemoryRouter>
@@ -37,11 +36,10 @@ const Template: ComponentStory<typeof CompleteScreen> = (args) => (
 
 export const Story = Template.bind({});
 Story.args = {
-  title: "Sent/Received!",
   render: () => {
     return (
       <Button leftIcon={<QuestionMark />} color="blue">
-        Send/Receive more
+        Send/Receive a file
       </Button>
     );
   },
