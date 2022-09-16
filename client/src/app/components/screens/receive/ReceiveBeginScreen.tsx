@@ -28,8 +28,8 @@ export function ReceiveBeginScreenContent(props: ContentProps) {
           onClose={props.onCancelModalClose}
           title="Transfer failed"
         >
-          <Text>The transfer was cancelled or interrupted.</Text>
-          <Text>Please try again.</Text>
+          <Text component="p">The transfer was cancelled or interrupted.</Text>
+          <Text component="p">Please try again.</Text>
         </Modal>
         <Text className={classes.headerText} weight={300}>
           Receive files in real-time

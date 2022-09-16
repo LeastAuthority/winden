@@ -46,11 +46,11 @@ export function SendBeginScreenContent(props: ContentProps) {
           onClose={props.onModalClose}
           title="One at a time please :)"
         >
-          <Text>
+          <Text component="p">
             As Winden is in development state, you can only send one file at a
             time.
           </Text>
-          <Text>Please select a single file. </Text>
+          <Text component="p">Please select a single file. </Text>
         </Modal>
         <Modal
           centered
@@ -58,11 +58,11 @@ export function SendBeginScreenContent(props: ContentProps) {
           onClose={props.onModalClose}
           title="Large file sizes: coming soon"
         >
-          <Text>
+          <Text component="p">
             In this development state, this product only supports file sizes of
             up to 200 MB.
           </Text>
-          <Text>Please select a smaller file.</Text>
+          <Text component="p">Please select a smaller file.</Text>
         </Modal>
         <Modal
           centered
@@ -70,7 +70,7 @@ export function SendBeginScreenContent(props: ContentProps) {
           onClose={props.onModalClose}
           title="Oops..."
         >
-          <Text>
+          <Text component="p">
             An unexpected error occurred. Please refresh the page before trying
             again.
           </Text>
@@ -81,8 +81,8 @@ export function SendBeginScreenContent(props: ContentProps) {
           onClose={props.onModalClose}
           title="Transfer failed"
         >
-          <Text>The transfer was cancelled or interrupted.</Text>
-          <Text>Please try again.</Text>
+          <Text component="p">The transfer was cancelled or interrupted.</Text>
+          <Text component="p">Please try again.</Text>
         </Modal>
         <Text className={commonClasses.headerText}>
           Send files in real-time
