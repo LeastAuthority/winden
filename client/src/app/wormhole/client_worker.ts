@@ -40,12 +40,12 @@ export default class ClientWorker implements ClientInterface {
 
   private readonly config?: ClientConfig;
   private onWasmExit?: () => void;
-  private onReceiverCancel?: () => void;
+  private onReceiverCancel?: (id: number) => void;
 
   constructor(
     config?: ClientConfig,
     onWasmExit?: () => void,
-    onReceiverCancel?: () => void
+    onReceiverCancel?: (id: number) => void
   ) {
     this.config = config;
     this.onWasmExit = onWasmExit;
@@ -172,7 +172,7 @@ export default class ClientWorker implements ClientInterface {
       /failed to write: WebSocket closed: (unclean|status)/.test(error) &&
       this.onReceiverCancel
     ) {
-      this.onReceiverCancel();
+      this.onReceiverCancel(id);
     }
   }
 

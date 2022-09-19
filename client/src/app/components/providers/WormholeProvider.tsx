@@ -34,13 +34,16 @@ class Transfer {
   private onDone: () => void;
   private onBytes: (bytes: number) => void;
 
+  public cancelled = false;
+  public id = 0;
+
   constructor(
     onUpload: (file: Record<string, any>, code?: string) => void,
     onEta: (eta: number | null) => void,
     onDone: () => void,
     onBytes: (bytes: number) => void,
     onWasmExit: () => void,
-    onReceiverCancel: () => void
+    onReceiverCancel: (id: number) => void
   ) {
     this.onUpload = onUpload;
     this.onEta = onEta;
@@ -72,6 +75,7 @@ class Transfer {
 
     const p = this.client.sendFile(file, opts);
     p.then(({ code, done }) => {
+      this.cancelled = false;
       this.onUpload(file, code);
       return done;
     }).then(() => {
@@ -92,6 +96,7 @@ class Transfer {
 
     const p = this.client.saveFile(code.toLowerCase(), opts);
     p.then((file) => {
+      this.cancelled = false;
       this.onUpload(file);
       return file.done;
     }).then(() => {
@@ -103,6 +108,10 @@ class Transfer {
   }
 
   private updateProgressETA(sentBytes: number, totalBytes: number) {
+    if (this.cancelled) {
+      return;
+    }
+
     if (this.progressBegin === 0) {
       this.progressBegin = Date.now();
     }
@@ -124,10 +133,12 @@ class Transfer {
   }
 
   public cancelSave(id: number) {
+    this.cancelled = true;
     return this.client.cancelSave(id);
   }
 
   public cancelSend(id: number) {
+    this.cancelled = true;
     return this.client.cancelSend(id);
   }
 }
@@ -146,7 +157,7 @@ export const WormholeContext =
     reset: () => void;
     bytesSent: number;
     cancelSave: () => Promise<void>;
-    cancelSend: () => Promise<void>;
+    cancelSend: (id?: number) => Promise<void>;
   } | null>(null);
 
 export function WormholeProvider(props: Props) {
@@ -179,12 +190,18 @@ export function WormholeProvider(props: Props) {
       () => {
         error?.setError(ErrorTypes.WASM_EXITED);
       },
-      () => {
+      (id) => {
         error?.setError(ErrorTypes.RECEIVER_CANCELLED);
-        reset();
+        cancelSend(id);
       }
     );
   }, []);
+
+  useEffect(() => {
+    if (client.current) {
+      client.current.id = currentId;
+    }
+  }, [currentId]);
 
   async function sendFile(
     file: File,
@@ -216,8 +233,8 @@ export function WormholeProvider(props: Props) {
     reset();
   }
 
-  async function cancelSend() {
-    await client.current?.cancelSend(currentId);
+  async function cancelSend(id?: number) {
+    await client.current?.cancelSend(id || currentId);
     reset();
   }
 

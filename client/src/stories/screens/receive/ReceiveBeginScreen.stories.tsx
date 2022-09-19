@@ -25,8 +25,6 @@ const Template: ComponentStory<typeof ReceiveBeginScreenContent> = (args) => (
 
 export const Story = Template.bind({});
 Story.args = {
-  cancelModalOpen: false,
-  onCancelModalClose: () => console.log("onCancelModalClose"),
   onSubmit: () => console.log("onSubmit"),
   submitting: false,
 };
