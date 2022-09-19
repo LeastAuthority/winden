@@ -1,17 +1,11 @@
-import {
-  Button,
-  Group,
-  Space,
-  Stack,
-  Text,
-  TextInput,
-  Title,
-} from "@mantine/core";
+import { Button, Group, Space, Stack, Text, TextInput } from "@mantine/core";
+import { useClipboard } from "@mantine/hooks";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Files, X } from "tabler-icons-react";
-import { useClipboard } from "../../../hooks/useClipboard";
+import { useCommonStyles } from "../../../hooks/useCommonStyles";
 import { useWormhole } from "../../../hooks/useWormhole";
+import Content from "../../Content";
 import FileLabel from "../../FileLabel";
 
 type ContentProps = {
@@ -22,53 +16,77 @@ type ContentProps = {
 };
 
 export function SendInstructionsScreenContent(props: ContentProps) {
+  const { classes } = useCommonStyles();
+
   return (
-    <>
-      <Title order={1}>Ready to send!</Title>
-      <Stack align="center" data-testid="send-page-code-section">
+    <Content>
+      <Text className={classes.headerText}>Ready to send!</Text>
+      <Stack align="center" spacing={30} data-testid="send-page-code-section">
         <FileLabel />
-        <Text weight="bold" color="gray">
-          1. Keep this tab open
-        </Text>
-        <Text color="gray">Files are sent directly from your device.</Text>
-        <Text color="gray">The link/code expires once you close the tab.</Text>
-        <Text weight="bold" color="gray">
-          2. Give the receiver the link below
-        </Text>
-        <Group position="center">
+        <div>
+          <Text component="p" size={14.4} weight={600} color="dark-grey">
+            1. Keep this tab open
+          </Text>
+        </div>
+        <div>
+          <Text
+            component="p"
+            size={14.4}
+            weight={400}
+            color="dark-grey"
+            align="center"
+          >
+            Files are sent directly from your device.
+            <br />
+            The link/code expires once you close the tab.
+          </Text>
+        </div>
+        <div>
+          <Text component="p" size={14.4} weight={600} color="dark-grey">
+            2. Give the receiver the link below
+          </Text>
+        </div>
+        <Group
+          position="center"
+          style={{
+            width: "100%",
+          }}
+        >
           <TextInput
-            style={{ width: "100%" }}
+            styles={{
+              root: {
+                flexGrow: "1 !important" as any,
+                maxWidth: 400,
+              },
+              input: {
+                width: "100%",
+                textAlign: "center",
+                fontSize: 14.4,
+              },
+            }}
             readOnly
             type="text"
-            value={`${window.location.protocol}//${window.location.host}/#/${props.code}`}
+            value={`${window.location.host}/#/${props.code}`}
           />
           <Button
+            leftIcon={<Files />}
             disabled={props.copied}
             onClick={props.onCopy}
-            variant="light"
-            color="dark"
-            pl="xs"
-            pr="md"
+            color="yellow"
           >
-            <Files />
-            <Space w="xs" />
             {props.copied ? "Link copied!" : "Copy"}
           </Button>
         </Group>
         <Button
+          leftIcon={<X />}
           data-testid="send-page-cancel-button"
           onClick={props.onCancel}
-          variant="light"
-          color="dark"
-          pl="xs"
-          pr="md"
+          color="medium-grey"
         >
-          <X />
-          <Space w="xs" />
           Cancel
         </Button>
       </Stack>
-    </>
+    </Content>
   );
 }
 

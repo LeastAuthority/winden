@@ -1,5 +1,6 @@
 export const enum ErrorTypes {
   RECV_CONNECTION_TIMEOUT,
+  SENDER_BAD_CODE,
   BAD_CODE,
   MAILBOX,
   RELAY,
@@ -13,7 +14,9 @@ const ServerErrorMsg =
   "Unfortunately, the site cannot connect to the [Product name] server. Please try again or let us know at support@domainname if the problem remains.";
 
 export function detectErrorType(error: string) {
-  if (/^decrypt message failed$/.test(error)) {
+  if (/^SendErr: decrypt message failed$/.test(error)) {
+    return ErrorTypes.SENDER_BAD_CODE;
+  } else if (/^decrypt message failed$/.test(error)) {
     return ErrorTypes.BAD_CODE;
   } else if (/.*$rendezvousURL.*/.test(error)) {
     return ErrorTypes.MAILBOX;
@@ -29,8 +32,10 @@ export function detectErrorType(error: string) {
     )
   ) {
     return ErrorTypes.INTERRUPT;
-  } else {
+  } else if (!error.startsWith("SendErr:")) {
     return ErrorTypes.RECV_CONNECTION_TIMEOUT;
+  } else {
+    return null;
   }
 }
 
@@ -48,11 +53,23 @@ export function errorContent(type: ErrorTypes): {
         ],
       };
     }
+    case ErrorTypes.SENDER_BAD_CODE: {
+      return {
+        title: "Oops...",
+        description: [
+          "The receiver has entered the wrong code. ",
+          "Please try sending the file again and provide the receiver with a new code.",
+        ],
+      };
+    }
     case ErrorTypes.BAD_CODE: {
       return {
         title: "Oops...",
         description: [
-          "If you’re sure this is the right code: Either the sender is no longer connected, or the code was already used.",
+          "Something went wrong. Possibly:",
+          "- The code is wrong; or",
+          "- The code was already used; or",
+          "- The sender is no longer connected.",
           "Please ask the sender for a new code and for them to stay connected until you get the file.",
         ],
       };

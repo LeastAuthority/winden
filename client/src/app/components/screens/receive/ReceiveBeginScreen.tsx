@@ -1,10 +1,12 @@
-import { Space, Text, Title } from "@mantine/core";
+import { Space, Text } from "@mantine/core";
 import React from "react";
 import { useCodeInput } from "../../../hooks/useCodeInput";
+import { useCommonStyles } from "../../../hooks/useCommonStyles";
 import { useError } from "../../../hooks/useError";
 import { useWormhole } from "../../../hooks/useWormhole";
 import { detectErrorType } from "../../../util/errors";
-import { CodeInput } from "../../CodeInput";
+import CodeInput from "../../CodeInput";
+import Content from "../../Content";
 
 type ContentProps = {
   onSubmit: (code: string) => void;
@@ -12,15 +14,21 @@ type ContentProps = {
 };
 
 export function ReceiveBeginScreenContent(props: ContentProps) {
+  const { classes } = useCommonStyles();
+
   return (
-    <div data-testid="receive-page-container">
-      <Title order={2}>Receive files in real-time</Title>
-      <Text size="md" weight="bold" color="dimmed">
-        Always end-to-end encrypted.
-      </Text>
-      <Space h="md" />
-      <CodeInput onSubmit={props.onSubmit} submitting={props.submitting} />
-    </div>
+    <Content>
+      <div data-testid="receive-page-container">
+        <Text className={classes.headerText} weight={300}>
+          Receive files in real-time
+        </Text>
+        <Text component="p" color="dark-grey" weight={400}>
+          Always end-to-end encrypted.
+        </Text>
+        <Space h={40} />
+        <CodeInput onSubmit={props.onSubmit} submitting={props.submitting} />
+      </div>
+    </Content>
   );
 }
 

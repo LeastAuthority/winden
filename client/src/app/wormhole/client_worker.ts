@@ -41,15 +41,18 @@ export default class ClientWorker implements ClientInterface {
   private readonly config?: ClientConfig;
   private onWasmExit?: () => void;
   private onReceiverCancel?: (id: number) => void;
+  private onSendError?: (error: string) => void;
 
   constructor(
     config?: ClientConfig,
     onWasmExit?: () => void,
-    onReceiverCancel?: (id: number) => void
+    onReceiverCancel?: (id: number) => void,
+    onSendError?: (error: string) => void
   ) {
     this.config = config;
     this.onWasmExit = onWasmExit;
     this.onReceiverCancel = onReceiverCancel;
+    this.onSendError = onSendError;
     this.initialize();
   }
 
@@ -173,6 +176,8 @@ export default class ClientWorker implements ClientInterface {
       this.onReceiverCancel
     ) {
       this.onReceiverCancel(id);
+    } else {
+      this.onSendError && this.onSendError(`SendErr: ${error}`);
     }
   }
 
