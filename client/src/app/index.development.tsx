@@ -34,16 +34,16 @@ Sentry.init({
 });
 
 ReactDOM.render(
-  <ErrorProvider>
-    <CodeInputProvider>
-      <WormholeProvider>
-        <ThemeProvider>
+  <CodeInputProvider>
+    <ThemeProvider>
+      <ErrorProvider>
+        <WormholeProvider>
           <HashRouter>
             <App />
           </HashRouter>
-        </ThemeProvider>
-      </WormholeProvider>
-    </CodeInputProvider>
-  </ErrorProvider>,
+        </WormholeProvider>
+      </ErrorProvider>
+    </ThemeProvider>
+  </CodeInputProvider>,
   document.querySelector("#app")
 );
