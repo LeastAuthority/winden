@@ -1,28 +1,19 @@
-import { Button, Group, Paper, Space, Text, TextInput } from "@mantine/core";
-import { Modifier } from "@popperjs/core";
+import {
+  Button,
+  Group,
+  Paper,
+  Popover,
+  Space,
+  Text,
+  TextInput,
+} from "@mantine/core";
 import React, { useState } from "react";
-import { usePopper } from "react-popper";
 import { useCodeInput } from "../hooks/useCodeInput";
 import { applyCodeSuggestion } from "../util/applyCodeSuggestion";
 import { CODE_SEGMENT_DELIMITER } from "../util/constants";
 import { getCodeSuggestion } from "../util/getCodeSuggestion";
 import { spellCheckCodeWord } from "../util/spellCheckCodeWord";
 import { CodeErrorType, validateCode } from "../util/validateCode";
-
-const sameWidth: Modifier<string, object> = {
-  name: "sameWidth",
-  enabled: true,
-  phase: "beforeWrite",
-  requires: ["computeStyles"],
-  fn: ({ state }) => {
-    state.styles.popper.width = `${state.rects.reference.width}px`;
-  },
-  effect: ({ state }) => {
-    state.elements.popper.style.width = `${
-      (state.elements.reference as HTMLElement).offsetWidth
-    }px`;
-  },
-};
 
 type ContentProps = {
   code: string;
@@ -39,17 +30,6 @@ type ContentProps = {
 };
 
 export function CodeInputContent(props: ContentProps) {
-  const [referenceElement, setReferenceElement] =
-    useState<HTMLElement | null>(null);
-  const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
-  const { styles: popperStyles, attributes } = usePopper(
-    referenceElement,
-    popperElement,
-    {
-      modifiers: [sameWidth],
-    }
-  );
-
   const errorMessage = (() => {
     if (!props.touched || !props.showError) {
       return "";
@@ -75,26 +55,54 @@ export function CodeInputContent(props: ContentProps) {
     }
   })();
 
+  const popoverOpened = Boolean(props.codeSuggestion && props.focused);
+
   return (
     <div data-testid="code-input-container">
-      <Group align="stretch" ref={setReferenceElement} spacing="md">
-        <TextInput
-          style={{ flex: 1 }}
-          data-testid="code-input"
-          type="text"
-          value={props.code}
-          onChange={props.onChange}
-          placeholder="Enter code here (E.g.: 7-guitarist-revenge)"
-          onFocus={props.onFocus}
-          onBlur={props.onBlur}
-          error={Boolean(errorMessage)}
-          disabled={props.submitting}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && props.onSubmit) {
-              props.onSubmit(props.code);
-            }
-          }}
-        />
+      <Group position="center" spacing="md">
+        <Popover
+          opened={popoverOpened}
+          position="bottom"
+          width="target"
+          transition="pop"
+        >
+          <Popover.Target>
+            <TextInput
+              style={{
+                flexGrow: 1,
+                maxWidth: 400,
+              }}
+              sx={(theme) => ({
+                input: {
+                  textAlign: "center",
+                  fontSize: 14.4,
+                },
+              })}
+              data-testid="code-input"
+              type="text"
+              value={props.code}
+              onChange={props.onChange}
+              placeholder="Enter code here (E.g.: 7-guitarist-revenge)"
+              onFocus={props.onFocus}
+              onBlur={props.onBlur}
+              error={Boolean(errorMessage)}
+              disabled={props.submitting}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && props.onSubmit) {
+                  props.onSubmit(props.code);
+                }
+              }}
+            />
+          </Popover.Target>
+          <Popover.Dropdown>
+            <Group spacing="md" position="center">
+              <Text inline>{props.codeSuggestion}</Text>
+              <Paper p="xs" withBorder>
+                <Text>Press space to complete</Text>
+              </Paper>
+            </Group>
+          </Popover.Dropdown>
+        </Popover>
         <Button
           data-testid="code-input-submit"
           onClick={() => {
@@ -102,35 +110,24 @@ export function CodeInputContent(props: ContentProps) {
               props.onSubmit(props.code);
             }
           }}
+          disabled={Boolean(props.errorType)}
           loading={props.submitting}
+          color="yellow"
         >
           Next
         </Button>
       </Group>
-      <div
-        ref={setPopperElement}
-        style={{
-          ...popperStyles.popper,
-          visibility:
-            props.codeSuggestion && props.focused ? "visible" : "hidden",
-          opacity: props.codeSuggestion && props.focused ? 1 : 0,
-          transition: "opacity ease-in 0.2s",
-          zIndex: 9001,
-        }}
-        {...attributes.popper}
+      <Text
+        data-testid="code-error-message"
+        sx={(theme) => ({
+          color: theme.colors["warning-red"][6],
+        })}
+        align="center"
+        size="sm"
+        weight={300}
       >
         <Space h="sm" />
-        <Paper shadow="md" p="xs" withBorder>
-          <Group spacing="md" position="center">
-            <Text inline>{props.codeSuggestion}</Text>
-            <Paper shadow="xs" p="xs" withBorder>
-              <Text>Press space to complete</Text>
-            </Paper>
-          </Group>
-        </Paper>
-      </div>
-      <Text data-testid="code-error-message" color="red">
-        {errorMessage}
+        {errorMessage || <>&#8203;</>}
       </Text>
     </div>
   );
@@ -141,7 +138,7 @@ type Props = {
   submitting?: boolean;
 };
 
-export function CodeInput(props: Props) {
+export default function CodeInput(props: Props) {
   const [focused, setFocused] = useState(false);
   const codeInput = useCodeInput();
   const codeSuggestion = getCodeSuggestion(codeInput?.value || "");

@@ -9,9 +9,6 @@ import {
   TransferProgress,
 } from "../../wormhole/types";
 
-const MAX_FILE_SIZE_MB = 200;
-const MB = 1000 ** 2;
-const MAX_FILE_SIZE_BYTES = MB * MAX_FILE_SIZE_MB;
 const updateProgressETAFrequency = 10;
 
 const defaultConfig: ClientConfig = {
@@ -39,13 +36,14 @@ class Transfer {
     onEta: (eta: number | null) => void,
     onDone: () => void,
     onBytes: (bytes: number) => void,
-    onWasmExit: () => void
+    onWasmExit: () => void,
+    onSendError: (error: string) => void
   ) {
     this.onUpload = onUpload;
     this.onEta = onEta;
     this.onDone = onDone;
     this.onBytes = onBytes;
-    this.client = new ClientWorker(defaultConfig, onWasmExit);
+    this.client = new ClientWorker(defaultConfig, onWasmExit, onSendError);
   }
 
   public async sendFile(
@@ -93,10 +91,14 @@ class Transfer {
     p.then((file) => {
       this.onUpload(file);
       return file.done;
-    }).then(() => {
-      this.resetProgress();
-      this.onDone();
-    });
+    })
+      .then(() => {
+        this.resetProgress();
+        this.onDone();
+      })
+      .catch((e) => {
+        console.error(e);
+      });
 
     return p;
   }
@@ -138,7 +140,7 @@ export const WormholeContext =
     bytesSent: number;
   } | null>(null);
 
-export function WormholeProvider(props: Props) {
+export default function WormholeProvider(props: Props) {
   const [fileMeta, setFileMeta] = useState<Record<string, any> | null>(null);
   const [code, setCode] = useState<string | undefined>();
   const [progressEta, setProgressEta] = useState<number | null>(null);
@@ -165,6 +167,9 @@ export function WormholeProvider(props: Props) {
       },
       () => {
         error?.setError(ErrorTypes.WASM_EXITED);
+      },
+      (err) => {
+        error?.setError(detectErrorType(err));
       }
     );
   }, []);

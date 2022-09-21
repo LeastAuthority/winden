@@ -39,10 +39,16 @@ export default class ClientWorker implements ClientInterface {
 
   private readonly config?: ClientConfig;
   private onWasmExit?: () => void;
+  private onSendError?: (error: string) => void;
 
-  constructor(config?: ClientConfig, onWasmExit?: () => void) {
+  constructor(
+    config?: ClientConfig,
+    onWasmExit?: () => void,
+    onSendError?: (error: string) => void
+  ) {
     this.config = config;
     this.onWasmExit = onWasmExit;
+    this.onSendError = onSendError;
     this.initialize();
   }
 
@@ -164,8 +170,12 @@ export default class ClientWorker implements ClientInterface {
     id,
     error,
   }: RPCMessage): Promise<void> {
-    window.history.pushState({}, "", "/#/s?cancel=");
-    window.location.reload();
+    if (error.includes("failed to write")) {
+      window.history.pushState({}, "", "/#/s?cancel=");
+      window.location.reload();
+    } else {
+      this.onSendError && this.onSendError(`SendErr: ${error}`);
+    }
   }
 
   private _handleFileProgress({ id, sentBytes, totalBytes }: RPCMessage): void {
@@ -271,7 +281,7 @@ export default class ClientWorker implements ClientInterface {
       ...this.pending[id],
       opts,
     };
-    const { name, size } = await new Promise((resolve, reject) => {
+    const { name, size }: any = await new Promise((resolve, reject) => {
       const timeoutID = window.setTimeout(() => {
         reject("ErrRecvConnectionTimeout");
       }, SENDER_TIMEOUT);
@@ -286,6 +296,8 @@ export default class ClientWorker implements ClientInterface {
           _resolve(result);
         })
         .catch(reject);
+    }).catch((e) => {
+      throw e;
     });
 
     // NOTE NOTE: mitm doesn't seem to be used when @ionic/vue is imported
