@@ -5,17 +5,20 @@ import { HashRouter } from "react-router-dom";
 import App from "./components/App";
 import CodeInputProvider from "./components/providers/CodeInputProvider";
 import ErrorProvider from "./components/providers/ErrorProvider";
+import ThemeProvider from "./components/providers/ThemeProvider";
 import WormholeProvider from "./components/providers/WormholeProvider";
 
 ReactDOM.render(
-  <ErrorProvider>
-    <CodeInputProvider>
-      <WormholeProvider>
-        <HashRouter>
-          <App />
-        </HashRouter>
-      </WormholeProvider>
-    </CodeInputProvider>
-  </ErrorProvider>,
+  <CodeInputProvider>
+    <ThemeProvider>
+      <ErrorProvider>
+        <WormholeProvider>
+          <HashRouter>
+            <App />
+          </HashRouter>
+        </WormholeProvider>
+      </ErrorProvider>
+    </ThemeProvider>
+  </CodeInputProvider>,
   document.querySelector("#app")
 );
