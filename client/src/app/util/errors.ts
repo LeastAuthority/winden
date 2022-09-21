@@ -14,7 +14,10 @@ const ServerErrorMsg =
 export function detectErrorType(error: string) {
   if (/^SendErr: decrypt message failed$/.test(error)) {
     return ErrorTypes.SENDER_BAD_CODE;
-  } else if (/^decrypt message failed$/.test(error)) {
+  } else if (
+    /^decrypt message failed$/.test(error) ||
+    error.startsWith("Nameplate is unclaimed")
+  ) {
     return ErrorTypes.BAD_CODE;
   } else if (/.*$rendezvousURL.*/.test(error)) {
     return ErrorTypes.MAILBOX;

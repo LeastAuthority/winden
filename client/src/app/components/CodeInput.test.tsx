@@ -7,6 +7,8 @@ import ThemeProvider from "./providers/ThemeProvider";
 
 const emptyLine = String.fromCharCode(8203);
 
+global.ResizeObserver = require("resize-observer-polyfill");
+
 describe("<CodeInput />", () => {
   describe("autocompletion", () => {
     describe("when hitting space when given a suggestion", () => {
