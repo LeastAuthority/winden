@@ -1,47 +1,81 @@
 import {
   Anchor,
-  Center,
   createStyles,
+  Divider,
   Group,
   Image,
   Space,
-  Stack,
   Text,
 } from "@mantine/core";
 import classNames from "classnames";
 import React from "react";
 import { Link } from "react-router-dom";
 
+const BREAKPOINT_MOBILE_PX = 590;
+const BREAKPOINT_DESKTOP_NARROWEST_PX = 850;
+const BREAKPOINT_DESKTOP_NARROWER_PX = 1050;
+
 const useStyles = createStyles((theme) => ({
   laMadeByTextLarge: {
-    [`@media (min-width: ${theme.breakpoints.sm}px) and (max-width: ${theme.breakpoints.md}px)`]:
-      {
-        display: "none",
-      },
-  },
-  laMadeByTextSmall: {
-    // [`@media (max-width: ${theme.breakpoints.xs}px)`]: {
-    //   display: "none",
-    // },
-  },
-  footerLarge: {
-    [`@media (max-width: ${theme.breakpoints.sm - 1}px)`]: {
+    [`@media (min-width: ${BREAKPOINT_DESKTOP_NARROWEST_PX}px) and (max-width: ${
+      BREAKPOINT_DESKTOP_NARROWER_PX - 1
+    }px)`]: {
       display: "none",
     },
   },
-  footerSmall: {
-    [`@media (min-width: ${theme.breakpoints.sm}px)`]: {
+  footerLarge: {
+    margin: "0 40px",
+    [`@media (max-width: ${BREAKPOINT_DESKTOP_NARROWEST_PX - 1}px)`]: {
+      justifyContent: "center",
+      margin: 0,
+    },
+    [`@media (max-width: ${BREAKPOINT_MOBILE_PX - 1}px)`]: {
       display: "none",
+    },
+  },
+  feedbackLink: {
+    backgroundColor: theme.colors.blue,
+    padding: "5.5px 11px",
+    borderRadius: "5px",
+  },
+  links: {
+    [`@media (max-width: ${BREAKPOINT_DESKTOP_NARROWEST_PX - 1}px)`]: {
+      display: "flex",
+      justifyContent: "center",
+      width: "100%",
+    },
+  },
+  spacer: {
+    flex: 1,
+    [`@media (max-width: ${BREAKPOINT_DESKTOP_NARROWEST_PX - 1}px)`]: {
+      flex: 0,
     },
   },
 }));
 
 function Links() {
+  const { classes } = useStyles();
+
   return (
     <>
+      <Anchor
+        component={Link}
+        className={classes.feedbackLink}
+        to="/about"
+        size="sm"
+        color="black"
+        weight={600}
+      >
+        Feedback
+      </Anchor>
+      <Anchor component={Link} to="/about" size="sm" color="black" weight={600}>
+        About
+      </Anchor>
+      <Divider orientation="vertical" />
       <Anchor component={Link} to="/faq" size="sm" color="black" weight={600}>
         FAQ
       </Anchor>
+      <Divider orientation="vertical" />
       <Anchor
         component={Link}
         to="/privacy"
@@ -51,9 +85,21 @@ function Links() {
       >
         Privacy
       </Anchor>
-      <Anchor component={Link} to="/about" size="sm" color="black" weight={600}>
-        About Us
+      <Divider orientation="vertical" />
+      <Anchor component={Link} to="/terms" size="sm" color="black" weight={600}>
+        Terms
       </Anchor>
+      <Divider orientation="vertical" />
+      <Anchor
+        component={Link}
+        to="/for-business"
+        size="sm"
+        color="black"
+        weight={600}
+      >
+        For Business
+      </Anchor>
+      <Divider orientation="vertical" />
       <Anchor
         href="https://github.com/LeastAuthority/winden"
         target="_blank"
@@ -74,11 +120,11 @@ export default function Footer() {
     <>
       <Space h="lg" />
 
-      <Group spacing={8} position="apart" className={classes.footerLarge}>
-        <Group position="apart" style={{ width: 380 }} ml={40}>
+      <Group spacing={0} position="apart" className={classes.footerLarge}>
+        <Group spacing={16} className={classes.links}>
           <Links />
         </Group>
-        <div style={{ flex: 1 }} />
+        <div className={classes.spacer} />
         <Text
           size="sm"
           color="dark-grey"
@@ -87,30 +133,11 @@ export default function Footer() {
         >
           Made with love for privacy by
         </Text>
+        <Space w={8} />
         <div>
           <Image width="auto" height={30} fit="contain" src="/la-logo.svg" />
         </div>
-        <Space w={40} />
       </Group>
-
-      <Stack className={classes.footerSmall}>
-        <Group position="center" spacing={60}>
-          <Links />
-        </Group>
-        <Center>
-          <Text
-            size="sm"
-            color="dark-grey"
-            className={classNames(classes.laMadeByTextSmall)}
-            weight="bold"
-          >
-            Made with love for privacy by
-          </Text>
-          <div>
-            <Image width="auto" height={30} fit="contain" src="/la-logo.svg" />
-          </div>
-        </Center>
-      </Stack>
 
       <Space h="lg" />
     </>
