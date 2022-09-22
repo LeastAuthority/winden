@@ -151,12 +151,16 @@ onmessage = async function (event) {
     rpc!.rpc(WASM_EXITED);
   };
   let wasm: { instance: WebAssembly.Instance };
-  if (typeof WebAssembly.instantiateStreaming === "undefined") {
-    const wasmData = await (await wasmPromise).arrayBuffer();
-    wasm = await WebAssembly.instantiate(wasmData, go.importObject);
-  } else {
-    wasm = await WebAssembly.instantiateStreaming(wasmPromise, go.importObject);
-  }
+
+  // TODO: bring back instantiateStreaming once backend adds MIME type.
+  // https://github.com/LeastAuthority/winden/issues/26
+
+  // if (typeof WebAssembly.instantiateStreaming === "undefined") {
+  const wasmData = await (await wasmPromise).arrayBuffer();
+  wasm = await WebAssembly.instantiate(wasmData, go.importObject);
+  // } else {
+  //   wasm = await WebAssembly.instantiateStreaming(wasmPromise, go.importObject);
+  // }
   go.run(wasm.instance);
 
   client = new Client(event.data.config);
