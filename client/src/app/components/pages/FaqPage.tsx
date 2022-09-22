@@ -1,11 +1,12 @@
 import { Text, Title } from "@mantine/core";
 import React from "react";
+import Content from "../Content";
 
 type Props = {};
 
 export default function FaqPage({}: Props) {
   return (
-    <div>
+    <Content>
       <Title order={1}>Frequently Asked Questions</Title>
       <Text component="p" weight="bold">
         Ut rerum animi et vel?
@@ -48,6 +49,6 @@ export default function FaqPage({}: Props) {
       <Text component="p">
         Corporis sunt maiores aut iure quasi. Nesciunt quia qui in optio.
       </Text>
-    </div>
+    </Content>
   );
 }

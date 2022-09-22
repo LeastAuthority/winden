@@ -1,11 +1,12 @@
 import { Text, Title } from "@mantine/core";
 import React from "react";
+import Content from "../Content";
 
 type Props = {};
 
 export default function PrivacyPage({}: Props) {
   return (
-    <div>
+    <Content>
       <Title order={1}>Privacy Policy</Title>
       <Title order={2}>Ut et illum sunt et repellat</Title>
       <Text component="p">
@@ -40,6 +41,6 @@ export default function PrivacyPage({}: Props) {
         Perspiciatis a animi ad quo mollitia possimus dolore. Error voluptatibus
         maxime veniam at. Rerum deleniti eum alias unde sequi.
       </Text>
-    </div>
+    </Content>
   );
 }

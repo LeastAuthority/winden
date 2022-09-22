@@ -1,11 +1,12 @@
 import { Text, Title } from "@mantine/core";
 import React from "react";
+import Content from "../Content";
 
 type Props = {};
 
 export default function AboutPage({}: Props) {
   return (
-    <div>
+    <Content>
       <Title order={1}>About Us</Title>
       <Text component="p">
         Delectus consectetur nemo quam ducimus nisi. Et non mollitia nulla sunt
@@ -34,6 +35,6 @@ export default function AboutPage({}: Props) {
         numquam ut sit. Necessitatibus magni reprehenderit esse. Porro ea et at
         qui veniam ut.
       </Text>
-    </div>
+    </Content>
   );
 }
