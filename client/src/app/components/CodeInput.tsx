@@ -7,7 +7,7 @@ import {
   Text,
   TextInput,
 } from "@mantine/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useCodeInput } from "../hooks/useCodeInput";
 import { applyCodeSuggestion } from "../util/applyCodeSuggestion";
 import { CODE_SEGMENT_DELIMITER } from "../util/constants";
@@ -142,23 +142,28 @@ export default function CodeInput(props: Props) {
   const [focused, setFocused] = useState(false);
   const codeInput = useCodeInput();
   const codeSuggestion = getCodeSuggestion(codeInput?.value || "");
-  const [touched, setTouched] = useState(false);
-  const [showError, setShowError] = useState(false);
 
   const code = codeInput?.value || "";
   const error = validateCode(code);
+
+  useEffect(() => {
+    return () => {
+      codeInput?.setTouched(false);
+      codeInput?.setShowError(false);
+    };
+  }, []);
 
   return (
     <CodeInputContent
       code={code}
       codeSuggestion={codeSuggestion}
       focused={focused}
-      touched={touched}
-      showError={showError}
+      touched={codeInput?.touched || false}
+      showError={codeInput?.showError || false}
       errorType={error}
       submitting={props.submitting || false}
       onChange={(e) => {
-        setShowError(false);
+        codeInput?.setShowError(false);
         const hasSpace = e.target.value.includes(" ");
         if (hasSpace && codeSuggestion) {
           codeInput?.setValue(
@@ -169,16 +174,16 @@ export default function CodeInput(props: Props) {
         }
       }}
       onFocus={() => {
-        setShowError(false);
+        codeInput?.setShowError(false);
         setFocused(true);
-        setTouched(true);
+        codeInput?.setTouched(true);
       }}
       onBlur={() => {
-        setShowError(true);
+        codeInput?.setShowError(true);
         setFocused(false);
       }}
       onSubmit={() => {
-        setShowError(true);
+        codeInput?.setShowError(true);
         if (!error && props.onSubmit) {
           props.onSubmit(code);
         }

@@ -5,6 +5,8 @@ const connect = require("gulp-connect");
 const webpack = require("webpack-stream");
 const Dotenv = require("dotenv-webpack");
 const SentryPlugin = require("@sentry/webpack-plugin");
+const fs = require("fs");
+const path = require("path");
 
 require("dotenv").config();
 
@@ -101,6 +103,32 @@ const watch = () => {
     host: "0.0.0.0",
     root: "dist",
     livereload: true,
+    middleware: function (connect, opt) {
+      return [
+        (req, res, next) => {
+          if (
+            !fs.existsSync(
+              path.join(__dirname, "dist", req._parsedUrl.pathname)
+            )
+          ) {
+            fs.readFile(
+              path.join(__dirname, "dist/index.html"),
+              (err, data) => {
+                if (err) {
+                  res.writeHead(500);
+                  res.end(JSON.stringify(err));
+                  return;
+                }
+                res.writeHead(200);
+                res.end(data);
+              }
+            );
+          } else {
+            next();
+          }
+        },
+      ];
+    },
   });
 };
 
