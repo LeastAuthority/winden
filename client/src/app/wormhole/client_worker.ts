@@ -283,7 +283,7 @@ export default class ClientWorker implements ClientInterface {
       ...this.pending[id],
       opts,
     };
-    const { name, size } = await new Promise((resolve, reject) => {
+    const { name, size }: any = await new Promise((resolve, reject) => {
       const timeoutID = window.setTimeout(() => {
         reject("ErrRecvConnectionTimeout");
       }, SENDER_TIMEOUT);
@@ -298,6 +298,8 @@ export default class ClientWorker implements ClientInterface {
           _resolve(result);
         })
         .catch(reject);
+    }).catch((e) => {
+      throw e;
     });
 
     // NOTE NOTE: mitm doesn't seem to be used when @ionic/vue is imported

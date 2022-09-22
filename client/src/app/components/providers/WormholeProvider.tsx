@@ -102,10 +102,14 @@ class Transfer {
       this.cancelled = false;
       this.onUpload(file);
       return file.done;
-    }).then(() => {
-      this.resetProgress();
-      this.onDone();
-    });
+    })
+      .then(() => {
+        this.resetProgress();
+        this.onDone();
+      })
+      .catch((e) => {
+        console.error(e);
+      });
 
     return p;
   }
