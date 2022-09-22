@@ -1,7 +1,6 @@
 import {
   Anchor,
   Center,
-  Container,
   createStyles,
   Group,
   Image,
@@ -11,6 +10,7 @@ import {
 } from "@mantine/core";
 import classNames from "classnames";
 import React from "react";
+import { Link } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
   laMadeByTextLarge: {
@@ -39,16 +39,28 @@ const useStyles = createStyles((theme) => ({
 function Links() {
   return (
     <>
-      <Anchor size="sm" color="black" weight={600}>
+      <Anchor component={Link} to="/faq" size="sm" color="black" weight={600}>
         FAQ
       </Anchor>
-      <Anchor size="sm" color="black" weight={600}>
+      <Anchor
+        component={Link}
+        to="/privacy"
+        size="sm"
+        color="black"
+        weight={600}
+      >
         Privacy
       </Anchor>
-      <Anchor size="sm" color="black" weight={600}>
+      <Anchor component={Link} to="/about" size="sm" color="black" weight={600}>
         About Us
       </Anchor>
-      <Anchor size="sm" color="black" weight={600}>
+      <Anchor
+        href="https://github.com/leastauthority/transfer-rewrite"
+        target="_blank"
+        size="sm"
+        color="black"
+        weight={600}
+      >
         GitHub
       </Anchor>
     </>
