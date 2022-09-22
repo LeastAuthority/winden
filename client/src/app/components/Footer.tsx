@@ -55,7 +55,7 @@ function Links() {
         About Us
       </Anchor>
       <Anchor
-        href="https://github.com/leastauthority/transfer-rewrite"
+        href="https://github.com/LeastAuthority/winden"
         target="_blank"
         size="sm"
         color="black"
