@@ -11,15 +11,24 @@ export function useCodeUrlCheck() {
   const codeInput = useCodeInput();
 
   useEffect(() => {
-    const code = location.pathname.slice(1);
-    if (!validateCode(code)) {
-      codeInput?.setValue(code);
-      codeInput?.setSubmitting(true);
+    if (location.pathname == "/" && location.hash) {
       navigate("/r", { replace: true });
-      // HACK: have a better way to wait for wormhole to initialize
-      setTimeout(() => {
-        wormhole?.saveFile(code);
-      }, 2000);
+
+      const code = location.hash.slice(1);
+      codeInput?.setValue(code);
+
+      if (!validateCode(code)) {
+        codeInput?.setSubmitting(true);
+        // HACK: have a better way to wait for wormhole to initialize
+        setTimeout(() => {
+          wormhole?.saveFile(code);
+        }, 2000);
+      } else {
+        codeInput?.setShowError(true);
+        codeInput?.setTouched(true);
+      }
+    } else if (location.pathname == "/") {
+      navigate("/s", { replace: true });
     }
-  }, [location.pathname]);
+  }, [location.hash]);
 }

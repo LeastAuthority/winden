@@ -1,8 +1,13 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
-import { CodeInput } from "./CodeInput";
+import CodeInput from "./CodeInput";
 import CodeInputProvider from "./providers/CodeInputProvider";
+import ThemeProvider from "./providers/ThemeProvider";
+
+const emptyLine = String.fromCharCode(8203);
+
+global.ResizeObserver = require("resize-observer-polyfill");
 
 describe("<CodeInput />", () => {
   describe("autocompletion", () => {
@@ -10,9 +15,11 @@ describe("<CodeInput />", () => {
       it("will fill in the rest of the word", async () => {
         const user = userEvent.setup();
         render(
-          <CodeInputProvider>
-            <CodeInput />
-          </CodeInputProvider>
+          <ThemeProvider>
+            <CodeInputProvider>
+              <CodeInput />
+            </CodeInputProvider>
+          </ThemeProvider>
         );
         const input = screen.getByTestId("code-input");
         await user.type(input, "7-gu ");
@@ -26,9 +33,11 @@ describe("<CodeInput />", () => {
       it("will do nothing", async () => {
         const user = userEvent.setup();
         render(
-          <CodeInputProvider>
-            <CodeInput />
-          </CodeInputProvider>
+          <ThemeProvider>
+            <CodeInputProvider>
+              <CodeInput />
+            </CodeInputProvider>
+          </ThemeProvider>
         );
         const input = screen.getByTestId("code-input");
         await user.type(input, "7-a s d f ");
@@ -41,9 +50,11 @@ describe("<CodeInput />", () => {
     it("will say the code has an invalid format", async () => {
       const user = userEvent.setup();
       render(
-        <CodeInputProvider>
-          <CodeInput />
-        </CodeInputProvider>
+        <ThemeProvider>
+          <CodeInputProvider>
+            <CodeInput />
+          </CodeInputProvider>
+        </ThemeProvider>
       );
       const input = screen.getByTestId("code-input");
       const errorMessage = screen.getByTestId("code-error-message");
@@ -60,9 +71,11 @@ describe("<CodeInput />", () => {
     it("will say the first word is not recognized", async () => {
       const user = userEvent.setup();
       render(
-        <CodeInputProvider>
-          <CodeInput />
-        </CodeInputProvider>
+        <ThemeProvider>
+          <CodeInputProvider>
+            <CodeInput />
+          </CodeInputProvider>
+        </ThemeProvider>
       );
       const input = screen.getByTestId("code-input");
       const errorMessage = screen.getByTestId("code-error-message");
@@ -79,9 +92,11 @@ describe("<CodeInput />", () => {
     it("will say the second word is not recognized", async () => {
       const user = userEvent.setup();
       render(
-        <CodeInputProvider>
-          <CodeInput />
-        </CodeInputProvider>
+        <ThemeProvider>
+          <CodeInputProvider>
+            <CodeInput />
+          </CodeInputProvider>
+        </ThemeProvider>
       );
       const input = screen.getByTestId("code-input");
       const errorMessage = screen.getByTestId("code-error-message");
@@ -98,9 +113,11 @@ describe("<CodeInput />", () => {
     it("will say the first word is not recognized", async () => {
       const user = userEvent.setup();
       render(
-        <CodeInputProvider>
-          <CodeInput />
-        </CodeInputProvider>
+        <ThemeProvider>
+          <CodeInputProvider>
+            <CodeInput />
+          </CodeInputProvider>
+        </ThemeProvider>
       );
       const input = screen.getByTestId("code-input");
       const errorMessage = screen.getByTestId("code-error-message");
@@ -119,9 +136,11 @@ describe("<CodeInput />", () => {
         const onSubmit = jest.fn();
         const user = userEvent.setup();
         render(
-          <CodeInputProvider>
-            <CodeInput onSubmit={onSubmit} />
-          </CodeInputProvider>
+          <ThemeProvider>
+            <CodeInputProvider>
+              <CodeInput onSubmit={onSubmit} />
+            </CodeInputProvider>
+          </ThemeProvider>
         );
         const input = screen.getByTestId("code-input");
         const button = screen.getByTestId("code-input-submit");
@@ -137,9 +156,11 @@ describe("<CodeInput />", () => {
         const onSubmit = jest.fn();
         const user = userEvent.setup();
         render(
-          <CodeInputProvider>
-            <CodeInput onSubmit={onSubmit} />
-          </CodeInputProvider>
+          <ThemeProvider>
+            <CodeInputProvider>
+              <CodeInput onSubmit={onSubmit} />
+            </CodeInputProvider>
+          </ThemeProvider>
         );
         const input = screen.getByTestId("code-input");
         const button = screen.getByTestId("code-input-submit");
@@ -156,9 +177,11 @@ describe("<CodeInput />", () => {
         const onSubmit = jest.fn();
         const user = userEvent.setup();
         render(
-          <CodeInputProvider>
-            <CodeInput onSubmit={onSubmit} />
-          </CodeInputProvider>
+          <ThemeProvider>
+            <CodeInputProvider>
+              <CodeInput onSubmit={onSubmit} />
+            </CodeInputProvider>
+          </ThemeProvider>
         );
         const input = screen.getByTestId("code-input");
         await user.type(input, "7-guitarist-revenge{Enter}");
@@ -172,9 +195,11 @@ describe("<CodeInput />", () => {
         const onSubmit = jest.fn();
         const user = userEvent.setup();
         render(
-          <CodeInputProvider>
-            <CodeInput onSubmit={onSubmit} />
-          </CodeInputProvider>
+          <ThemeProvider>
+            <CodeInputProvider>
+              <CodeInput onSubmit={onSubmit} />
+            </CodeInputProvider>
+          </ThemeProvider>
         );
         const input = screen.getByTestId("code-input");
         await user.type(input, "asdf{Enter}");
@@ -187,12 +212,14 @@ describe("<CodeInput />", () => {
     describe("the initial state", () => {
       it("will not show the error", () => {
         render(
-          <CodeInputProvider>
-            <CodeInput />
-          </CodeInputProvider>
+          <ThemeProvider>
+            <CodeInputProvider>
+              <CodeInput />
+            </CodeInputProvider>
+          </ThemeProvider>
         );
         const error = screen.getByTestId("code-error-message");
-        expect(error.textContent).toEqual("");
+        expect(error.textContent).toEqual(emptyLine);
       });
     });
 
@@ -200,16 +227,18 @@ describe("<CodeInput />", () => {
       it("will show the error", async () => {
         const user = userEvent.setup();
         render(
-          <CodeInputProvider>
-            <CodeInput />
-          </CodeInputProvider>
+          <ThemeProvider>
+            <CodeInputProvider>
+              <CodeInput />
+            </CodeInputProvider>
+          </ThemeProvider>
         );
         const container = screen.getByTestId("code-input-container");
         const input = screen.getByTestId("code-input");
         const error = screen.getByTestId("code-error-message");
         await user.type(input, "asdf");
         await user.click(container);
-        expect(error.textContent).not.toEqual("");
+        expect(error.textContent).not.toEqual(emptyLine);
       });
     });
 
@@ -217,16 +246,18 @@ describe("<CodeInput />", () => {
       it("will not show the error", async () => {
         const user = userEvent.setup();
         render(
-          <CodeInputProvider>
-            <CodeInput />
-          </CodeInputProvider>
+          <ThemeProvider>
+            <CodeInputProvider>
+              <CodeInput />
+            </CodeInputProvider>
+          </ThemeProvider>
         );
         const container = screen.getByTestId("code-input-container");
         const input = screen.getByTestId("code-input");
         const error = screen.getByTestId("code-error-message");
         await user.type(input, "7-guitarist-revenge");
         await user.click(container);
-        expect(error.textContent).toEqual("");
+        expect(error.textContent).toEqual(emptyLine);
       });
     });
 
@@ -235,14 +266,16 @@ describe("<CodeInput />", () => {
         it("will show the error", async () => {
           const user = userEvent.setup();
           render(
-            <CodeInputProvider>
-              <CodeInput />
-            </CodeInputProvider>
+            <ThemeProvider>
+              <CodeInputProvider>
+                <CodeInput />
+              </CodeInputProvider>
+            </ThemeProvider>
           );
           const input = screen.getByTestId("code-input");
           const error = screen.getByTestId("code-error-message");
           await user.type(input, "asdf{Enter}");
-          expect(error.textContent).not.toEqual("");
+          expect(error.textContent).not.toEqual(emptyLine);
         });
       });
 
@@ -250,14 +283,16 @@ describe("<CodeInput />", () => {
         it("will not show the error", async () => {
           const user = userEvent.setup();
           render(
-            <CodeInputProvider>
-              <CodeInput />
-            </CodeInputProvider>
+            <ThemeProvider>
+              <CodeInputProvider>
+                <CodeInput />
+              </CodeInputProvider>
+            </ThemeProvider>
           );
           const input = screen.getByTestId("code-input");
           const error = screen.getByTestId("code-error-message");
           await user.type(input, "asdf");
-          expect(error.textContent).toEqual("");
+          expect(error.textContent).toEqual(emptyLine);
         });
       });
 
@@ -265,16 +300,18 @@ describe("<CodeInput />", () => {
         it("will show the error then hide it", async () => {
           const user = userEvent.setup();
           render(
-            <CodeInputProvider>
-              <CodeInput />
-            </CodeInputProvider>
+            <ThemeProvider>
+              <CodeInputProvider>
+                <CodeInput />
+              </CodeInputProvider>
+            </ThemeProvider>
           );
           const input = screen.getByTestId("code-input");
           const error = screen.getByTestId("code-error-message");
           await user.type(input, "{Enter}");
-          expect(error.textContent).not.toEqual("");
+          expect(error.textContent).not.toEqual(emptyLine);
           await user.type(input, "asdf");
-          expect(error.textContent).toEqual("");
+          expect(error.textContent).toEqual(emptyLine);
         });
       });
     });
