@@ -101,21 +101,60 @@ export default function Navbar(props: Props) {
         })}
       >
         <Space h={56} />
-        <NavbarItem onClick={() => navigate("/about")}>About</NavbarItem>
-        <NavbarItem onClick={() => navigate("/faq")}>FAQ</NavbarItem>
-        <NavbarItem onClick={() => navigate("/privacy")}>Privacy</NavbarItem>
-        <NavbarItem onClick={() => navigate("/terms")}>Terms</NavbarItem>
-        <NavbarItem onClick={() => navigate("/for-business")}>
+        <NavbarItem
+          onClick={() => {
+            navigate("/about");
+            setOpened(false);
+          }}
+        >
+          About
+        </NavbarItem>
+        <NavbarItem
+          onClick={() => {
+            navigate("/faq");
+            setOpened(false);
+          }}
+        >
+          FAQ
+        </NavbarItem>
+        <NavbarItem
+          onClick={() => {
+            navigate("/privacy");
+            setOpened(false);
+          }}
+        >
+          Privacy
+        </NavbarItem>
+        <NavbarItem
+          onClick={() => {
+            navigate("/terms");
+            setOpened(false);
+          }}
+        >
+          Terms
+        </NavbarItem>
+        <NavbarItem
+          onClick={() => {
+            navigate("/for-business");
+            setOpened(false);
+          }}
+        >
           For Business
         </NavbarItem>
         <NavbarItem
-          onClick={() =>
-            window.open("https://github.com/LeastAuthority/winden", "_blank")
-          }
+          onClick={() => {
+            window.open("https://github.com/LeastAuthority/winden", "_blank");
+            setOpened(false);
+          }}
         >
           GitHub
         </NavbarItem>
-        <NavbarItem onClick={() => navigate("/feedback")}>
+        <NavbarItem
+          onClick={() => {
+            navigate("/feedback");
+            setOpened(false);
+          }}
+        >
           <span className={classes.feedbackLink}>Feedback</span>
         </NavbarItem>
       </div>
