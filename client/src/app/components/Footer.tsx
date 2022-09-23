@@ -134,7 +134,7 @@ export default function Footer() {
           size="sm"
           color="dark-grey"
           className={classNames(classes.laMadeByTextLarge)}
-          weight={600}
+          weight={400}
         >
           Made with love for privacy by
         </Text>
@@ -149,7 +149,7 @@ export default function Footer() {
           size="sm"
           color="dark-grey"
           className={classNames(classes.laMadeByTextLarge)}
-          weight={600}
+          weight={400}
         >
           Made with love for privacy by
         </Text>
