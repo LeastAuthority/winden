@@ -82,7 +82,10 @@ const publicClean = () =>
     "!dist/wormhole.wasm",
   ]);
 const publicCopy = () =>
-  gulp.src("src/public/**/*").pipe(gulp.dest("dist")).pipe(connect.reload());
+  gulp
+    .src("src/public/**/*", { dot: true })
+    .pipe(gulp.dest("dist"))
+    .pipe(connect.reload());
 const public = gulp.series(publicClean, publicCopy);
 
 const wasmBuild = () =>
