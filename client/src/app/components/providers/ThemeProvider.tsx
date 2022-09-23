@@ -128,6 +128,14 @@ export default function ThemeProvider(props: Props) {
           {
             "@font-face": {
               fontFamily: "Poppins",
+              src: `url("/Poppins/Poppins-Regular.ttf") format("truetype")`,
+              fontWeight: 400,
+              fontStyle: "normal",
+            },
+          },
+          {
+            "@font-face": {
+              fontFamily: "Poppins",
               src: `url("/Poppins/Poppins-Medium.ttf") format("truetype")`,
               fontWeight: 500,
               fontStyle: "normal",
