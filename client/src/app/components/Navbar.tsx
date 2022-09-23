@@ -32,33 +32,44 @@ function NavbarItem(
   );
 }
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles((theme, _params, getRef) => ({
   navbarContainer: {
+    zIndex: -9001,
     opacity: 0,
-    transition: "opacity 0.2s",
+    transition: "opacity 0.2s, z-index 0.2s step-end",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     position: "absolute",
     top: 0,
     left: 0,
     width: "100%",
     height: "100%",
+    [`&.${getRef("navbarContainerOpened")}`]: {
+      opacity: 1,
+      zIndex: 9001,
+      transition: "opacity 0.2s, z-index 0.2s step-start",
+    },
   },
   navbarContainerOpened: {
-    opacity: 1,
+    ref: getRef("navbarContainerOpened"),
   },
   navbar: {
+    zIndex: 9001,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: 240,
+    minHeight: "100vh",
     transform: "translate(-320px, 0)",
     transition: "transform 0.2s",
     backgroundColor: "#F0F0F0",
-    width: 240,
-    minHeight: "100vh",
   },
   navbarOpened: {
     transform: "translate(0, 0)",
   },
   burger: {
+    zIndex: 9001,
     position: "absolute",
-    top: 11,
+    top: 19,
     left: 11,
   },
   feedbackLink: {
@@ -82,7 +93,7 @@ export default function Navbar(props: Props) {
         className={classNames(classes.navbarContainer, {
           [classes.navbarContainerOpened]: opened,
         })}
-        // onClick{() => setOpened(false)}
+        onClick={() => setOpened(false)}
       />
       <div
         className={classNames(classes.navbar, {

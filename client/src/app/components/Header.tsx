@@ -1,8 +1,9 @@
 import { Button, createStyles, Group, Image, Space, Text } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
+import classnames from "classnames";
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Download, Send } from "tabler-icons-react";
-import { useCommonStyles } from "../hooks/useCommonStyles";
 import { useWormhole } from "../hooks/useWormhole";
 
 const useStyles = createStyles((theme) => ({
@@ -12,12 +13,28 @@ const useStyles = createStyles((theme) => ({
       margin: 0,
     },
   },
-  headerTextSuper: {
+  headerText: {
     fontWeight: "lighter",
-    fontSize: 20,
+    fontSize: 14,
     color: theme.colors["dark-grey"][6],
+  },
+  headerTextLarge: {
+    fontSize: 20,
     position: "relative",
     bottom: 7,
+  },
+  logo: {
+    display: "flex",
+  },
+  logoSmall: {
+    flexDirection: "column-reverse",
+    alignItems: "flex-end",
+    marginLeft: 40,
+  },
+  logoLarge: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: 8,
   },
 }));
 
@@ -26,23 +43,34 @@ export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const { classes } = useStyles();
+  const isWideView = useMediaQuery("(min-width: 590px)");
 
   return (
     <div className={classes.container}>
-      <Space h="lg" />
+      <Space h={isWideView ? "lg" : "xs"} />
       <Group position="apart">
-        <Group align="start" spacing={8}>
+        <div
+          className={classnames(
+            classes.logo,
+            isWideView ? classes.logoLarge : classes.logoSmall
+          )}
+        >
           <Link to="/s">
             <Image
-              width={200}
+              width={isWideView ? 200 : 137}
               fit="contain"
               src="/LA_Winden_HorizontalLogo_Color.svg"
             />
           </Link>
-          <Text className={classes.headerTextSuper} component="span">
+          <Text
+            className={classnames(classes.headerText, {
+              [classes.headerTextLarge]: isWideView,
+            })}
+            component="span"
+          >
             BETA
           </Text>
-        </Group>
+        </div>
         {location.pathname === "/s" ? (
           <Button
             leftIcon={<Download />}
@@ -58,6 +86,7 @@ export default function Header() {
               }
             }}
             styles={{
+              root: !isWideView ? { padding: "0 10px" } : {},
               label: {
                 fontSize: 16,
               },
@@ -89,7 +118,7 @@ export default function Header() {
           </Button>
         )}
       </Group>
-      <Space h="lg" />
+      <Space h={isWideView ? "lg" : "xs"} />
     </div>
   );
 }
