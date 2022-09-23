@@ -118,6 +118,26 @@ function Links() {
   );
 }
 
+function TagLine() {
+  const { classes } = useStyles();
+  return (
+    <>
+      <Text
+        size="sm"
+        color="dark-grey"
+        className={classNames(classes.laMadeByTextLarge)}
+        weight={400}
+      >
+        Made with love for privacy by
+      </Text>
+      <Space w={8} />
+      <div>
+        <Image width="auto" height={30} fit="contain" src="/la-logo.svg" />
+      </div>
+    </>
+  );
+}
+
 export default function Footer() {
   const { classes } = useStyles();
 
@@ -130,32 +150,11 @@ export default function Footer() {
           <Links />
         </Group>
         <div className={classes.spacer} />
-        <Text
-          size="sm"
-          color="dark-grey"
-          className={classNames(classes.laMadeByTextLarge)}
-          weight={400}
-        >
-          Made with love for privacy by
-        </Text>
-        <Space w={8} />
-        <div>
-          <Image width="auto" height={30} fit="contain" src="/la-logo.svg" />
-        </div>
+        <TagLine />
       </Group>
 
-      <Group className={classes.footerSmall} position="center" spacing={8}>
-        <Text
-          size="sm"
-          color="dark-grey"
-          className={classNames(classes.laMadeByTextLarge)}
-          weight={400}
-        >
-          Made with love for privacy by
-        </Text>
-        <div>
-          <Image width="auto" height={30} fit="contain" src="/la-logo.svg" />
-        </div>
+      <Group className={classes.footerSmall} position="center" spacing={0}>
+        <TagLine />
       </Group>
 
       <Space h="lg" />
