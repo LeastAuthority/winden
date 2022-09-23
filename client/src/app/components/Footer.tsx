@@ -23,6 +23,11 @@ const useStyles = createStyles((theme) => ({
       display: "none",
     },
   },
+  footerSmall: {
+    [`@media (min-width: ${BREAKPOINT_MOBILE_PX}px)`]: {
+      display: "none",
+    },
+  },
   footerLarge: {
     margin: "0 40px",
     [`@media (max-width: ${BREAKPOINT_DESKTOP_NARROWEST_PX - 1}px)`]: {
@@ -134,6 +139,20 @@ export default function Footer() {
           Made with love for privacy by
         </Text>
         <Space w={8} />
+        <div>
+          <Image width="auto" height={30} fit="contain" src="/la-logo.svg" />
+        </div>
+      </Group>
+
+      <Group className={classes.footerSmall} position="center" spacing={8}>
+        <Text
+          size="sm"
+          color="dark-grey"
+          className={classNames(classes.laMadeByTextLarge)}
+          weight={600}
+        >
+          Made with love for privacy by
+        </Text>
         <div>
           <Image width="auto" height={30} fit="contain" src="/la-logo.svg" />
         </div>
