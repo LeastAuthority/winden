@@ -1,3 +1,6 @@
+import { List, Text } from "@mantine/core";
+import React, { ReactElement, ReactNode } from "react";
+
 export const enum ErrorTypes {
   RECV_CONNECTION_TIMEOUT,
   SENDER_BAD_CODE,
@@ -40,37 +43,55 @@ export function detectErrorType(error: string) {
 
 export function errorContent(type: ErrorTypes): {
   title: string;
-  description: string[];
+  description: ReactElement | ReactNode[];
 } {
   switch (type) {
     case ErrorTypes.RECV_CONNECTION_TIMEOUT: {
       return {
         title: "Connection time-out",
-        description: [
-          "It looks like the connection between you and the sender was briefly lost.",
-          "Please ask the sender for a new code.",
-        ],
+        description: (
+          <>
+            <Text component="p">
+              It looks like the connection between you and the sender was
+              briefly lost.
+            </Text>
+            <Text component="p">Please ask the sender for a new code.</Text>
+          </>
+        ),
       };
     }
     case ErrorTypes.SENDER_BAD_CODE: {
       return {
         title: "Oops...",
-        description: [
-          "The receiver has entered the wrong code. ",
-          "Please try sending the file again and provide the receiver with a new code.",
-        ],
+        description: (
+          <>
+            <Text component="p">The receiver has entered the wrong code.</Text>
+            <Text component="p">
+              Please try sending the file again and provide the receiver with a
+              new code.
+            </Text>
+          </>
+        ),
       };
     }
     case ErrorTypes.BAD_CODE: {
       return {
         title: "Oops...",
-        description: [
-          "Something went wrong. Possibly:",
-          "- The code is wrong; or",
-          "- The code was already used; or",
-          "- The sender is no longer connected.",
-          "Please ask the sender for a new code and for them to stay connected until you get the file.",
-        ],
+        description: (
+          <>
+            <Text component="p">Something went wrong. Possibly:</Text>
+            <List>
+              <List.Item>The code is wrong; or</List.Item>
+              <List.Item>The code was already used; or</List.Item>
+              <List.Item>The sender is no longer connected.</List.Item>
+            </List>
+            <Text component="p"></Text>
+            <Text component="p">
+              Please ask the sender for a new code and for them to stay
+              connected until you get the file.
+            </Text>
+          </>
+        ),
       };
     }
     case ErrorTypes.MAILBOX: {
@@ -88,18 +109,24 @@ export function errorContent(type: ErrorTypes): {
     case ErrorTypes.INTERRUPT: {
       return {
         title: "Network trouble?",
-        description: [
-          "There was an issue with either your or the receiver's connection.",
-          "Please try again with a new code.",
-        ],
+        description: (
+          <>
+            <Text component="p">
+              There was an issue with either your or the receiver's connection.
+            </Text>
+            <Text component="p">Please try again with a new code.</Text>
+          </>
+        ),
       };
     }
     case ErrorTypes.WASM_EXITED: {
       return {
         title: "Oops...",
         description: [
-          "An unexpected error occurred.",
-          "Please refresh the page before trying again.",
+          <Text component="p">An unexpected error occurred.</Text>,
+          <Text component="p">
+            Please refresh the page before trying again.
+          </Text>,
         ],
       };
     }
