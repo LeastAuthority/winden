@@ -1,124 +1,119 @@
 import { Button, createStyles, Group, Image, Space, Text } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
-import classnames from "classnames";
+import { useViewportSize } from "@mantine/hooks";
 import React from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Download, Send } from "tabler-icons-react";
 import { useWormhole } from "../hooks/useWormhole";
 
-const useStyles = createStyles((theme) => ({
+const MOBILE_BREAKPOINT = 590;
+
+const useLogoStyles = createStyles(() => ({
   container: {
-    margin: "0 40px",
-    [`@media (max-width: ${theme.breakpoints.sm - 1}px)`]: {
-      margin: 0,
+    [`@media screen and (max-width: ${MOBILE_BREAKPOINT - 1}px)`]: {
+      position: "relative",
     },
   },
-  headerText: {
-    fontWeight: "lighter",
-    fontSize: 14,
-    color: theme.colors["dark-grey"][6],
-  },
-  headerTextLarge: {
+  text: {
     fontSize: 20,
+    fontWeight: "lighter",
     position: "relative",
-    bottom: 7,
-  },
-  logo: {
-    display: "flex",
-  },
-  logoSmall: {
-    flexDirection: "column-reverse",
-    alignItems: "flex-end",
-    marginLeft: 40,
-  },
-  logoLarge: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    gap: 8,
+    bottom: 19,
+    [`@media screen and (max-width: ${MOBILE_BREAKPOINT - 1}px)`]: {
+      fontSize: 14,
+      position: "absolute",
+      bottom: 23,
+      right: 0,
+    },
   },
 }));
 
+function Logo() {
+  const { width } = useViewportSize();
+  const { classes } = useLogoStyles();
+  return (
+    <Group spacing={8} className={classes.container}>
+      <Link to="/s">
+        <Image
+          width={width < MOBILE_BREAKPOINT ? 137 : 200}
+          fit="contain"
+          src="/LA_Winden_HorizontalLogo_Color.svg"
+        />
+      </Link>
+      <Text color="dark-grey" className={classes.text}>
+        BETA
+      </Text>
+    </Group>
+  );
+}
+
 export default function Header() {
-  const wormhole = useWormhole();
-  const location = useLocation();
+  const { width } = useViewportSize();
   const navigate = useNavigate();
-  const { classes } = useStyles();
-  const isWideView = useMediaQuery("(min-width: 590px)");
+  const wormhole = useWormhole();
+  const buttonPaddingX = width < MOBILE_BREAKPOINT ? 11 : 22;
+  const buttonHeight = width < MOBILE_BREAKPOINT ? 40 : 50;
 
   return (
-    <div className={classes.container}>
-      <Space h={isWideView ? "lg" : "xs"} />
-      <Group position="apart">
-        <div
-          className={classnames(
-            classes.logo,
-            isWideView ? classes.logoLarge : classes.logoSmall
-          )}
+    <Group
+      spacing={0}
+      px={width < MOBILE_BREAKPOINT ? 0 : 40}
+      py={width < MOBILE_BREAKPOINT ? "xs" : "xl"}
+    >
+      {width < MOBILE_BREAKPOINT && <Space w={40} />}
+
+      <Logo />
+
+      <div style={{ flex: 1 }} />
+
+      {location.pathname === "/s" ? (
+        <Button
+          leftIcon={<Download />}
+          data-testid="go-to-receive-page"
+          color="medium-grey"
+          onClick={() => {
+            navigate("/r");
+            if (wormhole?.fileMeta) {
+              // cancellation workaround
+              window.location.reload();
+            } else {
+              wormhole?.reset();
+            }
+          }}
+          px={buttonPaddingX}
+          styles={{
+            label: {
+              fontSize: 16,
+              height: buttonHeight,
+            },
+          }}
         >
-          <Link to="/s">
-            <Image
-              width={isWideView ? 200 : 137}
-              fit="contain"
-              src="/LA_Winden_HorizontalLogo_Color.svg"
-            />
-          </Link>
-          <Text
-            className={classnames(classes.headerText, {
-              [classes.headerTextLarge]: isWideView,
-            })}
-            component="span"
-          >
-            BETA
-          </Text>
-        </div>
-        {location.pathname === "/s" ? (
-          <Button
-            leftIcon={<Download />}
-            data-testid="go-to-receive-page"
-            color="medium-grey"
-            onClick={() => {
-              navigate("/r");
-              if (wormhole?.fileMeta) {
-                // cancellation workaround
-                window.location.reload();
-              } else {
-                wormhole?.reset();
-              }
-            }}
-            styles={{
-              root: !isWideView ? { padding: "0 10px" } : {},
-              label: {
-                fontSize: 16,
-              },
-            }}
-          >
-            Receive
-          </Button>
-        ) : (
-          <Button
-            leftIcon={<Send />}
-            data-testid="go-to-send-page"
-            color="medium-grey"
-            onClick={() => {
-              navigate("/s");
-              if (wormhole?.fileMeta) {
-                // cancellation workaround
-                window.location.reload();
-              } else {
-                wormhole?.reset();
-              }
-            }}
-            styles={{
-              label: {
-                fontSize: 16,
-              },
-            }}
-          >
-            Send
-          </Button>
-        )}
-      </Group>
-      <Space h={isWideView ? "lg" : "xs"} />
-    </div>
+          Receive
+        </Button>
+      ) : (
+        <Button
+          leftIcon={<Send />}
+          data-testid="go-to-send-page"
+          color="medium-grey"
+          onClick={() => {
+            navigate("/s");
+            if (wormhole?.fileMeta) {
+              // cancellation workaround
+              window.location.reload();
+            } else {
+              wormhole?.reset();
+            }
+          }}
+          px={buttonPaddingX}
+          styles={{
+            label: {
+              fontSize: 16,
+              height: buttonHeight,
+            },
+          }}
+        >
+          Send
+        </Button>
+      )}
+    </Group>
   );
 }
