@@ -141,6 +141,7 @@ export default function ThemeProvider(props: Props) {
               background: `linear-gradient(222.19deg, #f0f0f0 23.77%, #ffffff 98.02%)`,
               fontSize: `16px`,
               color: theme.colors.black[6],
+              minWidth: 330,
             },
             p: {
               margin: 0,
