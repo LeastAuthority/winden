@@ -1,68 +1,48 @@
 import {
   Anchor,
+  Box,
   createStyles,
   Divider,
   Group,
   Image,
   Space,
+  Stack,
   Text,
 } from "@mantine/core";
-import classNames from "classnames";
+import { useViewportSize } from "@mantine/hooks";
 import React from "react";
 import { Link } from "react-router-dom";
 
+const BREAKPOINT_NARROW_MOBILE_PX = 390;
 const BREAKPOINT_MOBILE_PX = 590;
-const BREAKPOINT_DESKTOP_NARROWEST_PX = 850;
-const BREAKPOINT_DESKTOP_NARROWER_PX = 1050;
+const BREAKPOINT_DESKTOP_NARROW_PX = 850;
+const BREAKPOINT_DESKTOP_PX = 1050;
 
 const useStyles = createStyles((theme) => ({
-  laMadeByTextLarge: {
-    [`@media (min-width: ${BREAKPOINT_DESKTOP_NARROWEST_PX}px) and (max-width: ${
-      BREAKPOINT_DESKTOP_NARROWER_PX - 1
-    }px)`]: {
-      display: "none",
-    },
-  },
-  footerSmall: {
-    [`@media (min-width: ${BREAKPOINT_MOBILE_PX}px)`]: {
-      display: "none",
-    },
-  },
-  footerLarge: {
-    margin: "0 40px",
-    [`@media (max-width: ${BREAKPOINT_DESKTOP_NARROWEST_PX - 1}px)`]: {
-      justifyContent: "center",
-      margin: 0,
-    },
-    [`@media (max-width: ${BREAKPOINT_MOBILE_PX - 1}px)`]: {
-      display: "none",
-    },
-  },
   feedbackLink: {
     backgroundColor: theme.colors.blue,
     padding: "5.5px 11px",
     borderRadius: "5px",
   },
-  links: {
-    [`@media (max-width: ${BREAKPOINT_DESKTOP_NARROWEST_PX - 1}px)`]: {
-      display: "flex",
-      justifyContent: "center",
-      width: "100%",
-    },
-  },
-  spacer: {
-    flex: 1,
-    [`@media (max-width: ${BREAKPOINT_DESKTOP_NARROWEST_PX - 1}px)`]: {
-      flex: 0,
-    },
-  },
 }));
+
+function Tagline() {
+  return (
+    <Text size="sm" color="dark-grey" weight={400}>
+      Made with love for privacy by
+    </Text>
+  );
+}
+
+function Logo() {
+  return <Image width="auto" height={30} fit="contain" src="/la-logo.svg" />;
+}
 
 function Links() {
   const { classes } = useStyles();
 
   return (
-    <>
+    <Group spacing={16}>
       <Anchor
         component={Link}
         className={classes.feedbackLink}
@@ -114,50 +94,59 @@ function Links() {
       >
         GitHub
       </Anchor>
-    </>
+    </Group>
   );
 }
 
-function TagLine() {
-  const { classes } = useStyles();
-  return (
-    <>
-      <Text
-        size="sm"
-        color="dark-grey"
-        className={classNames(classes.laMadeByTextLarge)}
-        weight={400}
-      >
-        Made with love for privacy by
-      </Text>
-      <Space w={8} />
-      <div>
-        <Image width="auto" height={30} fit="contain" src="/la-logo.svg" />
-      </div>
-    </>
-  );
+type Props = {};
+
+function FooterLayout(props: Props) {
+  const { width } = useViewportSize();
+  if (width < BREAKPOINT_NARROW_MOBILE_PX) {
+    return (
+      <Stack spacing={6} align="center">
+        <Tagline />
+        <Logo />
+      </Stack>
+    );
+  } else if (width < BREAKPOINT_MOBILE_PX) {
+    return (
+      <Group spacing={8} position="center">
+        <Tagline />
+        <Logo />
+      </Group>
+    );
+  } else if (width < BREAKPOINT_DESKTOP_NARROW_PX) {
+    return (
+      <Stack spacing={6} align="center">
+        <Links />
+        <Group spacing={8}>
+          <Tagline />
+          <Logo />
+        </Group>
+      </Stack>
+    );
+  } else {
+    return (
+      <Group spacing={0}>
+        <Links />
+        <div style={{ flex: 1 }} />
+        <Group spacing={8}>
+          {width >= BREAKPOINT_DESKTOP_PX && <Tagline />}
+          <Logo />
+        </Group>
+      </Group>
+    );
+  }
 }
 
 export default function Footer() {
-  const { classes } = useStyles();
-
+  const { width } = useViewportSize();
   return (
-    <div>
+    <Box px={width < BREAKPOINT_DESKTOP_NARROW_PX ? 0 : 40}>
       <Space h="lg" />
-
-      <Group spacing={0} position="apart" className={classes.footerLarge}>
-        <Group spacing={16} className={classes.links}>
-          <Links />
-        </Group>
-        <div className={classes.spacer} />
-        <TagLine />
-      </Group>
-
-      <Group className={classes.footerSmall} position="center" spacing={0}>
-        <TagLine />
-      </Group>
-
+      <FooterLayout />
       <Space h="lg" />
-    </div>
+    </Box>
   );
 }
