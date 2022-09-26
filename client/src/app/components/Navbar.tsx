@@ -5,10 +5,9 @@ import { useNavigate } from "react-router-dom";
 
 const useNavbarItemStyles = createStyles((theme) => ({
   navbarItem: {
-    width: "100%",
     height: 48,
     backgroundColor: "#F0F0F0",
-    paddingLeft: 56,
+    padding: "0 56px",
     transition: "background-color 0.2s",
     "&:hover": {
       backgroundColor: theme.colors["medium-grey"],
@@ -33,7 +32,7 @@ function NavbarItem(
 }
 
 const useStyles = createStyles((theme, _params, getRef) => ({
-  navbarContainer: {
+  navbarOverlay: {
     zIndex: -9001,
     opacity: 0,
     transition: "opacity 0.2s, z-index 0.2s step-end",
@@ -43,25 +42,37 @@ const useStyles = createStyles((theme, _params, getRef) => ({
     left: 0,
     width: "100%",
     height: "100%",
-    [`&.${getRef("navbarContainerOpened")}`]: {
+    [`&.${getRef("navbarOverlayOpened")}`]: {
       opacity: 1,
       zIndex: 9001,
       transition: "opacity 0.2s, z-index 0.2s step-start",
+    },
+  },
+  navbarOverlayOpened: {
+    ref: getRef("navbarOverlayOpened"),
+  },
+  navbarContainer: {
+    zIndex: -9001,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    bottom: 0,
+    transition: "z-index 0.2s step-end",
+    [`&.${getRef("navbarContainerOpened")}`]: {
+      zIndex: 9001,
+      transition: "z-index 0.2s step-start",
     },
   },
   navbarContainerOpened: {
     ref: getRef("navbarContainerOpened"),
   },
   navbar: {
-    zIndex: 9001,
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: 240,
-    minHeight: "100vh",
-    transform: "translate(-320px, 0)",
+    transform: "translate(-100%, 0)",
     transition: "transform 0.2s",
+    height: "100%",
     backgroundColor: "#F0F0F0",
+    display: "inline-flex",
+    flexDirection: "column",
   },
   navbarOpened: {
     transform: "translate(0, 0)",
@@ -90,73 +101,79 @@ export default function Navbar(props: Props) {
   return (
     <>
       <div
-        className={classNames(classes.navbarContainer, {
-          [classes.navbarContainerOpened]: opened,
+        className={classNames(classes.navbarOverlay, {
+          [classes.navbarOverlayOpened]: opened,
         })}
         onClick={() => setOpened(false)}
       />
       <div
-        className={classNames(classes.navbar, {
-          [classes.navbarOpened]: opened,
+        className={classNames(classes.navbarContainer, {
+          [classes.navbarContainerOpened]: opened,
         })}
       >
-        <Space h={56} />
-        <NavbarItem
-          onClick={() => {
-            navigate("/about");
-            setOpened(false);
-          }}
+        <div
+          className={classNames(classes.navbar, {
+            [classes.navbarOpened]: opened,
+          })}
         >
-          About
-        </NavbarItem>
-        <NavbarItem
-          onClick={() => {
-            navigate("/faq");
-            setOpened(false);
-          }}
-        >
-          FAQ
-        </NavbarItem>
-        <NavbarItem
-          onClick={() => {
-            navigate("/privacy");
-            setOpened(false);
-          }}
-        >
-          Privacy
-        </NavbarItem>
-        <NavbarItem
-          onClick={() => {
-            navigate("/terms");
-            setOpened(false);
-          }}
-        >
-          Terms
-        </NavbarItem>
-        <NavbarItem
-          onClick={() => {
-            navigate("/for-business");
-            setOpened(false);
-          }}
-        >
-          For Business
-        </NavbarItem>
-        <NavbarItem
-          onClick={() => {
-            window.open("https://github.com/LeastAuthority/winden", "_blank");
-            setOpened(false);
-          }}
-        >
-          GitHub
-        </NavbarItem>
-        <NavbarItem
-          onClick={() => {
-            navigate("/feedback");
-            setOpened(false);
-          }}
-        >
-          <span className={classes.feedbackLink}>Feedback</span>
-        </NavbarItem>
+          <Space h={56} />
+          <NavbarItem
+            onClick={() => {
+              navigate("/about");
+              setOpened(false);
+            }}
+          >
+            About
+          </NavbarItem>
+          <NavbarItem
+            onClick={() => {
+              navigate("/faq");
+              setOpened(false);
+            }}
+          >
+            FAQ
+          </NavbarItem>
+          <NavbarItem
+            onClick={() => {
+              navigate("/privacy");
+              setOpened(false);
+            }}
+          >
+            Privacy
+          </NavbarItem>
+          <NavbarItem
+            onClick={() => {
+              navigate("/terms");
+              setOpened(false);
+            }}
+          >
+            Terms
+          </NavbarItem>
+          <NavbarItem
+            onClick={() => {
+              navigate("/for-business");
+              setOpened(false);
+            }}
+          >
+            For Business
+          </NavbarItem>
+          <NavbarItem
+            onClick={() => {
+              window.open("https://github.com/LeastAuthority/winden", "_blank");
+              setOpened(false);
+            }}
+          >
+            GitHub
+          </NavbarItem>
+          <NavbarItem
+            onClick={() => {
+              navigate("/feedback");
+              setOpened(false);
+            }}
+          >
+            <span className={classes.feedbackLink}>Feedback</span>
+          </NavbarItem>
+        </div>
       </div>
       <Burger
         className={classes.burger}
