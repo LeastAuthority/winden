@@ -142,7 +142,7 @@ export default function Footer() {
   const { classes } = useStyles();
 
   return (
-    <>
+    <div>
       <Space h="lg" />
 
       <Group spacing={0} position="apart" className={classes.footerLarge}>
@@ -158,6 +158,6 @@ export default function Footer() {
       </Group>
 
       <Space h="lg" />
-    </>
+    </div>
   );
 }

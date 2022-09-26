@@ -10,8 +10,4 @@ export default {
   },
 } as ComponentMeta<typeof Background>;
 
-export const Story: ComponentStory<typeof Background> = () => (
-  <Background>
-    <div style={{ width: "100vw", height: "100vh" }}></div>
-  </Background>
-);
+export const Story: ComponentStory<typeof Background> = () => <Background />;
