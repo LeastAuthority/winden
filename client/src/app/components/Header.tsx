@@ -82,7 +82,7 @@ export default function Header() {
           px={buttonPaddingX}
           styles={{
             label: {
-              fontSize: 16,
+              fontSize: width < MOBILE_BREAKPOINT ? 14 : 16,
               height: buttonHeight,
             },
           }}
@@ -106,7 +106,7 @@ export default function Header() {
           px={buttonPaddingX}
           styles={{
             label: {
-              fontSize: 16,
+              fontSize: width < MOBILE_BREAKPOINT ? 14 : 16,
               height: buttonHeight,
             },
           }}
