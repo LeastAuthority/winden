@@ -1,6 +1,7 @@
 const del = require("del");
 const { exec, execSync } = require("child_process");
 const gulp = require("gulp");
+const log = require("fancy-log")
 const connect = require("gulp-connect");
 const webpack = require("webpack-stream");
 const Dotenv = require("dotenv-webpack");
@@ -156,7 +157,7 @@ const watch = () => {
 
 const clean = () => del("dist");
 
-const deploy = (cb) => {
+const deployAWS = (cb) => {
   execSync(`aws s3 sync ./dist ${process.env.S3_BUCKET}`);
   execSync(`aws cloudfront create-invalidation \
     --distribution-id ${process.env.CDF_DISTRIBUTION_ID} \
@@ -164,6 +165,20 @@ const deploy = (cb) => {
      /wormhole.wasm \
      /worker/main.js`);
   cb();
+};
+
+const deploySftp = (cb) => {
+    // accept ssh host key of target
+    execSync("mkdir -p ~/.ssh");
+    execSync(`ssh-keyscan ${process.env.SFTP_HOSTNAME} > ~/.ssh/known_hosts`);
+
+    // transfer files
+    let environment = process.env.ENVIRONMENT === undefined ? process.env.NODE_ENV : process.env.ENVIRONMENT;
+    log.info(`Using environment: ${environment} (NODE_ENV: ${process.env.NODE_ENV}, ENVIRONMENT: ${process.env.ENVIRONMENT})`);
+    execSync(`lftp sftp://${process.env.SFTP_USERNAME}:${process.env.SFTP_PASSWORD}@${process.env.SFTP_HOSTNAME}`, {
+        input: `mirror -R dist winden_${environment}`,
+    });
+    cb();
 };
 
 exports.javascript = javascript;
@@ -178,8 +193,8 @@ exports.deploy = gulp.series(
   javascript,
   worker,
   wasm,
-  storybook,
-  deploy
+  // storybook,
+  deploySftp,
 );
 
 exports.default = gulp.series(public, javascript, worker, wasm, storybook);
