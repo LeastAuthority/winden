@@ -61,6 +61,21 @@ const javascript = () =>
         ],
       })
     )
+    .pipe(gulp.dest("dist/app"));
+
+const javascriptWatch = () =>
+  gulp
+    .src(`src/app/index.${process.env.NODE_ENV}.tsx`)
+    .pipe(
+      webpack({
+        ...webpackConfig,
+        watch: true,
+        entry: [
+          "web-streams-polyfill",
+          `./src/app/index.${process.env.NODE_ENV}.tsx`,
+        ],
+      })
+    )
     .pipe(gulp.dest("dist/app"))
     .pipe(connect.reload());
 
@@ -82,7 +97,10 @@ const publicClean = () =>
     "!dist/wormhole.wasm",
   ]);
 const publicCopy = () =>
-  gulp.src("src/public/**/*").pipe(gulp.dest("dist")).pipe(connect.reload());
+  gulp
+    .src("src/public/**/*", { dot: true })
+    .pipe(gulp.dest("dist"))
+    .pipe(connect.reload());
 const public = gulp.series(publicClean, publicCopy);
 
 const wasmBuild = () =>
@@ -95,7 +113,11 @@ const wasmReload = () => gulp.src("gulpfile.js").pipe(connect.reload());
 const wasm = gulp.series(wasmBuild, wasmReload);
 
 const watch = () => {
-  gulp.watch("src/app/**/*.{ts,tsx,css}", { ignoreInitial: false }, javascript);
+  gulp.watch(
+    "src/app/**/*.{ts,tsx,css}",
+    { ignoreInitial: false },
+    javascriptWatch
+  );
   gulp.watch("src/worker/**/*.{js,ts,tsx}", { ignoreInitial: false }, worker);
   gulp.watch("src/public/**/*", { ignoreInitial: false }, public);
   gulp.watch("vendor/wormhole-william/**/*.go", { ignoreInitial: false }, wasm);

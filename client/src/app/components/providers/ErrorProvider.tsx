@@ -41,9 +41,7 @@ export default function ErrorProvider(props: Props) {
         withCloseButton={false}
         padding={30}
       >
-        {errorText?.description.map((line) => (
-          <Text>{line}</Text>
-        ))}
+        {errorText?.description}
         <Space h="md" />
         <Group position="right">
           <Button onClick={() => setOpened(false)}>Ok</Button>
