@@ -8,7 +8,7 @@ const useNavbarItemStyles = createStyles((theme) => ({
     width: "100%",
     height: 48,
     backgroundColor: "#F0F0F0",
-    paddingLeft: 32,
+    paddingLeft: 56,
     transition: "background-color 0.2s",
     "&:hover": {
       backgroundColor: theme.colors["medium-grey"],
