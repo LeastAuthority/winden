@@ -18,27 +18,6 @@ export default function ThemeProvider(props: Props) {
       withNormalizeCSS
       theme={{
         components: {
-          AppShell: {
-            styles: (theme) => ({
-              root: {
-                height: "100vh",
-                display: "flex",
-                flexDirection: "column",
-                "@media (min-width: 576px)": {
-                  minHeight: 720,
-                },
-              },
-              body: {
-                height: "100%",
-              },
-              main: {
-                display: "grid",
-                gridTemplateRows: "1fr",
-                gridTemplateColumns: "1fr",
-                minHeight: 0,
-              },
-            }),
-          },
           Button: {
             styles: (theme, params: ButtonStylesParams) => ({
               root: {
