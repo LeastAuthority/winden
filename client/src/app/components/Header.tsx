@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Download, Send } from "tabler-icons-react";
 import { useWormhole } from "../hooks/useWormhole";
 
+const SUPER_NARROW_BREAKPOINT = 350;
 const MOBILE_BREAKPOINT = 590;
 
 const useLogoStyles = createStyles(() => ({
@@ -18,7 +19,15 @@ const useLogoStyles = createStyles(() => ({
     fontWeight: "lighter",
     position: "relative",
     bottom: 19,
-    [`@media screen and (max-width: ${MOBILE_BREAKPOINT - 1}px)`]: {
+    [`@media screen and (max-width: ${SUPER_NARROW_BREAKPOINT - 1}px)`]: {
+      fontSize: 14,
+      position: "absolute",
+      bottom: 18,
+      right: 0,
+    },
+    [`@media screen and (min-width: ${SUPER_NARROW_BREAKPOINT}px) and (max-width: ${
+      MOBILE_BREAKPOINT - 1
+    }px)`]: {
       fontSize: 14,
       position: "absolute",
       bottom: 23,
@@ -34,7 +43,13 @@ function Logo() {
     <Group spacing={8} className={classes.container}>
       <Link to="/s">
         <Image
-          width={width < MOBILE_BREAKPOINT ? 137 : 200}
+          width={
+            width < SUPER_NARROW_BREAKPOINT
+              ? 110
+              : width < MOBILE_BREAKPOINT
+              ? 137
+              : 200
+          }
           fit="contain"
           src="/LA_Winden_HorizontalLogo_Color.svg"
         />
