@@ -4,9 +4,11 @@ import React from "react";
 import { ContentProps } from "./AppTemplate";
 
 const useStyles = createStyles((_theme) => ({
-  content: {
+  container: {
     gridRow: 1,
     gridColumn: 1,
+  },
+  content: {
     width: "100%",
     padding: 40,
     "@media (max-width: 620px)": {
@@ -25,14 +27,16 @@ export default function Content(props: ContentProps) {
   const { classes } = useStyles();
 
   return (
-    <Paper
-      className={classnames(classes.content, {
-        [classes.contentFullHeight]: props.fullHeight,
-      })}
-      withBorder
-      radius={10}
-    >
-      {props.children}
-    </Paper>
+    <div className={classes.container}>
+      <Paper
+        className={classnames(classes.content, {
+          [classes.contentFullHeight]: props.fullHeight,
+        })}
+        withBorder
+        radius={10}
+      >
+        {props.children}
+      </Paper>
+    </div>
   );
 }
