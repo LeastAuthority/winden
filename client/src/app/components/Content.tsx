@@ -1,7 +1,6 @@
 import { createStyles, Paper } from "@mantine/core";
 import classnames from "classnames";
-import React from "react";
-import { ContentProps } from "./AppTemplate";
+import React, { CSSProperties } from "react";
 
 const useStyles = createStyles((_theme) => ({
   container: {
@@ -23,12 +22,23 @@ const useStyles = createStyles((_theme) => ({
   },
 }));
 
-export default function Content(props: ContentProps) {
+type Props = React.PropsWithChildren<{
+  fullHeight?: boolean;
+  styles?: {
+    root?: CSSProperties;
+    paper?: CSSProperties;
+  };
+}>;
+
+export default function Content(props: Props) {
   const { classes } = useStyles();
 
+  console.log(props.styles?.paper);
+
   return (
-    <div className={classes.container}>
+    <div className={classes.container} style={props.styles?.root}>
       <Paper
+        style={props.styles?.paper}
         className={classnames(classes.content, {
           [classes.contentFullHeight]: props.fullHeight,
         })}

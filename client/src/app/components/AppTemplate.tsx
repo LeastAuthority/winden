@@ -22,10 +22,6 @@ const useStyles = createStyles(() => ({
   },
 }));
 
-export type ContentProps = React.PropsWithChildren<{
-  fullHeight?: boolean;
-}>;
-
 type Props = React.PropsWithChildren<{}>;
 
 export default function AppTemplate(props: Props) {

@@ -35,7 +35,14 @@ export function SendBeginScreenContent(props: ContentProps) {
   const { classes } = useStyles();
 
   return (
-    <Content fullHeight>
+    <Content
+      fullHeight
+      styles={{
+        paper: {
+          minHeight: 480,
+        },
+      }}
+    >
       <div
         data-testid="send-page-upload-section"
         className={classes.sendPageSection}
