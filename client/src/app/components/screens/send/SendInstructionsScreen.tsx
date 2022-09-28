@@ -7,7 +7,7 @@ import {
   Text,
   TextInput,
 } from "@mantine/core";
-import { useClipboard } from "@mantine/hooks";
+import { useClipboard, useViewportSize } from "@mantine/hooks";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Files, X } from "tabler-icons-react";
@@ -27,8 +27,7 @@ const useStyles = createStyles(() => ({
   codeLabel: {
     backgroundColor: "#efeff1",
     height: 50,
-    fontSize: 14.4,
-    padding: "0 15px",
+    padding: "0 10px",
     borderRadius: 4,
     display: "inline-flex",
     alignItems: "center",
@@ -38,6 +37,8 @@ const useStyles = createStyles(() => ({
 export function SendInstructionsScreenContent(props: ContentProps) {
   const { classes: commonClasses } = useCommonStyles();
   const { classes } = useStyles();
+  const { width } = useViewportSize();
+  const urlTextSize = width < 580 ? 16 : 14.4;
 
   return (
     <Content>
@@ -73,15 +74,17 @@ export function SendInstructionsScreenContent(props: ContentProps) {
             width: "100%",
           }}
         >
-          <Text>{window.location.host}/#</Text>
-          <Text className={classes.codeLabel}>{props.code}</Text>
+          <Text size={urlTextSize}>{window.location.host}/#</Text>
+          <Text ml={-15} size={urlTextSize} className={classes.codeLabel}>
+            {props.code}
+          </Text>
           <Button
             leftIcon={<Files />}
             disabled={props.copied}
             onClick={props.onCopy}
             color="yellow"
           >
-            {props.copied ? "Link copied!" : "Copy"}
+            {props.copied ? "Link copied!" : "Copy link"}
           </Button>
         </Group>
         <Button
