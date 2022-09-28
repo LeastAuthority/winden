@@ -53,8 +53,8 @@ export default function FaqPage({}: Props) {
           time.
         </li>
         <li>
-          File size limits: In this initial stage, it is it is only possible to
-          send files of up to 200 MB. When sending files to mobile devices, this
+          File size limits: In this initial stage, it is only possible to send
+          files of up to 200 MB. When sending files to mobile devices, this
           number may be smaller than 100 MB.
         </li>
         <li>
