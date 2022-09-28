@@ -155,6 +155,25 @@ export default function ThemeProvider(props: Props) {
               fontSize: `16px`,
               color: theme.colors.black[6],
             },
+            li: {
+              lineHeight: 1.5,
+            },
+            ol: {
+              counterReset: "item",
+              marginBottom: "1.1em",
+            },
+            "ol > li": {
+              counterIncrement: "item",
+            },
+            "ol ol > li": {
+              display: "block",
+            },
+            "ol ol > li:before": {
+              content: 'counters(item, ".") ". "',
+            },
+            ":not(ol) > ol > li": {
+              fontWeight: 600,
+            },
             p: {
               margin: 0,
               marginBottom: "1.1em",

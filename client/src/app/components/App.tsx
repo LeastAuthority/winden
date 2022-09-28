@@ -11,6 +11,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import ReceivePage from "./pages/ReceivePage";
 import SendPage from "./pages/SendPage";
+import TermsPage from "./pages/TermsPage";
 
 type Props = {};
 
@@ -36,6 +37,7 @@ export default function App({}: Props) {
             <Route path="about" element={<AboutPage />} />
             <Route path="faq" element={<FaqPage />} />
             <Route path="privacy" element={<PrivacyPage />} />
+            <Route path="terms" element={<TermsPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </CSSTransition>
