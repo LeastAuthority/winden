@@ -21,6 +21,7 @@ export default function TermsPage({}: Props) {
         to subsequent uses of the Service by the same person without having to
         refer to them again:
       </p>
+      <br />
       <ol>
         <li>Scope of the Service</li>
         <ol>
