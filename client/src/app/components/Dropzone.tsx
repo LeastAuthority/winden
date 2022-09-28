@@ -122,7 +122,7 @@ export default function Dropzone(props: Props) {
             <Text color="dark-grey" weight={600}>
               Drag & drop any file
             </Text>
-            <Text color="dark-grey">up to 4GB</Text>
+            <Text color="dark-grey">up to 200MB</Text>
             <Divider
               className={classes.dropzoneDivider}
               my="xs"
