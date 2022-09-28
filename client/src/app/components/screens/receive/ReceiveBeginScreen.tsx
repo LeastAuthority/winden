@@ -26,9 +26,13 @@ export function ReceiveBeginScreenContent(props: ContentProps) {
           centered
           opened={props.cancelModalOpen}
           onClose={props.onCancelModalClose}
-          title="Transfer failed"
+          title="Transfer cancelled/interrupted"
         >
-          <Text component="p">The transfer was cancelled or interrupted.</Text>
+          <Text component="p">Either:</Text>
+          <Text component="p"></Text>
+          <Text component="p">- The transfer was cancelled by the sender.</Text>
+          <Text component="p">- Your or the sender's Internet connection was interrupted.</Text>
+          <Text component="p"></Text>
           <Text component="p">Please try again.</Text>
         </Modal>
         <Text className={classes.headerText} weight={300}>
