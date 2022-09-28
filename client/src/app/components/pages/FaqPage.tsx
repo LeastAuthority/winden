@@ -1,4 +1,6 @@
+import { Anchor } from "@mantine/core";
 import React from "react";
+import { Link } from "react-router-dom";
 import Content from "../Content";
 
 type Props = {};
@@ -88,11 +90,14 @@ export default function FaqPage({}: Props) {
       <p>
         We previously received generous support from the European Union&rsquo;s
         Next Generation Internet fund to build this as a privacy-preserving
-        technology (see About). We are currently exploring the best-suited
-        privacy-respecting business model. We are offering consulting and
-        customization services for businesses, and in the future we may offer
-        premium apps, features, or performance at extra cost, aside from the
-        freely accessible version.
+        technology (see{" "}
+        <Anchor component={Link} to="/about" color="tertiary">
+          About
+        </Anchor>
+        ). We are currently exploring the best-suited privacy-respecting
+        business model. We are offering consulting and customization services
+        for businesses, and in the future we may offer premium apps, features,
+        or performance at extra cost, aside from the freely accessible version.
       </p>
 
       <h3>Getting Started</h3>
@@ -300,7 +305,12 @@ export default function FaqPage({}: Props) {
         information.
       </p>
 
-      <p>For more details, see our privacy policy.</p>
+      <p>
+        For more details, see our{" "}
+        <Anchor component={Link} to="/privacy" color="tertiary">
+          privacy policy.
+        </Anchor>
+      </p>
       <h4>What other security concerns should I think about?</h4>
       <p>
         While we make every effort to ensure the security of our software, there
