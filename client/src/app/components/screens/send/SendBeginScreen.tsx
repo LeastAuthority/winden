@@ -78,7 +78,7 @@ export function SendBeginScreenContent(props: ContentProps) {
           centered
           opened={props.modalState === "TRANSFER_CANCELLED"}
           onClose={props.onModalClose}
-          title="Transfer failed"
+          title="Transfer cancelled/interrupted"
         >
           <Text component="p">Either:</Text>
           <Text component="p"></Text>
