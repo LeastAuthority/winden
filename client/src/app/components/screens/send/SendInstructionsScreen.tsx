@@ -75,7 +75,7 @@ export function SendInstructionsScreenContent(props: ContentProps) {
           }}
         >
           <Text size={urlTextSize}>{window.location.host}/#</Text>
-          <Text ml={-15} size={urlTextSize} className={classes.codeLabel}>
+          <Text ml={-9} size={urlTextSize} className={classes.codeLabel}>
             {props.code}
           </Text>
           <Button
