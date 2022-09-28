@@ -14,7 +14,7 @@ const ServerErrorMsg =
   "Unfortunately, Winden cannot connect to the Least Authority servers. Please try again or let us know at contact@winden.app if the problem remains.";
 
 export function detectErrorType(error: string) {
-  console.log(error)
+  console.log("Error details: ",error)
   if (/^SendErr: decrypt message failed$/.test(error)) {
     return ErrorTypes.SENDER_BAD_CODE;
   } else if (
@@ -25,8 +25,6 @@ export function detectErrorType(error: string) {
     // TODO: separate error messages depending when it happens
   } else if (/(.*unclean connection close.*)|(.*websocket.Dial failed.*)|(failed to establish connection$)|(^WebSocket connection to.*failed.*)/.test(error)) {
     return ErrorTypes.MAILBOX_RELAY_CONNECTION;
-  //} else if (/(.*$transitRelayURL.*)$/.test(error)) {
-  //  return ErrorTypes.INTERRUPT;
   } else {
     return ErrorTypes.RECV_CONNECTION_TIMEOUT;
   }
@@ -108,7 +106,7 @@ export function errorContent(type: ErrorTypes): {
         title: "Something went wrong",
         description: [
           <Text component="p">
-            Please  refresh the page and try again or let us know at contact@winden.app  if the problem remains.
+            Please refresh the page and try again or let us know at contact@winden.app if the problem remains.
           </Text>,
         ],
       };
