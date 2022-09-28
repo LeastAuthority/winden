@@ -46,7 +46,7 @@ function Links() {
       <Anchor
         component={Link}
         className={classes.feedbackLink}
-        to="/about"
+        to="/feedback"
         size="sm"
         color="black"
         weight={600}
