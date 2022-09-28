@@ -68,11 +68,10 @@ export function SendBeginScreenContent(props: ContentProps) {
           centered
           opened={props.modalState === "OTHER_ERROR"}
           onClose={props.onModalClose}
-          title="Oops..."
+          title="Something went wrong"
         >
           <Text component="p">
-            An unexpected error occurred. Please refresh the page before trying
-            again.
+            Please refresh the page and try again or let us know at contact@winden.app if the problem remains.
           </Text>
         </Modal>
         <Modal
@@ -81,7 +80,11 @@ export function SendBeginScreenContent(props: ContentProps) {
           onClose={props.onModalClose}
           title="Transfer failed"
         >
-          <Text component="p">The transfer was cancelled or interrupted.</Text>
+          <Text component="p">Either:</Text>
+          <Text component="p"></Text>
+          <Text component="p">- The transfer was cancelled by the receiver.</Text>
+          <Text component="p">- Your or the receiver's Internet connection was interrupted.</Text>
+          <Text component="p"></Text>
           <Text component="p">Please try again.</Text>
         </Modal>
         <Text className={commonClasses.headerText}>
