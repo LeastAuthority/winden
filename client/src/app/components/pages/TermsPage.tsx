@@ -13,13 +13,13 @@ export default function TermsPage({}: Props) {
       <p>
         Thank you for choosing our service which allows people to transfer data
         ("Service"). The Service is provided by Least Authority TFA GmbH,
-        Thaerstraße 28a, 10249 Berlin ("Least Authority", "we" or "us" or
-        “our”). By using the Service, you conclude a binding agreement with us
-        under the following terms and conditions. The Terms shall apply in the
-        version current at the time of the first use of the Service as a
-        framework agreement (§ 305 (3) of the German Civil Code (BGB)) and also
-        to subsequent uses of the Service by the same person without having to
-        refer to them again:
+        Thaerstraße 28a, 10249 Berlin (<b>"Least Authority"</b>, <b>"we"</b> or{" "}
+        <b>"us"</b> or <b>"our"</b>). By using the Service, you conclude a
+        binding agreement with us under the following terms and conditions. The
+        Terms shall apply in the version current at the time of the first use of
+        the Service as a framework agreement (§ 305 (3) of the German Civil Code
+        (BGB)) and also to subsequent uses of the Service by the same person
+        without having to refer to them again:
       </p>
       <br />
       <ol>
@@ -152,34 +152,37 @@ export default function TermsPage({}: Props) {
             through the Service.
           </li>
         </ol>
-        <li>Liability (Haftung)</li>
+        <li>
+          Liability (<i>Haftung</i>)
+        </li>
         <ol>
           <li>We are only liable to you as stated hereinafter.</li>
           <ol>
             <li>
-              We are liable for damages which we or our vicarious agents
-              (Erfüllungsgehilfen) caused intentionally and grossly negligent or
-              which we caused by violating a guarantee undertaken by us.
+              We are liable for damages which we or our vicarious agents (
+              <i>Erfüllungsgehilfen</i>) caused intentionally and grossly
+              negligent or which we caused by violating a guarantee undertaken
+              by us.
             </li>
             <li>
               We are further liable for damages which we caused by a slightly
               negligent breach of an essential obligation necessary for the
-              performance of these Terms (wesentliche Vertragspflichten). In
-              this case, our liability shall be limited to typical and
+              performance of these Terms (<i>wesentliche Vertragspflichten</i>).
+              In this case, our liability shall be limited to typical and
               foreseeable damages.
             </li>
           </ol>
           <li>
-            A limitation period (Verjährungsfrist) of one year applies to any
-            liability claims against us. This begins at the end of the year in
-            which the claim arose and you became aware or should have become
+            A limitation period (<i>Verjährungsfrist</i>) of one year applies to
+            any liability claims against us. This begins at the end of the year
+            in which the claim arose and you became aware or should have become
             aware of the circumstances giving rise to the claim.
           </li>
           <li>
             Any limitation of our liability does not apply in the case of gross
-            negligence and intent, liability under the Product Liability Act
-            (Produkthaftungsgesetz) or in the case of damages to the life, body
-            and health of natural persons.
+            negligence and intent, liability under the Product Liability Act (
+            <i>Produkthaftungsgesetz</i>) or in the case of damages to the life,
+            body and health of natural persons.
           </li>
           <li>
             You agree that you shall be liable to us in accordance with the
@@ -202,9 +205,9 @@ export default function TermsPage({}: Props) {
         <ol>
           <li>
             You acknowledge that the software which we use to provide the
-            Service is Open-Source-Software ("OSS"). You find a list of the
-            applicable OSS licenses, related copyright notices and the source
-            code under GitHub repository{" "}
+            Service is Open-Source-Software (<b>"OSS"</b>). You find a list of
+            the applicable OSS licenses, related copyright notices and the
+            source code under GitHub repository{" "}
             <a href="https://github.com/LeastAuthority/winden">
               https://github.com/LeastAuthority/winden
             </a>
@@ -218,10 +221,10 @@ export default function TermsPage({}: Props) {
         <li>Limitation of warranty</li>
         <ol>
           <li>
-            You agree with us that we do not assume any warranty
-            (Gewährleistung) for or in relation to the Service. Any and all
-            statutory warranty shall be excluded to the extent permissible under
-            applicable law.
+            You agree with us that we do not assume any warranty (
+            <i>Gewährleistung</i>) for or in relation to the Service. Any and
+            all statutory warranty shall be excluded to the extent permissible
+            under applicable law.
           </li>
           <li>
             For clarity but not as a limitation to the aforementioned exclusion
@@ -277,14 +280,15 @@ export default function TermsPage({}: Props) {
             Should one or more provisions of these Terms be or become invalid or
             unenforceable in whole or in part, this shall not affect the
             validity and enforceability of the remaining provisions of these
-            Terms. In place of any Standard Terms of Business (Allgemeine
-            Geschäftsbedingungen) which are invalid or not incorporated in the
-            Terms the statutory provisions shall apply (§ 306 (2) of the German
-            Civil Code (BGB)). In all other cases, we shall agree a valid
-            provision to replace the invalid or unenforceable provision which
-            reflects as closely as possible the original economic purpose,
-            provided a supplementary interpretation of the Terms (ergänzende
-            Vertragsauslegung) does not have precedence or is not possible.
+            Terms. In place of any Standard Terms of Business (
+            <i>Allgemeine Geschäftsbedingungen</i>) which are invalid or not
+            incorporated in the Terms the statutory provisions shall apply (§
+            306 (2) of the German Civil Code (BGB)). In all other cases, we
+            shall agree a valid provision to replace the invalid or
+            unenforceable provision which reflects as closely as possible the
+            original economic purpose, provided a supplementary interpretation
+            of the Terms (<i>ergänzende Vertragsauslegung</i>) does not have
+            precedence or is not possible.
           </li>
         </ol>
       </ol>
