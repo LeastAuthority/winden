@@ -72,7 +72,8 @@ export default function Header() {
     <Group
       spacing={0}
       px={width < MOBILE_BREAKPOINT ? 0 : 40}
-      py={width < MOBILE_BREAKPOINT ? "xs" : "xl"}
+      pt={width < MOBILE_BREAKPOINT ? "lg" : "xl"}
+      pb={width < MOBILE_BREAKPOINT ? "sm" : "xl"}
     >
       {width < MOBILE_BREAKPOINT && <Space w={40} />}
 

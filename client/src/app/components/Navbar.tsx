@@ -80,7 +80,7 @@ const useStyles = createStyles((theme, _params, getRef) => ({
   burger: {
     zIndex: 9001,
     position: "absolute",
-    top: 13,
+    top: 23,
     left: 11,
   },
   feedbackLink: {
