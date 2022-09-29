@@ -143,6 +143,37 @@ export default function ThemeProvider(props: Props) {
               color: theme.colors.black[6],
               minWidth: 320,
             },
+            li: {
+              lineHeight: 1.5,
+            },
+            ol: {
+              listStyleType: "none",
+              counterReset: "item",
+              margin: "0",
+              padding: "0",
+              marginBottom: "1.1em",
+            },
+            "ol > li": {
+              display: "table",
+              counterIncrement: "item",
+            },
+            "ol > li:before": {
+              content: 'counters(item, ".") ". "',
+              display: "table-cell",
+              paddingRight: "0.6em",
+            },
+            "li ol > li": {
+              margin: "0",
+            },
+            "li ol > li:before": {
+              content: 'counters(item, ".") " "',
+            },
+            "ol > ol > ol": {
+              marginLeft: "2em",
+            },
+            ":not(ol) > ol > li": {
+              fontWeight: 600,
+            },
             p: {
               margin: 0,
               marginBottom: "1.1em",
