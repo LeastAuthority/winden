@@ -1,10 +1,22 @@
-name: Winden deployment
+---
+name: deployment
 
 on:
-  workflow_run:
-    workflows: transfer-repo-CI # Reuse the name of your tests workflow
-    branches: main
-    types: completed
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deploy target environment'
+        type: choice
+        options:
+          - stage
+          - prod
+        required: true
+#  workflow_run:
+#    workflows: [transfer-repo-CI]
+#    types: [completed]
+#    branches: [main]
 
 jobs:
   deploy:
@@ -28,8 +40,10 @@ jobs:
 
       - name: Install docker and docker-compose
         run: |
-          sudo curl -o /usr/local/bin/docker-compose -L "https://github.com/docker/compose/releases/download/v2.6.1/docker-compose-linux-x86_64"
+          sudo curl -o /usr/local/bin/docker-compose -L \
+          "https://github.com/docker/compose/releases/download/v2.6.1/docker-compose-linux-x86_64"
           sudo chmod +x /usr/local/bin/docker-compose
+
       - name: create config
         run: |
           touch ./client-e2e/.env
@@ -40,12 +54,13 @@ jobs:
           SFTP_USERNAME=${{ secrets.SFTP_USERNAME }}
           SFTP_IDENTITY=${{ secrets.SFTP_IDENTITY }}
           NODE_ENV=production
-          ENVIRONMENT=stage
+          ENVIRONMENT=${{ inputs.environment }}
           EOF
       - name: prepare
         run: |
           docker-compose build
           docker-compose run client npm i
+
       - name: deploy
         run: docker-compose run client gulp deploy
       - name: tear down
