@@ -13,6 +13,8 @@ services:
       - "4002:4002" # WebSocket
   client:
     build: ./client
+    env_file:
+      - ./client/.env
     volumes:
       - ./:/usr/src/app
     ports:
