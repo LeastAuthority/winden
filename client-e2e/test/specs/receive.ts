@@ -33,7 +33,7 @@ describe("Receive flow", () => {
         await (await Page.receiveButton()).click();
         const input = await Page.receiveCodeInput();
         await input.click();
-        await browser.keys(["100-guitarist-revenge"]);
+        await browser.keys(["1000-guitarist-revenge"]);
         await (await Page.submitCodeButton()).click();
         await browser.waitUntil(
           async () => (await $("body").getText()).includes("bad code error"),
