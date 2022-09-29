@@ -6,7 +6,7 @@ describe("Cancellation", () => {
       await Page.open();
       const sendWindow = await browser.getWindowHandle();
       await Page.uploadFiles("/usr/src/app/test/files/sizes/20MB");
-      const input = await $("div[code-generated]");
+      const input = await $("div[data-testid='code-generated']");
       const codeUrl = await input.getValue();
 
       await (await $("button*=Cancel")).click();
@@ -26,7 +26,7 @@ describe("Cancellation", () => {
         await Page.open();
         const sendWindow = await browser.getWindowHandle();
         await Page.uploadFiles("/usr/src/app/test/files/sizes/20MB");
-        const input = await $("div[code-generated]");
+        const input = await $("div[data-testid='code-generated']");
         const codeUrl = await input.getValue();
         const _receiveWindow = await browser.newWindow(codeUrl);
         await browser.waitUntil(() => $("button*=Download").isExisting());
@@ -51,7 +51,7 @@ describe("Cancellation", () => {
         await Page.open();
         const _sendWindow = await browser.getWindowHandle();
         await Page.uploadFiles("/usr/src/app/test/files/sizes/20MB");
-        const input = await $("div[code-generated]");
+        const input = await $("div[data-testid='code-generated']");
         const codeUrl = await input.getValue();
         const _receiveWindow = await browser.newWindow(codeUrl);
         await browser.waitUntil(() => $("button*=Cancel").isExisting());
@@ -72,7 +72,7 @@ describe("Cancellation", () => {
         await Page.open();
         const sendWindow = await browser.getWindowHandle();
         await Page.uploadFiles("/usr/src/app/test/files/sizes/20MB");
-        const input = await $("div[code-generated]");
+        const input = await $("div[data-testid='code-generated']");
         const codeUrl = await input.getValue();
         const receiveWindow = await browser.newWindow(codeUrl);
         await browser.waitUntil(() => $("button*=Download").isExisting());
@@ -99,7 +99,7 @@ describe("Cancellation", () => {
         await Page.open();
         const sendWindow = await browser.getWindowHandle();
         await Page.uploadFiles("/usr/src/app/test/files/sizes/20MB");
-        const input = await $("div[code-generated]");
+        const input = await $("div[data-testid='code-generated']");
         const codeUrl = await input.getValue();
         const _receiveWindow = await browser.newWindow(codeUrl);
         await browser.switchToWindow(sendWindow);

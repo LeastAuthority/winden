@@ -10,7 +10,7 @@ async function testTimeoutSuccess(timeoutMs: number) {
   await Page.open();
   const _sendWindow = await browser.getWindowHandle();
   await Page.uploadFiles(originalFilePath);
-  const input = await $("div[code-generated]");
+  const input = await $("div[data-testid='code-generated']");
   const codeUrl = await input.getValue();
   const _receiveWindow = await browser.newWindow(codeUrl);
   await browser.waitUntil(() => $("button").isExisting());

@@ -13,7 +13,7 @@ async function testTransferSuccess(fileName: string, timeout?: number) {
   await Page.open();
   const _sendWindow = await browser.getWindowHandle();
   await Page.uploadFiles(originalFilePath);
-  const input = await $("div[code-generated]");
+  const input = await $("div[data-testid='code-generated']");
   const codeUrl = await input.getValue();
   const _receiveWindow = await browser.newWindow(codeUrl);
   await browser.waitUntil(() => $("button*=Download").isExisting());
@@ -48,7 +48,7 @@ describe("Send flow", () => {
       await Page.open();
       await Page.uploadFiles("/usr/src/app/test/files/hello-world.txt");
 
-      const input = await $("div[code-generated]");
+      const input = await $("div[data-testid='code-generated']");
       const re = new RegExp(
         `^http://${process.env.HOST_IP}:8080/#\\d+-\\w+-\\w+$`
       );
