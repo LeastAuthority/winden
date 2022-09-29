@@ -33,6 +33,8 @@ describe("Receive flow", () => {
         await (await Page.receiveButton()).click();
         const input = await Page.receiveCodeInput();
         await input.click();
+
+        // max nameplate number 999, so will not impact real nameplate
         await browser.keys(["1000-guitarist-revenge"]);
         await (await Page.submitCodeButton()).click();
         await browser.waitUntil(
@@ -51,7 +53,7 @@ describe("Receive flow", () => {
         await Page.uploadFiles("/usr/src/app/test/files/hello-world.txt");
         const receiveUrl = await (await $("input[readonly='']")).getValue();
         const re = new RegExp(
-          `^http://${process.env.HOST_IP}:8080/#/(\\d+)-\\w+-\\w+$`
+          `^http://${process.env.HOST_IP}:8080/#(\\d+)-\\w+-\\w+$`
         );
         const nameplate = parseInt(receiveUrl.match(re)[1]);
 

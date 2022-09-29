@@ -5,6 +5,8 @@ const connect = require("gulp-connect");
 const webpack = require("webpack-stream");
 const Dotenv = require("dotenv-webpack");
 const SentryPlugin = require("@sentry/webpack-plugin");
+const fs = require("fs");
+const path = require("path");
 
 require("dotenv").config();
 
@@ -49,11 +51,29 @@ const webpackConfig = {
 
 const javascript = () =>
   gulp
-    .src("src/app/index.tsx")
+    .src(`src/app/index.${process.env.NODE_ENV}.tsx`)
     .pipe(
       webpack({
         ...webpackConfig,
-        entry: ["web-streams-polyfill", "./src/app/index.tsx"],
+        entry: [
+          "web-streams-polyfill",
+          `./src/app/index.${process.env.NODE_ENV}.tsx`,
+        ],
+      })
+    )
+    .pipe(gulp.dest("dist/app"));
+
+const javascriptWatch = () =>
+  gulp
+    .src(`src/app/index.${process.env.NODE_ENV}.tsx`)
+    .pipe(
+      webpack({
+        ...webpackConfig,
+        watch: true,
+        entry: [
+          "web-streams-polyfill",
+          `./src/app/index.${process.env.NODE_ENV}.tsx`,
+        ],
       })
     )
     .pipe(gulp.dest("dist/app"))
@@ -77,7 +97,10 @@ const publicClean = () =>
     "!dist/wormhole.wasm",
   ]);
 const publicCopy = () =>
-  gulp.src("src/public/**/*").pipe(gulp.dest("dist")).pipe(connect.reload());
+  gulp
+    .src("src/public/**/*", { dot: true })
+    .pipe(gulp.dest("dist"))
+    .pipe(connect.reload());
 const public = gulp.series(publicClean, publicCopy);
 
 const wasmBuild = () =>
@@ -90,7 +113,11 @@ const wasmReload = () => gulp.src("gulpfile.js").pipe(connect.reload());
 const wasm = gulp.series(wasmBuild, wasmReload);
 
 const watch = () => {
-  gulp.watch("src/app/**/*.{ts,tsx,css}", { ignoreInitial: false }, javascript);
+  gulp.watch(
+    "src/app/**/*.{ts,tsx,css}",
+    { ignoreInitial: false },
+    javascriptWatch
+  );
   gulp.watch("src/worker/**/*.{js,ts,tsx}", { ignoreInitial: false }, worker);
   gulp.watch("src/public/**/*", { ignoreInitial: false }, public);
   gulp.watch("vendor/wormhole-william/**/*.go", { ignoreInitial: false }, wasm);
@@ -98,12 +125,38 @@ const watch = () => {
     host: "0.0.0.0",
     root: "dist",
     livereload: true,
+    middleware: function (connect, opt) {
+      return [
+        (req, res, next) => {
+          if (
+            !fs.existsSync(
+              path.join(__dirname, "dist", req._parsedUrl.pathname)
+            )
+          ) {
+            fs.readFile(
+              path.join(__dirname, "dist/index.html"),
+              (err, data) => {
+                if (err) {
+                  res.writeHead(500);
+                  res.end(JSON.stringify(err));
+                  return;
+                }
+                res.writeHead(200);
+                res.end(data);
+              }
+            );
+          } else {
+            next();
+          }
+        },
+      ];
+    },
   });
 };
 
 const clean = () => del("dist");
 
-const deploy_playground = (cb) => {
+const deploy = (cb) => {
   execSync(`aws s3 sync ./dist ${process.env.S3_BUCKET}`);
   execSync(`aws cloudfront create-invalidation \
     --distribution-id ${process.env.CDF_DISTRIBUTION_ID} \
@@ -120,13 +173,13 @@ exports.wasm = wasm;
 exports.storybook = storybook;
 exports.watch = watch;
 exports.clean = clean;
-exports.deploy_playground = gulp.series(
+exports.deploy = gulp.series(
   public,
   javascript,
   worker,
   wasm,
   storybook,
-  deploy_playground
+  deploy
 );
 
 exports.default = gulp.series(public, javascript, worker, wasm, storybook);

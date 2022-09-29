@@ -1,11 +1,13 @@
-import { Modal, Space, Text, Title } from "@mantine/core";
+import { Modal, Space, Text } from "@mantine/core";
 import React from "react";
 import { useCancelModal } from "../../../hooks/useCancelModal";
 import { useCodeInput } from "../../../hooks/useCodeInput";
+import { useCommonStyles } from "../../../hooks/useCommonStyles";
 import { useError } from "../../../hooks/useError";
 import { useWormhole } from "../../../hooks/useWormhole";
 import { detectErrorType } from "../../../util/errors";
-import { CodeInput } from "../../CodeInput";
+import CodeInput from "../../CodeInput";
+import Content from "../../Content";
 
 type ContentProps = {
   cancelModalOpen: boolean;
@@ -15,24 +17,34 @@ type ContentProps = {
 };
 
 export function ReceiveBeginScreenContent(props: ContentProps) {
+  const { classes } = useCommonStyles();
+
   return (
-    <div data-testid="receive-page-container">
-      <Modal
-        centered
-        opened={props.cancelModalOpen}
-        onClose={props.onCancelModalClose}
-        title="Transfer failed"
-      >
-        <Text>The transfer was cancelled or interrupted.</Text>
-        <Text>Please try again.</Text>
-      </Modal>
-      <Title order={2}>Receive files in real-time</Title>
-      <Text size="md" weight="bold" color="dimmed">
-        Always end-to-end encrypted.
-      </Text>
-      <Space h="md" />
-      <CodeInput onSubmit={props.onSubmit} submitting={props.submitting} />
-    </div>
+    <Content>
+      <div data-testid="receive-page-container">
+        <Modal
+          centered
+          opened={props.cancelModalOpen}
+          onClose={props.onCancelModalClose}
+          title="Transfer cancelled/interrupted"
+        >
+          <Text component="p">Either:</Text>
+          <Text component="p"></Text>
+          <Text component="p">- The transfer was cancelled by the sender.</Text>
+          <Text component="p">- Your or the sender's Internet connection was interrupted.</Text>
+          <Text component="p"></Text>
+          <Text component="p">Please try again.</Text>
+        </Modal>
+        <Text className={classes.headerText} weight={300}>
+          Receive files in real-time
+        </Text>
+        <Text component="p" color="dark-grey" weight={400}>
+          Always end-to-end encrypted.
+        </Text>
+        <Space h={40} />
+        <CodeInput onSubmit={props.onSubmit} submitting={props.submitting} />
+      </div>
+    </Content>
   );
 }
 

@@ -2,9 +2,11 @@ import { Button } from "@mantine/core";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
+import { QuestionMark } from "tabler-icons-react";
 import AppTemplate from "../../app/components/AppTemplate";
 import { WormholeContext } from "../../app/components/providers/WormholeProvider";
 import CompleteScreen from "../../app/components/screens/CompleteScreen";
+import { useCommonStyles } from "../../app/hooks/useCommonStyles";
 
 export default {
   title: "screens/CompleteScreen",
@@ -36,5 +38,11 @@ const Template: ComponentStory<typeof CompleteScreen> = (args) => (
 export const Story = Template.bind({});
 Story.args = {
   title: "Sent/Received!",
-  render: () => <Button>Send/Receive more</Button>,
+  render: () => {
+    return (
+      <Button leftIcon={<QuestionMark />} color="blue">
+        Send/Receive more
+      </Button>
+    );
+  },
 };

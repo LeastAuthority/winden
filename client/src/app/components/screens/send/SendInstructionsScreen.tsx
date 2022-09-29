@@ -1,17 +1,19 @@
 import {
   Button,
+  createStyles,
   Group,
   Space,
   Stack,
   Text,
   TextInput,
-  Title,
 } from "@mantine/core";
+import { useClipboard, useViewportSize } from "@mantine/hooks";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Files, X } from "tabler-icons-react";
-import { useClipboard } from "../../../hooks/useClipboard";
+import { useCommonStyles } from "../../../hooks/useCommonStyles";
 import { useWormhole } from "../../../hooks/useWormhole";
+import Content from "../../Content";
 import FileLabel from "../../FileLabel";
 
 type ContentProps = {
@@ -21,54 +23,80 @@ type ContentProps = {
   onCancel: () => void;
 };
 
+const useStyles = createStyles(() => ({
+  codeLabel: {
+    backgroundColor: "#efeff1",
+    height: 50,
+    padding: "0 10px",
+    borderRadius: 4,
+    display: "inline-flex",
+    alignItems: "center",
+  },
+}));
+
 export function SendInstructionsScreenContent(props: ContentProps) {
+  const { classes: commonClasses } = useCommonStyles();
+  const { classes } = useStyles();
+  const { width } = useViewportSize();
+  const urlTextSize = width < 580 ? 16 : 14.4;
+
   return (
-    <>
-      <Title order={1}>Ready to send!</Title>
-      <Stack align="center" data-testid="send-page-code-section">
+    <Content>
+      <Text className={commonClasses.headerText}>Ready to send!</Text>
+      <Stack align="center" spacing={30} data-testid="send-page-code-section">
         <FileLabel />
-        <Text weight="bold" color="gray">
-          1. Keep this tab open
-        </Text>
-        <Text color="gray">Files are sent directly from your device.</Text>
-        <Text color="gray">The link/code expires once you close the tab.</Text>
-        <Text weight="bold" color="gray">
-          2. Give the receiver the link below
-        </Text>
-        <Group position="center">
-          <TextInput
-            style={{ width: "100%" }}
-            readOnly
-            type="text"
-            value={`${window.location.protocol}//${window.location.host}/#/${props.code}`}
-          />
+        <div>
+          <Text component="p" size={14.4} weight={600} color="dark-grey">
+            1. Keep this tab open
+          </Text>
+        </div>
+        <div>
+          <Text
+            component="p"
+            size={14.4}
+            weight={400}
+            color="dark-grey"
+            align="center"
+          >
+            Files are sent directly from your device.
+            <br />
+            The link/code expires once you close the tab.
+          </Text>
+        </div>
+        <div>
+          <Text component="p" size={14.4} weight={600} color="dark-grey">
+            2. Give the receiver the link below
+          </Text>
+        </div>
+        <Group
+          position="center"
+          style={{
+            width: "100%",
+          }}
+        >
+          <Text size={urlTextSize}>{window.location.host}/#</Text>
+          <Text ml={-9} size={urlTextSize} className={classes.codeLabel}>
+            {props.code}
+          </Text>
           <Button
+            leftIcon={<Files />}
             disabled={props.copied}
             onClick={props.onCopy}
-            variant="light"
-            color="dark"
-            pl="xs"
-            pr="md"
+            color="yellow"
           >
-            <Files />
-            <Space w="xs" />
-            {props.copied ? "Link copied!" : "Copy"}
+            {props.copied ? "Link copied!" : "Copy link"}
           </Button>
         </Group>
         <Button
+          leftIcon={<X />}
           data-testid="send-page-cancel-button"
           onClick={props.onCancel}
-          variant="light"
-          color="dark"
-          pl="xs"
-          pr="md"
+          color="medium-grey"
         >
-          <X />
-          <Space w="xs" />
           Cancel
         </Button>
       </Stack>
-    </>
+    </Content>
   );
 }
 
@@ -85,7 +113,7 @@ export default function SendInstructionsScreen({}: Props) {
       copied={clipboard.copied}
       onCopy={() =>
         clipboard.copy(
-          `${window.location.protocol}//${window.location.host}/#/${wormhole.code}`
+          `${window.location.protocol}//${window.location.host}/#${wormhole.code}`
         )
       }
       onCancel={() => {
