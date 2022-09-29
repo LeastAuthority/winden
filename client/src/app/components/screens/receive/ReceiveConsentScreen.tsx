@@ -39,6 +39,7 @@ export function ReceiveConsentScreenContent(props: ContentProps) {
             color="tertiary"
             weight={600}
             target="_blank"
+            size={14.4}
           >
             Terms
           </Anchor>

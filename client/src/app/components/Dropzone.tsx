@@ -105,6 +105,16 @@ export default function Dropzone(props: Props) {
     </Group>
   );
 
+  const terms = (
+    <Text color="dark-grey" weight={400} size={12.8}>
+      By using Winden you agree to the{" "}
+      <Anchor component={Link} to="/terms" color="tertiary" weight={600}>
+        Terms
+      </Anchor>
+      .
+    </Text>
+  );
+
   return (
     <div
       {...getRootProps({
@@ -113,7 +123,10 @@ export default function Dropzone(props: Props) {
     >
       <input {...getInputProps()} />
       {isNarrowScreen ? (
-        button
+        <Stack align="center">
+          {button}
+          {terms}
+        </Stack>
       ) : (
         <>
           <div
@@ -134,18 +147,7 @@ export default function Dropzone(props: Props) {
             />
             {button}
             <Space h="xl" />
-            <Text color="dark-grey" weight={400}>
-              By using Winden you agree to the{" "}
-              <Anchor
-                component={Link}
-                to="/terms"
-                color="tertiary"
-                weight={600}
-              >
-                Terms
-              </Anchor>
-              .
-            </Text>
+            {terms}
           </div>
           <div
             className={classNames(
