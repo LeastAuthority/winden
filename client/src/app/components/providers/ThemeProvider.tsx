@@ -17,6 +17,7 @@ export default function ThemeProvider(props: Props) {
     <MantineProvider
       withNormalizeCSS
       theme={{
+        primaryColor: "tertiary",
         components: {
           Button: {
             styles: (theme, params: ButtonStylesParams) => ({
@@ -152,6 +153,7 @@ export default function ThemeProvider(props: Props) {
               margin: "0",
               padding: "0",
               marginBottom: "1.1em",
+              paddingLeft: "0 !important",
             },
             "ol > li": {
               display: "table",
@@ -167,12 +169,6 @@ export default function ThemeProvider(props: Props) {
             },
             "li ol > li:before": {
               content: 'counters(item, ".") " "',
-            },
-            "ol > ol > ol": {
-              marginLeft: "2em",
-            },
-            ":not(ol) > ol > li": {
-              fontWeight: 600,
             },
             p: {
               margin: 0,
