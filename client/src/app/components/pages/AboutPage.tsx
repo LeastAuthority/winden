@@ -1,4 +1,4 @@
-import { Anchor } from "@mantine/core";
+import { Anchor, Group } from "@mantine/core";
 import React from "react";
 import { Link } from "react-router-dom";
 import Content from "../Content";
@@ -60,7 +60,11 @@ export default function AboutPage({}: Props) {
         <a href="https://leastauthority.com">leastauthority.com</a>.
       </p>
       <br />
-      <img width={200} src="/la-logo.svg" />
+      <Group spacing="xl">
+        <img height={50} src="/la-logo.svg" />
+        <img height={50} src="/EU-Emblem.png" />
+        <img height={50} src="/NGI-TRUST_rgb.png" />
+      </Group>
     </Content>
   );
 }
