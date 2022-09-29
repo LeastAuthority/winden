@@ -6,7 +6,7 @@ type Props = {};
 export default function PrivacyPage({}: Props) {
   return (
     <Content>
-      <h1>Winden privacy policy</h1>
+      <h1>Privacy Policy</h1>
       <h2>Who we are</h2>
       <p>
         Winden is operated by Least Authority TFA GmbH (‘Least Authority’, ‘we’,
@@ -52,10 +52,6 @@ export default function PrivacyPage({}: Props) {
       <p>
         Based on the above data, OVH automatically generates statistics about
         the usage of Winden.app.
-      </p>
-      <p>
-        We may share information with third parties if required to do so by law
-        or if required to represent our interests in case you violate our Terms.{" "}
       </p>
       <p>
         The legal basis for processing this data is our legitimate interest to
@@ -107,12 +103,14 @@ export default function PrivacyPage({}: Props) {
         improve our service based on feedback.
       </p>
       <p>
-        We do not use this data to attempt to build a profile of individual
-        users of our service.
+        We do <strong>not</strong> use this data to attempt to build a profile
+        of individual users of our service.
       </p>
       <p>
-        We do not share any of this data with anyone outside of Least Authority
-        or, by default, the sub-processors mentioned above.{" "}
+        We do <strong>not</strong> share any of this data with anyone outside of
+        Least Authority or, by default, the sub-processors mentioned above,
+        unless required to do so by law or a court decision, and only to the
+        extent permitted by data protection laws.
       </p>
       <p>
         However, we may publish aggregated (non-personal) statistics. This can,
