@@ -2,7 +2,7 @@ FROM node:16-alpine
 
 WORKDIR /usr/src/app/client
 
-RUN apk add aws-cli git
+RUN apk add aws-cli git openssh lftp
 
 RUN npm -g config set user root
 RUN npm install --global gulp-cli
