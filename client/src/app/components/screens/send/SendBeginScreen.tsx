@@ -39,7 +39,7 @@ export function SendBeginScreenContent(props: ContentProps) {
       fullHeight
       styles={{
         paper: {
-          minHeight: 480,
+          minHeight: 520,
         },
       }}
     >
@@ -78,7 +78,8 @@ export function SendBeginScreenContent(props: ContentProps) {
           title="Something went wrong"
         >
           <Text component="p">
-            Please refresh the page and try again or let us know at contact@winden.app if the problem remains.
+            Please refresh the page and try again or let us know at
+            contact@winden.app if the problem remains.
           </Text>
         </Modal>
         <Modal
@@ -89,8 +90,12 @@ export function SendBeginScreenContent(props: ContentProps) {
         >
           <Text component="p">Either:</Text>
           <Text component="p"></Text>
-          <Text component="p">- The transfer was cancelled by the receiver.</Text>
-          <Text component="p">- Your or the receiver's Internet connection was interrupted.</Text>
+          <Text component="p">
+            - The transfer was cancelled by the receiver.
+          </Text>
+          <Text component="p">
+            - Your or the receiver's Internet connection was interrupted.
+          </Text>
           <Text component="p"></Text>
           <Text component="p">Please try again.</Text>
         </Modal>
