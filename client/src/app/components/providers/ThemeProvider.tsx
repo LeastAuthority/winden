@@ -17,6 +17,7 @@ export default function ThemeProvider(props: Props) {
     <MantineProvider
       withNormalizeCSS
       theme={{
+        primaryColor: "tertiary",
         components: {
           Button: {
             styles: (theme, params: ButtonStylesParams) => ({
