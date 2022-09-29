@@ -1,5 +1,13 @@
-import { Button, Group, Space, Stack, Text, TextInput } from "@mantine/core";
-import { useClipboard } from "@mantine/hooks";
+import {
+  Button,
+  createStyles,
+  Group,
+  Space,
+  Stack,
+  Text,
+  TextInput,
+} from "@mantine/core";
+import { useClipboard, useViewportSize } from "@mantine/hooks";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Files, X } from "tabler-icons-react";
@@ -15,12 +23,26 @@ type ContentProps = {
   onCancel: () => void;
 };
 
+const useStyles = createStyles(() => ({
+  codeLabel: {
+    backgroundColor: "#efeff1",
+    height: 50,
+    padding: "0 10px",
+    borderRadius: 4,
+    display: "inline-flex",
+    alignItems: "center",
+  },
+}));
+
 export function SendInstructionsScreenContent(props: ContentProps) {
-  const { classes } = useCommonStyles();
+  const { classes: commonClasses } = useCommonStyles();
+  const { classes } = useStyles();
+  const { width } = useViewportSize();
+  const urlTextSize = width < 580 ? 16 : 14.4;
 
   return (
     <Content>
-      <Text className={classes.headerText}>Ready to send!</Text>
+      <Text className={commonClasses.headerText}>Ready to send!</Text>
       <Stack align="center" spacing={30} data-testid="send-page-code-section">
         <FileLabel />
         <div>
@@ -52,29 +74,17 @@ export function SendInstructionsScreenContent(props: ContentProps) {
             width: "100%",
           }}
         >
-          <TextInput
-            styles={{
-              root: {
-                flexGrow: "1 !important" as any,
-                maxWidth: 400,
-              },
-              input: {
-                width: "100%",
-                textAlign: "center",
-                fontSize: 14.4,
-              },
-            }}
-            readOnly
-            type="text"
-            value={`${window.location.host}/#${props.code}`}
-          />
+          <Text size={urlTextSize}>{window.location.host}/#</Text>
+          <Text ml={-9} size={urlTextSize} className={classes.codeLabel}>
+            {props.code}
+          </Text>
           <Button
             leftIcon={<Files />}
             disabled={props.copied}
             onClick={props.onCopy}
             color="yellow"
           >
-            {props.copied ? "Link copied!" : "Copy"}
+            {props.copied ? "Link copied!" : "Copy link"}
           </Button>
         </Group>
         <Button

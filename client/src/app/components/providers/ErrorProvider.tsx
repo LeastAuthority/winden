@@ -44,7 +44,7 @@ export default function ErrorProvider(props: Props) {
         {errorText?.description}
         <Space h="md" />
         <Group position="right">
-          <Button onClick={() => setOpened(false)}>Ok</Button>
+          <Button onClick={() => setOpened(false)}>OK</Button>
         </Group>
       </Modal>
     </ErrorContext.Provider>

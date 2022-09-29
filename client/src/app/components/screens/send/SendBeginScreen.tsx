@@ -35,7 +35,14 @@ export function SendBeginScreenContent(props: ContentProps) {
   const { classes } = useStyles();
 
   return (
-    <Content fullHeight>
+    <Content
+      fullHeight
+      styles={{
+        paper: {
+          minHeight: 520,
+        },
+      }}
+    >
       <div
         data-testid="send-page-upload-section"
         className={classes.sendPageSection}
@@ -68,20 +75,28 @@ export function SendBeginScreenContent(props: ContentProps) {
           centered
           opened={props.modalState === "OTHER_ERROR"}
           onClose={props.onModalClose}
-          title="Oops..."
+          title="Something went wrong"
         >
           <Text component="p">
-            An unexpected error occurred. Please refresh the page before trying
-            again.
+            Please refresh the page and try again or let us know at
+            contact@winden.app if the problem remains.
           </Text>
         </Modal>
         <Modal
           centered
           opened={props.modalState === "TRANSFER_CANCELLED"}
           onClose={props.onModalClose}
-          title="Transfer failed"
+          title="Transfer cancelled/interrupted"
         >
-          <Text component="p">The transfer was cancelled or interrupted.</Text>
+          <Text component="p">Either:</Text>
+          <Text component="p"></Text>
+          <Text component="p">
+            - The transfer was cancelled by the receiver.
+          </Text>
+          <Text component="p">
+            - Your or the receiver's Internet connection was interrupted.
+          </Text>
+          <Text component="p"></Text>
           <Text component="p">Please try again.</Text>
         </Modal>
         <Text className={commonClasses.headerText}>

@@ -1,9 +1,14 @@
 import { createStyles, Paper } from "@mantine/core";
-import React from "react";
-import { ContentProps } from "./AppTemplate";
+import classnames from "classnames";
+import React, { CSSProperties } from "react";
 
 const useStyles = createStyles((_theme) => ({
+  container: {
+    gridRow: 1,
+    gridColumn: 1,
+  },
   content: {
+    width: "100%",
     padding: 40,
     "@media (max-width: 620px)": {
       padding: 30,
@@ -12,21 +17,29 @@ const useStyles = createStyles((_theme) => ({
       padding: 20,
     },
   },
+  contentFullHeight: {
+    height: "100%",
+  },
 }));
 
-export default function Content(props: ContentProps) {
+type Props = React.PropsWithChildren<{
+  fullHeight?: boolean;
+  styles?: {
+    root?: CSSProperties;
+    paper?: CSSProperties;
+  };
+}>;
+
+export default function Content(props: Props) {
   const { classes } = useStyles();
 
   return (
-    <div
-      style={{
-        gridRow: 1,
-        gridColumn: 1,
-      }}
-    >
+    <div className={classes.container} style={props.styles?.root}>
       <Paper
-        className={classes.content}
-        style={props.fullHeight ? { height: "100%" } : {}}
+        style={props.styles?.paper}
+        className={classnames(classes.content, {
+          [classes.contentFullHeight]: props.fullHeight,
+        })}
         withBorder
         radius={10}
       >

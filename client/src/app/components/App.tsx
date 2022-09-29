@@ -6,7 +6,9 @@ import { useCodeUrlCheck } from "../hooks/useCodeUrlCheck";
 import AppTemplate from "./AppTemplate";
 import Navigate from "./Navigate";
 import AboutPage from "./pages/AboutPage";
+import BusinessPage from "./pages/Business";
 import FaqPage from "./pages/FaqPage";
+import FeedbackPage from "./pages/FeedbackPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import ReceivePage from "./pages/ReceivePage";
@@ -38,6 +40,8 @@ export default function App({}: Props) {
             <Route path="faq" element={<FaqPage />} />
             <Route path="privacy" element={<PrivacyPage />} />
             <Route path="terms" element={<TermsPage />} />
+            <Route path="for-business" element={<BusinessPage />} />
+            <Route path="feedback" element={<FeedbackPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </CSSTransition>

@@ -18,27 +18,6 @@ export default function ThemeProvider(props: Props) {
       withNormalizeCSS
       theme={{
         components: {
-          AppShell: {
-            styles: (theme) => ({
-              root: {
-                height: "100vh",
-                display: "flex",
-                flexDirection: "column",
-                "@media (min-width: 576px)": {
-                  minHeight: 720,
-                },
-              },
-              body: {
-                height: "100%",
-              },
-              main: {
-                display: "grid",
-                gridTemplateRows: "1fr",
-                gridTemplateColumns: "1fr",
-                minHeight: 0,
-              },
-            }),
-          },
           Button: {
             styles: (theme, params: ButtonStylesParams) => ({
               root: {
@@ -128,6 +107,14 @@ export default function ThemeProvider(props: Props) {
           {
             "@font-face": {
               fontFamily: "Poppins",
+              src: `url("/Poppins/Poppins-Regular.ttf") format("truetype")`,
+              fontWeight: 400,
+              fontStyle: "normal",
+            },
+          },
+          {
+            "@font-face": {
+              fontFamily: "Poppins",
               src: `url("/Poppins/Poppins-Medium.ttf") format("truetype")`,
               fontWeight: 500,
               fontStyle: "normal",
@@ -154,6 +141,7 @@ export default function ThemeProvider(props: Props) {
               background: `linear-gradient(222.19deg, #f0f0f0 23.77%, #ffffff 98.02%)`,
               fontSize: `16px`,
               color: theme.colors.black[6],
+              minWidth: 320,
             },
             li: {
               lineHeight: 1.5,
