@@ -13,7 +13,7 @@ async function testTransferSuccess(fileName: string, timeout?: number) {
   await Page.open();
   const _sendWindow = await browser.getWindowHandle();
   await Page.uploadFiles(originalFilePath);
-  const input = await $("input[readonly='']");
+  const input = await $("div[code-generated]");
   const codeUrl = await input.getValue();
   const _receiveWindow = await browser.newWindow(codeUrl);
   await browser.waitUntil(() => $("button*=Download").isExisting());

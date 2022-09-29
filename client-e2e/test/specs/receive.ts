@@ -51,7 +51,7 @@ describe("Receive flow", () => {
       it("will display a bad code error", async () => {
         await Page.open();
         await Page.uploadFiles("/usr/src/app/test/files/hello-world.txt");
-        const receiveUrl = await (await $("input[readonly='']")).getValue();
+        const receiveUrl = await (await $("div[code-generated]")).getValue();
         const re = new RegExp(
           `^http://${process.env.HOST_IP}:8080/#(\\d+)-\\w+-\\w+$`
         );
