@@ -33,8 +33,6 @@ type Props = React.PropsWithChildren<{
 export default function Content(props: Props) {
   const { classes } = useStyles();
 
-  console.log(props.styles?.paper);
-
   return (
     <div className={classes.container} style={props.styles?.root}>
       <Paper
