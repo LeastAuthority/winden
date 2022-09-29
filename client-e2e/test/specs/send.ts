@@ -50,7 +50,7 @@ describe("Send flow", () => {
 
       const input = await $("input[readonly='']");
       const re = new RegExp(
-        `^http://${process.env.HOST_IP}:8080/#/\\d+-\\w+-\\w+$`
+        `^http://${process.env.HOST_IP}:8080/#\\d+-\\w+-\\w+$`
       );
       await expect(input).toHaveValue(re);
 

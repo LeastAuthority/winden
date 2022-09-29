@@ -52,7 +52,7 @@ describe("Receive flow", () => {
         await Page.uploadFiles("/usr/src/app/test/files/hello-world.txt");
         const receiveUrl = await (await $("input[readonly='']")).getValue();
         const re = new RegExp(
-          `^http://${process.env.HOST_IP}:8080/#/(\\d+)-\\w+-\\w+$`
+          `^http://${process.env.HOST_IP}:8080/#(\\d+)-\\w+-\\w+$`
         );
         const nameplate = parseInt(receiveUrl.match(re)[1]);
 
