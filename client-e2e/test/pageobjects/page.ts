@@ -21,8 +21,8 @@ export async function uploadFiles(...files: string[]) {
 }
 
 
-export function getCode() {
-  return $('div[data-testid=code-generated]');
+export async function getCode() {
+  return await $('div[data-testid=code-generated]').getText();
 }
 
 export async function getCodeUrl() {

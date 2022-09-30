@@ -56,7 +56,6 @@ describe("Send flow", () => {
       const expectedUrl = new RegExp(
         `^http://${process.env.HOST_IP}:8080/#\\d+-\\w+-\\w+$`
       );
-      await browser.waitUntil(() => code.isExisting());
       console.log("Code:"+ code);
       console.log("Excp:"+ expectedUrl);
       await expect(code).toHaveValue(expectedUrl);
