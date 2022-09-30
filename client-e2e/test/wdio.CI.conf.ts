@@ -58,7 +58,7 @@ export const config: Options.Testrunner = {
       },
     },
   ],
-  logLevel: "error",
+  logLevel: "trace",
   bail: 0,
   baseUrl: "http://localhost",
   waitforTimeout: 10000,
@@ -70,7 +70,7 @@ export const config: Options.Testrunner = {
     ui: "bdd",
     timeout: 120000,
   },
-  onPrepare: function (config, capabilities) {
+  onPrepare: function (_config, _capabilities) {
     execSync("/usr/src/app/scripts/generate-CI-test-files.sh");
   },
   beforeTest: function () {
