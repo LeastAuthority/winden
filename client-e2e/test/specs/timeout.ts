@@ -25,9 +25,11 @@ async function testTimeoutSuccess(timeoutMs: number) {
     () => waitForFileExists(receivedFilePath, 20000) // 20 seconds
   );
 
-  const originalHash = await hashFile(originalFilePath);
-  const receivedHash = await hashFile(receivedFilePath);
-  await expect(originalHash).toBe(receivedHash);
+  await browser.waitUntil(async () => {
+    const originalHash = await hashFile(originalFilePath);
+    const receivedHash = await hashFile(receivedFilePath);
+    return originalHash === receivedHash;
+  });
 }
 
 describe("Time out", () => {

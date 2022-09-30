@@ -52,11 +52,14 @@ describe("Send flow", () => {
       await Page.open();
       await Page.uploadFiles("/usr/src/app/test/files/hello-world.txt");
 
-      const codeUrl = await Page.getCodeUrl()
+      const code = await Page.getCode()
       const expectedUrl = new RegExp(
         `^http://${process.env.HOST_IP}:8080/#\\d+-\\w+-\\w+$`
       );
-      await expect(await codeUrl).toHaveValue(expectedUrl);
+      await browser.waitUntil(() => code.isExisting());
+      console.log("Code:"+ code);
+      console.log("Excp:"+ expectedUrl);
+      await expect(code).toHaveValue(expectedUrl);
 
       const content = await $("main");
       await expect(content).toHaveTextContaining("hello-world.txt");
