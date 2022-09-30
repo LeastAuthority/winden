@@ -1,8 +1,10 @@
 import {
+  Anchor,
   Button,
   createStyles,
   Divider,
   Group,
+  Space,
   Stack,
   Text,
 } from "@mantine/core";
@@ -10,6 +12,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import classNames from "classnames";
 import React from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
+import { Link } from "react-router-dom";
 import { Plus } from "tabler-icons-react";
 
 const useStyles = createStyles((theme) => ({
@@ -102,6 +105,16 @@ export default function Dropzone(props: Props) {
     </Group>
   );
 
+  const terms = (
+    <Text color="dark-grey" weight={400} size={12.8}>
+      By using Winden you agree to the{" "}
+      <Anchor component={Link} to="/terms" color="tertiary" weight={600}>
+        Terms
+      </Anchor>
+      .
+    </Text>
+  );
+
   return (
     <div
       {...getRootProps({
@@ -110,7 +123,10 @@ export default function Dropzone(props: Props) {
     >
       <input {...getInputProps()} />
       {isNarrowScreen ? (
-        button
+        <Stack align="center">
+          {button}
+          {terms}
+        </Stack>
       ) : (
         <>
           <div
@@ -130,6 +146,8 @@ export default function Dropzone(props: Props) {
               labelPosition="center"
             />
             {button}
+            <Space h="xl" />
+            {terms}
           </div>
           <div
             className={classNames(

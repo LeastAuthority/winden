@@ -1,0 +1,52 @@
+name: Winden deployment
+
+on:
+  workflow_run:
+    workflows: transfer-repo-CI # Reuse the name of your tests workflow
+    branches: main
+    types: completed
+
+jobs:
+  deploy:
+    # `if` required because a workflow run is triggered regardless of
+    # the result of the previous workflow (see the documentation page)
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    runs-on: ubuntu-22.04
+    env:
+      TEST_ENV: foobar
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: setup npm, yarn etc.
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install docker and docker-compose
+        run: |
+          sudo curl -o /usr/local/bin/docker-compose -L "https://github.com/docker/compose/releases/download/v2.6.1/docker-compose-linux-x86_64"
+          sudo chmod +x /usr/local/bin/docker-compose
+      - name: create config
+        run: |
+          touch ./client-e2e/.env
+          cat <<EOF >> ./client/.env
+          MAILBOX_URL="wss://mailbox.winden.app/v1"
+          RELAY_URL="wss://relay.winden.app/"
+          SFTP_HOSTNAME=${{ secrets.SFTP_HOSTNAME }}
+          SFTP_USERNAME=${{ secrets.SFTP_USERNAME }}
+          SFTP_IDENTITY=${{ secrets.SFTP_IDENTITY }}
+          NODE_ENV=production
+          ENVIRONMENT=stage
+          EOF
+      - name: prepare
+        run: |
+          docker-compose build
+          docker-compose run client npm i
+      - name: deploy
+        run: docker-compose run client gulp deploy
+      - name: tear down
+        run: docker-compose down

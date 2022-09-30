@@ -1,6 +1,6 @@
-import { Button, Space, Stack, Text } from "@mantine/core";
+import { Anchor, Button, Space, Stack, Text } from "@mantine/core";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Download, X } from "tabler-icons-react";
 import { useCommonStyles } from "../../../hooks/useCommonStyles";
 import { useError } from "../../../hooks/useError";
@@ -31,6 +31,20 @@ export function ReceiveConsentScreenContent(props: ContentProps) {
         >
           Download
         </Button>
+        <Text color="dark-grey" weight={400}>
+          By using Winden you agree to the{" "}
+          <Anchor
+            component={Link}
+            to="/terms"
+            color="tertiary"
+            weight={600}
+            target="_blank"
+            size={14.4}
+          >
+            Terms
+          </Anchor>
+          .
+        </Text>
         <Button
           leftIcon={<X />}
           data-testid="send-page-cancel-button"
