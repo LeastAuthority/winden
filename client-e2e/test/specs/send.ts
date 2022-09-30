@@ -13,14 +13,18 @@ async function testTransferSuccess(fileName: string, timeout?: number) {
   await Page.open();
   const _sendWindow = await browser.getWindowHandle();
   await Page.uploadFiles(originalFilePath);
-  const input = await $("div[data-testid='code-generated']");
-  const codeUrl = await input.getValue();
+
+  // Receiver
+  const codeUrl = await Page.getCodeUrl()
   const _receiveWindow = await browser.newWindow(codeUrl);
-  await browser.waitUntil(() => $("button*=Download").isExisting());
-  await (await $("button*=Download")).click();
+
+  await browser.waitUntil(() => Page.receiveDownloadButton().isExisting());
+  await (await Page.receiveDownloadButton()).click();
+
   await browser.call(() =>
-    waitForFileExists(receivedFilePath, timeout || 60000)
+    waitForFileExists(receivedFilePath, timeout || 120000)
   );
+
   await browser.waitUntil(async () => {
     const originalHash = await hashFile(originalFilePath);
     const receivedHash = await hashFile(receivedFilePath);
@@ -48,14 +52,22 @@ describe("Send flow", () => {
       await Page.open();
       await Page.uploadFiles("/usr/src/app/test/files/hello-world.txt");
 
-      const input = await $("div[data-testid='code-generated']");
-      const re = new RegExp(
+      const codeUrl = await Page.getCodeUrl()
+      const expectedUrl = new RegExp(
         `^http://${process.env.HOST_IP}:8080/#\\d+-\\w+-\\w+$`
       );
-      await expect(input).toHaveValue(re);
+      expect(codeUrl).toHaveValue(expectedUrl);
 
       const content = await $("main");
-      await expect(content).toHaveTextContaining("hello-world.txt");
+      expect(content).toHaveTextContaining("hello-world.txt");
+    });
+    //TODO requires switch to https in dev
+    it.skip("can copy generate link", async () => {});
+  });
+
+  describe("when uploading zero bytes file", () => {
+    it("will transfer successfully", async () => {
+      await testTransferSuccess("zero.file");
     });
   });
 
@@ -67,7 +79,8 @@ describe("Send flow", () => {
 
   describe("when uploading a file with the size of 20MB", () => {
     it("will transfer successfully", async () => {
-      await testTransferSuccess("sizes/20MB");
+      // 100 sec.
+      await testTransferSuccess("sizes/20MB", 100000);
     });
   });
 

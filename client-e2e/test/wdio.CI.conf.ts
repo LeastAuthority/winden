@@ -17,9 +17,10 @@ export const config: Options.Testrunner = {
       project: "test/tsconfig.json",
     },
   },
-  specs: ["./test/specs/**/*.ts"],
+  //specs: ["./test/specs/**/*.ts"],
+  specs: ["./test/specs/pages.ts"],
   exclude: ["./test/specs/send-large-files.ts",
-            "./test/specs/timeout.ts", 
+            //"./test/specs/timeout.ts", 
             ],
   maxInstances: 1,
   capabilities: [
@@ -34,7 +35,7 @@ export const config: Options.Testrunner = {
           "savefile.default_directory": global.downloadDirBrowser,
         },
       },
-    },
+    },/*
     {
       browserName: "firefox",
       "moz:firefoxOptions": {
@@ -54,19 +55,19 @@ export const config: Options.Testrunner = {
           "savefile.default_directory": global.downloadDirBrowser,
         },
       },
-    },
+    },*/
   ],
   logLevel: "error",
   bail: 0,
   baseUrl: "http://localhost",
-  waitforTimeout: 10000,
+  waitforTimeout: 20000,
   connectionRetryTimeout: 120000,
-  connectionRetryCount: 3,
+  connectionRetryCount: 1,
   framework: "mocha",
   reporters: ["spec"],
   mochaOpts: {
     ui: "bdd",
-    timeout: 60000,
+    timeout: 120000,
   },
   onPrepare: function (config, capabilities) {
     execSync("/usr/src/app/scripts/generate-CI-test-files.sh");

@@ -32,7 +32,11 @@ jobs:
           cat <<EOF >> ./client-e2e/.env
           HOST_IP="$IP"
           EOF
-          cp client/.env.example client/.env
+          cat <<EOF >> ./client/.env
+          MAILBOX_URL="ws://$IP:4000/v1"
+          RELAY_URL="ws://$IP:4002"
+          NODE_ENV=development
+          EOF
 
       - name: Setup docker images
         run: docker-compose --profile e2e build

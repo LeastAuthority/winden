@@ -7,17 +7,20 @@ async function testTimeoutSuccess(timeoutMs: number) {
   const originalFilePath = `/usr/src/app/test/files/hello-world.txt`;
   const receivedFilePath = path.join(global.downloadDir, "hello-world.txt");
 
+  // Sender
   await Page.open();
   const _sendWindow = await browser.getWindowHandle();
   await Page.uploadFiles(originalFilePath);
-  const input = await $("div[data-testid='code-generated']");
-  const codeUrl = await input.getValue();
-  const _receiveWindow = await browser.newWindow(codeUrl);
-  await browser.waitUntil(() => $("button").isExisting());
+  const codeUrl = await Page.getCodeUrl()
 
+  // Receiver
+  const _receiveWindow = await browser.newWindow(codeUrl);
+  await browser.waitUntil(() => Page.receiveDownloadButton().isExisting());
+  
   await browser.pause(timeoutMs);
 
-  await (await $("button")).click();
+  await (await Page.receiveDownloadButton()).click();
+
   await browser.call(
     () => waitForFileExists(receivedFilePath, 10000) // 10 seconds
   );
@@ -27,9 +30,9 @@ async function testTimeoutSuccess(timeoutMs: number) {
 }
 
 describe("Time out", () => {
-  describe("when the receiver waits 5 minutes before accepting the file", () => {
+  describe("when the receiver waits 1 minutes before accepting the file", () => {
     it("will succeed in connecting and transferring", async () => {
-      await testTimeoutSuccess(5 * 60 * 1000);
+      await testTimeoutSuccess(1 * 60 * 1000);
     });
   });
 
@@ -39,7 +42,4 @@ describe("Time out", () => {
     });
   });
 
-  // it.skip("3.C", async () => {
-  //   await testTimeoutSuccess(2 * 60 * 60 * 1000);
-  // });
 });

@@ -82,6 +82,7 @@ export function SendInstructionsScreenContent(props: ContentProps) {
             leftIcon={<Files />}
             disabled={props.copied}
             onClick={props.onCopy}
+            data-testid="copy-link-button"
             color="yellow"
           >
             {props.copied ? "Link copied!" : "Copy link"}

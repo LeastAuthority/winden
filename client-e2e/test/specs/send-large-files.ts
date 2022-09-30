@@ -13,14 +13,18 @@ async function testTransferSuccess(fileName: string, timeout?: number) {
   await Page.open();
   const _sendWindow = await browser.getWindowHandle();
   await Page.uploadFiles(originalFilePath);
-  const input = await $("div[data-testid='code-generated']");
-  const codeUrl = await input.getValue();
+
+  // Receiver
+  const codeUrl = await Page.getCodeUrl()
   const _receiveWindow = await browser.newWindow(codeUrl);
-  await browser.waitUntil(() => $("button*=Download").isExisting());
-  await (await $("button*=Download")).click();
+
+  await browser.waitUntil(() => Page.receiveDownloadButton().isExisting());
+  await (await Page.receiveDownloadButton()).click();
+
   await browser.call(() =>
-    waitForFileExists(receivedFilePath, timeout || 60000)
+    waitForFileExists(receivedFilePath, timeout || 120000)
   );
+
   await browser.waitUntil(async () => {
     const originalHash = await hashFile(originalFilePath);
     const receivedHash = await hashFile(receivedFilePath);
