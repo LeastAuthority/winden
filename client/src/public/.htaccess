@@ -5,3 +5,10 @@ RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^ index.html [L]
+
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+<IfModule mod_headers.c>
+Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+</IfModule>
