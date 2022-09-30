@@ -24,6 +24,7 @@ async function testTimeoutSuccess(timeoutMs: number) {
   await browser.call(
     () => waitForFileExists(receivedFilePath, 20000) // 20 seconds
   );
+
   const originalHash = await hashFile(originalFilePath);
   const receivedHash = await hashFile(receivedFilePath);
   await expect(originalHash).toBe(receivedHash);
