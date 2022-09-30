@@ -17,8 +17,7 @@ export const config: Options.Testrunner = {
       project: "test/tsconfig.json",
     },
   },
-  //specs: ["./test/specs/**/*.ts"],
-  specs: ["./test/specs/pages.ts"],
+  specs: ["./test/specs/**/*.ts"],
   exclude: ["./test/specs/send-large-files.ts",
             //"./test/specs/timeout.ts", 
             ],
@@ -35,7 +34,7 @@ export const config: Options.Testrunner = {
           "savefile.default_directory": global.downloadDirBrowser,
         },
       },
-    },/*
+    },
     {
       browserName: "firefox",
       "moz:firefoxOptions": {
@@ -55,7 +54,7 @@ export const config: Options.Testrunner = {
           "savefile.default_directory": global.downloadDirBrowser,
         },
       },
-    },*/
+    },
   ],
   logLevel: "error",
   bail: 0,

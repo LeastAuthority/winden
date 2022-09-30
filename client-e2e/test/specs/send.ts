@@ -56,10 +56,10 @@ describe("Send flow", () => {
       const expectedUrl = new RegExp(
         `^http://${process.env.HOST_IP}:8080/#\\d+-\\w+-\\w+$`
       );
-      expect(codeUrl).toHaveValue(expectedUrl);
+      await expect(codeUrl).toHaveValue(expectedUrl);
 
       const content = await $("main");
-      expect(content).toHaveTextContaining("hello-world.txt");
+      await expect(content).toHaveTextContaining("hello-world.txt");
     });
     //TODO requires switch to https in dev
     it.skip("can copy generate link", async () => {});

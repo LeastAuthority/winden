@@ -22,7 +22,7 @@ async function testTimeoutSuccess(timeoutMs: number) {
   await (await Page.receiveDownloadButton()).click();
 
   await browser.call(
-    () => waitForFileExists(receivedFilePath, 10000) // 10 seconds
+    () => waitForFileExists(receivedFilePath, 20000) // 20 seconds
   );
   const originalHash = await hashFile(originalFilePath);
   const receivedHash = await hashFile(receivedFilePath);

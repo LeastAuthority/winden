@@ -56,7 +56,7 @@ describe("Check internal Pages", () => {
         
             await $('a[href="/terms"').click();
             
-            await expect(await $("main")).toHaveTextContaining(
+            await expect(await $("h1")).toHaveTextContaining(
               "GENERAL TERMS AND CONDITIONS"
             );
         });
@@ -73,7 +73,7 @@ describe("Check internal Pages", () => {
 
             await $('a[href="/terms"').click();
             
-            await expect(await $("main")).toHaveTextContaining(
+            await expect(await $("h1")).toHaveTextContaining(
                 "GENERAL TERMS AND CONDITIONS"
             );
         });
@@ -81,13 +81,17 @@ describe("Check internal Pages", () => {
         it("if Terms & Conditions is present in Receiver block and opens", async () => {
             
             await Page.open();
+            // Sender
             const _sendWindow = await browser.getWindowHandle();
             await Page.uploadFiles("/usr/src/app/test/files/sizes/20MB");
             const codeUrl = await Page.getCodeUrl()
 
+            // Receiver
             const _receiveWindow = await browser.newWindow(codeUrl);
+            await browser.waitUntil(() => Page.receiveDownloadButton().isExisting());
+
             await expect(await $("main")).toHaveTextContaining(
-                "Receive files in real-time"
+                "Ready to download"
             );
 
             await expect(await $("main")).toHaveTextContaining(
@@ -95,10 +99,15 @@ describe("Check internal Pages", () => {
             );
 
             await $('a[href="/terms"').click();
+
+            await browser.switchWindow('/terms')
+            //await browser.waitUntil(() => Page.($("h1")))
             
-            await expect(await $("main")).toHaveTextContaining(
+            await expect(await $("h1")).toHaveTextContaining(
                 "GENERAL TERMS AND CONDITIONS"
             );
+
+            
         });
     });
 });

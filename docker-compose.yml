@@ -29,6 +29,11 @@ services:
       - test-downloads:/home/seluser/downloads
     ports:
       - "5900:5900"
+    healthcheck:
+      test: curl --fail http://localhost:8080 | grep "Winden" || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
     build:
       dockerfile: ./client-e2e/images/Dockerfile.chrome
     shm_size: 2gb
@@ -46,6 +51,11 @@ services:
       - test-downloads:/home/seluser/downloads
     ports:
       - "5901:5900"
+    healthcheck:
+      test: curl --fail http://localhost:8080 | grep "Winden" || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
     build:
       dockerfile: ./client-e2e/images/Dockerfile.edge
     shm_size: 2gb
@@ -63,6 +73,11 @@ services:
       - test-downloads:/home/seluser/downloads
     ports:
       - "5902:5900"
+    healthcheck:
+      test: curl --fail http://localhost:8080 | grep "Winden" || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
     build:
       dockerfile: ./client-e2e/images/Dockerfile.firefox
     shm_size: 2gb
