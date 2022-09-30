@@ -6,6 +6,9 @@ const useStyles = createStyles((_theme) => ({
   container: {
     gridRow: 1,
     gridColumn: 1,
+    "h1:first-of-type": {
+      marginTop: 0,
+    },
   },
   content: {
     width: "100%",
