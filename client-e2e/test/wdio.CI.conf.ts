@@ -58,7 +58,7 @@ export const config: Options.Testrunner = {
       },
     },
   ],
-  logLevel: "trace",
+  logLevel: "error",
   bail: 0,
   baseUrl: "http://localhost",
   waitforTimeout: 10000,
