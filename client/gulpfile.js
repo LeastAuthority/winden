@@ -221,7 +221,7 @@ exports.public = public;
 exports.wasm = wasm;
 exports.storybook = storybook;
 exports.watch = watch;
-// for CI optimization
+// for CI optimization without watch
 exports.start = start;
 exports.clean = clean;
 exports.deploy = gulp.series(
