@@ -55,7 +55,7 @@ jobs:
       - name: Run END-2-END tests
         if: ${{ github.event_name == 'pull_request' }}
         run: |
-          docker-compose --profile e2e run --rm client-e2e --no-recreate
+          docker compose --profile e2e run --rm client-e2e 
 
       - name: Stop the containers
         run: docker-compose --profile e2e down
