@@ -53,8 +53,8 @@ jobs:
 
       - name: Run UNIT and INTEGRATION tests
         run: |
-          docker compose --profile e2e up -d client
-          docker compose --profile e2e run client npm run test
+          docker compose --profile e2e up -d client-ci
+          docker compose --profile e2e run client-ci npm run test
 
       - name: Run END-2-END tests
         if: ${{ github.event_name == 'pull_request' }}
