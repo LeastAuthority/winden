@@ -5,15 +5,10 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { useCodeUrlCheck } from "../hooks/useCodeUrlCheck";
 import AppTemplate from "./AppTemplate";
 import Navigate from "./Navigate";
-import AboutPage from "./pages/AboutPage";
-import BusinessPage from "./pages/Business";
-import FaqPage from "./pages/FaqPage";
-import FeedbackPage from "./pages/FeedbackPage";
 import NotFoundPage from "./pages/NotFoundPage";
-import PrivacyPage from "./pages/PrivacyPage";
 import ReceivePage from "./pages/ReceivePage";
 import SendPage from "./pages/SendPage";
-import TermsPage from "./pages/TermsPage";
+import StaticPage from "./pages/StaticPage";
 
 type Props = {};
 
@@ -36,12 +31,15 @@ export default function App({}: Props) {
             <Route path="/" element={<Navigate replace to="s" />} />
             <Route path="s" element={<SendPage />} />
             <Route path="r" element={<ReceivePage />} />
-            <Route path="about" element={<AboutPage />} />
-            <Route path="faq" element={<FaqPage />} />
-            <Route path="privacy" element={<PrivacyPage />} />
-            <Route path="terms" element={<TermsPage />} />
-            <Route path="for-business" element={<BusinessPage />} />
-            <Route path="feedback" element={<FeedbackPage />} />
+            <Route path="about" element={<StaticPage page="about" />} />
+            <Route path="faq" element={<StaticPage page="faq" />} />
+            <Route path="privacy" element={<StaticPage page="privacy" />} />
+            <Route path="terms" element={<StaticPage page="terms" />} />
+            <Route
+              path="for-business"
+              element={<StaticPage page="business" />}
+            />
+            <Route path="feedback" element={<StaticPage page="feedback" />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </CSSTransition>
