@@ -49,6 +49,8 @@ jobs:
 
       - name: Run UNIT and INTEGRATION tests
         run: |
+          ls -la /usr/src/app
+          ls -la /usr/src/app/dist
           docker-compose --profile e2e up -d client
           docker-compose --profile e2e run client npm run test
 
@@ -56,6 +58,9 @@ jobs:
       - name: Run END-2-END tests
         if: ${{ github.event_name == 'pull_request' }}
         run: |
+          ls -la /usr/src/app
+          ls -la /usr/src/app/dist
+          ls -la /usr/src/client
           docker-compose --profile e2e run --rm client-e2e
 
       - name: Stop the containers
