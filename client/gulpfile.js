@@ -48,6 +48,9 @@ const webpackConfig = {
         ]
       : []),
   ],
+  optimization: {
+    minimize: process.env.NODE_ENV === "production",
+  },
 };
 
 const javascript = () =>
