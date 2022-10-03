@@ -19,14 +19,27 @@ services:
     build: ./client
     env_file:
       - ./client/.env
-    #volumes:
-    #  - ./client:/usr/src/app/client
+    volumes:
+      - ./client:/usr/src/app/client
     ports:
       - "8080:8080" # DevServer
       - "35729:35729" # LiveReload
     depends_on:
       - mailbox
       - relay
+  # build to run in CI
+  client-ci:
+    build: ./client
+    env_file:
+      - ./client/.env
+    ports:
+      - "8080:8080" # DevServer
+      - "35729:35729" # LiveReload
+    depends_on:
+      - mailbox
+      - relay
+    profiles:
+      - e2e
   # Selenium services
   chrome:
     volumes:
@@ -102,7 +115,7 @@ services:
       - ./client-e2e:/usr/src/app
       - test-downloads:/home/node/downloads
     depends_on:
-      client:
+      client-ci:
         condition: service_started
       chrome:
         condition: service_started

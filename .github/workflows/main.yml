@@ -37,17 +37,19 @@ jobs:
           RELAY_URL="ws://$IP:4002"
           NODE_ENV=development
           EOF
+          println "Client .env:"
           cat ./client/.env
+          println "Client-e2e .env:"
           cat ./client-e2e/.env
 
       - name: Setup docker images
         run: docker compose --profile e2e build
 
-      - name: Build client packages
-        run: docker compose --profile e2e run client npm i
+      #- name: Build client packages
+      #  run: docker compose --profile e2e run client npm i
 
-      - name: Build client-e2e packages
-        run: docker compose --profile e2e run client-e2e npm i
+      #- name: Build client-e2e packages
+      #  run: docker compose --profile e2e run client-e2e npm i
 
       - name: Run UNIT and INTEGRATION tests
         run: |
