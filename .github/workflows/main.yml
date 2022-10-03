@@ -37,6 +37,8 @@ jobs:
           RELAY_URL="ws://$IP:4002"
           NODE_ENV=development
           EOF
+          cat ./client/.env
+          cat ./client-e2e/.env
 
       - name: Setup docker images
         run: docker compose --profile e2e build

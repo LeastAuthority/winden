@@ -100,7 +100,6 @@ services:
       - ./client-e2e/.env
     volumes:
       - ./client-e2e:/usr/src/app
-      - ./client:/usr/src/app/client
       - test-downloads:/home/node/downloads
     depends_on:
       client:
