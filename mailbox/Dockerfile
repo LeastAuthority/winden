@@ -1,10 +1,14 @@
-FROM python:3.9.1-buster
+FROM pypy:3.9-bullseye
 
 COPY Pipfile /app/Pipfile
 COPY ./Pipfile.lock /app/Pipfile.lock
 
-RUN pip install pipenv
 WORKDIR /app
-RUN pipenv install
 
-CMD pipenv run twist wormhole-mailbox
+RUN apt update
+
+RUN apt install rustc -y
+
+RUN pip install git+https://github.com/magic-wormhole/magic-wormhole-mailbox-server.git#egg=magic-wormhole-mailbox-server
+
+CMD twist wormhole-mailbox

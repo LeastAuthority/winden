@@ -4,7 +4,7 @@ import { hashFile } from "../util/hashFile";
 import { waitForFileExists } from "../util/waitForFileExists";
 
 async function testTransferSuccess(fileName: string, timeout?: number) {
-  const originalFilePath = path.join("/usr/src/app/test/files/", fileName);
+  const originalFilePath = path.join("./test/files/", fileName);
   const receivedFilePath = path.join(
     global.downloadDir,
     path.basename(fileName)
@@ -13,14 +13,18 @@ async function testTransferSuccess(fileName: string, timeout?: number) {
   await Page.open();
   const _sendWindow = await browser.getWindowHandle();
   await Page.uploadFiles(originalFilePath);
-  const input = await $("input[readonly='']");
-  const codeUrl = await input.getValue();
+
+  // Receiver
+  const codeUrl = await Page.getCodeUrl()
   const _receiveWindow = await browser.newWindow(codeUrl);
-  await browser.waitUntil(() => $("button*=Download").isExisting());
-  await (await $("button*=Download")).click();
+
+  await browser.waitUntil(() => Page.receiveDownloadButton().isExisting());
+  await (await Page.receiveDownloadButton()).click();
+
   await browser.call(() =>
-    waitForFileExists(receivedFilePath, timeout || 60000)
+    waitForFileExists(receivedFilePath, timeout || 120000)
   );
+
   await browser.waitUntil(async () => {
     const originalHash = await hashFile(originalFilePath);
     const receivedHash = await hashFile(receivedFilePath);
@@ -29,7 +33,7 @@ async function testTransferSuccess(fileName: string, timeout?: number) {
 }
 
 async function testTransferFailure(fileName: string, timeout?: number) {
-  const originalFilePath = path.join("/usr/src/app/test/files/", fileName);
+  const originalFilePath = path.join("./test/files/", fileName);
   const receivedFilePath = path.join(
     global.downloadDir,
     path.basename(fileName)
