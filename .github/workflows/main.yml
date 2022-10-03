@@ -39,23 +39,23 @@ jobs:
           EOF
 
       - name: Setup docker images
-        run: docker-compose --profile e2e build
+        run: docker compose --profile e2e build
 
       - name: Build client packages
-        run: docker-compose --profile e2e run client npm i
+        run: docker compose --profile e2e run client npm i
 
       - name: Build client-e2e packages
-        run: docker-compose --profile e2e run client-e2e npm i
+        run: docker compose --profile e2e run client-e2e npm i
 
       - name: Run UNIT and INTEGRATION tests
         run: |
-          docker-compose --profile e2e up -d client
-          docker-compose --profile e2e run client npm run test
+          docker compose --profile e2e up -d client
+          docker compose --profile e2e run client npm run test
 
       - name: Run END-2-END tests
         if: ${{ github.event_name == 'pull_request' }}
         run: |
-          docker compose --profile e2e run --no-deps --rm client-e2e 
+          docker compose --profile e2e run --rm client-e2e 
 
       - name: Stop the containers
-        run: docker-compose --profile e2e down
+        run: docker compose --profile e2e down
