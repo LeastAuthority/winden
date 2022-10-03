@@ -6,7 +6,7 @@ describe("Cancellation", () => {
     it("check if file is not downloadable anymore", async () => {
       await Page.open();
       const sendWindow = await browser.getWindowHandle();
-      await Page.uploadFiles("/usr/src/app/test/files/sizes/20MB");
+      await Page.uploadFiles("./test/files/sizes/20MB");
       const codeUrl = await Page.getCodeUrl()
       
       await (await Page.cancelButton()).click();
@@ -29,7 +29,7 @@ describe("Cancellation", () => {
 
         await Page.open();
         const sendWindow = await browser.getWindowHandle();
-        await Page.uploadFiles("/usr/src/app/test/files/sizes/20MB");
+        await Page.uploadFiles("./test/files/sizes/20MB");
 
         const codeUrl = await Page.getCodeUrl()
         const _receiveWindow = await browser.newWindow(codeUrl);
@@ -52,7 +52,7 @@ describe("Cancellation", () => {
 
         await Page.open();
         const _sendWindow = await browser.getWindowHandle();
-        await Page.uploadFiles("/usr/src/app/test/files/sizes/20MB");
+        await Page.uploadFiles("./test/files/sizes/20MB");
         const codeUrl = await Page.getCodeUrl()
 
         const _receiveWindow = await browser.newWindow(codeUrl);
@@ -71,7 +71,7 @@ describe("Cancellation", () => {
 
         await Page.open();
         const sendWindow = await browser.getWindowHandle();
-        await Page.uploadFiles("/usr/src/app/test/files/sizes/20MB");
+        await Page.uploadFiles("./test/files/sizes/20MB");
 
         const codeUrl = await Page.getCodeUrl()
         const _receiveWindow = await browser.newWindow(codeUrl);
@@ -97,7 +97,7 @@ describe("Cancellation", () => {
 
         await Page.open();
         const sendWindow = await browser.getWindowHandle();
-        await Page.uploadFiles("/usr/src/app/test/files/sizes/20MB");
+        await Page.uploadFiles("./test/files/sizes/20MB");
 
         const codeUrl = await Page.getCodeUrl()
         const _receiveWindow = await browser.newWindow(codeUrl);
@@ -131,7 +131,7 @@ describe("Cancellation", () => {
 
         await Page.open();
         const sendWindow = await browser.getWindowHandle();
-        await Page.uploadFiles("/usr/src/app/test/files/sizes/20MB");
+        await Page.uploadFiles("./test/files/sizes/20MB");
         const codeUrl = await Page.getCodeUrl()
 
         // Receiver
@@ -161,7 +161,7 @@ describe("Cancellation", () => {
 
         await Page.open();
         const sendWindow = await browser.getWindowHandle();
-        await Page.uploadFiles("/usr/src/app/test/files/sizes/20MB");
+        await Page.uploadFiles("./test/files/sizes/20MB");
         const codeUrl = await Page.getCodeUrl()
 
         const _receiveWindow = await browser.newWindow(codeUrl);

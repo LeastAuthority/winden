@@ -44,7 +44,7 @@ describe("Receive flow", () => {
     describe("the code has an valid nameplate number but invalid code", () => {
       it("will display a bad code error", async () => {
         await Page.open();
-        await Page.uploadFiles("/usr/src/app/test/files/hello-world.txt");
+        await Page.uploadFiles("./test/files/hello-world.txt");
 
         const codeUrl = await Page.getCodeUrl()
         const re = new RegExp(

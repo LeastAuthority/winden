@@ -4,7 +4,7 @@ import { hashFile } from "../util/hashFile";
 import { waitForFileExists } from "../util/waitForFileExists";
 
 async function testTransferSuccess(fileName: string, timeout?: number) {
-  const originalFilePath = path.join("/usr/src/app/test/files/", fileName);
+  const originalFilePath = path.join("./test/files/", fileName);
   const receivedFilePath = path.join(
     global.downloadDir,
     path.basename(fileName)
@@ -33,7 +33,7 @@ async function testTransferSuccess(fileName: string, timeout?: number) {
 }
 
 async function testTransferFailure(fileName: string, timeout?: number) {
-  const originalFilePath = path.join("/usr/src/app/test/files/", fileName);
+  const originalFilePath = path.join("./test/files/", fileName);
   const receivedFilePath = path.join(
     global.downloadDir,
     path.basename(fileName)
@@ -50,7 +50,7 @@ describe("Send flow", () => {
   describe("on uploading a single file", () => {
     it("check generated code format", async () => {
       await Page.open();
-      await Page.uploadFiles("/usr/src/app/test/files/hello-world.txt");
+      await Page.uploadFiles("./test/files/hello-world.txt");
 
       const code = await Page.getCode()
       const expectedCode = new RegExp(`^\\d+-\\w+-\\w+$`);
@@ -94,9 +94,9 @@ describe("Send flow", () => {
   describe("when a sender tries to send the same file twice", () => {
     it("will successfully upload the file both times", async () => {
       await Page.open();
-      await Page.uploadFiles("/usr/src/app/test/files/hello-world.txt");
+      await Page.uploadFiles("./test/files/hello-world.txt");
       await (await $("button*=Cancel")).click();
-      await Page.uploadFiles("/usr/src/app/test/files/hello-world.txt");
+      await Page.uploadFiles("./test/files/hello-world.txt");
       await expect(await $("main")).toHaveTextContaining("Ready to send!");
     });
   });

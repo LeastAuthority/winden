@@ -83,7 +83,7 @@ describe("Check internal Pages", () => {
             await Page.open();
             // Sender
             const _sendWindow = await browser.getWindowHandle();
-            await Page.uploadFiles("/usr/src/app/test/files/sizes/20MB");
+            await Page.uploadFiles("./test/files/sizes/20MB");
             const codeUrl = await Page.getCodeUrl()
 
             // Receiver

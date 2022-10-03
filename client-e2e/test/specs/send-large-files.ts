@@ -4,7 +4,7 @@ import { hashFile } from "../util/hashFile";
 import { waitForFileExists } from "../util/waitForFileExists";
 
 async function testTransferSuccess(fileName: string, timeout?: number) {
-  const originalFilePath = path.join("/usr/src/app/test/files/", fileName);
+  const originalFilePath = path.join("./test/files/", fileName);
   const receivedFilePath = path.join(
     global.downloadDir,
     path.basename(fileName)
@@ -33,7 +33,7 @@ async function testTransferSuccess(fileName: string, timeout?: number) {
 }
 
 async function testTransferFailure(fileName: string, timeout?: number) {
-  const originalFilePath = path.join("/usr/src/app/test/files/", fileName);
+  const originalFilePath = path.join("./test/files/", fileName);
   const receivedFilePath = path.join(
     global.downloadDir,
     path.basename(fileName)

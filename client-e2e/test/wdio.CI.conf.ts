@@ -71,7 +71,7 @@ export const config: Options.Testrunner = {
     timeout: 120000,
   },
   onPrepare: function (_config, _capabilities) {
-    execSync("/usr/src/app/scripts/generate-CI-test-files.sh");
+    execSync("./scripts/generate-CI-test-files.sh");
   },
   beforeTest: function () {
     fsExtra.emptyDirSync(global.downloadDir);

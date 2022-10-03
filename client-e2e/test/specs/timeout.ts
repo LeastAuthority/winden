@@ -4,7 +4,7 @@ import { hashFile } from "../util/hashFile";
 import { waitForFileExists } from "../util/waitForFileExists";
 
 async function testTimeoutSuccess(timeoutMs: number) {
-  const originalFilePath = `/usr/src/app/test/files/hello-world.txt`;
+  const originalFilePath = `./test/files/hello-world.txt`;
   const receivedFilePath = path.join(global.downloadDir, "hello-world.txt");
 
   // Sender
