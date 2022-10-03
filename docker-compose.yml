@@ -1,13 +1,17 @@
 version: "3.9"
 services:
   mailbox:
-    build:
-      context: ./mailbox
+    image: mwprojects/mailbox-server:latest
+    # if building from repo
+    #build:
+    #  context: ./mailbox
     ports:
       - "4000:4000" # WebSocket
   relay:
-    build:
-      context: ./relay
+    image: mwprojects/relay-server:latest
+    # if building from repo
+    #build:
+    #  context: ./relay
     ports:
       - "4001:4001" # TCP
       - "4002:4002" # WebSocket
@@ -16,7 +20,7 @@ services:
     env_file:
       - ./client/.env
     volumes:
-      - ./:/usr/src/app
+      - ./client:/usr/src/app/client
     ports:
       - "8080:8080" # DevServer
       - "35729:35729" # LiveReload
@@ -95,7 +99,7 @@ services:
     env_file:
       - ./client-e2e/.env
     volumes:
-      - ./client-e2e:/usr/src/app
+      - ./client-e2e:/usr/src/app/
       - test-downloads:/home/node/downloads
     depends_on:
       client:

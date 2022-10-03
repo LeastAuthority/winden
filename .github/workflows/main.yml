@@ -41,26 +41,20 @@ jobs:
       - name: Setup docker images
         run: docker-compose --profile e2e build
 
-      - name: Build client
+      - name: Build client packages
         run: docker-compose --profile e2e run client npm i
 
-      - name: Build client-e2e
+      - name: Build client-e2e packages
         run: docker-compose --profile e2e run client-e2e npm i
 
       - name: Run UNIT and INTEGRATION tests
         run: |
-          ls -la /usr/src/app
-          ls -la /usr/src/app/dist
           docker-compose --profile e2e up -d client
           docker-compose --profile e2e run client npm run test
-
 
       - name: Run END-2-END tests
         if: ${{ github.event_name == 'pull_request' }}
         run: |
-          ls -la /usr/src/app
-          ls -la /usr/src/app/dist
-          ls -la /usr/src/client
           docker-compose --profile e2e run --rm client-e2e
 
       - name: Stop the containers
