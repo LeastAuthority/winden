@@ -27,34 +27,30 @@ describe("Receive flow", () => {
   });
 
   describe("when entering a code with proper format", () => {
-    describe("the code has an invalid namplate number and code", () => {
-      it.skip("will display a bad code error", async () => {
+    describe("the code has an invalid namplate number and valid code", () => {
+      it("will display a bad code error", async () => {
         await Page.open();
         await (await Page.receiveButton()).click();
         const input = await Page.receiveCodeInput();
         await input.click();
+
         // max nameplate number 999, so will not impact real nameplate
         await browser.keys(["1000-guitarist-revenge"]);
         await (await Page.submitCodeButton()).click();
-        await browser.waitUntil(
-          async () => (await $("body").getText()).includes("bad code error"),
-          {
-            timeout: 10000,
-            timeoutMsg: "expected bad code error",
-          }
-        );
+        await browser.waitUntil(async () => (await $("div*=The code is wrong").isExisting()));
       });
     });
 
-    describe("the code has an valid namplate number but valid code", () => {
+    describe("the code has an valid nameplate number but invalid code", () => {
       it("will display a bad code error", async () => {
         await Page.open();
-        await Page.uploadFiles("/usr/src/app/test/files/hello-world.txt");
-        const receiveUrl = await (await $("input[readonly='']")).getValue();
+        await Page.uploadFiles("./test/files/hello-world.txt");
+
+        const codeUrl = await Page.getCodeUrl()
         const re = new RegExp(
           `^http://${process.env.HOST_IP}:8080/#(\\d+)-\\w+-\\w+$`
         );
-        const nameplate = parseInt(receiveUrl.match(re)[1]);
+        const nameplate = parseInt(codeUrl.match(re)[1]);
 
         const _receiveWindow = await browser.newWindow(homePageUrl);
         await (await Page.receiveButton()).click();
@@ -63,18 +59,7 @@ describe("Receive flow", () => {
         // very high chance the 2 words are not guitarist-revenge
         await browser.keys([`${nameplate}-guitarist-revenge`]);
         await (await Page.submitCodeButton()).click();
-        await browser.waitUntil(
-          async () =>
-            (
-              await $("body").getText()
-            ).includes(
-              "Either the sender is no longer connected, or the code was already used."
-            ),
-          {
-            timeout: 10000,
-            timeoutMsg: "expected bad code error",
-          }
-        );
+        await browser.waitUntil(async () => (await $("div*=The code is wrong").isExisting()));
       });
     });
   });

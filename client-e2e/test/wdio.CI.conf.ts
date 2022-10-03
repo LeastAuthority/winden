@@ -18,8 +18,10 @@ export const config: Options.Testrunner = {
     },
   },
   specs: ["./test/specs/**/*.ts"],
+  //specs: ["./test/specs/send.ts"],
+  
   exclude: ["./test/specs/send-large-files.ts",
-            "./test/specs/timeout.ts", 
+            //"./test/specs/timeout.ts", 
             ],
   maxInstances: 1,
   capabilities: [
@@ -61,15 +63,15 @@ export const config: Options.Testrunner = {
   baseUrl: "http://localhost",
   waitforTimeout: 10000,
   connectionRetryTimeout: 120000,
-  connectionRetryCount: 3,
+  connectionRetryCount: 1,
   framework: "mocha",
   reporters: ["spec"],
   mochaOpts: {
     ui: "bdd",
-    timeout: 60000,
+    timeout: 120000,
   },
-  onPrepare: function (config, capabilities) {
-    execSync("/usr/src/app/scripts/generate-CI-test-files.sh");
+  onPrepare: function (_config, _capabilities) {
+    execSync("./scripts/generate-CI-test-files.sh");
   },
   beforeTest: function () {
     fsExtra.emptyDirSync(global.downloadDir);

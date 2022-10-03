@@ -3,7 +3,7 @@ import * as fs from "fs";
 
 export function hashFile(file: string) {
   return new Promise((res) => {
-    const hash = crypto.createHash("md5");
+    const hash = crypto.createHash("sha256");
     const stream = fs.createReadStream(file);
 
     stream.on("data", (data: string) => {
