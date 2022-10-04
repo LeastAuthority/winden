@@ -1,7 +1,7 @@
 const del = require("del");
 const { exec, execSync } = require("child_process");
 const gulp = require("gulp");
-const log = require("fancy-log")
+const log = require("fancy-log");
 const connect = require("gulp-connect");
 const webpack = require("webpack-stream");
 const Dotenv = require("dotenv-webpack");
@@ -48,6 +48,9 @@ const webpackConfig = {
         ]
       : []),
   ],
+  optimization: {
+    minimize: process.env.NODE_ENV === "production",
+  },
 };
 
 const javascript = () =>
@@ -168,18 +171,29 @@ const deployAWS = (cb) => {
 };
 
 const deploySftp = (cb) => {
-    // accept ssh host key of target
-    execSync("mkdir -p ~/.ssh");
-    execSync(`ssh-keyscan ${process.env.SFTP_HOSTNAME} > ~/.ssh/known_hosts 2>/dev/null`);
-    fs.writeFileSync(process.env.HOME + '/.ssh/id_ed25519', process.env.SFTP_IDENTITY, {mode: 0o600});
+  // accept ssh host key of target
+  execSync("mkdir -p ~/.ssh");
+  execSync(
+    `ssh-keyscan ${process.env.SFTP_HOSTNAME} > ~/.ssh/known_hosts 2>/dev/null`
+  );
+  fs.writeFileSync(
+    path.join(process.env.HOME, "/.ssh/id_ed25519"),
+    process.env.SFTP_IDENTITY,
+    { mode: 0o600 }
+  );
 
-    // transfer files
-    let environment = process.env.ENVIRONMENT === undefined ? process.env.NODE_ENV : process.env.ENVIRONMENT;
-    log.info(`Using environment: ${environment} (NODE_ENV: ${process.env.NODE_ENV}, ENVIRONMENT: ${process.env.ENVIRONMENT})`);
-    execSync(`lftp sftp://${process.env.SFTP_USERNAME}:dummy@${process.env.SFTP_HOSTNAME}`, {
-        input: `mirror -R dist winden_${environment}`,
-    });
-    cb();
+  // transfer files
+  let environment = process.env.ENVIRONMENT ?? process.env.NODE_ENV;
+  log.info(
+    `Using environment: ${environment} (NODE_ENV: ${process.env.NODE_ENV}, ENVIRONMENT: ${process.env.ENVIRONMENT})`
+  );
+  execSync(
+    `lftp sftp://${process.env.SFTP_USERNAME}:dummy@${process.env.SFTP_HOSTNAME}`,
+    {
+      input: `mirror -R dist winden_${environment}`,
+    }
+  );
+  cb();
 };
 
 exports.javascript = javascript;
@@ -195,7 +209,7 @@ exports.deploy = gulp.series(
   worker,
   wasm,
   // storybook,
-  deploySftp,
+  deploySftp
 );
 
 exports.default = gulp.series(public, javascript, worker, wasm, storybook);
