@@ -66,6 +66,13 @@ const useStyles = createStyles((theme) => ({
   dropzoneLayerBottom: {
     border: `4px dashed ${theme.colors["dark-grey"][6]}`,
   },
+  centered: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 }));
 
 type Props = {
@@ -118,7 +125,10 @@ export default function Dropzone(props: Props) {
   return (
     <div
       {...getRootProps({
-        className: classNames({ [classes.dropzone]: !isNarrowScreen }),
+        className: classNames({
+          [classes.dropzone]: !isNarrowScreen,
+          [classes.centered]: isNarrowScreen,
+        }),
       })}
     >
       <input {...getInputProps()} />
