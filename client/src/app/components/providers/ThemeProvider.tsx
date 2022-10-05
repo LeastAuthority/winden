@@ -144,6 +144,9 @@ export default function ThemeProvider(props: Props) {
               color: theme.colors.black[6],
               minWidth: 320,
             },
+            "a:visited": {
+              color: "#9d44b5",
+            },
             li: {
               lineHeight: 1.5,
             },
