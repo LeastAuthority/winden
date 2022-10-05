@@ -178,6 +178,9 @@ export default function ThemeProvider(props: Props) {
             "p:last-of-type": {
               marginBottom: 0,
             },
+            ".target-highlight": {
+              backgroundColor: "#ffa",
+            },
             ".transition-container-default > .transition-item-enter": {
               opacity: 0,
               transform: "translate(30px, 0)",
