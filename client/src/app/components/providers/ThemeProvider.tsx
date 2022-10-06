@@ -26,6 +26,21 @@ export default function ThemeProvider(props: Props) {
                 "@media (max-width: 755px)": {
                   fontSize: theme.fontSizes.md,
                 },
+                h1: {
+                  fontSize: "1.35rem",
+                },
+                h2: {
+                  fontSize: "1.25rem",
+                  fontWeight: 400
+                },
+                h3: {
+                  fontSize: "1.15rem",
+                },
+                "h2:after": {
+                  content: "' '",
+                  display: "block",
+                  border: `1px solid ${theme.colors["dark-grey"][6]}`,
+                },
               },
             }),
           },
