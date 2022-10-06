@@ -31,12 +31,13 @@
   It means that we are still making many improvements and that the tool may
   experience unexpected issues. It also means that we are hoping to use this
   moment to learn from &lsquo;real people&rsquo; (like you) trying out the tool
-  and sharing your experience with us.
+  and sharing their experience with us.
 </p>
 <p>Some known limitations:</p>
 <ul>
   <li>
-    Single files: It is currently only possible to send one file at a time.
+    Single files: It is currently only possible to
+    <a href="#multiple-files">send one file at a time</a>.
   </li>
   <li>
     File size limits: In this initial stage, it is only possible to send files
@@ -314,6 +315,16 @@
 </p>
 
 <h2>Other</h2>
+
+<h3 id="multiple-files" class="highlightable-target">
+  Can I send multiple files at the same time?
+</h3>
+<p>Not yet -- but we would love to offer this in the future.</p>
+<p>
+  For now, if you would like to send multiple files at the same time, you can
+  compress them, for example, as a single ZIP file.
+</p>
+
 <h3>Isn&rsquo;t this similar to Magic Wormhole?</h3>
 <p>
   It is! Winden uses the &ldquo;<a
@@ -323,6 +334,29 @@
   to transfer files safely from one device to another. Winden implements a Magic
   Wormhole application for the web.
 </p>
+
+<h3>Can Winden be used with other Magic Wormhole applications?</h3>
+<p>Yes (depending on the application). Here are the settings you need:</p>
+<ul>
+  <li>Mailbox URL: wss://mailbox.mw.leastauthority.com/v1</li>
+  <li>
+    Transit relay URL: tcp://relay.mw.leastauthority.com:4001 and
+    wss://relay.mw.leastauthority.com
+  </li>
+  <li>AppID: lothar.com/wormhole/text-or-file-xfer</li>
+</ul>
+
+<p>Please note that:</p>
+<ul>
+  <li>
+    By using these servers, you agree to be bound by the same
+    <a href="/terms">Terms</a> as when using Winden.
+  </li>
+  <li>
+    We cannot guarantee interoperability with other applications or offer
+    support for it.
+  </li>
+</ul>
 
 <h3>Is Winden open source?</h3>
 <p>
@@ -342,17 +376,19 @@
   </li>
   <li>
     <a href="https://github.com/magic-wormhole">Magic-Wormhole</a>
-    (protocol and servers)
+    (<a href="https://github.com/magic-wormhole/magic-wormhole-protocols"
+      >protocol</a
+    >,
+    <a href="https://github.com/magic-wormhole/magic-wormhole-mailbox-server"
+      >mailbox</a
+    >
+    and
+    <a href="https://github.com/magic-wormhole/magic-wormhole-transit-relay"
+      >transit relay</a
+    >
+    servers)
   </li>
 </ul>
-
-<h3>Can I send multiple files at the same time?</h3>
-<p>Not yet -- but we would love to offer this in the future.</p>
-
-<p>
-  For now, if you would like to send multiple files at the same time, you can
-  compress them, for example, as a single ZIP file.
-</p>
 
 <h3>I like this tool, I want more!</h3>
 <p>
