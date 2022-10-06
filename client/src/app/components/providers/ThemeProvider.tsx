@@ -35,13 +35,13 @@ export default function ThemeProvider(props: Props) {
                     fontSize: "1.15rem",
                   },
                 },
-                h2: {
+                h3: {
                   fontWeight: 400,
                 },
                 "h2:after": {
                   content: "' '",
                   display: "block",
-                  border: `1px solid ${theme.colors["dark-grey"][6]}`,
+                  borderTop: `1px dashed #868e96`,
                 },
                 "b, strong": {
                   fontWeight: 600,
