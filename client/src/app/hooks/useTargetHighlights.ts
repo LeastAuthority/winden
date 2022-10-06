@@ -12,12 +12,20 @@ export function useTargetHighlights() {
 
       setTimeout(() => {
         const element = document.getElementById(location.hash.slice(1));
-        element?.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-          inline: "start",
-        });
-        element?.classList.add("target-highlight");
+        if (element?.classList.contains("highlightable-target")) {
+          element?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+            inline: "start",
+          });
+          element?.classList.add("target-highlight");
+        } else {
+          element?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+            inline: "start",
+          });
+        }
       }, 200);
     }
     console.log(location);
