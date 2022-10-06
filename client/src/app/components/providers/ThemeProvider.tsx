@@ -25,16 +25,18 @@ export default function ThemeProvider(props: Props) {
                 // override shrinking font on small screens
                 "@media (max-width: 755px)": {
                   fontSize: theme.fontSizes.md,
-                },
-                h1: {
-                  fontSize: "1.35rem",
+                  h1: {
+                    fontSize: "1.35rem",
+                  },
+                  h2: {
+                    fontSize: "1.25rem",
+                  },
+                  h3: {
+                    fontSize: "1.15rem",
+                  },
                 },
                 h2: {
-                  fontSize: "1.25rem",
                   fontWeight: 400,
-                },
-                h3: {
-                  fontSize: "1.15rem",
                 },
                 "h2:after": {
                   content: "' '",
