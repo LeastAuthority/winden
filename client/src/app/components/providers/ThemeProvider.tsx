@@ -19,6 +19,16 @@ export default function ThemeProvider(props: Props) {
       theme={{
         primaryColor: "tertiary",
         components: {
+          TypographyStylesProvider: {
+            styles: (theme, params: ButtonStylesParams) => ({
+              root: {
+                // override shrinking font on small screens
+                "@media (max-width: 755px)": {
+                  fontSize: theme.fontSizes.md,
+                },
+              }
+            })
+          },
           Button: {
             styles: (theme, params: ButtonStylesParams) => ({
               root: {
