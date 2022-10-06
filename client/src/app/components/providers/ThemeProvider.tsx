@@ -31,7 +31,7 @@ export default function ThemeProvider(props: Props) {
                 },
                 h2: {
                   fontSize: "1.25rem",
-                  fontWeight: 400
+                  fontWeight: 400,
                 },
                 h3: {
                   fontSize: "1.15rem",
@@ -40,6 +40,9 @@ export default function ThemeProvider(props: Props) {
                   content: "' '",
                   display: "block",
                   border: `1px solid ${theme.colors["dark-grey"][6]}`,
+                },
+                "b, strong": {
+                  fontWeight: 600,
                 },
               },
             }),
