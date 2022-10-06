@@ -31,7 +31,7 @@ export function ReceiveConsentScreenContent(props: ContentProps) {
         >
           Download
         </Button>
-        <Text color="dark-grey" weight={400}>
+        <Text color="dark-grey" weight={400} size={14.4}>
           By using Winden you agree to the{" "}
           <Anchor
             component={Link}
@@ -39,7 +39,6 @@ export function ReceiveConsentScreenContent(props: ContentProps) {
             color="tertiary"
             weight={600}
             target="_blank"
-            size={14.4}
           >
             Terms
           </Anchor>

@@ -3,6 +3,7 @@ import React from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { useCodeUrlCheck } from "../hooks/useCodeUrlCheck";
+import { useTargetHighlights } from "../hooks/useTargetHighlights";
 import AppTemplate from "./AppTemplate";
 import Navigate from "./Navigate";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -14,6 +15,8 @@ type Props = {};
 
 export default function App({}: Props) {
   useCodeUrlCheck();
+  useTargetHighlights();
+
   const location = useLocation();
   const reduceMotion = useReducedMotion();
 

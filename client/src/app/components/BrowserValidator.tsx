@@ -25,7 +25,7 @@ export default function BrowserValidator(props: Props) {
         >
           <Text>
             Please use a{" "}
-            <Link to="/faq#browser" onClick={() => setOpened(false)}>
+            <Link to="/faq#supported-browsers" onClick={() => setOpened(false)}>
               browser we do support.
             </Link>
           </Text>

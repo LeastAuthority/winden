@@ -35,7 +35,11 @@ function Tagline() {
 }
 
 function Logo() {
-  return <Image width="auto" height={30} fit="contain" src="/la-logo.svg" />;
+  return (
+    <Anchor href="https://leastauthority.com" target="_blank">
+      <Image width="auto" height={30} fit="contain" src="/la-logo.svg" />
+    </Anchor>
+  );
 }
 
 function Links() {

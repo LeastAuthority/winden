@@ -19,6 +19,36 @@ export default function ThemeProvider(props: Props) {
       theme={{
         primaryColor: "tertiary",
         components: {
+          TypographyStylesProvider: {
+            styles: (theme, params: ButtonStylesParams) => ({
+              root: {
+                // override shrinking font on small screens
+                "@media (max-width: 755px)": {
+                  fontSize: theme.fontSizes.md,
+                  h1: {
+                    fontSize: "1.35rem",
+                  },
+                  h2: {
+                    fontSize: "1.25rem",
+                  },
+                  h3: {
+                    fontSize: "1.15rem",
+                  },
+                },
+                h3: {
+                  fontWeight: 400,
+                },
+                "h2:after": {
+                  content: "' '",
+                  display: "block",
+                  borderTop: `1px dashed #868e96`,
+                },
+                "b, strong": {
+                  fontWeight: 600,
+                },
+              },
+            }),
+          },
           Button: {
             styles: (theme, params: ButtonStylesParams) => ({
               root: {
@@ -75,6 +105,9 @@ export default function ThemeProvider(props: Props) {
               },
             }),
           },
+        },
+        headings: {
+          fontFamily: "Poppins, sans-serif",
         },
         fontFamily: "Poppins, sans-serif",
         fontSizes: {
@@ -144,6 +177,9 @@ export default function ThemeProvider(props: Props) {
               color: theme.colors.black[6],
               minWidth: 320,
             },
+            ".content a, .mantine-Modal-root a": {
+              color: "#9d44b5",
+            },
             li: {
               lineHeight: 1.5,
             },
@@ -177,6 +213,9 @@ export default function ThemeProvider(props: Props) {
             },
             "p:last-of-type": {
               marginBottom: 0,
+            },
+            ".target-highlight": {
+              backgroundColor: "#ffa",
             },
             ".transition-container-default > .transition-item-enter": {
               opacity: 0,

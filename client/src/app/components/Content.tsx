@@ -37,7 +37,10 @@ export default function Content(props: Props) {
   const { classes } = useStyles();
 
   return (
-    <div className={classes.container} style={props.styles?.root}>
+    <div
+      className={classnames(classes.container, "content")}
+      style={props.styles?.root}
+    >
       <Paper
         style={props.styles?.paper}
         className={classnames(classes.content, {
