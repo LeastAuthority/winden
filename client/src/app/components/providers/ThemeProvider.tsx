@@ -26,8 +26,8 @@ export default function ThemeProvider(props: Props) {
                 "@media (max-width: 755px)": {
                   fontSize: theme.fontSizes.md,
                 },
-              }
-            })
+              },
+            }),
           },
           Button: {
             styles: (theme, params: ButtonStylesParams) => ({
@@ -157,7 +157,7 @@ export default function ThemeProvider(props: Props) {
               color: theme.colors.black[6],
               minWidth: 320,
             },
-            ".static-content a:visited": {
+            ".content a, .mantine-Modal-root a": {
               color: "#9d44b5",
             },
             li: {
