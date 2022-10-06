@@ -20,7 +20,7 @@ jobs:
   deploy:
     # `if` required because a workflow run is triggered regardless of
     # the result of the previous workflow (see the documentation page)
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+#    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     runs-on: ubuntu-22.04
     env:
