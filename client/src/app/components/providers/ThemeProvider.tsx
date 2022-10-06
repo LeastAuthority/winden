@@ -81,8 +81,7 @@ export default function ThemeProvider(props: Props) {
         },
         fontFamily: "Poppins, sans-serif",
         fontSizes: {
-          xs: 16,
-          sm: 16,
+          sm: 12.8,
           md: 16,
         },
         colors: {
