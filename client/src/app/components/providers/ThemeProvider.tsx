@@ -144,7 +144,7 @@ export default function ThemeProvider(props: Props) {
               color: theme.colors.black[6],
               minWidth: 320,
             },
-            "a:visited": {
+            ".static-content a:visited": {
               color: "#9d44b5",
             },
             li: {

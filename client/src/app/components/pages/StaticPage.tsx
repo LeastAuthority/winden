@@ -25,7 +25,10 @@ export default function StaticPage(props: Props) {
   return (
     <Content>
       <TypographyStylesProvider>
-        <div dangerouslySetInnerHTML={{ __html: pages[props.page] }}></div>
+        <div
+          className="static-content"
+          dangerouslySetInnerHTML={{ __html: pages[props.page] }}
+        ></div>
       </TypographyStylesProvider>
     </Content>
   );
