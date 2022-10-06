@@ -50,7 +50,7 @@ jobs:
           RELAY_URL="wss://relay.winden.app/"
           SFTP_HOSTNAME=${{ secrets.SFTP_HOSTNAME }}
           SFTP_USERNAME=${{ secrets.SFTP_USERNAME }}
-          SFTP_IDENTITY=${{ secrets.SFTP_IDENTITY }}
+          SFTP_IDENTITY="${{ secrets.SFTP_IDENTITY }}"
           NODE_ENV=production
           ENVIRONMENT=${{ inputs.environment }}
           EOF
