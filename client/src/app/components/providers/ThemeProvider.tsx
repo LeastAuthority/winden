@@ -76,6 +76,9 @@ export default function ThemeProvider(props: Props) {
             }),
           },
         },
+        headings: {
+          fontFamily: "Poppins, sans-serif",
+        },
         fontFamily: "Poppins, sans-serif",
         fontSizes: {
           xs: 16,
