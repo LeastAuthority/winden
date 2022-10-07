@@ -1,14 +1,14 @@
 version: "3.9"
 services:
   mailbox:
-    image: mwprojects/mailbox-server:latest
+    image: leastauthority/magic-wormhole-mailbox:latest
     # if building from repo
     #build:
     #  context: ./mailbox
     ports:
       - "4000:4000" # WebSocket
   relay:
-    image: mwprojects/relay-server:latest
+    image: leastauthority/magic-wormhole-relay:latest
     # if building from repo
     #build:
     #  context: ./relay
