@@ -27,7 +27,7 @@ describe("Receive flow", () => {
   });
 
   describe("when entering a code with proper format", () => {
-    describe("the code has an invalid namplate number and valid code", () => {
+    describe("the code has correct format, but nameplate is not used", () => {
       it("will display a bad code error", async () => {
         await Page.open();
         await (await Page.receiveButton()).click();
@@ -41,7 +41,21 @@ describe("Receive flow", () => {
       });
     });
 
-    describe("the code has an valid nameplate number but invalid code", () => {
+    describe("the code has unknown word and nameplate is not used", () => {
+      it("will display a bad code error", async () => {
+        await Page.open();
+        await (await Page.receiveButton()).click();
+        const input = await Page.receiveCodeInput();
+        await input.click();
+
+        // max nameplate number 999, so will not impact real nameplate
+        await browser.keys(["1000-guitarist-unknown"]);
+        await (await Page.submitCodeButton()).click();
+        await browser.waitUntil(async () => (await $("div*=Second word is not recognized").isExisting()));
+      });
+    });
+
+    describe("the code has an existing nameplate number but invalid code", () => {
       it("will display a bad code error", async () => {
         await Page.open();
         await Page.uploadFiles("./test/files/hello-world.txt");

@@ -2,16 +2,10 @@ version: "3.9"
 services:
   mailbox:
     image: leastauthority/magic-wormhole-mailbox:latest
-    # if building from repo
-    #build:
-    #  context: ./mailbox
     ports:
       - "4000:4000" # WebSocket
   relay:
     image: leastauthority/magic-wormhole-relay:latest
-    # if building from repo
-    #build:
-    #  context: ./relay
     ports:
       - "4001:4001" # TCP
       - "4002:4002" # WebSocket
@@ -20,7 +14,7 @@ services:
     env_file:
       - ./client/.env
     volumes:
-      - ./client:/usr/src/app/client
+      - ./:/usr/src/app/
     ports:
       - "8080:8080" # DevServer
       - "35729:35729" # LiveReload
@@ -46,8 +40,7 @@ services:
       - test-downloads:/home/seluser/downloads
     ports:
       - "5900:5900"
-    build:
-      dockerfile: ./client-e2e/images/Dockerfile.chrome
+    image: selenium/node-chrome:latest
     shm_size: 2gb
     depends_on:
       - selenium-hub
@@ -63,8 +56,7 @@ services:
       - test-downloads:/home/seluser/downloads
     ports:
       - "5901:5900"
-    build:
-      dockerfile: ./client-e2e/images/Dockerfile.edge
+    image: selenium/node-edge:latest
     shm_size: 2gb
     depends_on:
       - selenium-hub
@@ -80,8 +72,7 @@ services:
       - test-downloads:/home/seluser/downloads
     ports:
       - "5902:5900"
-    build:
-      dockerfile: ./client-e2e/images/Dockerfile.firefox
+    image: selenium/node-firefox:latest
     shm_size: 2gb
     depends_on:
       - selenium-hub
@@ -112,7 +103,7 @@ services:
     env_file:
       - ./client-e2e/.env
     volumes:
-      #- ./client-e2e:/usr/src/app
+      - ./client-e2e:/usr/src/app
       - test-downloads:/home/node/downloads
     depends_on:
       client-ci:

@@ -18,10 +18,8 @@ export const config: Options.Testrunner = {
     },
   },
   specs: ["./test/specs/**/*.ts"],
-  //specs: ["./test/specs/send.ts"],
   
   exclude: ["./test/specs/send-large-files.ts",
-            //"./test/specs/timeout.ts", 
             ],
   maxInstances: 1,
   capabilities: [
@@ -63,7 +61,7 @@ export const config: Options.Testrunner = {
   baseUrl: "http://localhost",
   waitforTimeout: 10000,
   connectionRetryTimeout: 120000,
-  connectionRetryCount: 1,
+  connectionRetryCount: 2,
   framework: "mocha",
   reporters: ["spec"],
   mochaOpts: {

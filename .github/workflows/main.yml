@@ -45,12 +45,6 @@ jobs:
       - name: Setup docker images
         run: docker compose --profile e2e build
 
-      #- name: Build client packages
-      #  run: docker compose --profile e2e run client npm i
-
-      #- name: Build client-e2e packages
-      #  run: docker compose --profile e2e run client-e2e npm i
-
       - name: Run UNIT and INTEGRATION tests
         run: |
           docker compose --profile e2e up -d client-ci

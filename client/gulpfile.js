@@ -113,48 +113,6 @@ const wasmBuild = () =>
 const wasmReload = () => gulp.src("gulpfile.js").pipe(connect.reload());
 const wasm = gulp.series(wasmBuild, wasmReload);
 
-const watch = () => {
-  gulp.watch(
-    "src/app/**/*.{ts,tsx,css}",
-    { ignoreInitial: false },
-    javascriptWatch
-  );
-  gulp.watch("src/worker/**/*.{js,ts,tsx}", { ignoreInitial: false }, worker);
-  gulp.watch("src/public/**/*", { ignoreInitial: false }, public);
-  gulp.watch("vendor/wormhole-william/**/*.go", { ignoreInitial: false }, wasm);
-  connect.server({
-    host: "0.0.0.0",
-    root: "dist",
-    livereload: true,
-    middleware: function (connect, opt) {
-      return [
-        (req, res, next) => {
-          if (
-            !fs.existsSync(
-              path.join(__dirname, "dist", req._parsedUrl.pathname)
-            )
-          ) {
-            fs.readFile(
-              path.join(__dirname, "dist/index.html"),
-              (err, data) => {
-                if (err) {
-                  res.writeHead(500);
-                  res.end(JSON.stringify(err));
-                  return;
-                }
-                res.writeHead(200);
-                res.end(data);
-              }
-            );
-          } else {
-            next();
-          }
-        },
-      ];
-    },
-  });
-};
-
 const start = () => {
   connect.server({
     host: "0.0.0.0",
@@ -186,6 +144,18 @@ const start = () => {
       ];
     },
   });
+};
+
+const watch = () => {
+  gulp.watch(
+    "src/app/**/*.{ts,tsx,css}",
+    { ignoreInitial: false },
+    javascriptWatch
+  );
+  gulp.watch("src/worker/**/*.{js,ts,tsx}", { ignoreInitial: false }, worker);
+  gulp.watch("src/public/**/*", { ignoreInitial: false }, public);
+  gulp.watch("vendor/wormhole-william/**/*.go", { ignoreInitial: false }, wasm);
+  gulp.series(start);
 };
 
 const clean = () => del("dist");
