@@ -1,6 +1,8 @@
 import React, { PropsWithChildren, useEffect, useRef, useState } from "react";
 import { useCodeInput } from "../../hooks/useCodeInput";
 import { useError } from "../../hooks/useError";
+import { useRateLimitedState } from "../../hooks/useRateLimitedState";
+import { PROGRESS_BAR_MS_PER_UPDATES } from "../../util/constants";
 import { detectErrorType, ErrorTypes } from "../../util/errors";
 import ClientWorker from "../../wormhole/client_worker";
 import {
@@ -143,10 +145,16 @@ export const WormholeContext =
 export default function WormholeProvider(props: Props) {
   const [fileMeta, setFileMeta] = useState<Record<string, any> | null>(null);
   const [code, setCode] = useState<string | undefined>();
-  const [progressEta, setProgressEta] = useState<number | null>(null);
+  const [progressEta, setProgressEta] = useRateLimitedState<number | null>(
+    null,
+    1000
+  );
   const [done, setDone] = useState(false);
   const error = useError();
-  const [bytesSent, setBytesSent] = useState(0);
+  const [bytesSent, setBytesSent] = useRateLimitedState(
+    0,
+    PROGRESS_BAR_MS_PER_UPDATES
+  );
   const codeInput = useCodeInput();
 
   const client = useRef<Transfer>();
