@@ -5,6 +5,7 @@ import {
   Tuple,
 } from "@mantine/core";
 import React from "react";
+import { PROGRESS_BAR_MS_PER_UPDATES } from "../../util/constants";
 
 function sameShade(color: string) {
   return Array(10).fill(color) as Tuple<string, 10>;
@@ -60,6 +61,9 @@ export default function ThemeProvider(props: Props) {
             styles: (theme) => ({
               root: {
                 height: 40,
+              },
+              bar: {
+                transition: `width ${PROGRESS_BAR_MS_PER_UPDATES}ms linear 0s`,
               },
             }),
           },
