@@ -36,12 +36,12 @@ services:
       - e2e
   # Selenium services
   chrome:
-    command: /opt/bin/entry_point.sh && chmod 777 /home/seluser/downloads
     volumes:
       - test-downloads:/home/seluser/downloads
     ports:
       - "5900:5900"
-    image: selenium/node-chrome:latest
+    build:
+      dockerfile: ./client-e2e/images/Dockerfile.chrome
     shm_size: 2gb
     depends_on:
       - selenium-hub
@@ -53,12 +53,12 @@ services:
     profiles:
       - e2e
   edge:
-    command: /opt/bin/entry_point.sh && chmod 777 /home/seluser/downloads
     volumes:
       - test-downloads:/home/seluser/downloads
     ports:
       - "5901:5900"
-    image: selenium/node-edge:latest
+    build:
+      dockerfile: ./client-e2e/images/Dockerfile.edge
     shm_size: 2gb
     depends_on:
       - selenium-hub
@@ -70,12 +70,12 @@ services:
     profiles:
       - e2e
   firefox:
-    command: /opt/bin/entry_point.sh && chmod 777 /home/seluser/downloads
     volumes:
       - test-downloads:/home/seluser/downloads
     ports:
       - "5902:5900"
-    image: selenium/node-firefox:latest
+    build:
+      dockerfile: ./client-e2e/images/Dockerfile.firefox
     shm_size: 2gb
     depends_on:
       - selenium-hub

@@ -36,7 +36,7 @@ describe("Time out", () => {
   describe("when the receiver waits 1 minutes before accepting the file", () => {
     it("will succeed in connecting and transferring", async () => {
       await testTimeoutSuccess(1 * 60 * 1000);
-    });
+    }).timeout(120000);
   });
 
   describe("when the receiver waits 20 minutes before accepting the file", () => {
