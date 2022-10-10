@@ -36,6 +36,7 @@ services:
       - e2e
   # Selenium services
   chrome:
+    command: /opt/bin/entry_point.sh && chmod 777 /home/seluser/downloads
     volumes:
       - test-downloads:/home/seluser/downloads
     ports:
@@ -52,6 +53,7 @@ services:
     profiles:
       - e2e
   edge:
+    command: /opt/bin/entry_point.sh && chmod 777 /home/seluser/downloads
     volumes:
       - test-downloads:/home/seluser/downloads
     ports:
@@ -68,6 +70,7 @@ services:
     profiles:
       - e2e
   firefox:
+    command: /opt/bin/entry_point.sh && chmod 777 /home/seluser/downloads
     volumes:
       - test-downloads:/home/seluser/downloads
     ports:

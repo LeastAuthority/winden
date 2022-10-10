@@ -60,13 +60,13 @@ export const config: Options.Testrunner = {
   bail: 0,
   baseUrl: "http://localhost",
   waitforTimeout: 10000,
-  connectionRetryTimeout: 120000,
+  connectionRetryTimeout: 60000,
   connectionRetryCount: 2,
   framework: "mocha",
   reporters: ["spec"],
   mochaOpts: {
     ui: "bdd",
-    timeout: 120000,
+    timeout: 60000,
   },
   onPrepare: function (_config, _capabilities) {
     execSync("./scripts/generate-CI-test-files.sh");
