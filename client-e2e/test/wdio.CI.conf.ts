@@ -66,7 +66,7 @@ export const config: Options.Testrunner = {
   reporters: ["spec"],
   mochaOpts: {
     ui: "bdd",
-    timeout: 60000,
+    timeout: 120000,
   },
   onPrepare: function (_config, _capabilities) {
     execSync("./scripts/generate-CI-test-files.sh");
