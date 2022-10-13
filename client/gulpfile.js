@@ -155,7 +155,7 @@ const watch = () => {
   gulp.watch("src/worker/**/*.{js,ts,tsx}", { ignoreInitial: false }, worker);
   gulp.watch("src/public/**/*", { ignoreInitial: false }, public);
   gulp.watch("vendor/wormhole-william/**/*.go", { ignoreInitial: false }, wasm);
-  gulp.series(start);
+  start();
 };
 
 const clean = () => del("dist");
