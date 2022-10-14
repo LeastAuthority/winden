@@ -4,7 +4,7 @@ WORKDIR /usr/src/app/client-e2e
 
 COPY package.json .
 COPY package-lock.json .
-RUN npm install
+#RUN npm install
 COPY . .
 
 CMD ["npm", "run", "wdio"]

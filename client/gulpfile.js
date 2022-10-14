@@ -117,6 +117,7 @@ const start = () => {
   connect.server({
     host: "0.0.0.0",
     root: "dist",
+    livereload: true,
     middleware: function (connect, opt) {
       return [
         (req, res, next) => {

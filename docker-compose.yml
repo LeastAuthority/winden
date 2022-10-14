@@ -106,7 +106,7 @@ services:
     env_file:
       - ./client-e2e/.env
     volumes:
-      - ./client-e2e/test:/usr/src/app/client-e2e/test
+      - ./client-e2e:/usr/src/app/client-e2e
       - test-downloads:/home/node/downloads
     depends_on:
       client-ci:

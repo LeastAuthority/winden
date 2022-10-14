@@ -23,5 +23,5 @@ RUN npm install
 # prebuild, for CI optimization
 RUN gulp public javascript worker wasm
 
-CMD ["gulp", "start"]
+CMD ["gulp", "watch"]
 EXPOSE 8080
