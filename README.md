@@ -2,9 +2,13 @@
   <img src="https://raw.githubusercontent.com/LeastAuthority/winden/main/client/src/public/LA_Winden_HorizontalLogo_Color.svg" height="100" alt="Winden">
 </h1>
 
+Be aware, it is **Public Beta version**, which might have some issues or not work as expected in all browsers.
+
 # Winden -  Magic Wormhole Web Application Client
 
-Winden is a free web application that allows secure, fast, and easy transfer files between devices in real-time. Winden is identity-free, meaning that senders and receivers don’t need to know each other’s identity to use it, or to reveal their identity to us. We do not require people to sign up or log in and we cannot access any files you send, as they are end-to-end encrypted. Files are never stored on our servers and transfers happen in real-time. While these aspects ensure the app is more private and secure, it means that both the sender and receiver need to be online at the same time. **Learn more about how Winden works in our [FAQ](https://winden.app/faq)**.
+Winden is a free web application for secure, fast, and easy file transfers between devices in real-time. Winden is identity-free, meaning that senders and receivers don’t need to know each other’s identity to use it, or to reveal their identity to us.
+
+We do not require people to sign up or log in and we cannot access any files you send, as they are end-to-end encrypted. Files are never stored on our servers and transfers happen in real-time. While these aspects ensure the app is more private and secure, it means that both the sender and receiver need to be online at the same time. **Learn more about how Winden works in our [FAQ](https://winden.app/faq)**.
 
 Based on the [Magic Wormhole protocol](https://magic-wormhole.readthedocs.io/) , Winden was developed to scale the protocol without compromising its security and make it ready for web-usage. Part of this work was funded by the European Union’s [Next Generation Internet](https://www.ngi.eu/) program (NGI_Trust).
 
