@@ -1,11 +1,18 @@
-# Winden
+<h1 align="center">
+  <img src="https://raw.githubusercontent.com/LeastAuthority/winden/main/client/src/public/LA_Winden_HorizontalLogo_Color.svg" height="100" alt="Winden Logo">
+</h1>
 
-Winden is a graphical interface for doing file transfer via the Magic Wormhole protocol.
+Be aware, this is a **Beta version**, which might have some [issues](https://winden.app/faq) or not work as expected in all browsers.
 
-## Status
+# Winden - Magic Wormhole web application
 
-Core repository is currently in **_evaluation stage_**.
-The web app is in 'alpha' state, and **not ready for production use**.
+Winden is a free web application for secure, fast, and easy file transfers between devices in real-time. Winden is identity-free, meaning that senders and receivers don’t need to know each other’s identity to use it, or to reveal their identity to us.
+
+We do not require people to sign up or log in and we cannot access any files you send, as they are end-to-end encrypted. Files are never stored on our servers and transfers happen in real-time. While these aspects ensure the app is more private and secure, it means that both the sender and receiver need to be online at the same time. **Learn more about how Winden works in our [FAQ](https://winden.app/faq)**.
+
+Based on the [Magic Wormhole protocol](https://magic-wormhole.readthedocs.io/), Winden was developed to scale the protocol without compromising its security and make it ready for web-usage. Part of this work was funded by the European Union’s [Next Generation Internet](https://www.ngi.eu/) program (NGI_Trust).
+
+**Try it out at [winden.app](https://winden.app)**.
 
 ## Development Setup
 
@@ -29,14 +36,14 @@ git clone --recurse-submodules git@github.com:LeastAuthority/winden.git
 ### System Prerequisites
 
 - docker
-- docker-compose
+- docker compose
 
 ### Setup docker images
 
 ```sh
-docker-compose build
-docker-compose run client npm i
-docker-compose run client-e2e npm i
+docker compose build
+docker compose run client npm i
+docker compose run client-e2e npm i
 ```
 
 ### Run development environment
@@ -50,26 +57,26 @@ The following command will run `gulp watch` in the `client` container. `gulp wat
 Learn more about the build system at [ARCHITECTURE.md](ARCHITECTURE.md#build-process)
 
 ```sh
-docker-compose up -d client
-docker-compose run -p 8080:8080 client gulp watch # equivalent command
+docker compose up -d client
+docker compose run -p 8080:8080 client gulp watch # equivalent command
 ```
 
 ### View logs
 
 ```sh
-docker-compose logs -f
+docker compose logs -f
 ```
 
 ### Stop development environment
 
 ```sh
-docker-compose down
+docker compose down
 ```
 
 ### Storybook
 
 ```sh
-docker-compose run -p 6006:6006 client npm run storybook
+docker compose run -p 6006:6006 client npm run storybook
 ```
 
 ## Testing
@@ -88,9 +95,12 @@ Run the unit and integration tests using the following:
 
 ```sh
 # run tests once
-docker-compose run client npm run test
+docker compose run client npm run test
 # or automatically re-run tests when editing a file
-docker-compose run client npm run test -- --watch
+docker compose run client npm run test -- --watch
+
+# or run individual tests
+docker compose run client npm run test -- -i client/src/worker/tests/streaming.test.ts
 ```
 
 Run the end-to-end tests with the following
@@ -113,14 +123,21 @@ And https://webdriver.io/docs/api/browser/debug/
 ## Building
 
 - Create `client/.env` if it does not exist already
-- Fill it with the following:
+- Fill it with the following for:
 
+(Playground environment)
 ```sh
-MAILBOX_URL="wss://mailbox.w3.leastauthority.com/v1"
-RELAY_URL="wss://relay.w3.leastauthority.com:443"
-
+MAILBOX_URL="wss://<mailbox server>/v1"
+RELAY_URL="wss:///<relay server>"
 # Use the following line for a development build
 NODE_ENV=development
+```
+
+(Production environment)
+```sh
+# Production
+MAILBOX_URL="wss://<mailbox server>/v1"
+RELAY_URL="wss:///<relay server>"
 # Or use the following line instead for a production build
 NODE_ENV=production
 ```
@@ -140,10 +157,8 @@ AWS_DEFAULT_REGION=<REGION>
 S3_BUCKET=<URL>
 CDF_DISTRIBUTION_ID=<ID>
 
-# use w3.leastauthority.com instead if deploying to playground
-MAILBOX_URL="wss://mailbox.w.leastauthority.com/v1"
-RELAY_URL="wss://relay.w.leastauthority.com:443"
-
+MAILBOX_URL="wss://<mailbox server>/v1"
+RELAY_URL="wss://<relay server>"
 NODE_ENV=production # or `development` if deploying to playground
 ```
 
