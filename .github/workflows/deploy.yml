@@ -54,12 +54,18 @@ jobs:
           NODE_ENV=production
           ENVIRONMENT=${{ inputs.environment }}
           EOF
+
       - name: prepare
         run: |
           docker-compose build
           docker-compose run client npm i
 
+      - name: enable search in robots.txt
+        if: ${{ inputs.environment == "production" }}
+        run: mv ./client/src/public/robots.prod.txt ./client/src/public/robots.txt
+
       - name: deploy
         run: docker-compose run client gulp deploy
+
       - name: tear down
         run: docker-compose down
