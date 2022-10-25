@@ -2,7 +2,7 @@
   <img src="https://raw.githubusercontent.com/LeastAuthority/winden/main/client/src/public/LA_Winden_HorizontalLogo_Color.svg" height="100" alt="Winden Logo">
 </h1>
 
-Be aware, this is **Beta version**, which might have some [issues](https://winden.app/faq) or not work as expected in all browsers.
+Be aware, this is a **Beta version**, which might have some [issues](https://winden.app/faq) or not work as expected in all browsers.
 
 # Winden - Magic Wormhole web application
 
