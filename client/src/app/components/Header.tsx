@@ -52,6 +52,7 @@ function Logo() {
           }
           fit="contain"
           src="/LA_Winden_HorizontalLogo_Color.svg"
+          alt="Winden logo"
         />
       </Link>
       <Text color="dark-grey" className={classes.text}>
