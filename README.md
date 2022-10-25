@@ -1,18 +1,18 @@
 <h1 align="center">
-  <img src="https://raw.githubusercontent.com/LeastAuthority/winden/main/client/src/public/LA_Winden_HorizontalLogo_Color.svg" height="100" alt="Winden">
+  <img src="https://raw.githubusercontent.com/LeastAuthority/winden/main/client/src/public/LA_Winden_HorizontalLogo_Color.svg" height="100" alt="Winden Logo">
 </h1>
 
-Be aware, it is **Public Beta version**, which might have some issues or not work as expected in all browsers.
+Be aware, this is **Beta version**, which might have some [issues](https://winden.app/faq) or not work as expected in all browsers.
 
-# Winden -  Magic Wormhole Web Application Client
+# Winden - Magic Wormhole web application
 
 Winden is a free web application for secure, fast, and easy file transfers between devices in real-time. Winden is identity-free, meaning that senders and receivers don’t need to know each other’s identity to use it, or to reveal their identity to us.
 
 We do not require people to sign up or log in and we cannot access any files you send, as they are end-to-end encrypted. Files are never stored on our servers and transfers happen in real-time. While these aspects ensure the app is more private and secure, it means that both the sender and receiver need to be online at the same time. **Learn more about how Winden works in our [FAQ](https://winden.app/faq)**.
 
-Based on the [Magic Wormhole protocol](https://magic-wormhole.readthedocs.io/) , Winden was developed to scale the protocol without compromising its security and make it ready for web-usage. Part of this work was funded by the European Union’s [Next Generation Internet](https://www.ngi.eu/) program (NGI_Trust).
+Based on the [Magic Wormhole protocol](https://magic-wormhole.readthedocs.io/), Winden was developed to scale the protocol without compromising its security and make it ready for web-usage. Part of this work was funded by the European Union’s [Next Generation Internet](https://www.ngi.eu/) program (NGI_Trust).
 
-**Try it out [winden.app](https://winden.app)**
+**Try it out at [winden.app](https://winden.app)**.
 
 ## Development Setup
 
@@ -127,9 +127,8 @@ And https://webdriver.io/docs/api/browser/debug/
 
 (Playground environment)
 ```sh
-MAILBOX_URL="wss://mailbox.stage.mw.leastauthority.com/v1"
-RELAY_URL="wss:///relay.stage.mw.leastauthority.com"
-
+MAILBOX_URL="wss://<mailbox server>/v1"
+RELAY_URL="wss:///<relay server>"
 # Use the following line for a development build
 NODE_ENV=development
 ```
@@ -137,8 +136,8 @@ NODE_ENV=development
 (Production environment)
 ```sh
 # Production
-MAILBOX_URL="wss://mailbox.winden.app/v1"
-RELAY_URL="wss:///relay.winden.app"
+MAILBOX_URL="wss://<mailbox server>/v1"
+RELAY_URL="wss:///<relay server>"
 # Or use the following line instead for a production build
 NODE_ENV=production
 ```
@@ -158,10 +157,8 @@ AWS_DEFAULT_REGION=<REGION>
 S3_BUCKET=<URL>
 CDF_DISTRIBUTION_ID=<ID>
 
-# use w3.leastauthority.com instead if deploying to playground
-MAILBOX_URL="wss://mailbox.stage.mw.leastauthority.com/v1"
-RELAY_URL="wss://relay.stage.mw.leastauthority.com"
-
+MAILBOX_URL="wss://<mailbox server>/v1"
+RELAY_URL="wss://<relay server>"
 NODE_ENV=production # or `development` if deploying to playground
 ```
 
