@@ -3,6 +3,8 @@ const { exec, execSync } = require("child_process");
 const gulp = require("gulp");
 const log = require("fancy-log");
 const connect = require("gulp-connect");
+const replace = require('gulp-replace');
+const gulpif = require('gulp-if');
 const webpack = require("webpack-stream");
 const Dotenv = require("dotenv-webpack");
 const SentryPlugin = require("@sentry/webpack-plugin");
@@ -105,7 +107,16 @@ const publicCopy = () =>
     .src("src/public/**/*", { dot: true })
     .pipe(gulp.dest("dist"))
     .pipe(connect.reload());
-const public = gulp.series(publicClean, publicCopy);
+
+// allow search engine to crawl production deployment instances only
+const allowRobots = () =>
+  gulp
+    .src(['dist/robots.txt'])
+    .pipe(gulpif(process.env.ENVIRONMENT === "production" , replace('Disallow', 'Allow')))
+    .pipe(gulp.dest('dist'));
+
+const public = gulp.series(publicClean, publicCopy, allowRobots);
+
 
 const wasmBuild = () =>
   exec(
