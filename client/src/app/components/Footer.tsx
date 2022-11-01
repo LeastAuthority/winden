@@ -37,7 +37,7 @@ function Tagline() {
 function Logo() {
   return (
     <Anchor href="https://leastauthority.com" target="_blank">
-      <Image width="auto" height={30} fit="contain" src="/la-logo.svg" />
+      <Image width="auto" height={30} fit="contain" src="/la-logo.svg" alt="Least Authority logo" />
     </Anchor>
   );
 }
