@@ -1,4 +1,4 @@
-name: transfer-repo-CI
+name: Build and Test (CI)
 on: [push, pull_request]
 jobs:
   build:
@@ -7,7 +7,7 @@ jobs:
     timeout-minutes: 30
     strategy:
       matrix:
-        go-version: [1.16.2]
+        go-version: [1.16.15]
         os: [ubuntu-latest]
     steps:
       - name: Checkout repository
@@ -15,37 +15,51 @@ jobs:
         with:
             submodules: recursive
 
-      - name: setup npm, yarn etc.
+      - name: Setup npm, yarn etc.
         uses: actions/setup-node@v2
         with:
           node-version: '16'
 
       - name: Install docker and docker-compose
         run: |
-           sudo curl -o /usr/local/bin/docker-compose -L "https://github.com/docker/compose/releases/download/v2.6.1/docker-compose-linux-x86_64"
+           sudo curl -o /usr/local/bin/docker-compose -L "https://github.com/docker/compose/releases/download/v2.11.2/docker-compose-linux-x86_64"
            sudo chmod +x /usr/local/bin/docker-compose
 
-      - name: setup for running tests
+      - name: Setup for running tests
         run: |
           IP=$(ip address show  eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f1 | head -n1)
-          printf "HOST_IP address is: %s\n" "$HOST_IP"
+          printf "HOST_IP address is: %s\n" "$IP"
           cat <<EOF >> ./client-e2e/.env
           HOST_IP="$IP"
           EOF
+          cat <<EOF >> ./client/.env
+          MAILBOX_URL="ws://$IP:4000/v1"
+          RELAY_URL="ws://$IP:4002"
+          NODE_ENV=development
+          EOF
+          printf "Client .env:\n"
+          cat ./client/.env
+          printf "Client-e2e .env:\n"
+          cat ./client-e2e/.env
 
       - name: Setup docker images
-        run: docker-compose --profile e2e build
+        run: docker compose --profile e2e build
 
-      - name: build client
-        run: docker-compose --profile e2e run client npm i
 
-      - name: build client-e2e
-        run: docker-compose --profile e2e run client-e2e npm i
+      - name: Setup packages
+        run: docker compose --profile e2e run client-e2e npm i
 
-      - name: run unit and integration tests
+      - name: Run UNIT and INTEGRATION tests
         run: |
-          docker-compose --profile e2e up -d client
-          docker-compose --profile e2e run client npm run test
+          docker compose --profile e2e up -d client-ci
+          # give some time load webapp
+          sleep 60
+          docker compose --profile e2e run client-ci npm run test
 
-      - name: stop the containers
-        run: docker-compose --profile e2e down
+      - name: Run END-2-END tests
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          docker compose --profile e2e run --rm client-e2e 
+
+      - name: Stop the containers
+        run: docker compose --profile e2e down

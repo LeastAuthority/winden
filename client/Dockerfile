@@ -19,5 +19,9 @@ ARG SENTRYCLI_USE_LOCAL=1
 RUN npm install --location=global --unsafe-perm
 COPY . .
 
-EXPOSE 8080
+RUN npm install
+# prebuild, for CI optimization
+RUN gulp public javascript worker wasm
+
 CMD ["gulp", "watch"]
+EXPOSE 8080

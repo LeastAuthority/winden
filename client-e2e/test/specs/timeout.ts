@@ -4,33 +4,39 @@ import { hashFile } from "../util/hashFile";
 import { waitForFileExists } from "../util/waitForFileExists";
 
 async function testTimeoutSuccess(timeoutMs: number) {
-  const originalFilePath = `/usr/src/app/test/files/hello-world.txt`;
+  const originalFilePath = `./test/files/hello-world.txt`;
   const receivedFilePath = path.join(global.downloadDir, "hello-world.txt");
 
+  // Sender
   await Page.open();
   const _sendWindow = await browser.getWindowHandle();
   await Page.uploadFiles(originalFilePath);
-  const input = await $("input[readonly='']");
-  const codeUrl = await input.getValue();
-  const _receiveWindow = await browser.newWindow(codeUrl);
-  await browser.waitUntil(() => $("button").isExisting());
+  const codeUrl = await Page.getCodeUrl()
 
+  // Receiver
+  const _receiveWindow = await browser.newWindow(codeUrl);
+  await browser.waitUntil(() => Page.receiveDownloadButton().isExisting());
+  
   await browser.pause(timeoutMs);
 
-  await (await $("button")).click();
+  await (await Page.receiveDownloadButton()).click();
+
   await browser.call(
-    () => waitForFileExists(receivedFilePath, 10000) // 10 seconds
+    () => waitForFileExists(receivedFilePath, 20000) // 20 seconds
   );
-  const originalHash = await hashFile(originalFilePath);
-  const receivedHash = await hashFile(receivedFilePath);
-  await expect(originalHash).toBe(receivedHash);
+
+  await browser.waitUntil(async () => {
+    const originalHash = await hashFile(originalFilePath);
+    const receivedHash = await hashFile(receivedFilePath);
+    return originalHash === receivedHash;
+  });
 }
 
 describe("Time out", () => {
-  describe("when the receiver waits 5 minutes before accepting the file", () => {
-    it.skip("will succeed in connecting and transferring", async () => {
-      await testTimeoutSuccess(5 * 60 * 1000);
-    });
+  describe("when the receiver waits 1 minutes before accepting the file", () => {
+    it("will succeed in connecting and transferring", async () => {
+      await testTimeoutSuccess(1 * 60 * 1000);
+    }).timeout(120000);
   });
 
   describe("when the receiver waits 20 minutes before accepting the file", () => {
@@ -39,7 +45,4 @@ describe("Time out", () => {
     });
   });
 
-  // it.skip("3.C", async () => {
-  //   await testTimeoutSuccess(2 * 60 * 60 * 1000);
-  // });
 });

@@ -75,13 +75,14 @@ export function SendInstructionsScreenContent(props: ContentProps) {
           }}
         >
           <Text size={urlTextSize}>{window.location.host}/#</Text>
-          <Text ml={-9} size={urlTextSize} className={classes.codeLabel}>
+          <Text data-testid="code-generated" ml={-9} size={urlTextSize} className={classes.codeLabel}>
             {props.code}
           </Text>
           <Button
             leftIcon={<Files />}
             disabled={props.copied}
             onClick={props.onCopy}
+            data-testid="copy-link-button"
             color="yellow"
           >
             {props.copied ? "Link copied!" : "Copy link"}
