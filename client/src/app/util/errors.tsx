@@ -25,6 +25,8 @@ export function detectErrorType(error: string) {
     // TODO: separate error messages depending when it happens
   } else if (/(.*unclean connection close.*)|(.*websocket.Dial failed.*)|(failed to establish connection$)|(^WebSocket connection to.*failed.*)/.test(error)) {
     return ErrorTypes.MAILBOX_RELAY_CONNECTION;
+  } else if (/(.*unknown send result.*)/.test(error)) {
+    return ErrorTypes.INTERRUPT;
   } else {
     return ErrorTypes.RECV_CONNECTION_TIMEOUT;
   }
@@ -90,13 +92,13 @@ export function errorContent(type: ErrorTypes): {
     }
     case ErrorTypes.INTERRUPT: {
       return {
-        title: "Network trouble?",
+        title: "Transfer cancelled/interrupted",
         description: (
           <>
             <Text component="p">
-              There was an issue with either your or the receiver's connection.
+              The transfer was cancelled or interrupted.
             </Text>
-            <Text component="p">Please try again with a new code.</Text>
+            <Text component="p">Please try again.</Text>
           </>
         ),
       };
