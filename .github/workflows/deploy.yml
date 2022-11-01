@@ -54,6 +54,7 @@ jobs:
           NODE_ENV=production
           ENVIRONMENT=${{ inputs.environment }}
           EOF
+
       - name: prepare
         run: |
           docker-compose build
@@ -61,5 +62,6 @@ jobs:
 
       - name: deploy
         run: docker-compose run client gulp deploy
+
       - name: tear down
         run: docker-compose down
