@@ -17,7 +17,7 @@ Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; prelo
   # Turn on the module.
   ExpiresActive on
   # Set the default expiry times.
-  ExpiresDefault "access plus 1 days"
+  #ExpiresDefault "access plus 1 days"
   ExpiresByType image/jpg "access plus 1 month"
   ExpiresByType image/svg+xml "access 1 month"
   ExpiresByType image/jpeg "access plus 1 month"
