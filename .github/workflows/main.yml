@@ -52,6 +52,8 @@ jobs:
       - name: Run UNIT and INTEGRATION tests
         run: |
           docker compose --profile e2e up -d client-ci
+          # give some time load webapp
+          sleep 60
           docker compose --profile e2e run client-ci npm run test
 
       - name: Run END-2-END tests
