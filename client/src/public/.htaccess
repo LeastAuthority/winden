@@ -23,8 +23,9 @@ Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; prelo
   ExpiresByType image/jpeg "access plus 1 month"
   ExpiresByType image/png "access plus 1 month"
   ExpiresByType text/css "access plus 1 month"
-  ExpiresByType application/javascript "access plus 1 days"
-  ExpiresByType application/wasm "access plus 1 days"
+  # Till hash filename is implemented
+  #ExpiresByType application/javascript "access plus 1 days"
+  #ExpiresByType application/wasm "access plus 1 days"
   ExpiresByType application/x-font-ttf "access plus 1 month"
   ExpiresByType image/ico "access plus 1 month"
   ExpiresByType text/html "access plus 1 days"
