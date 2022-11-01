@@ -116,15 +116,7 @@ const wasmBuild = () =>
 const wasmReload = () => gulp.src("gulpfile.js").pipe(connect.reload());
 const wasm = gulp.series(wasmBuild, wasmReload);
 
-const watch = () => {
-  gulp.watch(
-    "src/app/**/*.{ts,tsx,css}",
-    { ignoreInitial: false },
-    javascriptWatch
-  );
-  gulp.watch("src/worker/**/*.{js,ts,tsx}", { ignoreInitial: false }, worker);
-  gulp.watch("src/public/**/*", { ignoreInitial: false }, public);
-  gulp.watch("vendor/wormhole-william/**/*.go", { ignoreInitial: false }, wasm);
+const start = () => {
   connect.server({
     host: "0.0.0.0",
     root: "dist",
@@ -156,6 +148,18 @@ const watch = () => {
       ];
     },
   });
+};
+
+const watch = () => {
+  gulp.watch(
+    "src/app/**/*.{ts,tsx,css}",
+    { ignoreInitial: false },
+    javascriptWatch
+  );
+  gulp.watch("src/worker/**/*.{js,ts,tsx}", { ignoreInitial: false }, worker);
+  gulp.watch("src/public/**/*", { ignoreInitial: false }, public);
+  gulp.watch("vendor/wormhole-william/**/*.go", { ignoreInitial: false }, wasm);
+  start();
 };
 
 const clean = () => del("dist");
@@ -202,6 +206,8 @@ exports.public = public;
 exports.wasm = wasm;
 exports.storybook = storybook;
 exports.watch = watch;
+// for CI optimization without watch
+exports.start = start;
 exports.clean = clean;
 exports.deploy = gulp.series(
   public,

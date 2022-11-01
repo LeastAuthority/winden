@@ -1,3 +1,5 @@
+// config for Github workflow to run
+
 import type { Options } from "@wdio/types";
 import { execSync } from "child_process";
 import * as fs from "fs";
@@ -16,7 +18,10 @@ export const config: Options.Testrunner = {
     },
   },
   specs: ["./test/specs/**/*.ts"],
-  maxInstances: 10,
+  
+  exclude: ["./test/specs/send-large-files.ts",
+            ],
+  maxInstances: 1,
   capabilities: [
     {
       browserName: "chrome",
@@ -55,16 +60,16 @@ export const config: Options.Testrunner = {
   bail: 0,
   baseUrl: "http://localhost",
   waitforTimeout: 10000,
-  connectionRetryTimeout: 120000,
-  connectionRetryCount: 3,
+  connectionRetryTimeout: 60000,
+  connectionRetryCount: 2,
   framework: "mocha",
   reporters: ["spec"],
   mochaOpts: {
     ui: "bdd",
-    timeout: 60000,
+    timeout: 120000,
   },
   onPrepare: function (_config, _capabilities) {
-    execSync("/usr/src/app/scripts/generate-sized-test-files.sh");
+    execSync("./scripts/generate-CI-test-files.sh");
   },
   beforeTest: function () {
     fsExtra.emptyDirSync(global.downloadDir);

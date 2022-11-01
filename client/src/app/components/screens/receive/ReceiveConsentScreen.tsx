@@ -25,6 +25,7 @@ export function ReceiveConsentScreenContent(props: ContentProps) {
         <FileLabel />
         <Button
           leftIcon={<Download />}
+          data-testid="receive-download-button"
           onClick={props.onAccept}
           color="yellow"
           loading={props.submitting}
