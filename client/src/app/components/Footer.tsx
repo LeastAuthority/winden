@@ -36,7 +36,7 @@ function Tagline() {
 
 function Logo() {
   return (
-    <Anchor href="https://leastauthority.com" target="_blank">
+    <Anchor href="https://leastauthority.com" target="_blank" rel="noopener noreferrer">
       <Image width="auto" height={30} fit="contain" src="/la-logo.svg" alt="Least Authority logo" />
     </Anchor>
   );
@@ -94,6 +94,7 @@ function Links() {
         target="_blank"
         size="sm"
         color="black"
+        rel="noopener noreferrer"
         weight={600}
       >
         GitHub
