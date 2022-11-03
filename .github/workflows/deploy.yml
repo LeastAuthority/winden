@@ -58,10 +58,10 @@ jobs:
       - name: prepare
         run: |
           docker-compose build
-          docker-compose run client npm i
+          docker-compose run client-ci npm i
 
       - name: deploy
-        run: docker-compose run client gulp deploy
+        run: docker-compose run client-ci gulp deploy
 
       - name: tear down
         run: docker-compose down
