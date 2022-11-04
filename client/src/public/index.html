@@ -22,20 +22,67 @@
     <meta name="twitter:image" content="/Winden_landscape_logo.png" />
     <meta name="twitter:site" content="@LeastAuthority" />
     <meta name="twitter:card" content="summary_large_image" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+      integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      .ns-container {
+        width: 100vw;
+        min-height: 100vh;
+        background-color: #ddd;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: "Poppins", sans-serif;
+      }
+      .ns-logo {
+        margin: 20px 0;
+      }
+      .ns-content {
+        background-color: #fff;
+        border: 1px solid #aaa;
+        padding: 20px;
+        border-radius: 20px;
+      }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <noscript>
-      <p>In order to use Winden, JavaScript must be enabled.</p>
-      <p>Please refresh the page after enabling Javascript.</p>
-      <p>
-        For instructions on how to enable JavaScript,
-        <a
-          href="https://www.enable-javascript.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          >click here</a
-        >.
-      </p>
+      <div class="ns-container">
+        <img
+          class="ns-logo"
+          height="60"
+          src="/LA_Winden_HorizontalLogo_Color.svg"
+          alt="winden logo"
+        />
+        <div class="ns-content">
+          <h1>Please enable JavaScript</h1>
+          <p>
+            In order to use Winden, your web browser must have JavaScript
+            enabled.
+          </p>
+          <p>Please refresh the page after enabling JavaScript.</p>
+          <p>
+            For instructions on how to enable JavaScript,
+            <a
+              href="https://www.enable-javascript.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              >click here</a
+            >.
+          </p>
+        </div>
+      </div>
     </noscript>
     <div id="app"></div>
     <script src="/app/main.js"></script>
