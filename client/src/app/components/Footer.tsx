@@ -37,7 +37,13 @@ function Tagline() {
 function Logo() {
   return (
     <Anchor href="https://leastauthority.com" target="_blank">
-      <Image width="auto" height={30} fit="contain" src="/la-logo.svg" alt="Least Authority logo" />
+      <Image
+        width="auto"
+        height={30}
+        fit="contain"
+        src="/la-logo.svg"
+        alt="Least Authority logo"
+      />
     </Anchor>
   );
 }
@@ -92,6 +98,7 @@ function Links() {
       <Anchor
         href="https://github.com/LeastAuthority/winden"
         target="_blank"
+        rel="noreferrer noopener"
         size="sm"
         color="black"
         weight={600}
