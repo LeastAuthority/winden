@@ -38,12 +38,19 @@ git clone --recurse-submodules git@github.com:LeastAuthority/winden.git
 - docker
 - docker compose
 
-### Setup docker images
+### Set up docker images
 
 ```sh
 docker compose build
 docker compose run client npm i
 docker compose run client-e2e npm i
+```
+
+### Set up pre-commit hooks
+
+```sh
+npm i
+npm run prepare
 ```
 
 ### Run development environment
@@ -126,6 +133,7 @@ And https://webdriver.io/docs/api/browser/debug/
 - Fill it with the following for:
 
 (Playground environment)
+
 ```sh
 MAILBOX_URL="wss://<mailbox server>/v1"
 RELAY_URL="wss:///<relay server>"
@@ -134,6 +142,7 @@ NODE_ENV=development
 ```
 
 (Production environment)
+
 ```sh
 # Production
 MAILBOX_URL="wss://<mailbox server>/v1"
