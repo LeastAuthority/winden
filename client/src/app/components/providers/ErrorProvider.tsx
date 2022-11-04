@@ -4,10 +4,9 @@ import { errorContent, ErrorTypes } from "../../util/errors";
 
 const TRANSITION_DURATION = 250;
 
-export const ErrorContext =
-  React.createContext<{
-    setError: React.Dispatch<React.SetStateAction<ErrorTypes | null>>;
-  } | null>(null);
+export const ErrorContext = React.createContext<{
+  setError: React.Dispatch<React.SetStateAction<ErrorTypes | null>>;
+} | null>(null);
 
 type Props = React.PropsWithChildren<{}>;
 

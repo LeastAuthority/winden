@@ -127,20 +127,19 @@ class Transfer {
   }
 }
 
-export const WormholeContext =
-  React.createContext<{
-    code?: string;
-    fileMeta: Record<string, any> | null;
-    progressEta: number | null;
-    saveFile: (code: string) => Promise<TransferProgress | void>;
-    sendFile: (
-      file: File,
-      opts?: TransferOptions
-    ) => Promise<TransferProgress | void>;
-    done: boolean;
-    reset: () => void;
-    bytesSent: number;
-  } | null>(null);
+export const WormholeContext = React.createContext<{
+  code?: string;
+  fileMeta: Record<string, any> | null;
+  progressEta: number | null;
+  saveFile: (code: string) => Promise<TransferProgress | void>;
+  sendFile: (
+    file: File,
+    opts?: TransferOptions
+  ) => Promise<TransferProgress | void>;
+  done: boolean;
+  reset: () => void;
+  bytesSent: number;
+} | null>(null);
 
 export default function WormholeProvider(props: Props) {
   const [fileMeta, setFileMeta] = useState<Record<string, any> | null>(null);

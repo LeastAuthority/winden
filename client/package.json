@@ -60,6 +60,7 @@
     "gulp-replace": "^1.1.3",
     "html-webpack-plugin": "^5.5.0",
     "jest": "^27.5.1",
+    "prettier": "2.7.1",
     "raw-loader": "^4.0.2",
     "resize-observer-polyfill": "^1.5.1",
     "storybook-css-modules": "^1.0.8",

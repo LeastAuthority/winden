@@ -31,7 +31,9 @@ export function ReceiveBeginScreenContent(props: ContentProps) {
           <Text component="p">Either:</Text>
           <Text component="p"></Text>
           <Text component="p">- The transfer was cancelled by the sender.</Text>
-          <Text component="p">- Your or the sender's Internet connection was interrupted.</Text>
+          <Text component="p">
+            - Your or the sender's Internet connection was interrupted.
+          </Text>
           <Text component="p"></Text>
           <Text component="p">Please try again.</Text>
         </Modal>
