@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import Client from "../client";
-import Go from "../wasm_exec";
+import Go from "../wasm_exec.d";
 import { NewTestFile } from "./util";
 
 const config = {

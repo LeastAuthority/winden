@@ -18,7 +18,7 @@ import {
 } from "../app/util/actions";
 import { TransferProgress } from "../app/wormhole/types";
 import Client from "./client";
-import Go from './wasm_exec';
+import Go from "./wasm_exec";
 
 const wasmPromise = fetch("/wormhole.wasm");
 let rpc: RpcProvider | undefined = undefined;
