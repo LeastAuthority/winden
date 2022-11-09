@@ -117,10 +117,10 @@ const allowRobots = () =>
 
 const public = gulp.series(publicClean, publicCopy, allowRobots);
 
-
+// added -buildvcs=false as it fails to build on Github actions with error obtaining VCS status: exit status 128
 const wasmBuild = () =>
   exec(
-    "cd vendor/wormhole-william && GOOS=js GOARCH=wasm go build -o ../../dist/wormhole.wasm ./wasm/module"
+    "cd vendor/wormhole-william && GOOS=js GOARCH=wasm go build  -buildvcs=false -o ../../dist/wormhole.wasm ./wasm/module"
   );
 // exec doesn't return a stream, but we need a non-empty stream to be able to reload.
 // so we build a stream using gulpfile.js
