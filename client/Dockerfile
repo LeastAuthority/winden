@@ -6,7 +6,7 @@ RUN apk add aws-cli git openssh lftp
 
 RUN npm -g config set user root
 RUN npm install --global gulp-cli
-COPY --from=golang:1.16-alpine /usr/local/go/ /usr/local/go/
+COPY --from=golang:1.19-alpine /usr/local/go/ /usr/local/go/
 
 RUN npm install --location=global @sentry/cli
 ENV SENTRYCLI_SKIP_DOWNLOAD=1
