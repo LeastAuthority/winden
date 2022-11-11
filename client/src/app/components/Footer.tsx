@@ -36,7 +36,9 @@ function Tagline() {
 
 function Logo() {
   return (
-    <Anchor href="https://leastauthority.com" target="_blank" rel="noopener noreferrer">
+    <Anchor href="https://leastauthority.com" 
+      target="_blank" 
+      rel="noopener noreferrer">
       <Image
         width="auto"
         height={30}
@@ -101,7 +103,6 @@ function Links() {
         rel="noreferrer noopener"
         size="sm"
         color="black"
-        rel="noopener noreferrer"
         weight={600}
       >
         GitHub
