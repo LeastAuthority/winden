@@ -9,7 +9,12 @@ import Navigate from "./Navigate";
 import NotFoundPage from "./pages/NotFoundPage";
 import ReceivePage from "./pages/ReceivePage";
 import SendPage from "./pages/SendPage";
-import StaticPage from "./pages/StaticPage";
+import AboutPage from "./pages/static/AboutPage";
+import BusinessPage from "./pages/static/BusinessPage";
+import FaqPage from "./pages/static/FaqPage";
+import FeedbackPage from "./pages/static/FeedbackPage";
+import PrivacyPage from "./pages/static/PrivacyPage";
+import TermsPage from "./pages/static/TermsPage";
 
 type Props = {};
 
@@ -34,15 +39,12 @@ export default function App({}: Props) {
             <Route path="/" element={<Navigate replace to="s" />} />
             <Route path="s" element={<SendPage />} />
             <Route path="r" element={<ReceivePage />} />
-            <Route path="about" element={<StaticPage page="about" />} />
-            <Route path="faq" element={<StaticPage page="faq" />} />
-            <Route path="privacy" element={<StaticPage page="privacy" />} />
-            <Route path="terms" element={<StaticPage page="terms" />} />
-            <Route
-              path="for-business"
-              element={<StaticPage page="business" />}
-            />
-            <Route path="feedback" element={<StaticPage page="feedback" />} />
+            <Route path="about" element={<AboutPage />} />
+            <Route path="faq" element={<FaqPage />} />
+            <Route path="privacy" element={<PrivacyPage />} />
+            <Route path="terms" element={<TermsPage />} />
+            <Route path="for-business" element={<BusinessPage />} />
+            <Route path="feedback" element={<FeedbackPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </CSSTransition>

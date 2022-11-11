@@ -112,7 +112,7 @@ const publicCopy = () =>
 const allowRobots = () =>
   gulp
     .src(['dist/robots.txt'])
-    .pipe(gulpif(process.env.ENVIRONMENT === "production" , replace('Disallow', 'Allow')))
+    .pipe(gulpif(process.env.ENVIRONMENT === "prod" , replace('Disallow', 'Allow')))
     .pipe(gulp.dest('dist'));
 
 const public = gulp.series(publicClean, publicCopy, allowRobots);
