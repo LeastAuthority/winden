@@ -13,6 +13,8 @@ const path = require("path");
 
 require("dotenv").config();
 
+const package = JSON.parse(fs.readFileSync('./package.json'))
+
 const webpackConfig = {
   mode: "development",
   devtool: "source-map",
@@ -110,10 +112,9 @@ const publicCopy = () =>
 
 // Set version in title of main html file to be visible for clients
 const setPublicVersion = async () => {
-  const gitTagVersion = execSync("git describe --tags --abbrev=0").toString().trim();
   gulp
     .src(['dist/index.html'])
-    .pipe(replace(new RegExp(`<title>(.*)</title>`), '<title>$1 ('+gitTagVersion+')</title>'))
+    .pipe(replace(new RegExp(`<title>(.*)</title>`), '<title>$1 ('+package.version+')</title>'))
     .pipe(gulp.dest('dist/'))
 }
 
@@ -129,11 +130,10 @@ const public = gulp.series(publicClean, publicCopy, setPublicVersion, allowRobot
 
 // Set agent version in go library to identify as web app client
 const setWasmVersion = async () => {
-  const gitTagVersion = execSync("git describe --tags --abbrev=0").toString().trim();
   gulp
     .src(['vendor/wormhole-william/version/version.go'])
     .pipe(replace(new RegExp(`AgentString = "(.*)"`), 'AgentString = "winden.app"'))
-    .pipe(replace(new RegExp(`AgentVersion = "(.*)"`), 'AgentVersion = "'+gitTagVersion+'"'))
+    .pipe(replace(new RegExp(`AgentVersion = "(.*)"`), 'AgentVersion = "'+package.version+'"'))
     .pipe(gulp.dest('vendor/wormhole-william/version/'));
 }
 

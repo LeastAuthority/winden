@@ -1,6 +1,7 @@
 {
   "name": "winden",
   "private": true,
+  "version": "0.5.1-beta",
   "scripts": {
     "test": "jest",
     "storybook": "start-storybook -p 6006",
