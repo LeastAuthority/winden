@@ -12,6 +12,7 @@ RUN npm install --location=global @sentry/cli
 ENV SENTRYCLI_SKIP_DOWNLOAD=1
 
 ENV PATH="/usr/local/go/bin:${PATH}"
+ENV GOROOT="/usr/local/go"
 
 COPY package.json .
 COPY package-lock.json .
