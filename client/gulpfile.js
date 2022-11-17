@@ -85,12 +85,24 @@ const javascriptWatch = () =>
     .pipe(gulp.dest("dist/app"))
     .pipe(connect.reload());
 
-const worker = () =>
+const prepWorker = () => {
+    // cp wasm_exec.js to be glued
+    execSync(
+      "cp \"$(go env GOROOT)/misc/wasm/wasm_exec.js\" src/worker"
+    );
+    // export as Go module
+    execSync(
+      "echo \"export default Go;\" >> src/worker/wasm_exec.js"
+    );
+}
+
+const worker = () => 
   gulp
     .src("src/worker/index.ts")
     .pipe(webpack(webpackConfig))
     .pipe(gulp.dest("dist/worker"))
     .pipe(connect.reload());
+
 
 const storybook = () => exec("npm run build-storybook");
 
@@ -162,6 +174,7 @@ const start = () => {
 };
 
 const watch = () => {
+  this.prepWorker();
   gulp.watch(
     "src/app/**/*.{ts,tsx,css}",
     { ignoreInitial: false },
@@ -220,7 +233,10 @@ exports.watch = watch;
 // for CI optimization without watch
 exports.start = start;
 exports.clean = clean;
+exports.prepWorker = prepWorker;
+
 exports.deploy = gulp.series(
+  prepWorker,
   public,
   javascript,
   worker,
@@ -229,4 +245,4 @@ exports.deploy = gulp.series(
   deploySftp
 );
 
-exports.default = gulp.series(public, javascript, worker, wasm, storybook);
+exports.default = gulp.series(prepWorker, public, javascript, worker, wasm, storybook);
