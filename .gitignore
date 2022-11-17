@@ -3,3 +3,4 @@
 */.env
 */test/files/sizes
 .DS_Store
+*/src/worker/wasm_exec.js
