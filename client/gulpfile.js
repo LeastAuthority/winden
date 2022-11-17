@@ -85,7 +85,7 @@ const javascriptWatch = () =>
     .pipe(gulp.dest("dist/app"))
     .pipe(connect.reload());
 
-const prepWorker = () => {
+const prepWorker = (cb) => {
     // cp wasm_exec.js to be glued
     execSync(
       "cp \"$(go env GOROOT)/misc/wasm/wasm_exec.js\" src/worker"
@@ -94,6 +94,7 @@ const prepWorker = () => {
     execSync(
       "echo \"export default Go;\" >> src/worker/wasm_exec.js"
     );
+    cb();
 }
 
 const worker = () => 
@@ -174,7 +175,7 @@ const start = () => {
 };
 
 const watch = () => {
-  this.prepWorker();
+  prepWorker;
   gulp.watch(
     "src/app/**/*.{ts,tsx,css}",
     { ignoreInitial: false },
