@@ -85,12 +85,21 @@ const javascriptWatch = () =>
     .pipe(gulp.dest("dist/app"))
     .pipe(connect.reload());
 
-const worker = () =>
+const prepWorker = (cb) => {
+    // cp wasm_exec.js to be glued
+    execSync(
+      "cp \"$(go env GOROOT)/misc/wasm/wasm_exec.js\" src/worker"
+    );
+    cb();
+}
+
+const worker = () => 
   gulp
     .src("src/worker/index.ts")
     .pipe(webpack(webpackConfig))
     .pipe(gulp.dest("dist/worker"))
     .pipe(connect.reload());
+
 
 const storybook = () => exec("npm run build-storybook");
 
@@ -117,10 +126,10 @@ const allowRobots = () =>
 
 const public = gulp.series(publicClean, publicCopy, allowRobots);
 
-
+// added -buildvcs=false as it fails to build on Github actions with error obtaining VCS status: exit status 128
 const wasmBuild = () =>
   exec(
-    "cd vendor/wormhole-william && GOOS=js GOARCH=wasm go build -o ../../dist/wormhole.wasm ./wasm/module"
+    "cd vendor/wormhole-william && GOOS=js GOARCH=wasm go build  -buildvcs=false -o ../../dist/wormhole.wasm ./wasm/module"
   );
 // exec doesn't return a stream, but we need a non-empty stream to be able to reload.
 // so we build a stream using gulpfile.js
@@ -162,6 +171,7 @@ const start = () => {
 };
 
 const watch = () => {
+  prepWorker;
   gulp.watch(
     "src/app/**/*.{ts,tsx,css}",
     { ignoreInitial: false },
@@ -220,7 +230,10 @@ exports.watch = watch;
 // for CI optimization without watch
 exports.start = start;
 exports.clean = clean;
+exports.prepWorker = prepWorker;
+
 exports.deploy = gulp.series(
+  prepWorker,
   public,
   javascript,
   worker,
@@ -229,4 +242,4 @@ exports.deploy = gulp.series(
   deploySftp
 );
 
-exports.default = gulp.series(public, javascript, worker, wasm, storybook);
+exports.default = gulp.series(prepWorker, public, javascript, worker, wasm, storybook);

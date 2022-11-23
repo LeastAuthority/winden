@@ -6,12 +6,13 @@ RUN apk add aws-cli git openssh lftp
 
 RUN npm -g config set user root
 RUN npm install --global gulp-cli
-COPY --from=golang:1.16-alpine /usr/local/go/ /usr/local/go/
+COPY --from=golang:1.19.3-alpine /usr/local/go/ /usr/local/go/
 
 RUN npm install --location=global @sentry/cli
 ENV SENTRYCLI_SKIP_DOWNLOAD=1
 
 ENV PATH="/usr/local/go/bin:${PATH}"
+ENV GOROOT="/usr/local/go"
 
 COPY package.json .
 COPY package-lock.json .
@@ -21,7 +22,7 @@ COPY . .
 
 RUN npm install
 # prebuild, for CI optimization
-RUN gulp public javascript worker wasm
+RUN gulp prepWorker public javascript worker wasm
 
 CMD ["gulp", "watch"]
 EXPOSE 8080
