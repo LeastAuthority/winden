@@ -1,6 +1,6 @@
 import path from "path";
 import fs from "fs";
-import Go from "../wasm_exec.d";
+import Go from "../wasm_exec.d"; 
 
 export interface TestFile {
   name: string;

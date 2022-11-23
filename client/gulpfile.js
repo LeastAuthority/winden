@@ -90,10 +90,6 @@ const prepWorker = (cb) => {
     execSync(
       "cp \"$(go env GOROOT)/misc/wasm/wasm_exec.js\" src/worker"
     );
-    // export as Go module
-    execSync(
-      "echo \"export default Go;\" >> src/worker/wasm_exec.js"
-    );
     cb();
 }
 
