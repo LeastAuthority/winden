@@ -9,6 +9,9 @@ const emptyLine = String.fromCharCode(8203);
 
 global.ResizeObserver = require("resize-observer-polyfill");
 
+// Sometimes tests fails on Github CI
+jest.retryTimes(1);
+
 describe("<CodeInput />", () => {
   describe("autocompletion", () => {
     describe("when hitting space when given a suggestion", () => {
