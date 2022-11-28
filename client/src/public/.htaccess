@@ -10,7 +10,10 @@ RewriteCond %{HTTPS} off
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
 <IfModule mod_headers.c>
-Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+  Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+  Header always set X-Content-Type-Options nosniff
+  Header unset Expires
+
 </IfModule>
 
 <IfModule mod_expires.c>  
@@ -19,7 +22,7 @@ Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; prelo
   # Set the default expiry times.
   #ExpiresDefault "access plus 1 days"
   ExpiresByType image/jpg "access plus 1 month"
-  ExpiresByType image/svg+xml "access 1 month"
+  ExpiresByType image/svg+xml "access plus 1 month"
   ExpiresByType image/jpeg "access plus 1 month"
   ExpiresByType image/png "access plus 1 month"
   ExpiresByType text/css "access plus 1 month"
