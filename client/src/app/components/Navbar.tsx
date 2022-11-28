@@ -159,7 +159,7 @@ export default function Navbar(props: Props) {
           </NavbarItem>
           <NavbarItem
             onClick={() => {
-              window.open("https://github.com/LeastAuthority/winden", "_blank");
+              window.open("https://github.com/LeastAuthority/winden");
               setOpened(false);
             }}
           >
