@@ -36,7 +36,9 @@ function Tagline() {
 
 function Logo() {
   return (
-    <Anchor href="https://leastauthority.com" target="_blank">
+
+    <Anchor href="https://leastauthority.com" 
+      rel="noopener noreferrer">
       <Image
         width="auto"
         height={30}
@@ -97,7 +99,7 @@ function Links() {
       <Divider orientation="vertical" />
       <Anchor
         href="https://github.com/LeastAuthority/winden"
-        target="_blank"
+        rel="noreferrer noopener"
         size="sm"
         color="black"
         weight={600}

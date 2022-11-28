@@ -3,3 +3,4 @@ client-e2e/test/files/sizes/
 node_modules/
 .DS_Store
 .env
+*/src/worker/wasm_exec.js
