@@ -36,7 +36,8 @@ function Tagline() {
 
 function Logo() {
   return (
-    <Anchor href="https://leastauthority.com">
+    <Anchor href="https://leastauthority.com" 
+      rel="noopener noreferrer">
       <Image
         width="auto"
         height={30}
