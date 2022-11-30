@@ -27,12 +27,12 @@ jobs:
       TEST_ENV: foobar
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: recursive
 
       - name: setup npm, yarn etc.
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '16'
 
@@ -42,12 +42,27 @@ jobs:
           "https://github.com/docker/compose/releases/download/v2.6.1/docker-compose-linux-x86_64"
           sudo chmod +x /usr/local/bin/docker-compose
 
-      - name: create config
+      - name: create config for production env.
+        if: inputs.environment == 'prod'
         run: |
-          touch ./client-e2e/.env
+          touch ./client/.env
           cat <<EOF >> ./client/.env
           MAILBOX_URL="wss://mailbox.winden.app/v1"
           RELAY_URL="wss://relay.winden.app/"
+          SFTP_HOSTNAME=${{ secrets.SFTP_HOSTNAME }}
+          SFTP_USERNAME=${{ secrets.SFTP_USERNAME }}
+          SFTP_IDENTITY="${{ secrets.SFTP_IDENTITY }}"
+          NODE_ENV=production
+          ENVIRONMENT=${{ inputs.environment }}
+          EOF
+
+      - name: create config for stage env.
+        if: inputs.environment == 'stage'
+        run: |
+          touch ./client/.env
+          cat <<EOF >> ./client/.env
+          MAILBOX_URL="wss://mailbox.stage.winden.app/v1"
+          RELAY_URL="wss://relay.stage.winden.app/"
           SFTP_HOSTNAME=${{ secrets.SFTP_HOSTNAME }}
           SFTP_USERNAME=${{ secrets.SFTP_USERNAME }}
           SFTP_IDENTITY="${{ secrets.SFTP_IDENTITY }}"
