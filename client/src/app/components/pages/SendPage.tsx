@@ -25,17 +25,21 @@ export function SendPageContent(props: Props) {
 export default function SendPage() {
   const wormhole = useWormhole();
 
-  return (
-    <SendPageContent
-      step={
-        wormhole?.done
-          ? "DONE"
-          : wormhole?.progressEta
-          ? "PROGRESS"
-          : wormhole?.fileMeta
-          ? "INSTRUCTIONS"
-          : "BEGIN"
-      }
-    />
-  );
+  if (wormhole?.state.status === "idle") {
+    return <SendPageContent step="BEGIN" />;
+  } else if (wormhole?.state.status === "sending") {
+    switch (wormhole.state.step) {
+      case "inProgress":
+        return (
+          <SendPageContent
+            step={wormhole.state.progress ? "PROGRESS" : "INSTRUCTIONS"}
+          />
+        );
+      case "failed":
+      case "succeeded":
+        return <SendPageContent step="DONE" />;
+    }
+  } else {
+    return null;
+  }
 }

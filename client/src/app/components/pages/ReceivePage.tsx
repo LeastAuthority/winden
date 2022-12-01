@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useWormhole } from "../../hooks/useWormhole";
 import ReceiveBeginScreen from "../screens/receive/ReceiveBeginScreen";
 import ReceiveCompleteScreen from "../screens/receive/ReceiveCompleteScreen";
@@ -9,33 +9,23 @@ type Props = {
   step: "BEGIN" | "CONSENT" | "PROGRESS" | "DONE";
 };
 
-export function ReceivePageContent(props: Props) {
-  switch (props.step) {
-    case "BEGIN":
-      return <ReceiveBeginScreen />;
-    case "CONSENT":
-      return <ReceiveConsentScreen />;
-    case "PROGRESS":
-      return <ReceiveProgressScreen />;
-    case "DONE":
-      return <ReceiveCompleteScreen />;
-  }
-}
-
 export default function ReceivePage() {
   const wormhole = useWormhole();
+  const [acceptFn, setAcceptFn] = useState(() => () => Promise.resolve());
 
-  return (
-    <ReceivePageContent
-      step={
-        wormhole?.done
-          ? "DONE"
-          : wormhole?.progressEta
-          ? "PROGRESS"
-          : wormhole?.fileMeta
-          ? "CONSENT"
-          : "BEGIN"
-      }
-    />
-  );
+  if (wormhole?.state.status === "idle") {
+    return <ReceiveBeginScreen onSuccess={(fn) => setAcceptFn(() => fn)} />;
+  } else if (wormhole?.state.status === "receiving") {
+    switch (wormhole?.state.step) {
+      case "confirming":
+        return <ReceiveConsentScreen accept={() => acceptFn()} />;
+      case "inProgress":
+        return <ReceiveProgressScreen />;
+      case "failed":
+      case "succeeded":
+        return <ReceiveCompleteScreen />;
+    }
+  } else {
+    return null;
+  }
 }

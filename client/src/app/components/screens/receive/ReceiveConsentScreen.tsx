@@ -1,10 +1,9 @@
-import { Anchor, Button, Space, Stack, Text } from "@mantine/core";
+import { Anchor, Button, Stack, Text } from "@mantine/core";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Download, X } from "tabler-icons-react";
 import { useCommonStyles } from "../../../hooks/useCommonStyles";
 import { useError } from "../../../hooks/useError";
-import { useWormhole } from "../../../hooks/useWormhole";
 import { detectErrorType } from "../../../util/errors";
 import Content from "../../Content";
 import FileLabel from "../../FileLabel";
@@ -34,12 +33,7 @@ export function ReceiveConsentScreenContent(props: ContentProps) {
         </Button>
         <Text color="dark-grey" weight={400} size={14.4}>
           By using Winden you agree to the{" "}
-          <Anchor
-            component={Link}
-            to="/terms"
-            color="tertiary"
-            weight={600}
-          >
+          <Anchor component={Link} to="/terms" color="tertiary" weight={600}>
             Terms
           </Anchor>
           .
@@ -57,10 +51,11 @@ export function ReceiveConsentScreenContent(props: ContentProps) {
   );
 }
 
-type Props = {};
+type Props = {
+  accept: () => Promise<void>;
+};
 
-export default function ReceiveConsentScreen({}: Props) {
-  const wormhole = useWormhole();
+export default function ReceiveConsentScreen(props: Props) {
   const error = useError();
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
@@ -70,8 +65,8 @@ export default function ReceiveConsentScreen({}: Props) {
       submitting={submitting}
       onAccept={() => {
         setSubmitting(true);
-        wormhole?.fileMeta
-          ?.accept()
+        props
+          .accept()
           .catch((e: any) => {
             if (e.includes("unexpected EOF")) {
               navigate("/r?cancel=", { replace: true });

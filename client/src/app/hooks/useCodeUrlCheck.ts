@@ -21,7 +21,7 @@ export function useCodeUrlCheck() {
         codeInput?.setSubmitting(true);
         // HACK: have a better way to wait for wormhole to initialize
         setTimeout(() => {
-          wormhole?.saveFile(code);
+          wormhole?.receiveFileRequest(code);
         }, 2000);
       } else {
         codeInput?.setShowError(true);

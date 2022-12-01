@@ -5,7 +5,6 @@ import { useCodeInput } from "../../../hooks/useCodeInput";
 import { useCommonStyles } from "../../../hooks/useCommonStyles";
 import { useError } from "../../../hooks/useError";
 import { useWormhole } from "../../../hooks/useWormhole";
-import { detectErrorType } from "../../../util/errors";
 import CodeInput from "../../CodeInput";
 import Content from "../../Content";
 
@@ -31,7 +30,9 @@ export function ReceiveBeginScreenContent(props: ContentProps) {
           <Text component="p">Either:</Text>
           <Text component="p"></Text>
           <Text component="p">- The transfer was cancelled by the sender.</Text>
-          <Text component="p">- Your or the sender's Internet connection was interrupted.</Text>
+          <Text component="p">
+            - Your or the sender's Internet connection was interrupted.
+          </Text>
           <Text component="p"></Text>
           <Text component="p">Please try again.</Text>
         </Modal>
@@ -48,29 +49,25 @@ export function ReceiveBeginScreenContent(props: ContentProps) {
   );
 }
 
-type Props = {};
+type Props = {
+  onSuccess: (accept: () => Promise<void>) => void;
+};
 
-export default function ReceiveBeginScreen({}: Props) {
+export default function ReceiveBeginScreen(props: Props) {
   const [cancelModal, setCancelModal] = useCancelModal();
   const wormhole = useWormhole();
-  const error = useError();
   const codeInput = useCodeInput();
 
   return (
     <ReceiveBeginScreenContent
       cancelModalOpen={cancelModal}
       onCancelModalClose={() => setCancelModal(false)}
-      onSubmit={(code) => {
+      onSubmit={async (code) => {
         if (wormhole) {
           codeInput?.setSubmitting(true);
-          wormhole
-            .saveFile(code)
-            .catch((e) => {
-              error?.setError(detectErrorType(e));
-            })
-            .finally(() => {
-              codeInput?.setSubmitting(false);
-            });
+          const accept = await wormhole.receiveFileRequest(code);
+          console.log("aaa?");
+          props.onSuccess(accept as any);
         }
       }}
       submitting={codeInput?.submitting || false}

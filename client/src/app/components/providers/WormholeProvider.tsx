@@ -1,222 +1,274 @@
-import React, { PropsWithChildren, useEffect, useRef, useState } from "react";
-import { useCodeInput } from "../../hooks/useCodeInput";
-import { useError } from "../../hooks/useError";
-import { useRateLimitedState } from "../../hooks/useRateLimitedState";
+import React, { useEffect, useReducer, useRef } from "react";
 import { PROGRESS_BAR_MS_PER_UPDATES } from "../../util/constants";
-import { detectErrorType, ErrorTypes } from "../../util/errors";
-import ClientWorker from "../../wormhole/client_worker";
-import {
-  ClientConfig,
-  TransferOptions,
-  TransferProgress,
-} from "../../wormhole/types";
+import { wormhole } from "../../wormhole/types";
 
-const updateProgressETAFrequency = 10;
-
-const defaultConfig: ClientConfig = {
-  rendezvousURL:
-    process.env["MAILBOX_URL"] || `ws://${window.location.hostname}:4000/v1`,
-  transitRelayURL:
-    process.env["RELAY_URL"] || `ws://${window.location.hostname}:4002`,
-  passPhraseComponentLength: 2,
+type FileInfo = {
+  name: string;
+  size: number;
 };
 
-type Props = PropsWithChildren<{}>;
-
-class Transfer {
-  private client: ClientWorker;
-  private progressBegin = 0;
-  private progressCounter = 0;
-
-  private onUpload: (file: Record<string, any>, code?: string) => void;
-  private onEta: (eta: number | null) => void;
-  private onDone: () => void;
-  private onBytes: (bytes: number) => void;
-
-  constructor(
-    onUpload: (file: Record<string, any>, code?: string) => void,
-    onEta: (eta: number | null) => void,
-    onDone: () => void,
-    onBytes: (bytes: number) => void,
-    onWasmExit: () => void,
-    onSendError: (error: string) => void
-  ) {
-    this.onUpload = onUpload;
-    this.onEta = onEta;
-    this.onDone = onDone;
-    this.onBytes = onBytes;
-    this.client = new ClientWorker(defaultConfig, onWasmExit, onSendError);
-  }
-
-  public async sendFile(
-    file: File,
-    opts?: TransferOptions
-  ): Promise<TransferProgress> {
-    const progressFunc = (sentBytes: number, totalBytes: number) => {
-      this.onBytes(sentBytes);
-      this.updateProgressETA(sentBytes, totalBytes);
+type State =
+  | {
+      status: "idle";
+    }
+  | {
+      status: "sending";
+      step: "inProgress" | "failed" | "succeeded";
+      code: string;
+      file: FileInfo;
+      progress: number;
+      // TODO: only exist on failed step
+      error?: any;
+      // TODO: make step before "inProgress"?
+      startTime?: number;
+    }
+  | {
+      status: "receiving";
+      step: "confirming" | "inProgress" | "failed" | "succeeded";
+      file: FileInfo;
+      progress: number;
+      // TODO: only exist on failed step
+      error?: any;
+      // TODO: make step before "inProgress"?
+      startTime?: number;
     };
 
-    if (typeof opts === "undefined") {
-      opts = { progressFunc };
-    } else if (typeof opts.progressFunc !== "function") {
-      opts.progressFunc = progressFunc;
-    } else {
-      const _progressFunc = opts.progressFunc;
-      opts.progressFunc = (sentBytes: number, totalBytes: number): void => {
-        _progressFunc(sentBytes, totalBytes);
-        progressFunc(sentBytes, totalBytes);
-      };
-    }
+const initialState: State = {
+  status: "idle",
+};
 
-    const p = this.client.sendFile(file, opts);
-    p.then(({ code, done }) => {
-      this.onUpload(file, code);
-      return done;
-    }).then(() => {
-      this.resetProgress();
-      this.onDone();
-    });
-
-    return p;
-  }
-
-  public saveFile(code: string): Promise<TransferProgress> {
-    const opts = {
-      progressFunc: (sentBytes: number, totalBytes: number) => {
-        this.onBytes(sentBytes);
-        this.updateProgressETA(sentBytes, totalBytes);
-      },
-    };
-
-    const p = this.client.saveFile(code.toLowerCase(), opts);
-    p.then((file) => {
-      this.onUpload(file);
-      return file.done;
-    })
-      .then(() => {
-        this.resetProgress();
-        this.onDone();
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-
-    return p;
-  }
-
-  private updateProgressETA(sentBytes: number, totalBytes: number) {
-    if (this.progressBegin === 0) {
-      this.progressBegin = Date.now();
-    }
-    this.progressCounter += 1;
-
+export function selectEta(state: State) {
+  if (state.status !== "idle" && state.startTime) {
     const now = Date.now();
-    const secSinceBegin = (now - this.progressBegin) / 1000;
-    const bytesPerSecond = sentBytes / secSinceBegin;
-    const bytesRemaining = totalBytes - sentBytes;
-    if (this.progressCounter % updateProgressETAFrequency === 0) {
-      this.onEta(Math.ceil(bytesRemaining / bytesPerSecond));
-    }
+    const secSinceBegin = (now - state.startTime) / 1000;
+    const bytesPerSecond = state.progress / secSinceBegin;
+    const bytesRemaining = state.file.size - state.progress;
+    return Math.ceil(bytesRemaining / bytesPerSecond);
+  } else {
+    return -1;
   }
+}
 
-  private resetProgress() {
-    this.progressBegin = 0;
-    this.progressCounter = 0;
-    this.onEta(null);
+type Action =
+  | {
+      type: "sendFile";
+      code: string;
+      file: FileInfo;
+    }
+  | { type: "sendFileFail"; error: any }
+  | { type: "sendFileSuccess" }
+  | { type: "receiveFileRequest"; file: FileInfo }
+  | { type: "receiveFileConfirm" }
+  | { type: "receiveFileFail"; error: any }
+  | { type: "receiveFileSuccess" }
+  | {
+      type: "updateProgress";
+      progress: number;
+    }
+  | { type: "reset" };
+
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case "sendFile": {
+      if (state.status === "idle") {
+        return {
+          status: "sending",
+          step: "inProgress",
+          code: action.code,
+          file: action.file,
+          progress: 0,
+        };
+      } else {
+        return state;
+      }
+    }
+    case "sendFileFail": {
+      if (state.status === "sending" && state.step === "inProgress") {
+        return {
+          ...state,
+          step: "failed",
+          error: action.error,
+        };
+      } else {
+        return state;
+      }
+    }
+    case "sendFileSuccess": {
+      if (state.status === "sending" && state.step === "inProgress") {
+        return {
+          ...state,
+          step: "succeeded",
+        };
+      } else {
+        return state;
+      }
+    }
+    case "receiveFileRequest": {
+      if (state.status === "idle") {
+        return {
+          status: "receiving",
+          step: "confirming",
+          file: action.file,
+          progress: 0,
+        };
+      } else {
+        return state;
+      }
+    }
+    case "receiveFileConfirm": {
+      if (state.status === "receiving" && state.step === "confirming") {
+        return {
+          ...state,
+          step: "inProgress",
+        };
+      } else {
+        return state;
+      }
+    }
+    case "receiveFileFail": {
+      if (state.status === "receiving" && state.step === "inProgress") {
+        return {
+          ...state,
+          step: "failed",
+          error: action.error,
+        };
+      } else {
+        return state;
+      }
+    }
+    case "receiveFileSuccess": {
+      if (state.status === "receiving" && state.step === "inProgress") {
+        return {
+          ...state,
+          step: "succeeded",
+        };
+      } else {
+        return state;
+      }
+    }
+    case "updateProgress": {
+      if (state.status === "sending") {
+        return {
+          ...state,
+          progress: action.progress,
+          startTime: state.startTime || Date.now(),
+        };
+      } else {
+        return state;
+      }
+    }
+    case "reset": {
+      return initialState;
+    }
   }
 }
 
 export const WormholeContext =
   React.createContext<{
-    code?: string;
-    fileMeta: Record<string, any> | null;
-    progressEta: number | null;
-    saveFile: (code: string) => Promise<TransferProgress | void>;
-    sendFile: (
-      file: File,
-      opts?: TransferOptions
-    ) => Promise<TransferProgress | void>;
-    done: boolean;
+    state: State;
+    sendFile: (file: File) => Promise<void>;
+    receiveFileRequest: (code: string) => Promise<() => Promise<void>>;
     reset: () => void;
-    bytesSent: number;
   } | null>(null);
 
+type Props = React.PropsWithChildren<{}>;
+
 export default function WormholeProvider(props: Props) {
-  const [fileMeta, setFileMeta] = useState<Record<string, any> | null>(null);
-  const [code, setCode] = useState<string | undefined>();
-  const [progressEta, setProgressEta] = useRateLimitedState<number | null>(
-    null,
-    1000
-  );
-  const [done, setDone] = useState(false);
-  const error = useError();
-  const [bytesSent, setBytesSent] = useRateLimitedState(
-    0,
-    PROGRESS_BAR_MS_PER_UPDATES
-  );
-  const codeInput = useCodeInput();
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const client = useRef(-1);
+  const lastProgressUpdate = useRef(Date.now());
 
-  const client = useRef<Transfer>();
+  const progressFunc = (sentBytes: number, totalBytes: number) => {
+    const now = Date.now();
+    if (now - lastProgressUpdate.current > PROGRESS_BAR_MS_PER_UPDATES) {
+      dispatch({ type: "updateProgress", progress: sentBytes });
+      lastProgressUpdate.current = now;
+    }
+  };
+
   useEffect(() => {
-    client.current = new Transfer(
-      (file, code) => {
-        setFileMeta(file);
-        setCode(code);
-      },
-      (eta) => {
-        setProgressEta(eta);
-      },
-      () => {
-        setDone(true);
-      },
-      (bytes: number) => {
-        setBytesSent(bytes);
-      },
-      () => {
-        error?.setError(ErrorTypes.WASM_EXITED);
-      },
-      (err) => {
-        error?.setError(detectErrorType(err));
+    (async () => {
+      const go = new Go();
+      go.exit = (code: number) => {
+        console.warn(`Go exited with code ${code}`);
+      };
+      let wasm: { instance: WebAssembly.Instance };
+      const wasmPromise = fetch("/wormhole.wasm");
+      if (typeof WebAssembly.instantiateStreaming === "undefined") {
+        const wasmData = await (await wasmPromise).arrayBuffer();
+        wasm = await WebAssembly.instantiate(wasmData, go.importObject);
+      } else {
+        wasm = await WebAssembly.instantiateStreaming(
+          wasmPromise,
+          go.importObject
+        );
       }
-    );
+      go.run(wasm.instance);
+
+      client.current = wormhole.Client.newClient({
+        rendezvousURL:
+          process.env["MAILBOX_URL"] ||
+          `ws://${window.location.hostname}:4000/v1`,
+        transitRelayURL:
+          process.env["RELAY_URL"] || `ws://${window.location.hostname}:4002`,
+        passPhraseComponentLength: 2,
+      });
+    })();
   }, []);
-
-  async function sendFile(
-    file: File,
-    opts?: TransferOptions
-  ): Promise<TransferProgress | void> {
-    return client.current?.sendFile(file, opts).catch((e: any) => {
-      error?.setError(detectErrorType(e));
-    });
-  }
-
-  async function saveFile(code: string): Promise<TransferProgress | void> {
-    return client.current?.saveFile(code).catch((e: any) => {
-      error?.setError(detectErrorType(e));
-    });
-  }
-
-  function reset() {
-    codeInput?.setValue("");
-    codeInput?.setSubmitting(false);
-    setFileMeta(null);
-    setCode(undefined);
-    setProgressEta(null);
-    setDone(false);
-  }
 
   return (
     <WormholeContext.Provider
       value={{
-        code,
-        fileMeta,
-        progressEta: progressEta || null,
-        saveFile,
-        sendFile,
-        done,
-        reset,
-        bytesSent,
+        state,
+        sendFile: async (file: File) => {
+          const transfer = await wormhole.Client.sendFile(
+            client.current,
+            file.name,
+            file,
+            {
+              progressFunc,
+            }
+          );
+          dispatch({ type: "sendFile", code: transfer.code!, file });
+          try {
+            await transfer.done;
+            dispatch({ type: "sendFileSuccess" });
+          } catch (error) {
+            dispatch({ type: "sendFileFail", error });
+          }
+        },
+        receiveFileRequest: async (code: string) => {
+          const reader = await wormhole.Client.recvFile(client.current, code, {
+            progressFunc,
+          });
+          dispatch({
+            type: "receiveFileRequest",
+            file: { name: reader.name, size: reader.size },
+          });
+          return async () => {
+            try {
+              dispatch({ type: "receiveFileConfirm" });
+              while (true) {
+                const buffer = new Uint8Array(reader.bufferSizeBytes);
+                const [, done] = await reader.read(buffer);
+                if (done) {
+                  break;
+                }
+              }
+              dispatch({
+                type: "receiveFileSuccess",
+              });
+            } catch (error) {
+              dispatch({
+                type: "receiveFileFail",
+                error,
+              });
+            }
+          };
+        },
+        reset: () => {
+          dispatch({ type: "reset" });
+        },
       }}
     >
       {props.children}

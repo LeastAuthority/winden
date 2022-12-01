@@ -1,12 +1,4 @@
-import {
-  Button,
-  createStyles,
-  Group,
-  Space,
-  Stack,
-  Text,
-  TextInput,
-} from "@mantine/core";
+import { Button, createStyles, Group, Stack, Text } from "@mantine/core";
 import { useClipboard, useViewportSize } from "@mantine/hooks";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -75,7 +67,12 @@ export function SendInstructionsScreenContent(props: ContentProps) {
           }}
         >
           <Text size={urlTextSize}>{window.location.host}/#</Text>
-          <Text data-testid="code-generated" ml={-9} size={urlTextSize} className={classes.codeLabel}>
+          <Text
+            data-testid="code-generated"
+            ml={-9}
+            size={urlTextSize}
+            className={classes.codeLabel}
+          >
             {props.code}
           </Text>
           <Button
@@ -108,19 +105,24 @@ export default function SendInstructionsScreen({}: Props) {
   const clipboard = useClipboard({ timeout: 2000 });
   const navigate = useNavigate();
 
-  return wormhole?.code ? (
-    <SendInstructionsScreenContent
-      code={wormhole.code}
-      copied={clipboard.copied}
-      onCopy={() =>
-        clipboard.copy(
-          `${window.location.protocol}//${window.location.host}/#${wormhole.code}`
-        )
-      }
-      onCancel={() => {
-        navigate("/s", { replace: true });
-        window.location.reload();
-      }}
-    />
-  ) : null;
+  if (wormhole?.state.status === "sending") {
+    const code = wormhole.state.code;
+    return (
+      <SendInstructionsScreenContent
+        code={code}
+        copied={clipboard.copied}
+        onCopy={() =>
+          clipboard.copy(
+            `${window.location.protocol}//${window.location.host}/#${code}`
+          )
+        }
+        onCancel={() => {
+          navigate("/s", { replace: true });
+          window.location.reload();
+        }}
+      />
+    );
+  } else {
+    return null;
+  }
 }

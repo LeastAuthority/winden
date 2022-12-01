@@ -6,6 +6,7 @@ import { useWormhole } from "../../hooks/useWormhole";
 import { durationToClosestUnit } from "../../util/durationToClosestUnit";
 import Content from "../Content";
 import FileLabel from "../FileLabel";
+import { selectEta } from "../providers/WormholeProvider";
 
 type ContentProps = {
   title: string;
@@ -56,13 +57,15 @@ type Props = {
 export default function ProgressScreen(props: Props) {
   const wormhole = useWormhole();
 
-  return wormhole && wormhole.fileMeta && wormhole.progressEta ? (
+  return wormhole &&
+    wormhole.state.status !== "idle" &&
+    wormhole.state.progress ? (
     <ProgressScreenContent
       title={props.title}
       waitText={props.waitText}
-      bytesSent={wormhole.bytesSent}
-      fileSize={wormhole.fileMeta.size}
-      eta={wormhole.progressEta}
+      bytesSent={wormhole.state.progress}
+      fileSize={wormhole.state.file.size}
+      eta={selectEta(wormhole.state)}
       onCancel={props.onCancel}
     />
   ) : null;

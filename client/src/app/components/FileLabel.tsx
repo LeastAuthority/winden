@@ -38,10 +38,15 @@ type Props = {};
 
 export default function FileLabel({}: Props) {
   const wormhole = useWormhole();
-  return (
-    <FileLabelContent
-      name={wormhole?.fileMeta?.name}
-      size={wormhole?.fileMeta?.size}
-    />
-  );
+
+  if (wormhole && wormhole.state.status !== "idle") {
+    return (
+      <FileLabelContent
+        name={wormhole.state.file.name}
+        size={wormhole.state.file.size}
+      />
+    );
+  } else {
+    return null;
+  }
 }

@@ -89,11 +89,12 @@ export default function Header() {
           color="medium-grey"
           onClick={() => {
             navigate("/r");
-            if (wormhole?.fileMeta) {
+            if (wormhole?.state.status !== "idle") {
               // cancellation workaround
               window.location.reload();
             } else {
-              wormhole?.reset();
+              // TODO: keep?
+              // wormhole?.reset();
             }
           }}
           px={buttonPaddingX}
@@ -115,11 +116,12 @@ export default function Header() {
           color="medium-grey"
           onClick={() => {
             navigate("/s");
-            if (wormhole?.fileMeta) {
+            if (wormhole?.state.status !== "idle") {
               // cancellation workaround
               window.location.reload();
             } else {
-              wormhole?.reset();
+              // TODO: keep?
+              // wormhole?.reset();
             }
           }}
           px={buttonPaddingX}
