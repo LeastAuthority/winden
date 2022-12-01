@@ -1,0 +1,56 @@
+name: Feature request
+description: Fill up a form to request a new feature
+title: "[Feature]: <name the feature here>"
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to help us improving our project!
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is the problem you seek a solution for?
+      description: Describe the problem that lead to ask for this request
+      placeholder: Tell us about the problem
+      value: "Alice can not send/receive something to/from Bob in a specific way..."
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: How do you think a solution for this look like?
+      description: Describe how this new feature could help solving this problem.
+      placeholder: Tell us about how the feature could look like
+      value: "If Alice could do this before doing that, she could then easily send/receive something to/from Bob in a specific way..."
+    validations:
+      required: true
+  - type: dropdown
+    id: use-case-types
+    attributes:
+      label: What type of use cases could benefits from this feature?
+      multiple: true
+      options:
+        - Customer to Customer (C2C)
+        - Business to Business (B2B)
+        - Business to Customer (B2C)
+        - Customer to Business (C2B)
+  - type: textarea
+    id: use-cases
+    attributes:
+      label: Relevant use cases
+      description: Describe possible concrete use cases that could illustrate the use of this feature.
+      placeholder: Tell us about possible use cases of this feature
+      value: |
+        - ACME Corporation could provide A and B to their customers
+        - Family members could share C or D with their relatives
+        - Neighbors could approve E when requested by the local authorities
+        - ...
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: ex. email@example.com
+    validations:
+      required: false
