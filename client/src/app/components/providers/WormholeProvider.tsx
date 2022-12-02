@@ -2,6 +2,7 @@ import React, { useEffect, useReducer, useRef } from "react";
 import { PROGRESS_BAR_MS_PER_UPDATES } from "../../util/constants";
 import { wormhole } from "../../wormhole/types";
 
+//#region state
 type FileInfo = {
   name: string;
   size: number;
@@ -36,7 +37,9 @@ type State =
 const initialState: State = {
   status: "idle",
 };
+//#endregion
 
+//#region selectors
 export function selectEta(state: State) {
   if (state.status !== "idle" && state.startTime) {
     const now = Date.now();
@@ -48,7 +51,9 @@ export function selectEta(state: State) {
     return -1;
   }
 }
+//#endregion
 
+//#region actions and reducer
 type Action =
   | {
       type: "sendFile";
@@ -162,7 +167,9 @@ function reducer(state: State, action: Action): State {
     }
   }
 }
+//#endregion
 
+//#region component
 export const WormholeContext =
   React.createContext<{
     state: State;
@@ -275,3 +282,4 @@ export default function WormholeProvider(props: Props) {
     </WormholeContext.Provider>
   );
 }
+//#endregion
