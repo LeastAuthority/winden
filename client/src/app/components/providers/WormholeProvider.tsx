@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useCodeInput } from "../../hooks/useCodeInput";
 import { useError } from "../../hooks/useError";
 import { PROGRESS_BAR_MS_PER_UPDATES } from "../../util/constants";
 import { detectErrorType, ErrorTypes } from "../../util/errors";
@@ -166,14 +167,18 @@ export default function WormholeProvider(props: Props) {
   const navigate = useNavigate();
   const error = useError();
 
-  const progressFunc = (sentBytes: number, totalBytes: number) => {
-    const now = Date.now();
-    if (now - lastProgressUpdate.current > PROGRESS_BAR_MS_PER_UPDATES) {
-      dispatch({ type: "updateProgress", progress: sentBytes });
-      lastProgressUpdate.current = now;
-    }
-  };
+  //#region clearing code input after a transfer
+  const codeInput = useCodeInput();
 
+  useEffect(() => {
+    if (state.status === "idle") {
+      codeInput?.setValue("");
+      codeInput?.setSubmitting(false);
+    }
+  }, [state.status]);
+  //#endregion
+
+  //#region initialize wasm module on mount
   useEffect(() => {
     (async () => {
       const go = new Go();
@@ -204,69 +209,80 @@ export default function WormholeProvider(props: Props) {
       });
     })();
   }, []);
+  //#endregion
 
-  return (
-    <WormholeContext.Provider
-      value={{
-        state,
-        sendFile: async (file: File) => {
-          const transfer = await wormhole.Client.sendFile(
-            client.current,
-            file.name,
-            file,
-            {
-              progressFunc,
-            }
-          );
-          dispatch({ type: "sendFile", code: transfer.code!, file });
-          try {
-            await transfer.done;
-            dispatch({ type: "sendFileSuccess" });
-          } catch (e: any) {
-            if (e.includes("failed to write")) {
-              window.history.pushState({}, "", "/s?cancel=");
-              window.location.reload();
-            } else {
-              error?.setError(detectErrorType(`SendErr: ${error}`));
+  //#region provide value for context
+  const progressFunc = (sentBytes: number, totalBytes: number) => {
+    const now = Date.now();
+    if (now - lastProgressUpdate.current > PROGRESS_BAR_MS_PER_UPDATES) {
+      dispatch({ type: "updateProgress", progress: sentBytes });
+      lastProgressUpdate.current = now;
+    }
+  };
+
+  const contextValue = {
+    state,
+    sendFile: async (file: File) => {
+      const transfer = await wormhole.Client.sendFile(
+        client.current,
+        file.name,
+        file,
+        {
+          progressFunc,
+        }
+      );
+      dispatch({ type: "sendFile", code: transfer.code!, file });
+      try {
+        await transfer.done;
+        dispatch({ type: "sendFileSuccess" });
+      } catch (e: any) {
+        if (e.includes("failed to write")) {
+          window.history.pushState({}, "", "/s?cancel=");
+          window.location.reload();
+        } else {
+          error?.setError(detectErrorType(`SendErr: ${error}`));
+        }
+      }
+    },
+    receiveFileRequest: async (code: string) => {
+      const reader = await wormhole.Client.recvFile(client.current, code, {
+        progressFunc,
+      });
+      dispatch({
+        type: "receiveFileRequest",
+        file: { name: reader.name, size: reader.size },
+      });
+      return async () => {
+        try {
+          dispatch({ type: "receiveFileConfirm" });
+          while (true) {
+            const buffer = new Uint8Array(reader.bufferSizeBytes);
+            const [, done] = await reader.read(buffer);
+            if (done) {
+              break;
             }
           }
-        },
-        receiveFileRequest: async (code: string) => {
-          const reader = await wormhole.Client.recvFile(client.current, code, {
-            progressFunc,
-          });
           dispatch({
-            type: "receiveFileRequest",
-            file: { name: reader.name, size: reader.size },
+            type: "receiveFileSuccess",
           });
-          return async () => {
-            try {
-              dispatch({ type: "receiveFileConfirm" });
-              while (true) {
-                const buffer = new Uint8Array(reader.bufferSizeBytes);
-                const [, done] = await reader.read(buffer);
-                if (done) {
-                  break;
-                }
-              }
-              dispatch({
-                type: "receiveFileSuccess",
-              });
-            } catch (e: any) {
-              if (e.includes("unexpected EOF")) {
-                navigate("/r?cancel=", { replace: true });
-                window.location.reload();
-              } else {
-                error?.setError(detectErrorType(e));
-              }
-            }
-          };
-        },
-        reset: () => {
-          dispatch({ type: "reset" });
-        },
-      }}
-    >
+        } catch (e: any) {
+          if (e.includes("unexpected EOF")) {
+            navigate("/r?cancel=", { replace: true });
+            window.location.reload();
+          } else {
+            error?.setError(detectErrorType(e));
+          }
+        }
+      };
+    },
+    reset: () => {
+      dispatch({ type: "reset" });
+    },
+  };
+  //#endregion
+
+  return (
+    <WormholeContext.Provider value={contextValue}>
       {props.children}
     </WormholeContext.Provider>
   );
