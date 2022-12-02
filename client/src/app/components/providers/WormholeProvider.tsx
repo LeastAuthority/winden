@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import streamSaver from "streamsaver";
 import { useCodeInput } from "../../hooks/useCodeInput";
 import { useError } from "../../hooks/useError";
 import { PROGRESS_BAR_MS_PER_UPDATES } from "../../util/constants";
@@ -235,11 +236,12 @@ export default function WormholeProvider(props: Props) {
       try {
         await transfer.done;
         dispatch({ type: "sendFileSuccess" });
-      } catch (e: any) {
-        if (e.includes("failed to write")) {
+      } catch (e) {
+        if (typeof e === "string" && e.includes("failed to write")) {
           window.history.pushState({}, "", "/s?cancel=");
           window.location.reload();
         } else {
+          console.error(e);
           error?.setError(detectErrorType(`SendErr: ${error}`));
         }
       }
@@ -255,22 +257,42 @@ export default function WormholeProvider(props: Props) {
       return async () => {
         try {
           dispatch({ type: "receiveFileConfirm" });
+          let writer: WritableStreamDefaultWriter;
+          if (window.showSaveFilePicker) {
+            const handle = await window.showSaveFilePicker({
+              suggestedName: reader.name,
+            });
+            const writable = await handle.createWritable();
+            writer = writable.getWriter();
+          } else {
+            console.warn(
+              "File System Access API not supported in this browser. Falling back to streamsaver."
+            );
+            writer = streamSaver
+              .createWriteStream(reader.name, {
+                size: reader.size,
+              })
+              .getWriter();
+          }
           while (true) {
             const buffer = new Uint8Array(reader.bufferSizeBytes);
-            const [, done] = await reader.read(buffer);
+            const [n, done] = await reader.read(buffer);
+            writer.write(new Uint8Array(buffer).slice(0, n));
             if (done) {
+              writer.close();
               break;
             }
           }
           dispatch({
             type: "receiveFileSuccess",
           });
-        } catch (e: any) {
-          if (e.includes("unexpected EOF")) {
+        } catch (e) {
+          if (typeof e === "string" && e.includes("unexpected EOF")) {
             navigate("/r?cancel=", { replace: true });
             window.location.reload();
           } else {
-            error?.setError(detectErrorType(e));
+            console.error(e);
+            error?.setError(detectErrorType(e as string));
           }
         }
       };
