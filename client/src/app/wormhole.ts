@@ -1,19 +1,29 @@
-// TODO: declare local interface instead of import?
-import { FileStreamReader } from "./streaming";
+type FileStreamReader = {
+  readonly name: string;
+  readonly size: number;
+  readonly read: (buf: ArrayBuffer) => Promise<[number, boolean]>;
+  readonly bufferSizeBytes: number;
+  readonly cancel: () => void;
+};
 
-export interface TransferProgress {
+type TransferProgress = {
   name?: string;
   size?: number;
   code?: string;
   done: Promise<void>;
   accept?: () => Promise<void>;
   cancel: () => void;
-}
+};
 
-export type ProgressFunc = (sentBytes: number, totalBytes: number) => void;
+type ClientConfig = {
+  rendezvousURL: string;
+  transitRelayURL: string;
+  // TODO: int
+  passPhraseComponentLength: number;
+};
 
-export interface TransferOptions {
-  progressFunc?: ProgressFunc;
+type TransferOptions = {
+  progressFunc?: (sentBytes: number, totalBytes: number) => void;
   code?: string;
 
   // TODO: keep?
@@ -22,28 +32,9 @@ export interface TransferOptions {
   // TODO: refactor
   name?: string;
   size?: number;
-}
+};
 
-export interface ClientInterface {
-  // TODO: readonly or at least protected.
-  goClient: number;
-
-  sendText(msg: string): Promise<string>;
-
-  recvText(code: string): Promise<string>;
-
-  sendFile(file: File, opts?: TransferOptions): Promise<TransferProgress>;
-
-  recvFile(code: string, opts?: TransferOptions): Promise<FileStreamReader>;
-
-  free(): void;
-}
-
-export interface WindowWormhole {
-  Client: WindowClient;
-}
-
-export interface WindowClient {
+type WindowClient = {
   newClient(config?: ClientConfig): number;
 
   sendText(goClient: number, message: string): Promise<string>;
@@ -64,14 +55,11 @@ export interface WindowClient {
   ): Promise<FileStreamReader>;
 
   free(goClient: number): string | undefined;
-}
+};
 
-export interface ClientConfig {
-  rendezvousURL: string;
-  transitRelayURL: string;
-  // TODO: int
-  passPhraseComponentLength: number;
-}
+type WindowWormhole = {
+  Client: WindowClient;
+};
 
 export const wormhole: WindowWormhole = new Proxy(
   { Client: {} as WindowClient },

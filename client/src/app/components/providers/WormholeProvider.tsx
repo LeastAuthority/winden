@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useError } from "../../hooks/useError";
 import { PROGRESS_BAR_MS_PER_UPDATES } from "../../util/constants";
 import { detectErrorType, ErrorTypes } from "../../util/errors";
-import { wormhole } from "../../wormhole/types";
+import { wormhole } from "../../wormhole";
 
 //#region state
 type FileInfo = {
