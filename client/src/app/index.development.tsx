@@ -39,11 +39,11 @@ ReactDOM.render(
   <CodeInputProvider>
     <ThemeProvider>
       <ErrorProvider>
-        <WormholeProvider>
-          <BrowserRouter>
+        <BrowserRouter>
+          <WormholeProvider>
             <App />
-          </BrowserRouter>
-        </WormholeProvider>
+          </WormholeProvider>
+        </BrowserRouter>
       </ErrorProvider>
     </ThemeProvider>
   </CodeInputProvider>,

@@ -1,5 +1,8 @@
 import React, { useEffect, useReducer, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { useError } from "../../hooks/useError";
 import { PROGRESS_BAR_MS_PER_UPDATES } from "../../util/constants";
+import { detectErrorType, ErrorTypes } from "../../util/errors";
 import { wormhole } from "../../wormhole/types";
 
 //#region state
@@ -60,11 +63,9 @@ type Action =
       code: string;
       file: FileInfo;
     }
-  | { type: "sendFileFail"; error: any }
   | { type: "sendFileSuccess" }
   | { type: "receiveFileRequest"; file: FileInfo }
   | { type: "receiveFileConfirm" }
-  | { type: "receiveFileFail"; error: any }
   | { type: "receiveFileSuccess" }
   | {
       type: "updateProgress";
@@ -82,17 +83,6 @@ function reducer(state: State, action: Action): State {
           code: action.code,
           file: action.file,
           progress: 0,
-        };
-      } else {
-        return state;
-      }
-    }
-    case "sendFileFail": {
-      if (state.status === "sending" && state.step === "inProgress") {
-        return {
-          ...state,
-          step: "failed",
-          error: action.error,
         };
       } else {
         return state;
@@ -125,17 +115,6 @@ function reducer(state: State, action: Action): State {
         return {
           ...state,
           step: "inProgress",
-        };
-      } else {
-        return state;
-      }
-    }
-    case "receiveFileFail": {
-      if (state.status === "receiving" && state.step === "inProgress") {
-        return {
-          ...state,
-          step: "failed",
-          error: action.error,
         };
       } else {
         return state;
@@ -184,6 +163,8 @@ export default function WormholeProvider(props: Props) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const client = useRef(-1);
   const lastProgressUpdate = useRef(Date.now());
+  const navigate = useNavigate();
+  const error = useError();
 
   const progressFunc = (sentBytes: number, totalBytes: number) => {
     const now = Date.now();
@@ -198,6 +179,7 @@ export default function WormholeProvider(props: Props) {
       const go = new Go();
       go.exit = (code: number) => {
         console.warn(`Go exited with code ${code}`);
+        error?.setError(ErrorTypes.WASM_EXITED);
       };
       let wasm: { instance: WebAssembly.Instance };
       const wasmPromise = fetch("/wormhole.wasm");
@@ -240,8 +222,13 @@ export default function WormholeProvider(props: Props) {
           try {
             await transfer.done;
             dispatch({ type: "sendFileSuccess" });
-          } catch (error) {
-            dispatch({ type: "sendFileFail", error });
+          } catch (e: any) {
+            if (e.includes("failed to write")) {
+              window.history.pushState({}, "", "/s?cancel=");
+              window.location.reload();
+            } else {
+              error?.setError(detectErrorType(`SendErr: ${error}`));
+            }
           }
         },
         receiveFileRequest: async (code: string) => {
@@ -265,11 +252,13 @@ export default function WormholeProvider(props: Props) {
               dispatch({
                 type: "receiveFileSuccess",
               });
-            } catch (error) {
-              dispatch({
-                type: "receiveFileFail",
-                error,
-              });
+            } catch (e: any) {
+              if (e.includes("unexpected EOF")) {
+                navigate("/r?cancel=", { replace: true });
+                window.location.reload();
+              } else {
+                error?.setError(detectErrorType(e));
+              }
             }
           };
         },
