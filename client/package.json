@@ -27,8 +27,7 @@
     "tabler-icons-react": "^1.51.0",
     "vue": "^3.0.0-0",
     "vue-router": "^4.0.0-0",
-    "web-streams-polyfill": "^2.0.2",
-    "worker-rpc": "^0.2.0"
+    "web-streams-polyfill": "^2.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.18.5",
