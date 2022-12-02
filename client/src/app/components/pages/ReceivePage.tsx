@@ -5,10 +5,6 @@ import ReceiveCompleteScreen from "../screens/receive/ReceiveCompleteScreen";
 import ReceiveConsentScreen from "../screens/receive/ReceiveConsentScreen";
 import ReceiveProgressScreen from "../screens/receive/ReceiveProgressScreen";
 
-type Props = {
-  step: "BEGIN" | "CONSENT" | "PROGRESS" | "DONE";
-};
-
 export default function ReceivePage() {
   const wormhole = useWormhole();
   const [acceptFn, setAcceptFn] = useState(() => () => Promise.resolve());
