@@ -66,7 +66,6 @@ export default function ReceiveBeginScreen(props: Props) {
         if (wormhole) {
           codeInput?.setSubmitting(true);
           const accept = await wormhole.receiveFileRequest(code);
-          console.log("aaa?");
           props.onSuccess(accept as any);
         }
       }}

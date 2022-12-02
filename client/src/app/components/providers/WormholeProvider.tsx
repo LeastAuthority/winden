@@ -147,7 +147,7 @@ function reducer(state: State, action: Action): State {
       }
     }
     case "updateProgress": {
-      if (state.status === "sending") {
+      if (state.status !== "idle") {
         return {
           ...state,
           progress: action.progress,

@@ -9,14 +9,20 @@ export default function ReceivePage() {
   const wormhole = useWormhole();
   const [acceptFn, setAcceptFn] = useState(() => () => Promise.resolve());
 
+  const consentScreen = <ReceiveConsentScreen accept={() => acceptFn()} />;
+
   if (wormhole?.state.status === "idle") {
     return <ReceiveBeginScreen onSuccess={(fn) => setAcceptFn(() => fn)} />;
   } else if (wormhole?.state.status === "receiving") {
     switch (wormhole?.state.step) {
       case "confirming":
-        return <ReceiveConsentScreen accept={() => acceptFn()} />;
+        return consentScreen;
       case "inProgress":
-        return <ReceiveProgressScreen />;
+        return wormhole.state.progress ? (
+          <ReceiveProgressScreen />
+        ) : (
+          consentScreen
+        );
       case "failed":
       case "succeeded":
         return <ReceiveCompleteScreen />;
