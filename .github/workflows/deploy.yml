@@ -45,24 +45,22 @@ jobs:
       - name: create config for production env.
         if: inputs.environment == 'prod'
         run: |
-          touch ./client/.env
-          cat <<EOF >> ./client/.env
-          MAILBOX_URL="wss://mailbox.winden.app/v1"
-          RELAY_URL="wss://relay.winden.app/"
-          SFTP_HOSTNAME=${{ secrets.SFTP_HOSTNAME }}
-          SFTP_USERNAME=${{ secrets.SFTP_USERNAME }}
-          SFTP_IDENTITY="${{ secrets.SFTP_IDENTITY }}"
-          NODE_ENV=production
-          ENVIRONMENT=${{ inputs.environment }}
-          EOF
+          echo "MAILBOX_URL=wss://mailbox.winden.app/v1" >> $GITHUB_ENV
+          echo "RELAY_URL=wss://relay.winden.app/" >> $GITHUB_ENV
+
+      - name: create config for stage env.
+        if: inputs.environment == 'stage'
+        run: |
+          echo "MAILBOX_URL=wss://mailbox.stage.winden.app/v1" >> $GITHUB_ENV
+          echo "RELAY_URL=wss://relay.stage.winden.app/" >> $GITHUB_ENV
 
       - name: create config for stage env.
         if: inputs.environment == 'stage'
         run: |
           touch ./client/.env
           cat <<EOF >> ./client/.env
-          MAILBOX_URL="wss://mailbox.stage.winden.app/v1"
-          RELAY_URL="wss://relay.stage.winden.app/"
+          MAILBOX_URL="${{ env.MAILBOX_URL }}"
+          RELAY_URL="${{ env.RELAY_URL }}"
           SFTP_HOSTNAME=${{ secrets.SFTP_HOSTNAME }}
           SFTP_USERNAME=${{ secrets.SFTP_USERNAME }}
           SFTP_IDENTITY="${{ secrets.SFTP_IDENTITY }}"
