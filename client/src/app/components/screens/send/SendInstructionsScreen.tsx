@@ -75,7 +75,12 @@ export function SendInstructionsScreenContent(props: ContentProps) {
           }}
         >
           <Text size={urlTextSize}>{window.location.host}/#</Text>
-          <Text data-testid="code-generated" ml={-9} size={urlTextSize} className={classes.codeLabel}>
+          <Text
+            data-testid="code-generated"
+            ml={-9}
+            size={urlTextSize}
+            className={classes.codeLabel}
+          >
             {props.code}
           </Text>
           <Button
