@@ -12,6 +12,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Files, X } from "tabler-icons-react";
 import { useCommonStyles } from "../../../hooks/useCommonStyles";
+import { useTabExitWarning } from "../../../hooks/useTabExitWarning";
 import { useWormhole } from "../../../hooks/useWormhole";
 import Content from "../../Content";
 import FileLabel from "../../FileLabel";
@@ -39,6 +40,7 @@ export function SendInstructionsScreenContent(props: ContentProps) {
   const { classes } = useStyles();
   const { width } = useViewportSize();
   const urlTextSize = width < 580 ? 16 : 14.4;
+  useTabExitWarning();
 
   return (
     <Content>

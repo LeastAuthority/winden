@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Download, X } from "tabler-icons-react";
 import { useCommonStyles } from "../../../hooks/useCommonStyles";
 import { useError } from "../../../hooks/useError";
+import { useTabExitWarning } from "../../../hooks/useTabExitWarning";
 import { useWormhole } from "../../../hooks/useWormhole";
 import { detectErrorType } from "../../../util/errors";
 import Content from "../../Content";
@@ -61,6 +62,7 @@ export default function ReceiveConsentScreen({}: Props) {
   const error = useError();
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
+  useTabExitWarning();
 
   return (
     <ReceiveConsentScreenContent
