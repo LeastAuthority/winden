@@ -21,7 +21,9 @@ export function ProgressScreenContent(props: ContentProps) {
 
   return (
     <Content>
-      <Text className={classes.headerText}>{props.title}</Text>
+      <Text component="h1" className={classes.headerText}>
+        {props.title}
+      </Text>
       <Space h="md" />
       <Stack align="center" spacing={30}>
         <FileLabel />

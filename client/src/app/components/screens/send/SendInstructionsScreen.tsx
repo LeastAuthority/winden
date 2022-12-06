@@ -42,7 +42,9 @@ export function SendInstructionsScreenContent(props: ContentProps) {
 
   return (
     <Content>
-      <Text className={commonClasses.headerText}>Ready to send!</Text>
+      <Text component="h1" className={commonClasses.headerText}>
+        Ready to send!
+      </Text>
       <Stack align="center" spacing={30} data-testid="send-page-code-section">
         <FileLabel />
         <div>
@@ -75,7 +77,12 @@ export function SendInstructionsScreenContent(props: ContentProps) {
           }}
         >
           <Text size={urlTextSize}>{window.location.host}/#</Text>
-          <Text data-testid="code-generated" ml={-9} size={urlTextSize} className={classes.codeLabel}>
+          <Text
+            data-testid="code-generated"
+            ml={-9}
+            size={urlTextSize}
+            className={classes.codeLabel}
+          >
             {props.code}
           </Text>
           <Button

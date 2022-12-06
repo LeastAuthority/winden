@@ -13,7 +13,9 @@ export default function NotFoundPage({}: Props) {
     <Content>
       <div data-testid="not-found-page-container">
         <Stack align="center">
-          <Text className={classes.headerText}>Page not found</Text>
+          <Text component="h1" className={classes.headerText}>
+            Page not found
+          </Text>
           <Link data-testid="not-found-page-back-button" to="s">
             <Button color="medium-grey">Back to home</Button>
           </Link>
