@@ -99,7 +99,7 @@ export function SendBeginScreenContent(props: ContentProps) {
           <Text component="p"></Text>
           <Text component="p">Please try again.</Text>
         </Modal>
-        <Text className={commonClasses.headerText}>
+        <Text component="h1" className={commonClasses.headerText}>
           Send files in real-time
         </Text>
         <Text component="p" color="dark-grey" weight={400}>

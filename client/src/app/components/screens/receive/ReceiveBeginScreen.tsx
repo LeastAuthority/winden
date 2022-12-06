@@ -31,11 +31,13 @@ export function ReceiveBeginScreenContent(props: ContentProps) {
           <Text component="p">Either:</Text>
           <Text component="p"></Text>
           <Text component="p">- The transfer was cancelled by the sender.</Text>
-          <Text component="p">- Your or the sender's Internet connection was interrupted.</Text>
+          <Text component="p">
+            - Your or the sender's Internet connection was interrupted.
+          </Text>
           <Text component="p"></Text>
           <Text component="p">Please try again.</Text>
         </Modal>
-        <Text className={classes.headerText} weight={300}>
+        <Text component="h1" className={classes.headerText} weight={300}>
           Receive files in real-time
         </Text>
         <Text component="p" color="dark-grey" weight={400}>
