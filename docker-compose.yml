@@ -9,7 +9,7 @@ services:
     ports:
       - "4001:4001" # TCP
       - "4002:4002" # WebSocket
-  client:
+  client: &client
     build: ./client
     env_file:
       - ./client/.env
@@ -21,6 +21,13 @@ services:
     depends_on:
       - mailbox
       - relay
+  client-storybook:
+    <<: *client
+    command: ["npm", "run", "storybook"]
+    ports:
+      - "6006:6006"
+    volumes:
+      - ./client:/usr/src/app
   # build to run in CI
   client-ci:
     build: ./client
