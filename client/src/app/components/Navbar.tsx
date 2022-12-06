@@ -1,7 +1,7 @@
 import { Burger, createStyles, Space, UnstyledButton } from "@mantine/core";
 import classNames from "classnames";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "../hooks/useNavigate";
 
 const useNavbarItemStyles = createStyles((theme) => ({
   navbarItem: {

@@ -1,12 +1,12 @@
 import { Anchor, createStyles, Modal, Space, Text } from "@mantine/core";
 import React, { useEffect, useState } from "react";
 import { FileRejection } from "react-dropzone";
-import { Link } from "react-router-dom";
 import { useCancelModal } from "../../../hooks/useCancelModal";
 import { useCommonStyles } from "../../../hooks/useCommonStyles";
 import { useWormhole } from "../../../hooks/useWormhole";
 import Content from "../../Content";
 import Dropzone from "../../Dropzone";
+import Link from "../../Link";
 
 const useStyles = createStyles((_theme) => ({
   sendPageSection: {

@@ -12,8 +12,8 @@ import { useMediaQuery } from "@mantine/hooks";
 import classNames from "classnames";
 import React from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
-import { Link } from "react-router-dom";
 import { Plus } from "tabler-icons-react";
+import Link from "./Link";
 
 const useStyles = createStyles((theme) => ({
   dropzoneButton: {

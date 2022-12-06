@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "../../../hooks/useNavigate";
 import { onTabExit, useTabExitWarning } from "../../../hooks/useTabExitWarning";
 import ProgressScreen from "../ProgressScreen";
 

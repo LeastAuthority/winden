@@ -1,7 +1,8 @@
 import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { validateCode } from "../util/validateCode";
 import { useCodeInput } from "./useCodeInput";
+import { useNavigate } from "./useNavigate";
 import { useWormhole } from "./useWormhole";
 
 export function useCodeUrlCheck() {

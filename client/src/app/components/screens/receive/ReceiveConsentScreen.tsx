@@ -1,14 +1,15 @@
 import { Anchor, Button, Stack, Text } from "@mantine/core";
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { Download, X } from "tabler-icons-react";
 import { useCommonStyles } from "../../../hooks/useCommonStyles";
 import { useError } from "../../../hooks/useError";
+import { useNavigate } from "../../../hooks/useNavigate";
 import { onTabExit, useTabExitWarning } from "../../../hooks/useTabExitWarning";
 import { useWormhole } from "../../../hooks/useWormhole";
 import { detectErrorType } from "../../../util/errors";
 import Content from "../../Content";
 import FileLabel from "../../FileLabel";
+import Link from "../../Link";
 
 type ContentProps = {
   submitting: boolean;
