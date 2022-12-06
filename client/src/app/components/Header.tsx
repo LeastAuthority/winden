@@ -3,6 +3,7 @@ import { useViewportSize } from "@mantine/hooks";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Download, Send } from "tabler-icons-react";
+import { onTabExit } from "../hooks/useTabExitWarning";
 import { useWormhole } from "../hooks/useWormhole";
 
 const SUPER_NARROW_BREAKPOINT = 350;
@@ -88,12 +89,12 @@ export default function Header() {
           data-testid="go-to-receive-page"
           color="medium-grey"
           onClick={() => {
-            navigate("/r");
             if (wormhole?.fileMeta) {
               // cancellation workaround
-              window.location.reload();
+              window.location.href = "/r";
             } else {
               wormhole?.reset();
+              navigate("/r");
             }
           }}
           px={buttonPaddingX}
@@ -114,12 +115,12 @@ export default function Header() {
           data-testid="go-to-send-page"
           color="medium-grey"
           onClick={() => {
-            navigate("/s");
             if (wormhole?.fileMeta) {
               // cancellation workaround
-              window.location.reload();
+              window.location.href = "/s";
             } else {
               wormhole?.reset();
+              navigate("/s");
             }
           }}
           px={buttonPaddingX}

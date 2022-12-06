@@ -12,7 +12,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Files, X } from "tabler-icons-react";
 import { useCommonStyles } from "../../../hooks/useCommonStyles";
-import { useTabExitWarning } from "../../../hooks/useTabExitWarning";
+import { onTabExit, useTabExitWarning } from "../../../hooks/useTabExitWarning";
 import { useWormhole } from "../../../hooks/useWormhole";
 import Content from "../../Content";
 import FileLabel from "../../FileLabel";
@@ -127,6 +127,7 @@ export default function SendInstructionsScreen({}: Props) {
         )
       }
       onCancel={() => {
+        window.removeEventListener("beforeunload", onTabExit);
         navigate("/s", { replace: true });
         window.location.reload();
       }}

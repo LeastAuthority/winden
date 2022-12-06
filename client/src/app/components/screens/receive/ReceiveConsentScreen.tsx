@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Download, X } from "tabler-icons-react";
 import { useCommonStyles } from "../../../hooks/useCommonStyles";
 import { useError } from "../../../hooks/useError";
-import { useTabExitWarning } from "../../../hooks/useTabExitWarning";
+import { onTabExit, useTabExitWarning } from "../../../hooks/useTabExitWarning";
 import { useWormhole } from "../../../hooks/useWormhole";
 import { detectErrorType } from "../../../util/errors";
 import Content from "../../Content";
@@ -73,6 +73,7 @@ export default function ReceiveConsentScreen({}: Props) {
           ?.accept()
           .catch((e: any) => {
             if (e.includes("unexpected EOF")) {
+              window.removeEventListener("beforeunload", onTabExit);
               navigate("/r?cancel=", { replace: true });
               window.location.reload();
             } else {
@@ -84,6 +85,7 @@ export default function ReceiveConsentScreen({}: Props) {
           });
       }}
       onCancel={() => {
+        window.removeEventListener("beforeunload", onTabExit);
         navigate("/r", { replace: true });
         window.location.reload();
       }}
