@@ -14,7 +14,9 @@ export default function CompleteScreen(props: Props) {
 
   return (
     <Content>
-      <Text className={classes.headerText}>{props.title}</Text>
+      <Text component="h1" className={classes.headerText}>
+        {props.title}
+      </Text>
       <Stack align="center" spacing={30}>
         <FileLabel />
         <Box

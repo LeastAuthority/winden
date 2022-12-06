@@ -12,7 +12,9 @@ export default function CancelScreen(props: Props) {
 
   return (
     <Content>
-      <Text className={classes.headerText}>So close...</Text>
+      <Text component="h1" className={classes.headerText}>
+        So close...
+      </Text>
       <Stack spacing={30} align="center">
         <div>
           <Text component="p" weight="bold" color="dark-grey" align="center">
