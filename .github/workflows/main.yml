@@ -2,14 +2,27 @@ name: Build and Test (CI)
 
 on:
   push:
-    branches:
-    - main
   pull_request:
   workflow_dispatch:
 
 jobs:
+  pre:
+    # Verification to be done before the real check
+    name: Pre-check
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.skip_flag.outputs.should_skip }}
+    steps:
+      - name: Skip flag
+        id: skip_flag
+        uses: fkirc/skip-duplicate-actions@v5
+        with:
+          concurrent_skipping: 'same_content_newer'
+
   build:
     name: Build/Test
+    needs: pre
+    if: needs.pre.outputs.should_skip != 'true'
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     strategy:
