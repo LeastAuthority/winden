@@ -1,4 +1,5 @@
-name: Build and Test (CI)
+---
+name: Integration
 
 on:
   push:
