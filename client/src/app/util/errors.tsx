@@ -4,6 +4,7 @@ import React, { ReactElement, ReactNode } from "react";
 export const enum ErrorTypes {
   RECV_CONNECTION_TIMEOUT,
   SENDER_BAD_CODE,
+  RECEIVER_REJECTED,
   BAD_CODE,
   MAILBOX_RELAY_CONNECTION,
   INTERRUPT,
@@ -17,6 +18,8 @@ export function detectErrorType(error: string) {
   console.log("Error details: ",error)
   if (/^SendErr: decrypt message failed$/.test(error)) {
     return ErrorTypes.SENDER_BAD_CODE;
+  } else if (/(.*transfer rejected.*)/.test(error)) {
+    return ErrorTypes.RECEIVER_REJECTED;
   } else if (
     /^decrypt message failed$/.test(error) ||
     error.startsWith("Nameplate is unclaimed")) {
@@ -47,6 +50,19 @@ export function errorContent(type: ErrorTypes): {
               briefly lost.
             </Text>
             <Text component="p">Please ask the sender for a new code.</Text>
+          </>
+        ),
+      };
+    }
+    case ErrorTypes.RECEIVER_REJECTED: {
+      return {
+        title: "Transfer cancelled",
+        description: (
+          <>
+            <Text component="p">The receiver rejected this transfer.</Text>
+            <Text component="p">
+              Please try sending the file again or contact the receiver.
+            </Text>
           </>
         ),
       };
