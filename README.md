@@ -86,6 +86,14 @@ docker compose down
 docker compose run -p 6006:6006 client npm run storybook
 ```
 
+### Format code
+
+Winden uses [prettier](https://prettier.io/) for code formatting. When code is pushed to this repo, a git hook will run to verify that the code is formatted. The push will be rejected if the check fails. In order to successfully push, format the code with the following command:
+
+```
+docker-compose run client npm run format
+```
+
 ## Testing
 
 ### Setup
