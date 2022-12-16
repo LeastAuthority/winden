@@ -5,7 +5,9 @@
   "scripts": {
     "test": "jest",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook -o dist/storybook"
+    "build-storybook": "build-storybook -o dist/storybook",
+    "lint": "prettier --check **/*.{json,md,html,js,jsx,ts,tsx}",
+    "format": "prettier --write **/*.{json,md,html,js,jsx,ts,tsx}"
   },
   "dependencies": {
     "@emotion/react": "^11.10.4",
@@ -61,6 +63,7 @@
     "gulp-replace": "^1.1.3",
     "html-webpack-plugin": "^5.5.0",
     "jest": "^27.5.1",
+    "prettier": "^2.8.0",
     "raw-loader": "^4.0.2",
     "resize-observer-polyfill": "^1.5.1",
     "storybook-css-modules": "^1.0.8",
