@@ -1,5 +1,5 @@
 <h1 align="center">
-  <a href="https://winden.app" target=_blank><img src="https://raw.githubusercontent.com/LeastAuthority/winden/main/client/src/public/LA_Winden_HorizontalLogo_Color.svg" height="100" alt="Winden Logo"></a>
+  <a href="https://winden.app"><img src="https://raw.githubusercontent.com/LeastAuthority/winden/main/client/src/public/LA_Winden_HorizontalLogo_Color.svg" height="100" alt="Winden Logo"></a>
 </h1>
 
 Be aware, this is a **Beta version**, which might have some [issues](https://winden.app/faq) or not work as expected in all browsers.
@@ -35,15 +35,22 @@ git clone --recurse-submodules git@github.com:LeastAuthority/winden.git
 
 ### System Prerequisites
 
+- npm
 - docker
 - docker compose
 
-### Setup docker images
+### Set up docker images
 
 ```sh
 docker compose build
 docker compose run client npm i
 docker compose run client-e2e npm i
+```
+
+### Set up pre-commit hooks
+
+```sh
+npm i
 ```
 
 ### Run development environment
@@ -77,6 +84,14 @@ docker compose down
 
 ```sh
 docker compose run -p 6006:6006 client npm run storybook
+```
+
+### Format code
+
+Winden uses [prettier](https://prettier.io/) for code formatting. When code is pushed to this repo, a git hook will run to verify that the code is formatted. The push will be rejected if the check fails. In order to successfully push, format the code with the following command:
+
+```
+docker-compose run client npm run format
 ```
 
 ## Testing
@@ -126,6 +141,7 @@ And https://webdriver.io/docs/api/browser/debug/
 - Fill it with the following for:
 
 (Playground environment)
+
 ```sh
 MAILBOX_URL="wss://<mailbox server>/v1"
 RELAY_URL="wss:///<relay server>"
@@ -134,6 +150,7 @@ NODE_ENV=development
 ```
 
 (Production environment)
+
 ```sh
 # Production
 MAILBOX_URL="wss://<mailbox server>/v1"

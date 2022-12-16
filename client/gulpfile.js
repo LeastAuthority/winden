@@ -13,6 +13,8 @@ const path = require("path");
 
 require("dotenv").config();
 
+const package = JSON.parse(fs.readFileSync("./package.json"));
+
 const webpackConfig = {
   mode: "development",
   devtool: "source-map",
@@ -85,6 +87,12 @@ const javascriptWatch = () =>
     .pipe(gulp.dest("dist/app"))
     .pipe(connect.reload());
 
+const prepWorker = (cb) => {
+  // cp wasm_exec.js to be glued
+  execSync('cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" src/worker');
+  cb();
+};
+
 const worker = () =>
   gulp
     .src("src/worker/index.ts")
@@ -108,6 +116,19 @@ const publicCopy = () =>
     .pipe(gulp.dest("dist"))
     .pipe(connect.reload());
 
+// Set version in title of main html file to be visible for clients
+const setPublicVersion = async () => {
+  gulp
+    .src(["dist/index.html"])
+    .pipe(
+      replace(
+        new RegExp(`<title>(.*)</title>`),
+        "<title>$1 (" + package.version + ")</title>"
+      )
+    )
+    .pipe(gulp.dest("dist/"));
+};
+
 // allow search engine to crawl production deployment instances only
 const allowRobots = () =>
   gulp
@@ -117,15 +138,38 @@ const allowRobots = () =>
     )
     .pipe(gulp.dest("dist"));
 
-const public = gulp.series(publicClean, publicCopy, allowRobots);
+const public = gulp.series(
+  publicClean,
+  publicCopy,
+  setPublicVersion,
+  allowRobots
+);
 
+// Set agent version in go library to identify as web app client
+const setWasmVersion = async () => {
+  gulp
+    .src(["vendor/wormhole-william/version/version.go"])
+    .pipe(
+      replace(new RegExp(`AgentString = "(.*)"`), 'AgentString = "winden.app"')
+    )
+    .pipe(
+      replace(
+        new RegExp(`AgentVersion = "(.*)"`),
+        'AgentVersion = "' + package.version + '"'
+      )
+    )
+    .pipe(gulp.dest("vendor/wormhole-william/version/"));
+};
+
+// added -buildvcs=false as it fails to build on Github actions with error obtaining VCS status: exit status 128
 const wasmBuild = () =>
   exec(
-    "cd vendor/wormhole-william && GOOS=js GOARCH=wasm go build -o ../../dist/wormhole.wasm ./wasm/module"
+    "cd vendor/wormhole-william && GOOS=js GOARCH=wasm go build  -buildvcs=false -o ../../dist/wormhole.wasm ./wasm/module"
   );
 // exec doesn't return a stream, but we need a non-empty stream to be able to reload.
 // so we build a stream using gulpfile.js
 const wasmReload = () => gulp.src("gulpfile.js").pipe(connect.reload());
+
 const wasm = gulp.series(wasmBuild, wasmReload);
 
 const start = () => {
@@ -138,6 +182,7 @@ const start = () => {
 };
 
 const watch = () => {
+  prepWorker;
   gulp.watch(
     "src/app/**/*.{ts,tsx,css}",
     { ignoreInitial: false },
@@ -196,13 +241,25 @@ exports.watch = watch;
 // for CI optimization without watch
 exports.start = start;
 exports.clean = clean;
+exports.prepWorker = prepWorker;
+
 exports.deploy = gulp.series(
+  prepWorker,
   public,
   javascript,
   worker,
+  setWasmVersion,
   wasm,
   // storybook,
   deploySftp
 );
 
-exports.default = gulp.series(public, javascript, worker, wasm, storybook);
+exports.default = gulp.series(
+  prepWorker,
+  public,
+  javascript,
+  worker,
+  setWasmVersion,
+  wasm,
+  storybook
+);

@@ -1,3 +1,4 @@
+---
 # For most projects, this workflow file will not need changing; you simply need
 # to commit it to your repository.
 #
@@ -21,8 +22,24 @@ on:
     - cron: '26 13 * * 5'
 
 jobs:
+  pre:
+    # Verification to be done before the real check
+    name: Pre-check
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.skip_flag.outputs.should_skip }}
+    steps:
+      - name: Skip flag
+        id: skip_flag
+        uses: fkirc/skip-duplicate-actions@v5
+        with:
+          concurrent_skipping: 'same_content_newer'
+          paths: '["client/**", "client-e2e/**", ".github/workflows/code-analysis.yml"]'
+
   analyze:
     name: Analyze
+    needs: pre
+    if: needs.pre.outputs.should_skip != 'true'
     runs-on: ubuntu-latest
     permissions:
       actions: read

@@ -1,4 +1,4 @@
-import { Anchor, Button, Space, Stack, Text } from "@mantine/core";
+import { Anchor, Button, Stack, Text } from "@mantine/core";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Download, X } from "tabler-icons-react";
@@ -20,7 +20,9 @@ export function ReceiveConsentScreenContent(props: ContentProps) {
 
   return (
     <Content>
-      <Text className={classes.headerText}>Ready to download</Text>
+      <Text component="h1" className={classes.headerText}>
+        Ready to download
+      </Text>
       <Stack align="center" spacing={30}>
         <FileLabel />
         <Button
@@ -34,13 +36,7 @@ export function ReceiveConsentScreenContent(props: ContentProps) {
         </Button>
         <Text color="dark-grey" weight={400} size={14.4}>
           By using Winden you agree to the{" "}
-          <Anchor
-            component={Link}
-            to="/terms"
-            color="tertiary"
-            weight={600}
-            target="_blank"
-          >
+          <Anchor component={Link} to="/terms" color="tertiary" weight={600}>
             Terms
           </Anchor>
           .
