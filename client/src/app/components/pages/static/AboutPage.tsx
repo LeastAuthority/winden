@@ -1,7 +1,7 @@
 import { Anchor } from "@mantine/core";
 import React from "react";
-import { Link } from "react-router-dom";
 import { ExternalLink } from "tabler-icons-react";
+import Link from "../../Link";
 import StaticPage from "../StaticPage";
 
 type Props = {};

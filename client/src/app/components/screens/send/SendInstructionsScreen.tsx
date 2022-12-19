@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Files, X } from "tabler-icons-react";
 import { useClipboard } from "../../../hooks/useClipboard";
 import { useCommonStyles } from "../../../hooks/useCommonStyles";
+import { onTabExit, useTabExitWarning } from "../../../hooks/useTabExitWarning";
 import { useWormhole } from "../../../hooks/useWormhole";
 import Content from "../../Content";
 import FileLabel from "../../FileLabel";
@@ -32,6 +33,7 @@ export function SendInstructionsScreenContent(props: ContentProps) {
   const { classes } = useStyles();
   const { width } = useViewportSize();
   const urlTextSize = width < 580 ? 16 : 14.4;
+  useTabExitWarning();
 
   return (
     <Content>
@@ -118,6 +120,7 @@ export default function SendInstructionsScreen({}: Props) {
         )
       }
       onCancel={() => {
+        window.removeEventListener("beforeunload", onTabExit);
         navigate("/s", { replace: true });
         window.location.reload();
       }}

@@ -1,9 +1,11 @@
 import { Button, createStyles, Group, Image, Space, Text } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { Download, Send } from "tabler-icons-react";
+import { useNavigate } from "../hooks/useNavigate";
+import { onTabExit } from "../hooks/useTabExitWarning";
 import { useWormhole } from "../hooks/useWormhole";
+import Link from "./Link";
 
 const SUPER_NARROW_BREAKPOINT = 350;
 const MOBILE_BREAKPOINT = 590;
@@ -89,12 +91,6 @@ export default function Header() {
           color="medium-grey"
           onClick={() => {
             navigate("/r");
-            if (wormhole?.fileMeta) {
-              // cancellation workaround
-              window.location.reload();
-            } else {
-              wormhole?.reset();
-            }
           }}
           px={buttonPaddingX}
           styles={{
@@ -115,12 +111,6 @@ export default function Header() {
           color="medium-grey"
           onClick={() => {
             navigate("/s");
-            if (wormhole?.fileMeta) {
-              // cancellation workaround
-              window.location.reload();
-            } else {
-              wormhole?.reset();
-            }
           }}
           px={buttonPaddingX}
           styles={{

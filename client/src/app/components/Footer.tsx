@@ -11,7 +11,7 @@ import {
 } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import React from "react";
-import { Link } from "react-router-dom";
+import Link from "./Link";
 
 const BREAKPOINT_NARROW_MOBILE_PX = 390;
 const BREAKPOINT_MOBILE_PX = 590;
