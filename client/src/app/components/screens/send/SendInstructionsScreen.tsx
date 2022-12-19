@@ -1,16 +1,9 @@
-import {
-  Button,
-  createStyles,
-  Group,
-  Space,
-  Stack,
-  Text,
-  TextInput,
-} from "@mantine/core";
-import { useClipboard, useViewportSize } from "@mantine/hooks";
+import { Button, createStyles, Group, Stack, Text } from "@mantine/core";
+import { useViewportSize } from "@mantine/hooks";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Files, X } from "tabler-icons-react";
+import { useClipboard } from "../../../hooks/useClipboard";
 import { useCommonStyles } from "../../../hooks/useCommonStyles";
 import { useWormhole } from "../../../hooks/useWormhole";
 import Content from "../../Content";
