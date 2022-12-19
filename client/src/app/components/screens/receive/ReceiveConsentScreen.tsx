@@ -39,8 +39,7 @@ export function ReceiveConsentScreenContent(props: ContentProps) {
         <Text color="dark-grey" weight={400} size={14.4}>
           By using Winden you agree to the{" "}
           <Anchor
-            component={Link}
-            to="/terms"
+            href="/terms"
             color="tertiary"
             weight={600}
             target="_blank"
