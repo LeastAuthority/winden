@@ -2,3 +2,4 @@ dist
 node_modules
 src/public
 vendor
+wasm_exec.js

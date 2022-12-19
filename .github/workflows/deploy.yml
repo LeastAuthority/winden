@@ -67,6 +67,7 @@ jobs:
           NODE_ENV=production
           ENVIRONMENT=${{ inputs.environment }}
           EOF
+          touch ./client-e2e/.env
 
       - name: prepare
         run: |
