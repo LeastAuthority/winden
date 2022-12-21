@@ -196,16 +196,6 @@ const watch = () => {
 
 const clean = () => del("dist");
 
-const deployAWS = (cb) => {
-  execSync(`aws s3 sync ./dist ${process.env.S3_BUCKET}`);
-  execSync(`aws cloudfront create-invalidation \
-    --distribution-id ${process.env.CDF_DISTRIBUTION_ID} \
-    --paths /index.html \
-     /wormhole.wasm \
-     /worker/main.js`);
-  cb();
-};
-
 const deploySftp = (cb) => {
   // accept ssh host key of target
   execSync("mkdir -p ~/.ssh");

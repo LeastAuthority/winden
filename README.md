@@ -161,16 +161,12 @@ NODE_ENV=production
 
 ## Deploying
 
-We build and deploy by running a gulp task inside a docker container. You will need to provide your AWS credentials to the container. We do this through the `.env` file.
+We build and deploy by running a gulp task inside a docker container. We do this through the `.env` file.
 
 - Create `client/.env` if it does not exist already
 - Fill it with the following: (Replace placeholders in angle brackets with the appropriate values)
 
 ```sh
-AWS_ACCESS_KEY_ID=<YOUR_ACCESS_KEY>
-AWS_SECRET_ACCESS_KEY=<YOUR_SECRET_ACCESS_KEY>
-AWS_DEFAULT_REGION=<REGION>
-
 S3_BUCKET=<URL>
 CDF_DISTRIBUTION_ID=<ID>
 
