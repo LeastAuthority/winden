@@ -87,18 +87,11 @@ const javascriptWatch = () =>
     .pipe(gulp.dest("dist/app"))
     .pipe(connect.reload());
 
-const prepWorker = (cb) => {
+const prepWasm = (cb) => {
   // cp wasm_exec.js to be glued
   execSync('cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" src/app');
   cb();
 };
-
-const worker = () =>
-  gulp
-    .src("src/worker/index.ts")
-    .pipe(webpack(webpackConfig))
-    .pipe(gulp.dest("dist/worker"))
-    .pipe(connect.reload());
 
 const storybook = () => exec("npm run build-storybook");
 
@@ -107,7 +100,6 @@ const publicClean = () =>
     "dist/*",
     "!dist/app",
     "!dist/storybook",
-    "!dist/worker",
     "!dist/wormhole.wasm",
   ]);
 const publicCopy = () =>
@@ -207,13 +199,12 @@ const start = () => {
 };
 
 const watch = () => {
-  prepWorker;
+  prepWasm;
   gulp.watch(
     "src/app/**/*.{ts,tsx,css}",
     { ignoreInitial: false },
     javascriptWatch
   );
-  gulp.watch("src/worker/**/*.{js,ts,tsx}", { ignoreInitial: false }, worker);
   gulp.watch("src/public/**/*", { ignoreInitial: false }, public);
   gulp.watch("vendor/wormhole-william/**/*.go", { ignoreInitial: false }, wasm);
   start();
@@ -258,7 +249,6 @@ const deploySftp = (cb) => {
 };
 
 exports.javascript = javascript;
-exports.worker = worker;
 exports.public = public;
 exports.wasm = wasm;
 exports.storybook = storybook;
@@ -266,13 +256,12 @@ exports.watch = watch;
 // for CI optimization without watch
 exports.start = start;
 exports.clean = clean;
-exports.prepWorker = prepWorker;
+exports.prepWasm = prepWasm;
 
 exports.deploy = gulp.series(
-  prepWorker,
+  prepWasm,
   public,
   javascript,
-  worker,
   setWasmVersion,
   wasm,
   // storybook,
@@ -280,10 +269,9 @@ exports.deploy = gulp.series(
 );
 
 exports.default = gulp.series(
-  prepWorker,
+  prepWasm,
   public,
   javascript,
-  worker,
   setWasmVersion,
   wasm,
   storybook
