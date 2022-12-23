@@ -23,7 +23,7 @@ async function testTransferSuccess(
   context: BrowserContext,
   filePath: string
 ) {
-  await page.goto("https://winden.app/");
+  await page.goto("http://localhost:8080");
   await uploadFile(page, filePath);
   await findCodeCopyButton(page).click();
 
@@ -96,7 +96,7 @@ test.describe("Sending a file", () => {
     test("It succeeds both times", async ({ page, context }) => {
       test.slow();
 
-      await page.goto("https://winden.app/");
+      await page.goto("http://localhost:8080");
 
       await uploadFile(page, path.join(__dirname, "files/hello.txt"));
       await findCodeCopyButton(page).click();
@@ -122,7 +122,7 @@ test.describe("Sending a file", () => {
 
   test.describe("The generated code", () => {
     test("Copying the code url to clipboard", async ({ page }) => {
-      await page.goto("https://winden.app/");
+      await page.goto("http://localhost:8080/");
       await page.setInputFiles(
         'input[type="file"]',
         path.join(__dirname, "files/hello.txt")
@@ -130,7 +130,7 @@ test.describe("Sending a file", () => {
       await page.getByTestId("copy-link-button").click();
       const code = await page.getByTestId("code-generated").innerText();
       expect(await page.evaluate(() => navigator.clipboard.readText())).toEqual(
-        `https://winden.app/#${code}`
+        `http://localhost:8080/#${code}`
       );
     });
   });
@@ -138,7 +138,7 @@ test.describe("Sending a file", () => {
 
 test.describe("Uploading multiple files", () => {
   test("It will give an error", async ({ page }) => {
-    await page.goto("https://winden.app/");
+    await page.goto("http://localhost:8080/");
     await uploadFile(page, [
       path.join(__dirname, "files/hello.txt"),
       path.join(__dirname, "files/sizes/5MB"),
