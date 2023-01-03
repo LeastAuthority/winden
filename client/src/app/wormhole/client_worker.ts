@@ -248,7 +248,6 @@ export default class ClientWorker implements ClientInterface {
           resolve({ code, cancel, done });
         })
         .catch((reason) => {
-          // console.log(reason);
           reject(reason);
         });
     });
