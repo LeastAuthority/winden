@@ -116,11 +116,11 @@ async function handleReceiveFile({
 }
 
 async function handleReceiveFileReject({ id }: RPCMessage) {
-  const cancel = receiving[id].reader?.cancel;
-  if (cancel) {
-    cancel();
+  const reject = receiving[id].reader?.reject;
+  if (reject) {
+    reject();
   } else {
-    throw new Error("Failed to cancel rejection of file");
+    throw new Error("Failed to reject file");
   }
 }
 
