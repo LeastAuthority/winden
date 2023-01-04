@@ -322,6 +322,10 @@ export default class ClientWorker implements ClientInterface {
       done,
       accept,
       cancel: () => {
+        // TODO: proper cancellation
+        throw new Error("Cancel function not implemented");
+      },
+      reject: () => {
         return this.rpc!.rpc(RECV_FILE_OFFER_REJECT, { id });
       },
     };
