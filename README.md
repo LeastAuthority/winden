@@ -74,6 +74,12 @@ docker compose run -p 8080:8080 client gulp watch # equivalent command
 docker compose logs -f
 ```
 
+#### Email from Feedback API
+We use a dummy SMTP server to log emails sent from `feedback-api`. To view the emails, run the following command:
+```sh
+docker compose logs -f dummy-smtp-server
+```
+
 ### Stop development environment
 
 ```sh

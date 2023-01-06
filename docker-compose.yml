@@ -21,6 +21,35 @@ services:
     depends_on:
       - mailbox
       - relay
+      - feedback-api
+  feedback-api:
+    build: ./feedback-api
+    command:
+      [
+        "app",
+        "-to",
+        "foo@barbaz.com",
+        "-smtp-server",
+        "dummy-smtp-server",
+        "-smtp-port",
+        "2500",
+      ]
+    ports:
+      - "8001:8001"
+    depends_on:
+      - dummy-smtp-server
+    environment:
+      - SMTP_USE_TLS=false
+      - SMTP_USERNAME=foo@foobar.in
+      - SMTP_PASSWORD=barbazquux
+  dummy-smtp-server:
+    image: python:latest
+    command:
+      ["python", "-m", "smtpd", "-n", "-c", "DebuggingServer", "0.0.0.0:2500"]
+    ports:
+      - "2500:2500"
+    environment:
+      - PYTHONUNBUFFERED=1
   # build to run in CI
   client-ci:
     build: ./client
