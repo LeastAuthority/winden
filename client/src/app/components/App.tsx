@@ -1,8 +1,9 @@
 import { useReducedMotion } from "@mantine/hooks";
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { useCodeUrlCheck } from "../hooks/useCodeUrlCheck";
+import { useFlash } from "../hooks/useFlash";
 import { useTargetHighlights } from "../hooks/useTargetHighlights";
 import AppTemplate from "./AppTemplate";
 import Navigate from "./Navigate";
@@ -24,6 +25,11 @@ export default function App({}: Props) {
 
   const location = useLocation();
   const reduceMotion = useReducedMotion();
+  const flash = useFlash();
+
+  useEffect(() => {
+    flash?.set(null);
+  }, [location.pathname]);
 
   return (
     <AppTemplate>

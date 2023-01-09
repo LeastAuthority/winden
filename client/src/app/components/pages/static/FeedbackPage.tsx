@@ -8,12 +8,81 @@ import {
   Textarea,
 } from "@mantine/core";
 import React, { useState } from "react";
+import { useFlash } from "../../../hooks/useFlash";
+import { useNavigate } from "../../../hooks/useNavigate";
 import StaticPage from "../StaticPage";
+
+const QUESTION_SENTENCES = {
+  whatsGreat: "What's great (if anything)?",
+  whatsUseful: "What do you find Winden useful for?",
+  whatsNotGreat: "What's missing or what's not great?",
+};
+
+function submitFeedback(
+  rating: number,
+  whatsGreat: string,
+  whatsUseful: string,
+  whatsNotGreat: string
+) {
+  return fetch(`/v1/feedback`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      channel: "winden.app",
+      feedback: {
+        title: "Full Feedback Form",
+        rate: {
+          type: "numbers",
+          value: rating,
+        },
+        questions: [
+          {
+            question: QUESTION_SENTENCES.whatsGreat,
+            answer: whatsGreat,
+          },
+          {
+            question: QUESTION_SENTENCES.whatsUseful,
+            answer: whatsUseful,
+          },
+          {
+            question: QUESTION_SENTENCES.whatsNotGreat,
+            answer: whatsNotGreat,
+          },
+        ],
+      },
+    }),
+  });
+}
 
 type Props = {};
 
 export default function FeedbackPage({}: Props) {
-  const [value, setValue] = useState("");
+  const [rating, setRating] = useState("");
+  const [whatsGreat, setWhatsGreat] = useState("");
+  const [whatsUseful, setWhatsUseful] = useState("");
+  const [whatsNotGreat, setWhatsNotGreat] = useState("");
+  const flash = useFlash();
+  const navigate = useNavigate();
+
+  async function handleSubmit() {
+    const response = await submitFeedback(
+      parseInt(rating),
+      whatsGreat,
+      whatsUseful,
+      whatsNotGreat
+    );
+    if (response.ok) {
+      navigate("/s");
+      flash?.set({
+        title: "Feedback sent",
+        content:
+          "Your feedback has been submitted successfully. Thank you for your feedback.",
+      });
+    }
+  }
+
   return (
     <StaticPage>
       <h1>Loving Winden? Meh? Kind of? 😍</h1>
@@ -25,16 +94,22 @@ export default function FeedbackPage({}: Props) {
           any thoughts you may have about using Winden.
         </p>
         <Textarea
-          label="1. What's great (if anything)?"
+          label={`1. ${QUESTION_SENTENCES.whatsGreat}`}
           placeholder="Please describe what you like about Winden."
+          value={whatsGreat}
+          onChange={(e) => setWhatsGreat(e.target.value)}
         />
         <Textarea
-          label="2. What do you find Winden useful for?"
+          label={`2. ${QUESTION_SENTENCES.whatsUseful}`}
           placeholder="Please describe the key purposes you use Winden for (e.g., sending large video files to clients; sending text files between my devices)."
+          value={whatsUseful}
+          onChange={(e) => setWhatsUseful(e.target.value)}
         />
         <Textarea
-          label="3. What's missing or what's not great?"
+          label={`3. ${QUESTION_SENTENCES.whatsNotGreat}`}
           placeholder="Please describe any missing functionality that's important to you, or anything else you'd like to see improved."
+          value={whatsNotGreat}
+          onChange={(e) => setWhatsNotGreat(e.target.value)}
         />
         <Group spacing={0}>
           <Text weight="bold">
@@ -46,8 +121,8 @@ export default function FeedbackPage({}: Props) {
           </Text>
         </Group>
         <SegmentedControl
-          value={value}
-          onChange={setValue}
+          value={rating}
+          onChange={setRating}
           data={[
             { label: "1", value: "1" },
             { label: "2", value: "2" },
@@ -58,7 +133,9 @@ export default function FeedbackPage({}: Props) {
           fullWidth
         />
         <Center>
-          <Button color="yellow">Submit</Button>
+          <Button color="yellow" onClick={handleSubmit}>
+            Submit
+          </Button>
         </Center>
       </Stack>
     </StaticPage>

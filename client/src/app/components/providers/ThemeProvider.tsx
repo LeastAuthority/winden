@@ -109,6 +109,14 @@ export default function ThemeProvider(props: Props) {
               },
             }),
           },
+          Notification: {
+            styles: (theme) => ({
+              root: {
+                boxShadow: "none",
+                border: "1px solid #dee2e6",
+              },
+            }),
+          },
         },
         headings: {
           fontFamily: "Poppins, sans-serif",

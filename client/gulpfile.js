@@ -10,6 +10,7 @@ const Dotenv = require("dotenv-webpack");
 const SentryPlugin = require("@sentry/webpack-plugin");
 const fs = require("fs");
 const path = require("path");
+const proxy = require("http-proxy-middleware");
 
 require("dotenv").config();
 
@@ -178,6 +179,14 @@ const start = () => {
     root: "dist",
     livereload: true,
     fallback: "src/public/index.html",
+    middleware: () => {
+      return [
+        proxy.createProxyMiddleware("/v1", {
+          target: "http://feedback-api:8001",
+          changeOrigin: true,
+        }),
+      ];
+    },
   });
 };
 
