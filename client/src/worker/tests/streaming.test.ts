@@ -87,6 +87,7 @@ describe.skip("Reader", () => {
         size: testFileSize,
         read: readFn,
         cancel: () => {},
+        reject: () => {},
       };
       const reader = new FileStreamReader(testBufferSize, opts);
       const buf = new ArrayBuffer(testBufferSize);

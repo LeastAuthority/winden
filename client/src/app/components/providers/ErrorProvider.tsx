@@ -5,6 +5,7 @@ import { errorContent, ErrorTypes } from "../../util/errors";
 const TRANSITION_DURATION = 250;
 
 export const ErrorContext = React.createContext<{
+  error: ErrorTypes | null;
   setError: React.Dispatch<React.SetStateAction<ErrorTypes | null>>;
 } | null>(null);
 
@@ -30,7 +31,7 @@ export default function ErrorProvider(props: Props) {
   }, [opened]);
 
   return (
-    <ErrorContext.Provider value={{ setError }}>
+    <ErrorContext.Provider value={{ error, setError }}>
       {props.children}
       <Modal
         transitionDuration={TRANSITION_DURATION}

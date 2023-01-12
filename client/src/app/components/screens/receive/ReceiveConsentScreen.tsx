@@ -92,9 +92,7 @@ export default function ReceiveConsentScreen({}: Props) {
           });
       }}
       onCancel={() => {
-        window.removeEventListener("beforeunload", onTabExit);
-        navigate("/r", { replace: true });
-        window.location.reload();
+        wormhole?.fileMeta?.reject().then(() => wormhole.reset());
       }}
     />
   );
