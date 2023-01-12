@@ -82,8 +82,7 @@ export default function ReceiveConsentScreen({}: Props) {
           });
       }}
       onCancel={() => {
-        navigate("/r", { replace: true });
-        window.location.reload();
+        wormhole?.fileMeta?.reject().then(() => wormhole.reset());
       }}
     />
   );

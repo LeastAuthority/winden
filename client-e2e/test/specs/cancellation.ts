@@ -7,80 +7,59 @@ describe("Cancellation", () => {
       await Page.open();
       const sendWindow = await browser.getWindowHandle();
       await Page.uploadFiles("./test/files/sizes/20MB");
-      const codeUrl = await Page.getCodeUrl()
-      
+      const codeUrl = await Page.getCodeUrl();
+
       await (await Page.cancelButton()).click();
-      
+
       await browser.pause(2000);
       const _receiveWindow = await browser.newWindow(codeUrl);
-      
+
       await browser.pause(20000);
       // check if Download button is not available
       await expect(await Page.receiveDownloadButton()).not.toBeExisting();
-
     });
   });
 
   describe("Receiver cancellations", () => {
-    describe("Cancel before accepted transfer starts", () => {
-      // TODO enable, when Sender side is fixed
-      it.skip("Sends the Sender back and show cancellation message", async function () {
+    describe("Rejects file when offer is received", () => {
+      it("Sends the Sender back and show cancellation message, no message for Receiver", async function () {
         this.retries(1);
 
         await Page.open();
         const sendWindow = await browser.getWindowHandle();
         await Page.uploadFiles("./test/files/sizes/20MB");
 
-        const codeUrl = await Page.getCodeUrl()
+        const codeUrl = await Page.getCodeUrl();
         const _receiveWindow = await browser.newWindow(codeUrl);
 
-        await browser.waitUntil(() => Page.receiveDownloadButton().isExisting());
+        // Receiver
         await browser.waitUntil(() => Page.cancelButton().isExisting());
         await (await Page.cancelButton()).click();
-        // Receiver
-        await expect(await $("main")).toHaveTextContaining(
+        expect(await $("main")).toHaveTextContaining(
           "Receive files in real-time"
         );
-        
         // Sender
         await browser.switchToWindow(sendWindow);
-        await browser.waitUntil(async () => (await $("div*=Transfer cancelled/interrupted").isExisting()));
-      });
-      it("Sends the Receiver back, no message", async function () {
-        // FIXME: flaky test that times out
-        this.retries(1);
-
-        await Page.open();
-        const _sendWindow = await browser.getWindowHandle();
-        await Page.uploadFiles("./test/files/sizes/20MB");
-        const codeUrl = await Page.getCodeUrl()
-
-        const _receiveWindow = await browser.newWindow(codeUrl);
-        await browser.waitUntil(() => Page.cancelButton().isExisting());
-        await (await Page.cancelButton()).click();
-        await expect(await $("main")).toHaveTextContaining(
-          "Receive files in real-time"
-        );
+        expect(await $("p*=The receiver rejected this transfer.").isExisting());
       });
     });
-    
-    describe("Cancel during transer", () => {
-      it("Sends the Receiver and Sender back. The Sender gets an error message", async function () {
-        // FIXME: flaky test that times out
-        this.retries(2);
 
+    describe("Cancel during transfer", () => {
+      it("Sends the Receiver and Sender back. The Sender gets an error message", async function () {
         await Page.open();
         const sendWindow = await browser.getWindowHandle();
         await Page.uploadFiles("./test/files/sizes/20MB");
 
-        const codeUrl = await Page.getCodeUrl()
+        const codeUrl = await Page.getCodeUrl();
         const _receiveWindow = await browser.newWindow(codeUrl);
 
         // Receiver
-        await browser.waitUntil(() => Page.receiveDownloadButton().isExisting());
+        await browser.waitUntil(() =>
+          Page.receiveDownloadButton().isExisting()
+        );
         await (await Page.receiveDownloadButton()).click();
 
-        await browser.waitUntil(() => Page.cancelButton().isExisting());
+        await browser.waitUntil(() => Page.progressBar().isExisting());
         await (await Page.cancelButton()).click();
 
         await expect(await $("main")).toHaveTextContaining(
@@ -89,69 +68,71 @@ describe("Cancellation", () => {
 
         // Sender
         await browser.switchToWindow(sendWindow);
-        await browser.waitUntil(async () => (await $("div*=Transfer cancelled/interrupted").isExisting()));
+        await browser.waitUntil(
+          async () =>
+            await $("div*=Transfer cancelled/interrupted").isExisting()
+        );
       });
       it("(after 5 sec.) Sends the Receiver and Sender back. The Sender gets an error message", async function () {
-        // FIXME: flaky test that times out
-        this.retries(1);
-
         await Page.open();
         const sendWindow = await browser.getWindowHandle();
         await Page.uploadFiles("./test/files/sizes/20MB");
 
-        const codeUrl = await Page.getCodeUrl()
+        const codeUrl = await Page.getCodeUrl();
         const _receiveWindow = await browser.newWindow(codeUrl);
 
         // Receiver
-        await browser.waitUntil(() => Page.receiveDownloadButton().isExisting());
+        await browser.waitUntil(() =>
+          Page.receiveDownloadButton().isExisting()
+        );
         await (await Page.receiveDownloadButton()).click();
 
-        await browser.waitUntil(() => Page.cancelButton().isExisting());
+        await browser.waitUntil(() => Page.progressBar().isExisting());
         browser.pause(5000);
         await (await Page.cancelButton()).click();
 
-        await expect(await $("main")).toHaveTextContaining(
+        expect(await $("main")).toHaveTextContaining(
           "Receive files in real-time"
         );
 
         // Sender
         await browser.switchToWindow(sendWindow);
-        await browser.waitUntil(async () => (await $("div*=Transfer cancelled/interrupted").isExisting()));
+        await browser.waitUntil(
+          async () =>
+            await $("div*=Transfer cancelled/interrupted").isExisting()
+        );
       });
     });
-
-    
   });
 
   describe("Sender cancellation", () => {
     describe("Cancel during transfer", () => {
       it("Sends the Receiver and Sender back. The Receiver gets an error message", async function () {
-        // FIXME: flaky test that times out
-        this.retries(1);
-
         await Page.open();
         const sendWindow = await browser.getWindowHandle();
         await Page.uploadFiles("./test/files/sizes/20MB");
-        const codeUrl = await Page.getCodeUrl()
+        const codeUrl = await Page.getCodeUrl();
 
         // Receiver
         const receiveWindow = await browser.newWindow(codeUrl);
-        await browser.waitUntil(() => Page.receiveDownloadButton().isExisting());
+        await browser.waitUntil(() =>
+          Page.receiveDownloadButton().isExisting()
+        );
         await (await Page.receiveDownloadButton()).click();
 
-        // Sender 
+        // Sender
         await browser.switchToWindow(sendWindow);
-        await browser.waitUntil(() => Page.cancelButton().isExisting());
+        await browser.waitUntil(() => Page.progressBar().isExisting());
         await (await Page.cancelButton()).click();
-        await expect(await $("main")).toHaveTextContaining(
-          "Send files in real-time"
-        );
+        expect(await $("main")).toHaveTextContaining("Send files in real-time");
 
         // Receiver
         await browser.switchToWindow(receiveWindow);
-        await browser.waitUntil(async () => (await $("div*=Transfer cancelled/interrupted").isExisting()));
+        await browser.waitUntil(
+          async () =>
+            await $("div*=Transfer cancelled/interrupted").isExisting()
+        );
       });
-      
     });
 
     describe("Cancel before accepted transfer", () => {
@@ -162,22 +143,18 @@ describe("Cancellation", () => {
         await Page.open();
         const sendWindow = await browser.getWindowHandle();
         await Page.uploadFiles("./test/files/sizes/20MB");
-        const codeUrl = await Page.getCodeUrl()
+        const codeUrl = await Page.getCodeUrl();
 
         const _receiveWindow = await browser.newWindow(codeUrl);
         await browser.switchToWindow(sendWindow);
         await browser.waitUntil(() => Page.cancelButton().isExisting());
         await (await Page.cancelButton()).click();
-        await expect(await $("main")).toHaveTextContaining(
-          "Send files in real-time"
-        );
+        expect(await $("main")).toHaveTextContaining("Send files in real-time");
       });
       // TODO not implemented functionality
-      it.skip("Receiver get cancellation messages after pressing Download", async function () {
-      });
+      it.skip("Receiver get cancellation messages after pressing Download", async function () {});
       // TODO not implemented functionality
-      it.skip("Receiver get cancellation messages after pressing Cancel", async function () {
-      });
+      it.skip("Receiver get cancellation messages after pressing Cancel", async function () {});
     });
   });
 });
