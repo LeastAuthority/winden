@@ -1,3 +1,4 @@
+import nosleep from "nosleep.js";
 import React, { PropsWithChildren, useEffect, useRef, useState } from "react";
 import { useCodeInput } from "../../hooks/useCodeInput";
 import { useError } from "../../hooks/useError";
@@ -180,6 +181,16 @@ export default function WormholeProvider(props: Props) {
       }
     );
   }, []);
+
+  const noSleep = useRef(new nosleep());
+  useEffect(() => {
+    // Prevent mobile browsers from sleeping during transfer
+    if (fileMeta && !done) {
+      noSleep.current.enable();
+    } else {
+      noSleep.current.disable();
+    }
+  }, [fileMeta, done]);
 
   async function sendFile(
     file: File,
