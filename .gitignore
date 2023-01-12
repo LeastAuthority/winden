@@ -1,6 +1,6 @@
-*/dist/
-*/node_modules/
-*/.env
-*/test/files/sizes
 .DS_Store
-*/src/worker/wasm_exec.js
+.env
+/client-e2e/test/files/sizes/
+dist/
+node_modules/
+wasm_exec.js

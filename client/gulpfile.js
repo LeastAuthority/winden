@@ -3,8 +3,8 @@ const { exec, execSync } = require("child_process");
 const gulp = require("gulp");
 const log = require("fancy-log");
 const connect = require("gulp-connect");
-const replace = require('gulp-replace');
-const gulpif = require('gulp-if');
+const replace = require("gulp-replace");
+const gulpif = require("gulp-if");
 const webpack = require("webpack-stream");
 const Dotenv = require("dotenv-webpack");
 const SentryPlugin = require("@sentry/webpack-plugin");
@@ -13,7 +13,7 @@ const path = require("path");
 
 require("dotenv").config();
 
-const package = JSON.parse(fs.readFileSync('./package.json'))
+const package = JSON.parse(fs.readFileSync("./package.json"));
 
 const webpackConfig = {
   mode: "development",
@@ -88,20 +88,17 @@ const javascriptWatch = () =>
     .pipe(connect.reload());
 
 const prepWorker = (cb) => {
-    // cp wasm_exec.js to be glued
-    execSync(
-      "cp \"$(go env GOROOT)/misc/wasm/wasm_exec.js\" src/worker"
-    );
-    cb();
-}
+  // cp wasm_exec.js to be glued
+  execSync('cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" src/worker');
+  cb();
+};
 
-const worker = () => 
+const worker = () =>
   gulp
     .src("src/worker/index.ts")
     .pipe(webpack(webpackConfig))
     .pipe(gulp.dest("dist/worker"))
     .pipe(connect.reload());
-
 
 const storybook = () => exec("npm run build-storybook");
 
@@ -122,30 +119,47 @@ const publicCopy = () =>
 // Set version in title of main html file to be visible for clients
 const setPublicVersion = async () => {
   gulp
-    .src(['dist/index.html'])
-    .pipe(replace(new RegExp(`<title>(.*)</title>`), '<title>$1 ('+package.version+')</title>'))
-    .pipe(gulp.dest('dist/'))
-}
+    .src(["dist/index.html"])
+    .pipe(
+      replace(
+        new RegExp(`<title>(.*)</title>`),
+        "<title>$1 (" + package.version + ")</title>"
+      )
+    )
+    .pipe(gulp.dest("dist/"));
+};
 
 // allow search engine to crawl production deployment instances only
 const allowRobots = () =>
   gulp
-    .src(['dist/robots.txt'])
-    .pipe(gulpif(process.env.ENVIRONMENT === "prod" , replace('Disallow', 'Allow')))
-    .pipe(gulp.dest('dist'));
+    .src(["dist/robots.txt"])
+    .pipe(
+      gulpif(process.env.ENVIRONMENT === "prod", replace("Disallow", "Allow"))
+    )
+    .pipe(gulp.dest("dist"));
 
-const public = gulp.series(publicClean, publicCopy, setPublicVersion, allowRobots);
-
-
+const public = gulp.series(
+  publicClean,
+  publicCopy,
+  setPublicVersion,
+  allowRobots
+);
 
 // Set agent version in go library to identify as web app client
 const setWasmVersion = async () => {
   gulp
-    .src(['vendor/wormhole-william/version/version.go'])
-    .pipe(replace(new RegExp(`AgentString = "(.*)"`), 'AgentString = "winden.app"'))
-    .pipe(replace(new RegExp(`AgentVersion = "(.*)"`), 'AgentVersion = "'+package.version+'"'))
-    .pipe(gulp.dest('vendor/wormhole-william/version/'));
-}
+    .src(["vendor/wormhole-william/version/version.go"])
+    .pipe(
+      replace(new RegExp(`AgentString = "(.*)"`), 'AgentString = "winden.app"')
+    )
+    .pipe(
+      replace(
+        new RegExp(`AgentVersion = "(.*)"`),
+        'AgentVersion = "' + package.version + '"'
+      )
+    )
+    .pipe(gulp.dest("vendor/wormhole-william/version/"));
+};
 
 // added -buildvcs=false as it fails to build on Github actions with error obtaining VCS status: exit status 128
 const wasmBuild = () =>
@@ -163,32 +177,7 @@ const start = () => {
     host: "0.0.0.0",
     root: "dist",
     livereload: true,
-    middleware: function (connect, opt) {
-      return [
-        (req, res, next) => {
-          if (
-            !fs.existsSync(
-              path.join(__dirname, "dist", req._parsedUrl.pathname)
-            )
-          ) {
-            fs.readFile(
-              path.join(__dirname, "dist/index.html"),
-              (err, data) => {
-                if (err) {
-                  res.writeHead(500);
-                  res.end(JSON.stringify(err));
-                  return;
-                }
-                res.writeHead(200);
-                res.end(data);
-              }
-            );
-          } else {
-            next();
-          }
-        },
-      ];
-    },
+    fallback: "src/public/index.html",
   });
 };
 
@@ -206,16 +195,6 @@ const watch = () => {
 };
 
 const clean = () => del("dist");
-
-const deployAWS = (cb) => {
-  execSync(`aws s3 sync ./dist ${process.env.S3_BUCKET}`);
-  execSync(`aws cloudfront create-invalidation \
-    --distribution-id ${process.env.CDF_DISTRIBUTION_ID} \
-    --paths /index.html \
-     /wormhole.wasm \
-     /worker/main.js`);
-  cb();
-};
 
 const deploySftp = (cb) => {
   // accept ssh host key of target
@@ -265,4 +244,12 @@ exports.deploy = gulp.series(
   deploySftp
 );
 
-exports.default = gulp.series(prepWorker, public, javascript, worker, setWasmVersion, wasm, storybook);
+exports.default = gulp.series(
+  prepWorker,
+  public,
+  javascript,
+  worker,
+  setWasmVersion,
+  wasm,
+  storybook
+);

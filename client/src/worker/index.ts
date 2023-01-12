@@ -23,7 +23,7 @@ import Client from "./client";
 import "./wasm_exec";
 
 const wasmPromise = fetch("/wormhole.wasm");
-let rpc: RpcProvider | undefined = undefined; 
+let rpc: RpcProvider | undefined = undefined;
 
 const bufferSize = 1024 * 4; // 4KiB
 // const bufferSize = (1024 ** 2) * 2 // 2MiB

@@ -55,7 +55,6 @@ jobs:
           echo "RELAY_URL=wss://relay.stage.winden.app/" >> $GITHUB_ENV
 
       - name: create config .env file
-        if: inputs.environment == 'stage'
         run: |
           touch ./client/.env
           cat <<EOF >> ./client/.env
@@ -67,6 +66,7 @@ jobs:
           NODE_ENV=production
           ENVIRONMENT=${{ inputs.environment }}
           EOF
+          touch ./client-e2e/.env
 
       - name: prepare
         run: |

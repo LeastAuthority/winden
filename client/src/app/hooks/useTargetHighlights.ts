@@ -28,6 +28,5 @@ export function useTargetHighlights() {
         }
       }, 200);
     }
-    console.log(location);
   }, [location.key]);
 }

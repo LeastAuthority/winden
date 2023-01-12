@@ -35,15 +35,22 @@ git clone --recurse-submodules git@github.com:LeastAuthority/winden.git
 
 ### System Prerequisites
 
+- npm
 - docker
 - docker compose
 
-### Setup docker images
+### Set up docker images
 
 ```sh
 docker compose build
 docker compose run client npm i
 docker compose run client-e2e npm i
+```
+
+### Set up pre-commit hooks
+
+```sh
+npm i
 ```
 
 ### Run development environment
@@ -77,6 +84,14 @@ docker compose down
 
 ```sh
 docker compose run -p 6006:6006 client npm run storybook
+```
+
+### Format code
+
+Winden uses [prettier](https://prettier.io/) for code formatting. When code is pushed to this repo, a git hook will run to verify that the code is formatted. The push will be rejected if the check fails. In order to successfully push, format the code with the following command:
+
+```
+docker-compose run client npm run format
 ```
 
 ## Testing
@@ -126,6 +141,7 @@ And https://webdriver.io/docs/api/browser/debug/
 - Fill it with the following for:
 
 (Playground environment)
+
 ```sh
 MAILBOX_URL="wss://<mailbox server>/v1"
 RELAY_URL="wss:///<relay server>"
@@ -134,6 +150,7 @@ NODE_ENV=development
 ```
 
 (Production environment)
+
 ```sh
 # Production
 MAILBOX_URL="wss://<mailbox server>/v1"
@@ -144,16 +161,12 @@ NODE_ENV=production
 
 ## Deploying
 
-We build and deploy by running a gulp task inside a docker container. You will need to provide your AWS credentials to the container. We do this through the `.env` file.
+We build and deploy by running a gulp task inside a docker container. We do this through the `.env` file.
 
 - Create `client/.env` if it does not exist already
 - Fill it with the following: (Replace placeholders in angle brackets with the appropriate values)
 
 ```sh
-AWS_ACCESS_KEY_ID=<YOUR_ACCESS_KEY>
-AWS_SECRET_ACCESS_KEY=<YOUR_SECRET_ACCESS_KEY>
-AWS_DEFAULT_REGION=<REGION>
-
 S3_BUCKET=<URL>
 CDF_DISTRIBUTION_ID=<ID>
 

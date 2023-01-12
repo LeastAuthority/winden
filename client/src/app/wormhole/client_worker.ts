@@ -1,5 +1,6 @@
 import streamSaver from "streamsaver";
 import { RpcProvider } from "worker-rpc";
+import { onTabExit } from "../hooks/useTabExitWarning";
 import {
   FREE,
   isRPCMessage,
@@ -168,6 +169,7 @@ export default class ClientWorker implements ClientInterface {
     error,
   }: RPCMessage): Promise<void> {
     if (error.includes("failed to write")) {
+      window.removeEventListener("beforeunload", onTabExit);
       window.history.pushState({}, "", "/s?cancel=");
       window.location.reload();
     } else {
@@ -243,7 +245,6 @@ export default class ClientWorker implements ClientInterface {
           resolve({ code, cancel, done });
         })
         .catch((reason) => {
-          // console.log(reason);
           reject(reason);
         });
     });

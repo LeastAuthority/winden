@@ -1,18 +1,11 @@
-import {
-  Button,
-  createStyles,
-  Group,
-  Space,
-  Stack,
-  Text,
-  TextInput,
-} from "@mantine/core";
+import { Button, createStyles, Group, Stack, Text } from "@mantine/core";
 import { useClipboard, useViewportSize } from "@mantine/hooks";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Files, X } from "tabler-icons-react";
 import { useCommonStyles } from "../../../hooks/useCommonStyles";
 import { useError } from "../../../hooks/useError";
+import { onTabExit, useTabExitWarning } from "../../../hooks/useTabExitWarning";
 import { useWormhole } from "../../../hooks/useWormhole";
 import { ErrorTypes } from "../../../util/errors";
 import Content from "../../Content";
@@ -49,6 +42,7 @@ export function SendInstructionsScreenContent(props: ContentProps) {
       wormhole?.reset();
     }
   });
+  useTabExitWarning();
 
   return (
     <Content>
@@ -135,6 +129,7 @@ export default function SendInstructionsScreen({}: Props) {
         )
       }
       onCancel={() => {
+        window.removeEventListener("beforeunload", onTabExit);
         navigate("/s", { replace: true });
         window.location.reload();
       }}

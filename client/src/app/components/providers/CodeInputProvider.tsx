@@ -1,16 +1,15 @@
 import React, { useState } from "react";
 
-export const CodeInputContext =
-  React.createContext<{
-    value: string;
-    setValue: React.Dispatch<React.SetStateAction<string>>;
-    submitting: boolean;
-    setSubmitting: React.Dispatch<React.SetStateAction<boolean>>;
-    showError: boolean;
-    setShowError: React.Dispatch<React.SetStateAction<boolean>>;
-    touched: boolean;
-    setTouched: React.Dispatch<React.SetStateAction<boolean>>;
-  } | null>(null);
+export const CodeInputContext = React.createContext<{
+  value: string;
+  setValue: React.Dispatch<React.SetStateAction<string>>;
+  submitting: boolean;
+  setSubmitting: React.Dispatch<React.SetStateAction<boolean>>;
+  showError: boolean;
+  setShowError: React.Dispatch<React.SetStateAction<boolean>>;
+  touched: boolean;
+  setTouched: React.Dispatch<React.SetStateAction<boolean>>;
+} | null>(null);
 
 type Props = React.PropsWithChildren<{}>;
 
