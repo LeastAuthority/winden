@@ -2,5 +2,5 @@
 	path = client/vendor/wormhole-william
 	url = git@github.com:LeastAuthority/wormhole-william.git
 [submodule "feedback-api/feedback-api"]
-	path = feedback-api/feedback-api
+	path = feedback-api
 	url = git@github.com:LeastAuthority/feedback-api.git

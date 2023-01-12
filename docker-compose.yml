@@ -26,7 +26,7 @@ services:
     build: ./feedback-api
     command:
       [
-        "app",
+        "/app/feedback-api",
         "-to",
         "foo@barbaz.com",
         "-smtp-server",
