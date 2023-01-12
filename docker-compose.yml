@@ -43,9 +43,7 @@ services:
       - SMTP_USERNAME=foo@foobar.in
       - SMTP_PASSWORD=barbazquux
   dummy-smtp-server:
-    image: python:latest
-    command:
-      ["python", "-m", "smtpd", "-n", "-c", "DebuggingServer", "0.0.0.0:2500"]
+    build: ./dummy-smtp-server
     ports:
       - "2500:2500"
     environment:
