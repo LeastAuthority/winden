@@ -32,7 +32,7 @@ services:
         "-smtp-server",
         "dummy-smtp-server",
         "-smtp-port",
-        "2500",
+        "1025",
       ]
     ports:
       - "8001:8001"
@@ -43,9 +43,9 @@ services:
       - SMTP_USERNAME=foo@foobar.in
       - SMTP_PASSWORD=barbazquux
   dummy-smtp-server:
-    build: ./dummy-smtp-server
+    build: ./feedback-api/docker/smtp-server
     ports:
-      - "2500:2500"
+      - "1025:1025"
     environment:
       - PYTHONUNBUFFERED=1
   # build to run in CI
