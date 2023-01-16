@@ -88,11 +88,7 @@ export function CodeInputContent(props: ContentProps) {
               error={Boolean(errorMessage)}
               disabled={props.submitting}
               onKeyDown={(e) => {
-                if (
-                  e.key === "Enter" &&
-                  props.onSubmit &&
-                  !Boolean(props.errorType)
-                ) {
+                if (e.key === "Enter" && props.onSubmit) {
                   props.onSubmit(props.code);
                 }
               }}
