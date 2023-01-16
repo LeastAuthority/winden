@@ -15,6 +15,7 @@ import CodeInputProvider from "./components/providers/CodeInputProvider";
 import ErrorProvider from "./components/providers/ErrorProvider";
 import ThemeProvider from "./components/providers/ThemeProvider";
 import WormholeProvider from "./components/providers/WormholeProvider";
+import "./NoSleep";
 
 Sentry.init({
   dsn: process.env["SENTRY_DSN"],

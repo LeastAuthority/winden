@@ -1,8 +1,8 @@
-import nosleep from "nosleep.js";
 import React, { PropsWithChildren, useEffect, useRef, useState } from "react";
 import { useCodeInput } from "../../hooks/useCodeInput";
 import { useError } from "../../hooks/useError";
 import { useRateLimitedState } from "../../hooks/useRateLimitedState";
+import { NoSleep } from "../../NoSleep";
 import { PROGRESS_BAR_MS_PER_UPDATES } from "../../util/constants";
 import { detectErrorType, ErrorTypes } from "../../util/errors";
 import ClientWorker from "../../wormhole/client_worker";
@@ -182,13 +182,9 @@ export default function WormholeProvider(props: Props) {
     );
   }, []);
 
-  const noSleep = useRef(new nosleep());
   useEffect(() => {
-    // Prevent mobile browsers from sleeping during transfer
-    if (fileMeta && !done) {
-      noSleep.current.enable();
-    } else {
-      noSleep.current.disable();
+    if (!fileMeta || done) {
+      NoSleep.disable();
     }
   }, [fileMeta, done]);
 
