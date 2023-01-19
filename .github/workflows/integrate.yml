@@ -79,7 +79,6 @@ jobs:
           docker compose --profile e2e run client-ci npm run test -- --coverage
 
       - name: Run END-2-END tests
-        if: ${{ github.event_name == 'pull_request' }}
         run: |
           docker compose --profile e2e run --rm client-e2e 
 
