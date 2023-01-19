@@ -5,6 +5,7 @@ export interface FileReaderOpts {
   size: number;
   read: ReadFn;
   cancel: () => void;
+  reject: () => void;
 }
 
 export class FileStreamReader {
@@ -13,15 +14,17 @@ export class FileStreamReader {
   readonly read: ReadFn;
   readonly bufferSizeBytes: number;
   readonly cancel: () => void;
+  readonly reject: () => void;
 
   constructor(bufferSizeBytes: number, opts: FileReaderOpts) {
-    const { name, size, read, cancel } = opts;
+    const { name, size, read, cancel, reject } = opts;
 
     this.bufferSizeBytes = bufferSizeBytes;
     this.name = name;
     this.read = read;
     this.size = size;
     this.cancel = cancel;
+    this.reject = reject;
   }
 
   async readAll(result: Uint8Array): Promise<number> {

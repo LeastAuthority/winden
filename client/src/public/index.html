@@ -4,12 +4,108 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Transfer</title>
+    <meta
+      name="description"
+      content="Winden is the private, secure way to send large files at speed. No sign-ups. No snooping. No nonsense."
+    />
+    <title>Winden - secure, fast and easy file transfer</title>
     <link rel="shortcut icon" type="image/png" href="/favicon.png" />
-    <link rel="stylesheet" href="/normalize.css" />
-    <link rel="stylesheet" href="/main.css" />
+    <link rel="apple-touch-icon" type="image/png" href="/favicon_bg.png" />
+    <meta
+      name="twitter:title"
+      content="Winden - secure, fast and easy file transfer"
+    />
+    <meta
+      name="twitter:description"
+      content="Winden is the private, secure way to send large files at speed. No sign-ups. No snooping. No nonsense."
+    />
+    <meta name="twitter:image" content="/Winden_landscape_logo.png" />
+    <meta name="twitter:site" content="@LeastAuthority" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <style>
+      @import url(/normalize.css);
+
+      @font-face {
+        font-family: Poppins;
+        src: url(/Poppins/Poppins-Light.ttf) format(truetype);
+        font-weight: 300;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: Poppins;
+        src: url(/Poppins/Poppins-Regular.ttf) format(truetype);
+        font-weight: 400;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: Poppins;
+        src: url(/Poppins/Poppins-Medium.ttf) format(truetype);
+        font-weight: 500;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: Poppins;
+        src: url(/Poppins/Poppins-SemiBold.ttf) format(truetype);
+        font-weight: 600;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: Poppins;
+        src: url(/Poppins/Poppins-Bold.ttf) format(truetype);
+        font-weight: 700;
+        font-style: normal;
+      }
+
+      body {
+        background: linear-gradient(222.19deg, #f0f0f0 23.77%, #ffffff 98.02%);
+        font-size: 16px;
+        color: #282f39;
+        min-width: 320px;
+      }
+
+      .ns-container {
+        width: 100vw;
+        min-height: 100vh;
+        background-color: #ddd;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: Poppins, sans-serif;
+      }
+      .ns-logo {
+        margin: 20px 0;
+      }
+      .ns-content {
+        background-color: #fff;
+        border: 1px solid #aaa;
+        padding: 20px;
+        border-radius: 20px;
+      }
+    </style>
   </head>
   <body>
+    <noscript>
+      <div class="ns-container">
+        <img
+          class="ns-logo"
+          height="60"
+          src="/LA_Winden_HorizontalLogo_Color.svg"
+          alt="winden logo"
+        />
+        <div class="ns-content">
+          <h1>Please enable JavaScript</h1>
+          <p>
+            In order to use Winden, your web browser must have JavaScript
+            enabled.
+          </p>
+          <p>Please refresh the page after enabling JavaScript.</p>
+          <p>
+            For instructions on how to enable JavaScript,
+            <a href="https://www.enable-javascript.com/">click here</a>.
+          </p>
+        </div>
+      </div>
+    </noscript>
     <div id="app"></div>
     <script src="/app/main.js"></script>
   </body>

@@ -10,4 +10,9 @@ export default {
   },
 } as ComponentMeta<typeof Background>;
 
-export const Story: ComponentStory<typeof Background> = () => <Background />;
+const Template: ComponentStory<typeof Background> = (args) => (
+  <Background {...args} />
+);
+
+export const Story = Template.bind({});
+Story.args = {};

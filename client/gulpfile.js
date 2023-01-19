@@ -1,12 +1,19 @@
 const del = require("del");
 const { exec, execSync } = require("child_process");
 const gulp = require("gulp");
+const log = require("fancy-log");
 const connect = require("gulp-connect");
+const replace = require("gulp-replace");
+const gulpif = require("gulp-if");
 const webpack = require("webpack-stream");
 const Dotenv = require("dotenv-webpack");
 const SentryPlugin = require("@sentry/webpack-plugin");
+const fs = require("fs");
+const path = require("path");
 
 require("dotenv").config();
+
+const package = JSON.parse(fs.readFileSync("./package.json"));
 
 const webpackConfig = {
   mode: "development",
@@ -45,19 +52,46 @@ const webpackConfig = {
         ]
       : []),
   ],
+  optimization: {
+    minimize: process.env.NODE_ENV === "production",
+  },
 };
 
 const javascript = () =>
   gulp
-    .src("src/app/index.tsx")
+    .src(`src/app/index.${process.env.NODE_ENV}.tsx`)
     .pipe(
       webpack({
         ...webpackConfig,
-        entry: ["web-streams-polyfill", "./src/app/index.tsx"],
+        entry: [
+          "web-streams-polyfill",
+          `./src/app/index.${process.env.NODE_ENV}.tsx`,
+        ],
+      })
+    )
+    .pipe(gulp.dest("dist/app"));
+
+const javascriptWatch = () =>
+  gulp
+    .src(`src/app/index.${process.env.NODE_ENV}.tsx`)
+    .pipe(
+      webpack({
+        ...webpackConfig,
+        watch: true,
+        entry: [
+          "web-streams-polyfill",
+          `./src/app/index.${process.env.NODE_ENV}.tsx`,
+        ],
       })
     )
     .pipe(gulp.dest("dist/app"))
     .pipe(connect.reload());
+
+const prepWorker = (cb) => {
+  // cp wasm_exec.js to be glued
+  execSync('cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" src/worker');
+  cb();
+};
 
 const worker = () =>
   gulp
@@ -77,39 +111,114 @@ const publicClean = () =>
     "!dist/wormhole.wasm",
   ]);
 const publicCopy = () =>
-  gulp.src("src/public/**/*").pipe(gulp.dest("dist")).pipe(connect.reload());
-const public = gulp.series(publicClean, publicCopy);
+  gulp
+    .src("src/public/**/*", { dot: true })
+    .pipe(gulp.dest("dist"))
+    .pipe(connect.reload());
 
+// Set version in title of main html file to be visible for clients
+const setPublicVersion = async () => {
+  gulp
+    .src(["dist/index.html"])
+    .pipe(
+      replace(
+        new RegExp(`<title>(.*)</title>`),
+        "<title>$1 (" + package.version + ")</title>"
+      )
+    )
+    .pipe(gulp.dest("dist/"));
+};
+
+// allow search engine to crawl production deployment instances only
+const allowRobots = () =>
+  gulp
+    .src(["dist/robots.txt"])
+    .pipe(
+      gulpif(process.env.ENVIRONMENT === "prod", replace("Disallow", "Allow"))
+    )
+    .pipe(gulp.dest("dist"));
+
+const public = gulp.series(
+  publicClean,
+  publicCopy,
+  setPublicVersion,
+  allowRobots
+);
+
+// Set agent version in go library to identify as web app client
+const setWasmVersion = async () => {
+  gulp
+    .src(["vendor/wormhole-william/version/version.go"])
+    .pipe(
+      replace(new RegExp(`AgentString = "(.*)"`), 'AgentString = "winden.app"')
+    )
+    .pipe(
+      replace(
+        new RegExp(`AgentVersion = "(.*)"`),
+        'AgentVersion = "' + package.version + '"'
+      )
+    )
+    .pipe(gulp.dest("vendor/wormhole-william/version/"));
+};
+
+// added -buildvcs=false as it fails to build on Github actions with error obtaining VCS status: exit status 128
 const wasmBuild = () =>
   exec(
-    "cd vendor/wormhole-william && GOOS=js GOARCH=wasm go build -o ../../dist/wormhole.wasm ./wasm/module"
+    "cd vendor/wormhole-william && GOOS=js GOARCH=wasm go build  -buildvcs=false -o ../../dist/wormhole.wasm ./wasm/module"
   );
 // exec doesn't return a stream, but we need a non-empty stream to be able to reload.
 // so we build a stream using gulpfile.js
 const wasmReload = () => gulp.src("gulpfile.js").pipe(connect.reload());
+
 const wasm = gulp.series(wasmBuild, wasmReload);
 
-const watch = () => {
-  gulp.watch("src/app/**/*.{ts,tsx,css}", { ignoreInitial: false }, javascript);
-  gulp.watch("src/worker/**/*.{js,ts,tsx}", { ignoreInitial: false }, worker);
-  gulp.watch("src/public/**/*", { ignoreInitial: false }, public);
-  gulp.watch("vendor/wormhole-william/**/*.go", { ignoreInitial: false }, wasm);
+const start = () => {
   connect.server({
     host: "0.0.0.0",
     root: "dist",
     livereload: true,
+    fallback: "src/public/index.html",
   });
+};
+
+const watch = () => {
+  prepWorker;
+  gulp.watch(
+    "src/app/**/*.{ts,tsx,css}",
+    { ignoreInitial: false },
+    javascriptWatch
+  );
+  gulp.watch("src/worker/**/*.{js,ts,tsx}", { ignoreInitial: false }, worker);
+  gulp.watch("src/public/**/*", { ignoreInitial: false }, public);
+  gulp.watch("vendor/wormhole-william/**/*.go", { ignoreInitial: false }, wasm);
+  start();
 };
 
 const clean = () => del("dist");
 
-const deploy_playground = (cb) => {
-  execSync(`aws s3 sync ./dist ${process.env.S3_BUCKET}`);
-  execSync(`aws cloudfront create-invalidation \
-    --distribution-id ${process.env.CDF_DISTRIBUTION_ID} \
-    --paths /index.html \
-     /wormhole.wasm \
-     /worker/main.js`);
+const deploySftp = (cb) => {
+  // accept ssh host key of target
+  execSync("mkdir -p ~/.ssh");
+  execSync(
+    `ssh-keyscan ${process.env.SFTP_HOSTNAME} > ~/.ssh/known_hosts 2>/dev/null`
+  );
+  fs.writeFileSync(
+    path.join(process.env.HOME, "/.ssh/id_ed25519"),
+    process.env.SFTP_IDENTITY,
+    { mode: 0o600 }
+  );
+
+  // transfer files
+  let environment = process.env.ENVIRONMENT ?? process.env.NODE_ENV;
+  log.info(
+    `Using environment: ${environment} (NODE_ENV: ${process.env.NODE_ENV}, ENVIRONMENT: ${process.env.ENVIRONMENT})`
+  );
+  execSync(
+    `lftp sftp://${process.env.SFTP_USERNAME}:dummy@${process.env.SFTP_HOSTNAME}`,
+    {
+      input: `mirror -R dist winden_${environment}`,
+    }
+  );
   cb();
 };
 
@@ -119,14 +228,28 @@ exports.public = public;
 exports.wasm = wasm;
 exports.storybook = storybook;
 exports.watch = watch;
+// for CI optimization without watch
+exports.start = start;
 exports.clean = clean;
-exports.deploy_playground = gulp.series(
+exports.prepWorker = prepWorker;
+
+exports.deploy = gulp.series(
+  prepWorker,
   public,
   javascript,
   worker,
+  setWasmVersion,
   wasm,
-  storybook,
-  deploy_playground
+  // storybook,
+  deploySftp
 );
 
-exports.default = gulp.series(public, javascript, worker, wasm, storybook);
+exports.default = gulp.series(
+  prepWorker,
+  public,
+  javascript,
+  worker,
+  setWasmVersion,
+  wasm,
+  storybook
+);

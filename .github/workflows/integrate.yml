@@ -1,0 +1,87 @@
+---
+name: Integration
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  pre:
+    # Verification to be done before the real check
+    name: Pre-check
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.skip_flag.outputs.should_skip }}
+    steps:
+      - name: Skip flag
+        id: skip_flag
+        uses: fkirc/skip-duplicate-actions@v5
+        with:
+          concurrent_skipping: 'same_content_newer'
+          paths: '["client/**", "client-e2e/**", ".github/workflows/integrate.yml"]'
+
+  build:
+    name: Build/Test
+    needs: pre
+    if: needs.pre.outputs.should_skip != 'true'
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      matrix:
+        go-version: [1.19.3]
+        os: [ubuntu-latest]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+            submodules: recursive
+
+      - name: Setup npm, yarn etc.
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install docker and docker-compose
+        run: |
+           sudo curl -o /usr/local/bin/docker-compose -L "https://github.com/docker/compose/releases/download/v2.11.2/docker-compose-linux-x86_64"
+           sudo chmod +x /usr/local/bin/docker-compose
+
+      - name: Setup for running tests
+        run: |
+          IP=$(ip address show  eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f1 | head -n1)
+          printf "HOST_IP address is: %s\n" "$IP"
+          cat <<EOF >> ./client-e2e/.env
+          HOST_IP="$IP"
+          EOF
+          cat <<EOF >> ./client/.env
+          MAILBOX_URL="ws://$IP:4000/v1"
+          RELAY_URL="ws://$IP:4002"
+          NODE_ENV=development
+          EOF
+          printf "Client .env:\n"
+          cat ./client/.env
+          printf "Client-e2e .env:\n"
+          cat ./client-e2e/.env
+
+      - name: Setup docker images
+        run: docker compose --profile e2e build
+
+
+      - name: Setup packages
+        run: docker compose --profile e2e run client-e2e npm i
+
+      - name: Run UNIT and INTEGRATION tests
+        run: |
+          docker compose --profile e2e up -d client-ci
+          # give some time load webapp
+          sleep 60
+          docker compose --profile e2e run client-ci npm run test -- --coverage
+
+      - name: Run END-2-END tests
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          docker compose --profile e2e run --rm client-e2e 
+
+      - name: Stop the containers
+        run: docker compose --profile e2e down

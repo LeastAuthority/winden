@@ -1,11 +1,13 @@
 import streamSaver from "streamsaver";
 import { RpcProvider } from "worker-rpc";
+import { onTabExit } from "../hooks/useTabExitWarning";
 import {
   FREE,
   isRPCMessage,
   NEW_CLIENT,
   RECV_FILE,
   RECV_FILE_DATA,
+  RECV_FILE_OFFER_REJECT,
   RECV_FILE_PROGRESS,
   RECV_TEXT,
   RPCMessage,
@@ -15,6 +17,7 @@ import {
   SEND_FILE_RESULT_ERROR,
   SEND_FILE_RESULT_OK,
   SEND_TEXT,
+  WASM_EXITED,
   WASM_READY,
 } from "../util/actions";
 import { SENDER_TIMEOUT } from "../util/constants";
@@ -37,9 +40,17 @@ export default class ClientWorker implements ClientInterface {
   protected worker: Worker | undefined = undefined;
 
   private readonly config?: ClientConfig;
+  private onWasmExit?: () => void;
+  private onSendError?: (error: string) => void;
 
-  constructor(config?: ClientConfig) {
+  constructor(
+    config?: ClientConfig,
+    onWasmExit?: () => void,
+    onSendError?: (error: string) => void
+  ) {
     this.config = config;
+    this.onWasmExit = onWasmExit;
+    this.onSendError = onSendError;
     this.initialize();
   }
 
@@ -89,10 +100,6 @@ export default class ClientWorker implements ClientInterface {
     });
   }
 
-  private _reset() {
-    this.initialize();
-  }
-
   protected _registerRPCHandlers() {
     this.rpc!.registerRpcHandler<RPCMessage, void>(
       SEND_FILE_PROGRESS,
@@ -106,6 +113,12 @@ export default class ClientWorker implements ClientInterface {
       RECV_FILE_DATA,
       this._handleRecvFileData.bind(this)
     );
+    if (this.onWasmExit) {
+      this.rpc!.registerRpcHandler<RPCMessage, void>(
+        WASM_EXITED,
+        this.onWasmExit.bind(this)
+      );
+    }
   }
 
   protected _registerSignalHandlers() {
@@ -155,8 +168,13 @@ export default class ClientWorker implements ClientInterface {
     id,
     error,
   }: RPCMessage): Promise<void> {
-    window.history.pushState({}, "", "/#/s?cancel=");
-    window.location.reload();
+    if (error.includes("failed to write")) {
+      window.removeEventListener("beforeunload", onTabExit);
+      window.history.pushState({}, "", "/s?cancel=");
+      window.location.reload();
+    } else {
+      this.onSendError && this.onSendError(`SendErr: ${error}`);
+    }
   }
 
   private _handleFileProgress({ id, sentBytes, totalBytes }: RPCMessage): void {
@@ -227,7 +245,6 @@ export default class ClientWorker implements ClientInterface {
           resolve({ code, cancel, done });
         })
         .catch((reason) => {
-          // console.log(reason);
           reject(reason);
         });
     });
@@ -262,7 +279,7 @@ export default class ClientWorker implements ClientInterface {
       ...this.pending[id],
       opts,
     };
-    const { name, size } = await new Promise((resolve, reject) => {
+    const { name, size }: any = await new Promise((resolve, reject) => {
       const timeoutID = window.setTimeout(() => {
         reject("ErrRecvConnectionTimeout");
       }, SENDER_TIMEOUT);
@@ -277,6 +294,8 @@ export default class ClientWorker implements ClientInterface {
           _resolve(result);
         })
         .catch(reject);
+    }).catch((e) => {
+      throw e;
     });
 
     // NOTE NOTE: mitm doesn't seem to be used when @ionic/vue is imported
@@ -298,7 +317,19 @@ export default class ClientWorker implements ClientInterface {
     const accept = async (): Promise<void> => {
       return this.rpc!.rpc(RECV_FILE_DATA, { id });
     };
-    return { name, size, done, accept, cancel: () => this._reset() };
+    return {
+      name,
+      size,
+      done,
+      accept,
+      cancel: () => {
+        // TODO: proper cancellation
+        throw new Error("Cancel function not implemented");
+      },
+      reject: () => {
+        return this.rpc!.rpc(RECV_FILE_OFFER_REJECT, { id });
+      },
+    };
   }
 
   public async free(): Promise<void> {

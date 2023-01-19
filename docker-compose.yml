@@ -1,18 +1,18 @@
 version: "3.9"
 services:
   mailbox:
-    build:
-      context: ./mailbox
+    image: leastauthority/magic-wormhole-mailbox:latest
     ports:
       - "4000:4000" # WebSocket
   relay:
-    build:
-      context: ./relay
+    image: leastauthority/magic-wormhole-relay:latest
     ports:
       - "4001:4001" # TCP
       - "4002:4002" # WebSocket
   client:
     build: ./client
+    env_file:
+      - ./client/.env
     volumes:
       - ./:/usr/src/app
     ports:
@@ -21,6 +21,46 @@ services:
     depends_on:
       - mailbox
       - relay
+      - feedback-api
+  feedback-api:
+    build: ./feedback-api
+    command:
+      [
+        "/app/feedback-api",
+        "-to",
+        "foo@barbaz.com",
+        "-smtp-server",
+        "dummy-smtp-server",
+        "-smtp-port",
+        "1025",
+      ]
+    ports:
+      - "8001:8001"
+    depends_on:
+      - dummy-smtp-server
+    environment:
+      - SMTP_USE_TLS=false
+      - SMTP_USERNAME=foo@foobar.in
+      - SMTP_PASSWORD=barbazquux
+  dummy-smtp-server:
+    build: ./feedback-api/docker/smtp-server
+    ports:
+      - "1025:1025"
+    environment:
+      - PYTHONUNBUFFERED=1
+  # build to run in CI
+  client-ci:
+    build: ./client
+    env_file:
+      - ./client/.env
+    ports:
+      - "8080:8080" # DevServer
+      - "35729:35729" # LiveReload
+    depends_on:
+      - mailbox
+      - relay
+    profiles:
+      - e2e
   # Selenium services
   chrome:
     volumes:
@@ -74,7 +114,7 @@ services:
     profiles:
       - e2e
   selenium-hub:
-    image: selenium/hub:4.1.3-20220405
+    image: selenium/hub:latest
     container_name: selenium-hub
     ports:
       - "4442:4442"
@@ -93,10 +133,10 @@ services:
     env_file:
       - ./client-e2e/.env
     volumes:
-      - ./client-e2e:/usr/src/app
+      - ./client-e2e:/usr/src/app/client-e2e
       - test-downloads:/home/node/downloads
     depends_on:
-      client:
+      client-ci:
         condition: service_started
       chrome:
         condition: service_started

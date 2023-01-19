@@ -9,7 +9,6 @@ export function useCancelModal() {
   useEffect(() => {
     if (params.get("cancel") !== null) {
       setCancelModal(true);
-      setParams({}, { replace: true });
     }
   }, [params]);
 

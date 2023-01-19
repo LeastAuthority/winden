@@ -1,20 +1,26 @@
-import { Button, Center, Stack, Title } from "@mantine/core";
+import { Button, Stack, Text } from "@mantine/core";
 import React from "react";
-import { Link } from "react-router-dom";
+import { useCommonStyles } from "../../hooks/useCommonStyles";
+import Content from "../Content";
+import Link from "../Link";
 
 type Props = {};
 
 export default function NotFoundPage({}: Props) {
+  const { classes } = useCommonStyles();
+
   return (
-    <div data-testid="not-found-page-container">
-      <Stack align="center">
-        <Title order={1}>Page not found</Title>
-        <Link data-testid="not-found-page-back-button" to="s">
-          <Button variant="light" color="dark">
-            Back to home
-          </Button>
-        </Link>
-      </Stack>
-    </div>
+    <Content>
+      <div data-testid="not-found-page-container">
+        <Stack align="center">
+          <Text component="h1" className={classes.headerText}>
+            Page not found
+          </Text>
+          <Link data-testid="not-found-page-back-button" to="s">
+            <Button color="medium-grey">Back to home</Button>
+          </Link>
+        </Stack>
+      </div>
+    </Content>
   );
 }

@@ -1,7 +1,10 @@
 import React, { PropsWithChildren, useEffect, useRef, useState } from "react";
 import { useCodeInput } from "../../hooks/useCodeInput";
 import { useError } from "../../hooks/useError";
-import { detectErrorType } from "../../util/errors";
+import { useRateLimitedState } from "../../hooks/useRateLimitedState";
+import { NoSleep } from "../../NoSleep";
+import { PROGRESS_BAR_MS_PER_UPDATES } from "../../util/constants";
+import { detectErrorType, ErrorTypes } from "../../util/errors";
 import ClientWorker from "../../wormhole/client_worker";
 import {
   ClientConfig,
@@ -9,9 +12,6 @@ import {
   TransferProgress,
 } from "../../wormhole/types";
 
-const MAX_FILE_SIZE_MB = 200;
-const MB = 1000 ** 2;
-const MAX_FILE_SIZE_BYTES = MB * MAX_FILE_SIZE_MB;
 const updateProgressETAFrequency = 10;
 
 const defaultConfig: ClientConfig = {
@@ -25,7 +25,7 @@ const defaultConfig: ClientConfig = {
 type Props = PropsWithChildren<{}>;
 
 class Transfer {
-  private client = new ClientWorker(defaultConfig);
+  private client: ClientWorker;
   private progressBegin = 0;
   private progressCounter = 0;
 
@@ -38,12 +38,15 @@ class Transfer {
     onUpload: (file: Record<string, any>, code?: string) => void,
     onEta: (eta: number | null) => void,
     onDone: () => void,
-    onBytes: (bytes: number) => void
+    onBytes: (bytes: number) => void,
+    onWasmExit: () => void,
+    onSendError: (error: string) => void
   ) {
     this.onUpload = onUpload;
     this.onEta = onEta;
     this.onDone = onDone;
     this.onBytes = onBytes;
+    this.client = new ClientWorker(defaultConfig, onWasmExit, onSendError);
   }
 
   public async sendFile(
@@ -91,10 +94,14 @@ class Transfer {
     p.then((file) => {
       this.onUpload(file);
       return file.done;
-    }).then(() => {
-      this.resetProgress();
-      this.onDone();
-    });
+    })
+      .then(() => {
+        this.resetProgress();
+        this.onDone();
+      })
+      .catch((e) => {
+        console.error(e);
+      });
 
     return p;
   }
@@ -121,28 +128,33 @@ class Transfer {
   }
 }
 
-export const WormholeContext =
-  React.createContext<{
-    code?: string;
-    fileMeta: Record<string, any> | null;
-    progressEta: number | null;
-    saveFile: (code: string) => Promise<TransferProgress | void>;
-    sendFile: (
-      file: File,
-      opts?: TransferOptions
-    ) => Promise<TransferProgress | void>;
-    done: boolean;
-    reset: () => void;
-    bytesSent: number;
-  } | null>(null);
+export const WormholeContext = React.createContext<{
+  code?: string;
+  fileMeta: Record<string, any> | null;
+  progressEta: number | null;
+  saveFile: (code: string) => Promise<TransferProgress | void>;
+  sendFile: (
+    file: File,
+    opts?: TransferOptions
+  ) => Promise<TransferProgress | void>;
+  done: boolean;
+  reset: () => void;
+  bytesSent: number;
+} | null>(null);
 
-export function WormholeProvider(props: Props) {
+export default function WormholeProvider(props: Props) {
   const [fileMeta, setFileMeta] = useState<Record<string, any> | null>(null);
   const [code, setCode] = useState<string | undefined>();
-  const [progressEta, setProgressEta] = useState<number | null>(null);
+  const [progressEta, setProgressEta] = useRateLimitedState<number | null>(
+    null,
+    1000
+  );
   const [done, setDone] = useState(false);
   const error = useError();
-  const [bytesSent, setBytesSent] = useState(0);
+  const [bytesSent, setBytesSent] = useRateLimitedState(
+    0,
+    PROGRESS_BAR_MS_PER_UPDATES
+  );
   const codeInput = useCodeInput();
 
   const client = useRef<Transfer>();
@@ -160,9 +172,21 @@ export function WormholeProvider(props: Props) {
       },
       (bytes: number) => {
         setBytesSent(bytes);
+      },
+      () => {
+        error?.setError(ErrorTypes.WASM_EXITED);
+      },
+      (err) => {
+        error?.setError(detectErrorType(err));
       }
     );
   }, []);
+
+  useEffect(() => {
+    if (!fileMeta || done) {
+      NoSleep.disable();
+    }
+  }, [fileMeta, done]);
 
   async function sendFile(
     file: File,

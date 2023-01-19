@@ -1,4 +1,5 @@
 export const WASM_READY = "client/wasm_ready";
+export const WASM_EXITED = "client/wasm_exited";
 export const NEW_CLIENT = "client/new";
 export const SEND_TEXT = "client/send_text";
 export const RECV_TEXT = "client/recv_text";
