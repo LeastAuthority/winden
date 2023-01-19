@@ -90,7 +90,6 @@ describe("Send flow", () => {
       await testTransferSuccess("sizes/20MB", 100000);
     });
   });
-  */
 
   describe("when a sender tries to send the same file twice", () => {
     it("will successfully upload the file both times", async () => {

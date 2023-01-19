@@ -1,18 +1,18 @@
 version: "3.9"
 services:
   mailbox:
-    build:
-      context: ./mailbox
+    image: leastauthority/magic-wormhole-mailbox:latest
     ports:
       - "4000:4000" # WebSocket
   relay:
-    build:
-      context: ./relay
+    image: leastauthority/magic-wormhole-relay:latest
     ports:
       - "4001:4001" # TCP
       - "4002:4002" # WebSocket
   client:
     build: ./client
+    env_file:
+      - ./client/.env
     volumes:
       - ./:/usr/src/app
     ports:
@@ -21,18 +21,57 @@ services:
     depends_on:
       - mailbox
       - relay
+      - feedback-api
+  feedback-api:
+    build: ./feedback-api
+    command:
+      [
+        "/app/feedback-api",
+        "-to",
+        "foo@barbaz.com",
+        "-smtp-server",
+        "dummy-smtp-server",
+        "-smtp-port",
+        "1025",
+      ]
+    ports:
+      - "8001:8001"
+    depends_on:
+      - dummy-smtp-server
+    environment:
+      - SMTP_USE_TLS=false
+      - SMTP_USERNAME=foo@foobar.in
+      - SMTP_PASSWORD=barbazquux
+  dummy-smtp-server:
+    build: ./feedback-api/docker/smtp-server
+    ports:
+      - "1025:1025"
+    environment:
+      - PYTHONUNBUFFERED=1
+  # build to run in CI
+  client-ci:
+    build: ./client
+    env_file:
+      - ./client/.env
+    ports:
+      - "8080:8080" # DevServer
+      - "35729:35729" # LiveReload
+    depends_on:
+      - mailbox
+      - relay
+    profiles:
+      - e2e
   # Selenium services
-  # for local run on M1 chip machine
-  chrome-m1:
+  chrome-arm64:
     volumes:
       - test-downloads:/home/seluser/downloads
     ports:
       - "5900:5900"
     build:
-      dockerfile: ./client-e2e/images/Dockerfile.chrome-m1
+      dockerfile: ./client-e2e/images/Dockerfile.chrome-arm64
     shm_size: 2gb
     depends_on:
-      - selenium-hub-m1
+      - selenium-hub-arm64
     environment:
       - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
@@ -40,16 +79,16 @@ services:
       - SE_NODE_SESSION_TIMEOUT=1800
     profiles:
       - e2e
-  firefox-m1:
+  firefox-arm64:
     volumes:
       - test-downloads:/home/seluser/downloads
     ports:
       - "5902:5900"
     build:
-      dockerfile: ./client-e2e/images/Dockerfile.firefox-m1
+      dockerfile: ./client-e2e/images/Dockerfile.firefox-arm64
     shm_size: 2gb
     depends_on:
-      - selenium-hub-m1
+      - selenium-hub-arm64
     environment:
       - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
@@ -57,8 +96,8 @@ services:
       - SE_NODE_SESSION_TIMEOUT=1800
     profiles:
       - e2e
-  selenium-hub-m1:
-    image: seleniarm/hub
+  selenium-hub-arm64:
+    image: seleniarm/hub:latest
     container_name: selenium-hub
     ports:
       - "4442:4442"
@@ -67,8 +106,8 @@ services:
     healthcheck:
       test:
         ["CMD", "/opt/bin/check-grid.sh", "--host", "0.0.0.0", "--port", "4444"]
-      interval: 15s
-      timeout: 10s
+      interval: 10s
+      timeout: 5s
       retries: 3
     profiles:
       - e2e
@@ -77,16 +116,16 @@ services:
     env_file:
       - ./client-e2e/.env
     volumes:
-      - ./client-e2e:/usr/src/app
+      - ./client-e2e:/usr/src/app/client-e2e
       - test-downloads:/home/node/downloads
     depends_on:
-      client:
+      client-ci:
         condition: service_started
-      chrome-m1:
+      chrome-arm64:
         condition: service_started
-      firefox-m1:
+      firefox-arm64:
         condition: service_started
-      selenium-hub-m1:
+      selenium-hub-arm64:
         condition: service_healthy
     profiles:
       - e2e
