@@ -4,6 +4,7 @@ import {
   isRPCMessage,
   RECV_FILE,
   RECV_FILE_DATA,
+  RECV_FILE_OFFER_REJECT,
   RECV_FILE_PROGRESS,
   RECV_TEXT,
   RPCMessage,
@@ -16,19 +17,22 @@ import {
   WASM_EXITED,
   WASM_READY,
 } from "../app/util/actions";
+import { FileStreamReader } from "../app/wormhole/streaming";
 import { TransferProgress } from "../app/wormhole/types";
 import Client from "./client";
 import "./wasm_exec";
 
 const wasmPromise = fetch("/wormhole.wasm");
-let rpc: RpcProvider | undefined = undefined; 
+let rpc: RpcProvider | undefined = undefined;
 
 const bufferSize = 1024 * 4; // 4KiB
 // const bufferSize = (1024 ** 2) * 2 // 2MiB
 let port: MessagePort;
 let client: Client;
-// TODO: be more specific
-const receiving: Record<number, any> = {};
+const receiving: Record<
+  number,
+  Partial<TransferProgress & { reader: FileStreamReader }>
+> = {};
 
 // TODO: be more specific about types!
 async function handleSendFile({
@@ -66,7 +70,11 @@ async function handleSendFile({
 
 function handleSendFileCancel({ id }: RPCMessage): void {
   const { cancel } = receiving[id];
-  cancel();
+  if (cancel) {
+    cancel();
+  } else {
+    throw new Error("Failed to cancel sending of file");
+  }
 }
 
 // TODO: be more specific with types!
@@ -107,13 +115,24 @@ async function handleReceiveFile({
   });
 }
 
+async function handleReceiveFileReject({ id }: RPCMessage) {
+  const reject = receiving[id].reader?.reject;
+  if (reject) {
+    reject();
+  } else {
+    throw new Error("Failed to reject file");
+  }
+}
+
 async function handleReceiveFileData({ id }: RPCMessage): Promise<void> {
   const _receiving = receiving[id];
+  const { reader } = _receiving;
   if (typeof _receiving === "undefined") {
     throw new Error(`not currently receiving file with id ${id}`);
+  } else if (!reader) {
+    throw new Error(`Unable to retrieve reader with id ${id}`);
   }
 
-  const { reader } = _receiving;
   for (let n = 0, done = false; !done; ) {
     const buffer = new Uint8Array(bufferSize);
     try {
@@ -191,6 +210,10 @@ onmessage = async function (event) {
   rpc.registerRpcHandler<RPCMessage, Record<string, any>>(
     RECV_FILE,
     handleReceiveFile
+  );
+  rpc.registerRpcHandler<RPCMessage, Record<string, any>>(
+    RECV_FILE_OFFER_REJECT,
+    handleReceiveFileReject
   );
   rpc.registerRpcHandler<RPCMessage, void>(
     RECV_FILE_DATA,

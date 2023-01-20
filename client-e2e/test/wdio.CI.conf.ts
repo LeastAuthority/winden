@@ -2,7 +2,6 @@
 
 import type { Options } from "@wdio/types";
 import { execSync } from "child_process";
-import * as fs from "fs";
 import * as fsExtra from "fs-extra";
 
 global.downloadDirBrowser = "/home/seluser/downloads";

@@ -20,14 +20,13 @@ export async function uploadFiles(...files: string[]) {
   await $("input[type=file]").setValue(remoteFilePaths.join("\n"));
 }
 
-
 export async function getCode() {
-  return await $('div[data-testid=code-generated]');
+  return await $("div[data-testid=code-generated]");
 }
 
 export async function getCodeUrl() {
-  const code = await $('div[data-testid=code-generated]')
-  return homePageUrl + "/#" + await code.getText();
+  const code = await $("div[data-testid=code-generated]");
+  return homePageUrl + "/#" + (await code.getText());
 }
 
 export async function receiveButton() {
@@ -35,15 +34,15 @@ export async function receiveButton() {
 }
 
 export function receiveDownloadButton() {
-  return $('button[data-testid=receive-download-button]');
+  return $("button[data-testid=receive-download-button]");
 }
 
 export function copyLinkButton() {
-  return $('button[data-testid=copy-link-button]');
+  return $("button[data-testid=copy-link-button]");
 }
 
 export function cancelButton() {
-  return $('button[data-testid=send-page-cancel-button]');
+  return $("button[data-testid=send-page-cancel-button]");
 }
 
 export function receiveCodeInput() {
@@ -52,4 +51,8 @@ export function receiveCodeInput() {
 
 export function submitCodeButton() {
   return $("span=Next");
+}
+
+export function progressBar() {
+  return $("div[role=progressbar]");
 }

@@ -1,12 +1,13 @@
 import { Anchor, createStyles, Modal, Space, Text } from "@mantine/core";
 import React, { useEffect, useState } from "react";
 import { FileRejection } from "react-dropzone";
-import { Link } from "react-router-dom";
 import { useCancelModal } from "../../../hooks/useCancelModal";
 import { useCommonStyles } from "../../../hooks/useCommonStyles";
 import { useWormhole } from "../../../hooks/useWormhole";
+import { NoSleep } from "../../../NoSleep";
 import Content from "../../Content";
 import Dropzone from "../../Dropzone";
+import Link from "../../Link";
 
 const useStyles = createStyles((_theme) => ({
   sendPageSection: {
@@ -139,6 +140,10 @@ export default function SendBeginScreen(props: Props) {
         wormhole?.sendFile(files[0]);
       }}
       onReject={(rejections) => {
+        if (rejections.length) {
+          NoSleep.disable();
+        }
+
         if (rejections.length > 1) {
           setModalState("DIRECTORIES_NOT_SUPPORTED");
         } else if (rejections.length == 1) {

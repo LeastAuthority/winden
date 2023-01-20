@@ -1,13 +1,16 @@
 import { Anchor, Button, Stack, Text } from "@mantine/core";
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { Download, X } from "tabler-icons-react";
 import { useCommonStyles } from "../../../hooks/useCommonStyles";
 import { useError } from "../../../hooks/useError";
+import { useNavigate } from "../../../hooks/useNavigate";
+import { onTabExit, useTabExitWarning } from "../../../hooks/useTabExitWarning";
 import { useWormhole } from "../../../hooks/useWormhole";
+import { NoSleep } from "../../../NoSleep";
 import { detectErrorType } from "../../../util/errors";
 import Content from "../../Content";
 import FileLabel from "../../FileLabel";
+import Link from "../../Link";
 
 type ContentProps = {
   submitting: boolean;
@@ -36,7 +39,13 @@ export function ReceiveConsentScreenContent(props: ContentProps) {
         </Button>
         <Text color="dark-grey" weight={400} size={14.4}>
           By using Winden you agree to the{" "}
-          <Anchor component={Link} to="/terms" color="tertiary" weight={600}>
+          <Anchor
+            href="/terms"
+            color="tertiary"
+            weight={600}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Terms
           </Anchor>
           .
@@ -61,16 +70,19 @@ export default function ReceiveConsentScreen({}: Props) {
   const error = useError();
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
+  useTabExitWarning();
 
   return (
     <ReceiveConsentScreenContent
       submitting={submitting}
       onAccept={() => {
+        NoSleep.enable();
         setSubmitting(true);
         wormhole?.fileMeta
           ?.accept()
           .catch((e: any) => {
             if (e.includes("unexpected EOF")) {
+              window.removeEventListener("beforeunload", onTabExit);
               navigate("/r?cancel=", { replace: true });
               window.location.reload();
             } else {
@@ -82,8 +94,7 @@ export default function ReceiveConsentScreen({}: Props) {
           });
       }}
       onCancel={() => {
-        navigate("/r", { replace: true });
-        window.location.reload();
+        wormhole?.fileMeta?.reject().then(() => wormhole.reset());
       }}
     />
   );

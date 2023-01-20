@@ -1,11 +1,13 @@
 import streamSaver from "streamsaver";
 import { RpcProvider } from "worker-rpc";
+import { onTabExit } from "../hooks/useTabExitWarning";
 import {
   FREE,
   isRPCMessage,
   NEW_CLIENT,
   RECV_FILE,
   RECV_FILE_DATA,
+  RECV_FILE_OFFER_REJECT,
   RECV_FILE_PROGRESS,
   RECV_TEXT,
   RPCMessage,
@@ -98,10 +100,6 @@ export default class ClientWorker implements ClientInterface {
     });
   }
 
-  private _reset() {
-    this.initialize();
-  }
-
   protected _registerRPCHandlers() {
     this.rpc!.registerRpcHandler<RPCMessage, void>(
       SEND_FILE_PROGRESS,
@@ -171,6 +169,7 @@ export default class ClientWorker implements ClientInterface {
     error,
   }: RPCMessage): Promise<void> {
     if (error.includes("failed to write")) {
+      window.removeEventListener("beforeunload", onTabExit);
       window.history.pushState({}, "", "/s?cancel=");
       window.location.reload();
     } else {
@@ -246,7 +245,6 @@ export default class ClientWorker implements ClientInterface {
           resolve({ code, cancel, done });
         })
         .catch((reason) => {
-          // console.log(reason);
           reject(reason);
         });
     });
@@ -319,7 +317,19 @@ export default class ClientWorker implements ClientInterface {
     const accept = async (): Promise<void> => {
       return this.rpc!.rpc(RECV_FILE_DATA, { id });
     };
-    return { name, size, done, accept, cancel: () => this._reset() };
+    return {
+      name,
+      size,
+      done,
+      accept,
+      cancel: () => {
+        // TODO: proper cancellation
+        throw new Error("Cancel function not implemented");
+      },
+      reject: () => {
+        return this.rpc!.rpc(RECV_FILE_OFFER_REJECT, { id });
+      },
+    };
   }
 
   public async free(): Promise<void> {

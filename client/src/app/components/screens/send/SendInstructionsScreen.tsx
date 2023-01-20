@@ -1,18 +1,13 @@
-import {
-  Button,
-  createStyles,
-  Group,
-  Space,
-  Stack,
-  Text,
-  TextInput,
-} from "@mantine/core";
+import { Button, createStyles, Group, Stack, Text } from "@mantine/core";
 import { useClipboard, useViewportSize } from "@mantine/hooks";
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Files, X } from "tabler-icons-react";
 import { useCommonStyles } from "../../../hooks/useCommonStyles";
+import { useError } from "../../../hooks/useError";
+import { onTabExit, useTabExitWarning } from "../../../hooks/useTabExitWarning";
 import { useWormhole } from "../../../hooks/useWormhole";
+import { ErrorTypes } from "../../../util/errors";
 import Content from "../../Content";
 import FileLabel from "../../FileLabel";
 
@@ -39,6 +34,15 @@ export function SendInstructionsScreenContent(props: ContentProps) {
   const { classes } = useStyles();
   const { width } = useViewportSize();
   const urlTextSize = width < 580 ? 16 : 14.4;
+  const error = useError();
+  const wormhole = useWormhole();
+
+  useEffect(() => {
+    if (error?.error === ErrorTypes.RECEIVER_REJECTED) {
+      wormhole?.reset();
+    }
+  });
+  useTabExitWarning();
 
   return (
     <Content>
@@ -125,6 +129,7 @@ export default function SendInstructionsScreen({}: Props) {
         )
       }
       onCancel={() => {
+        window.removeEventListener("beforeunload", onTabExit);
         navigate("/s", { replace: true });
         window.location.reload();
       }}

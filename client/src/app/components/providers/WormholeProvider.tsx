@@ -2,6 +2,7 @@ import React, { PropsWithChildren, useEffect, useRef, useState } from "react";
 import { useCodeInput } from "../../hooks/useCodeInput";
 import { useError } from "../../hooks/useError";
 import { useRateLimitedState } from "../../hooks/useRateLimitedState";
+import { NoSleep } from "../../NoSleep";
 import { PROGRESS_BAR_MS_PER_UPDATES } from "../../util/constants";
 import { detectErrorType, ErrorTypes } from "../../util/errors";
 import ClientWorker from "../../wormhole/client_worker";
@@ -127,20 +128,19 @@ class Transfer {
   }
 }
 
-export const WormholeContext =
-  React.createContext<{
-    code?: string;
-    fileMeta: Record<string, any> | null;
-    progressEta: number | null;
-    saveFile: (code: string) => Promise<TransferProgress | void>;
-    sendFile: (
-      file: File,
-      opts?: TransferOptions
-    ) => Promise<TransferProgress | void>;
-    done: boolean;
-    reset: () => void;
-    bytesSent: number;
-  } | null>(null);
+export const WormholeContext = React.createContext<{
+  code?: string;
+  fileMeta: Record<string, any> | null;
+  progressEta: number | null;
+  saveFile: (code: string) => Promise<TransferProgress | void>;
+  sendFile: (
+    file: File,
+    opts?: TransferOptions
+  ) => Promise<TransferProgress | void>;
+  done: boolean;
+  reset: () => void;
+  bytesSent: number;
+} | null>(null);
 
 export default function WormholeProvider(props: Props) {
   const [fileMeta, setFileMeta] = useState<Record<string, any> | null>(null);
@@ -181,6 +181,12 @@ export default function WormholeProvider(props: Props) {
       }
     );
   }, []);
+
+  useEffect(() => {
+    if (!fileMeta || done) {
+      NoSleep.disable();
+    }
+  }, [fileMeta, done]);
 
   async function sendFile(
     file: File,

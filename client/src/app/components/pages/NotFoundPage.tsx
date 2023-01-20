@@ -1,8 +1,8 @@
 import { Button, Stack, Text } from "@mantine/core";
 import React from "react";
-import { Link } from "react-router-dom";
 import { useCommonStyles } from "../../hooks/useCommonStyles";
 import Content from "../Content";
+import Link from "../Link";
 
 type Props = {};
 

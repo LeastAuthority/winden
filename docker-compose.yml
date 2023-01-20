@@ -21,6 +21,33 @@ services:
     depends_on:
       - mailbox
       - relay
+      - feedback-api
+  feedback-api:
+    build: ./feedback-api
+    command:
+      [
+        "/app/feedback-api",
+        "-to",
+        "foo@barbaz.com",
+        "-smtp-server",
+        "dummy-smtp-server",
+        "-smtp-port",
+        "1025",
+      ]
+    ports:
+      - "8001:8001"
+    depends_on:
+      - dummy-smtp-server
+    environment:
+      - SMTP_USE_TLS=false
+      - SMTP_USERNAME=foo@foobar.in
+      - SMTP_PASSWORD=barbazquux
+  dummy-smtp-server:
+    build: ./feedback-api/docker/smtp-server
+    ports:
+      - "1025:1025"
+    environment:
+      - PYTHONUNBUFFERED=1
   # build to run in CI
   client-ci:
     build: ./client

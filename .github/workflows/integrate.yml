@@ -76,7 +76,7 @@ jobs:
           docker compose --profile e2e up -d client-ci
           # give some time load webapp
           sleep 60
-          docker compose --profile e2e run client-ci npm run test
+          docker compose --profile e2e run client-ci npm run test -- --coverage
 
       - name: Run END-2-END tests
         if: ${{ github.event_name == 'pull_request' }}

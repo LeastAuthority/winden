@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "../hooks/useNavigate";
 
 // `react-transition-group` and `<Navigate />` from `react-router` causes an
 // update loop that crashes the app. Use this component instead.

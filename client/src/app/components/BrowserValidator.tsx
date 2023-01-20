@@ -1,7 +1,7 @@
 import { Modal, Text } from "@mantine/core";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { isValidBrowser } from "../util/isValidBrowser";
+import Link from "./Link";
 
 type Props = React.PropsWithChildren<{}>;
 
