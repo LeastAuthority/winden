@@ -3,7 +3,7 @@ import * as path from "path";
 
 export function waitForFileExists(filePath: string, timeout: number) {
   return new Promise<void>(function (resolve, reject) {
-    var timer = setTimeout(function () {
+    let timer = setTimeout(function () {
       watcher.close();
       reject(
         new Error("File did not exists and was not created during the timeout.")
@@ -18,9 +18,9 @@ export function waitForFileExists(filePath: string, timeout: number) {
       }
     });
 
-    var dir = path.dirname(filePath);
-    var basename = path.basename(filePath);
-    var watcher = fs.watch(dir, function (eventType, filename) {
+    let dir = path.dirname(filePath);
+    let basename = path.basename(filePath);
+    let watcher = fs.watch(dir, function (eventType, filename) {
       if (eventType === "rename" && filename === basename) {
         clearTimeout(timer);
         watcher.close();
