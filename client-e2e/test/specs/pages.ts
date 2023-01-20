@@ -3,50 +3,50 @@ import * as Page from "../pageobjects/page";
 describe("Check internal Pages", () => {
     it("if About Us opens", async () => {
       await Page.open();
-      const sendWindow = await browser.getWindowHandle();
-      await expect(await $("main")).toHaveTextContaining(
+
+      expect(await $("main")).toHaveTextContaining(
         "Send files in real-time"
       );
 
-      await $('a[to="/about"').click();
+      await $('a[href="/about"').click();
       
-      await expect(await $("main")).toHaveTextContaining(
+      expect(await $("main")).toHaveTextContaining(
         "Winden is a free web"
       );
     });
 
     it("if FAQ opens", async () => {
         
-        await $('a[to="/faq"').click();
+        await $('a[href="/faq"').click();
         
-        await expect(await $("main")).toHaveTextContaining(
+        expect(await $("main")).toHaveTextContaining(
           "What makes Winden different?"
         );
     });
     
     it("if Privacy opens", async () => {
         
-        await $('a[to="/privacy"').click();
+        await $('a[href="/privacy"').click();
         
-        await expect(await $("main")).toHaveTextContaining(
+        expect(await $("main")).toHaveTextContaining(
           "Who we are"
         );
     });
 
     it("if Privacy opens", async () => {
         
-        await $('a[to="/for-business"').click();
+        await $('a[href="/for-business"').click();
         
-        await expect(await $("main")).toHaveTextContaining(
+        expect(await $("main")).toHaveTextContaining(
           "Interested in bringing Winden"
         );
     });
 
     it("if Feedback opens", async () => {
         
-        await $('a[to="/feedback"').click();
+        await $('a[href="/feedback"').click();
         
-        await expect(await $("main")).toHaveTextContaining(
+        expect(await $("main")).toHaveTextContaining(
           "Loving Winden?"
         );
     });
@@ -54,26 +54,26 @@ describe("Check internal Pages", () => {
     describe("Check Terms", () => {
         it("if Terms & Conditions opens as link", async () => {
         
-            await $('a[to="/terms"').click();
+            await $('a[href="/terms"').click();
             
-            await expect(await $("h1")).toHaveTextContaining(
+            expect(await $("h1")).toHaveTextContaining(
               "GENERAL TERMS AND CONDITIONS"
             );
         });
         it("if Terms & Conditions is present in Sender block and opens", async () => {
             await Page.open();
-            const sendWindow = await browser.getWindowHandle();
-            await expect(await $("main")).toHaveTextContaining(
+            
+            expect(await $("main")).toHaveTextContaining(
                 "Send files in real-time"
             );
             
-            await expect(await $("main")).toHaveTextContaining(
+            expect(await $("main")).toHaveTextContaining(
                 "By using Winden you agree to the"
             );
 
-            await $('a[to="/terms"').click();
+            await $('a[href="/terms"').click();
             
-            await expect(await $("h1")).toHaveTextContaining(
+            expect(await $("h1")).toHaveTextContaining(
                 "GENERAL TERMS AND CONDITIONS"
             );
         });
@@ -90,11 +90,11 @@ describe("Check internal Pages", () => {
             const _receiveWindow = await browser.newWindow(codeUrl);
             await browser.waitUntil(() => Page.receiveDownloadButton().isExisting());
 
-            await expect(await $("main")).toHaveTextContaining(
+            expect(await $("main")).toHaveTextContaining(
                 "Ready to download"
             );
 
-            await expect(await $("main")).toHaveTextContaining(
+            expect(await $("main")).toHaveTextContaining(
                 "By using Winden you agree to the"
             );
 
@@ -103,7 +103,7 @@ describe("Check internal Pages", () => {
             await browser.switchWindow('/terms')
             //await browser.waitUntil(() => Page.($("h1")))
             
-            await expect(await $("h1")).toHaveTextContaining(
+            expect(await $("h1")).toHaveTextContaining(
                 "GENERAL TERMS AND CONDITIONS"
             );
 
@@ -117,8 +117,7 @@ describe("Check external Pages", () => {
     it("if Winden Github opens", async () => {
 
         await Page.open();
-        const sendWindow = await browser.getWindowHandle();
-        await expect(await $('a[href="https://github.com/LeastAuthority/winden"').isExisting());
+        expect(await $('a[href="https://github.com/LeastAuthority/winden"').isExisting());
     
     });
 });
