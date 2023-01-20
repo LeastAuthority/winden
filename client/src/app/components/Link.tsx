@@ -16,7 +16,7 @@ export default function Link(
   const navigate = useNavigate();
 
   return (
-    <a
+    <UnwrappedLink
       {...props}
       onClick={(e) => {
         e.preventDefault();
