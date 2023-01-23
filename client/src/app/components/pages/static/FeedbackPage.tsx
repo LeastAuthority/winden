@@ -63,23 +63,29 @@ export default function FeedbackPage({}: Props) {
   const [whatsGreat, setWhatsGreat] = useState("");
   const [whatsUseful, setWhatsUseful] = useState("");
   const [whatsNotGreat, setWhatsNotGreat] = useState("");
+  const [error, setError] = useState(false);
   const flash = useFlash();
   const navigate = useNavigate();
 
   async function handleSubmit() {
-    const response = await submitFeedback(
-      parseInt(rating),
-      whatsGreat,
-      whatsUseful,
-      whatsNotGreat
-    );
-    if (response.ok) {
-      navigate("/s");
-      flash?.set({
-        title: "Feedback sent",
-        content:
-          "Your feedback has been submitted successfully. Thank you for your feedback.",
-      });
+    // validation
+    if (!rating && !whatsGreat && !whatsUseful && !whatsNotGreat) {
+      setError(true);
+    } else {
+      const response = await submitFeedback(
+        parseInt(rating),
+        whatsGreat,
+        whatsUseful,
+        whatsNotGreat
+      );
+      if (response.ok) {
+        navigate("/s");
+        flash?.set({
+          title: "Feedback sent",
+          content:
+            "Your feedback has been submitted successfully. Thank you for your feedback.",
+        });
+      }
     }
   }
 
@@ -140,6 +146,7 @@ export default function FeedbackPage({}: Props) {
             Submit
           </Button>
         </Center>
+        {error && "The form is empty. Please fill out the form."}
       </Stack>
     </StaticPage>
   );
