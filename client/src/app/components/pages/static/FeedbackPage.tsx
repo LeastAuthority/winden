@@ -94,18 +94,21 @@ export default function FeedbackPage({}: Props) {
           any thoughts you may have about using Winden.
         </p>
         <Textarea
+          id="feedback-q1"
           label={`1. ${QUESTION_SENTENCES.whatsGreat}`}
           placeholder="Please describe what you like about Winden."
           value={whatsGreat}
           onChange={(e) => setWhatsGreat(e.target.value)}
         />
         <Textarea
+          id="feedback-q2"
           label={`2. ${QUESTION_SENTENCES.whatsUseful}`}
           placeholder="Please describe the key purposes you use Winden for (e.g., sending large video files to clients; sending text files between my devices)."
           value={whatsUseful}
           onChange={(e) => setWhatsUseful(e.target.value)}
         />
         <Textarea
+          id="feedback-q3"
           label={`3. ${QUESTION_SENTENCES.whatsNotGreat}`}
           placeholder="Please describe any missing functionality that's important to you, or anything else you'd like to see improved."
           value={whatsNotGreat}
