@@ -6,6 +6,7 @@ import { useError } from "../../../hooks/useError";
 import { useNavigate } from "../../../hooks/useNavigate";
 import { onTabExit, useTabExitWarning } from "../../../hooks/useTabExitWarning";
 import { useWormhole } from "../../../hooks/useWormhole";
+import { NoSleep } from "../../../NoSleep";
 import { detectErrorType } from "../../../util/errors";
 import Content from "../../Content";
 import FileLabel from "../../FileLabel";
@@ -75,6 +76,7 @@ export default function ReceiveConsentScreen({}: Props) {
     <ReceiveConsentScreenContent
       submitting={submitting}
       onAccept={() => {
+        NoSleep.enable();
         setSubmitting(true);
         wormhole?.fileMeta
           ?.accept()
@@ -92,9 +94,7 @@ export default function ReceiveConsentScreen({}: Props) {
           });
       }}
       onCancel={() => {
-        window.removeEventListener("beforeunload", onTabExit);
-        navigate("/r", { replace: true });
-        window.location.reload();
+        wormhole?.fileMeta?.reject().then(() => wormhole.reset());
       }}
     />
   );

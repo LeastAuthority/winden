@@ -1,10 +1,11 @@
 import { Modal, Space, Text } from "@mantine/core";
-import React from "react";
+import React, { useEffect } from "react";
 import { useCancelModal } from "../../../hooks/useCancelModal";
 import { useCodeInput } from "../../../hooks/useCodeInput";
 import { useCommonStyles } from "../../../hooks/useCommonStyles";
 import { useError } from "../../../hooks/useError";
 import { useWormhole } from "../../../hooks/useWormhole";
+import { NoSleep } from "../../../NoSleep";
 import { detectErrorType } from "../../../util/errors";
 import CodeInput from "../../CodeInput";
 import Content from "../../Content";
@@ -58,11 +59,18 @@ export default function ReceiveBeginScreen({}: Props) {
   const error = useError();
   const codeInput = useCodeInput();
 
+  useEffect(() => {
+    if (error?.error) {
+      NoSleep.disable();
+    }
+  }, [error]);
+
   return (
     <ReceiveBeginScreenContent
       cancelModalOpen={cancelModal}
       onCancelModalClose={() => setCancelModal(false)}
       onSubmit={(code) => {
+        NoSleep.enable();
         if (wormhole) {
           codeInput?.setSubmitting(true);
           wormhole

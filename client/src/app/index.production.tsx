@@ -8,6 +8,7 @@ import ErrorProvider from "./components/providers/ErrorProvider";
 import FlashProvider from "./components/providers/FlashProvider";
 import ThemeProvider from "./components/providers/ThemeProvider";
 import WormholeProvider from "./components/providers/WormholeProvider";
+import "./NoSleep";
 
 ReactDOM.render(
   <CodeInputProvider>

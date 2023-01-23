@@ -26,13 +26,13 @@ services:
     build: ./feedback-api
     command:
       [
-        "app",
+        "/app/feedback-api",
         "-to",
         "foo@barbaz.com",
         "-smtp-server",
         "dummy-smtp-server",
         "-smtp-port",
-        "2500",
+        "1025",
       ]
     ports:
       - "8001:8001"
@@ -43,11 +43,9 @@ services:
       - SMTP_USERNAME=foo@foobar.in
       - SMTP_PASSWORD=barbazquux
   dummy-smtp-server:
-    image: python:latest
-    command:
-      ["python", "-m", "smtpd", "-n", "-c", "DebuggingServer", "0.0.0.0:2500"]
+    build: ./feedback-api/docker/smtp-server
     ports:
-      - "2500:2500"
+      - "1025:1025"
     environment:
       - PYTHONUNBUFFERED=1
   # build to run in CI

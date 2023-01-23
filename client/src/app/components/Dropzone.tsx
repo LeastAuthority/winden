@@ -13,6 +13,7 @@ import classNames from "classnames";
 import React from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
 import { Plus } from "tabler-icons-react";
+import { NoSleep } from "../NoSleep";
 import Link from "./Link";
 
 const useStyles = createStyles((theme) => ({
@@ -96,7 +97,10 @@ export default function Dropzone(props: Props) {
   const button = (
     <Group position="center">
       <Button
-        onClick={open}
+        onClick={() => {
+          NoSleep.enable();
+          open();
+        }}
         className={classNames(classes.dropzoneButton)}
         color="tertiary"
       >
