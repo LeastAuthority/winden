@@ -1,5 +1,6 @@
 import React from "react";
-import { useWormhole } from "../../hooks/useWormhole";
+import { useAppSelector } from "../../hooks/redux";
+import { selectWormholeStatus } from "../../wormholeSlice";
 import ReceiveBeginScreen from "../screens/receive/ReceiveBeginScreen";
 import ReceiveCompleteScreen from "../screens/receive/ReceiveCompleteScreen";
 import ReceiveConsentScreen from "../screens/receive/ReceiveConsentScreen";
@@ -23,16 +24,16 @@ export function ReceivePageContent(props: Props) {
 }
 
 export default function ReceivePage() {
-  const wormhole = useWormhole();
+  const wormholeStatus = useAppSelector(selectWormholeStatus);
 
   return (
     <ReceivePageContent
       step={
-        wormhole?.done
+        wormholeStatus === "done"
           ? "DONE"
-          : wormhole?.progressEta
+          : wormholeStatus === "transferring"
           ? "PROGRESS"
-          : wormhole?.fileMeta
+          : wormholeStatus === "consenting"
           ? "CONSENT"
           : "BEGIN"
       }

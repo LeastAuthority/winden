@@ -8,12 +8,20 @@ import {
   TextInput,
 } from "@mantine/core";
 import React, { useEffect, useState } from "react";
-import { useCodeInput } from "../hooks/useCodeInput";
+import { useLocation } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { useNavigate } from "../hooks/useNavigate";
 import { applyCodeSuggestion } from "../util/applyCodeSuggestion";
 import { CODE_SEGMENT_DELIMITER } from "../util/constants";
 import { getCodeSuggestion } from "../util/getCodeSuggestion";
+import { makeProgressFunc } from "../util/makeProgressFunc";
 import { spellCheckCodeWord } from "../util/spellCheckCodeWord";
 import { CodeErrorType, validateCode } from "../util/validateCode";
+import {
+  requestTransfer,
+  selectWormholeStatus,
+  setTransferProgress,
+} from "../wormholeSlice";
 
 type ContentProps = {
   code: string;
@@ -135,22 +143,33 @@ export function CodeInputContent(props: ContentProps) {
 
 type Props = {
   onSubmit?: (code: string) => void;
-  submitting?: boolean;
 };
 
 export default function CodeInput(props: Props) {
   const [focused, setFocused] = useState(false);
-  const codeInput = useCodeInput();
-  const codeSuggestion = getCodeSuggestion(codeInput?.value || "");
-
-  const code = codeInput?.value || "";
+  const [code, setCode] = useState("");
+  const [touched, setTouched] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const codeSuggestion = getCodeSuggestion(code || "");
   const error = validateCode(code);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const wormholeStatus = useAppSelector(selectWormholeStatus);
 
   useEffect(() => {
-    return () => {
-      codeInput?.setTouched(false);
-      codeInput?.setShowError(false);
-    };
+    if (location.state?.code) {
+      const initialCode: string = location.state?.code.substring(1);
+      navigate("", { state: {} });
+
+      setCode(initialCode);
+      setTouched(true);
+
+      if (!validateCode(initialCode) && props.onSubmit) {
+        props.onSubmit(initialCode);
+      } else {
+        setShowError(true);
+      }
+    }
   }, []);
 
   return (
@@ -158,32 +177,30 @@ export default function CodeInput(props: Props) {
       code={code}
       codeSuggestion={codeSuggestion}
       focused={focused}
-      touched={codeInput?.touched || false}
-      showError={codeInput?.showError || false}
+      touched={touched || false}
+      showError={showError || false}
       errorType={error}
-      submitting={props.submitting || false}
+      submitting={wormholeStatus === "requestingReceive"}
       onChange={(e) => {
-        codeInput?.setShowError(false);
+        setShowError(false);
         const hasSpace = e.target.value.includes(" ");
         if (hasSpace && codeSuggestion) {
-          codeInput?.setValue(
-            applyCodeSuggestion(e.target.value, codeSuggestion)
-          );
+          setCode(applyCodeSuggestion(e.target.value, codeSuggestion));
         } else if (!hasSpace) {
-          codeInput?.setValue(e.target.value);
+          setCode(e.target.value);
         }
       }}
       onFocus={() => {
-        codeInput?.setShowError(false);
+        setShowError(false);
         setFocused(true);
-        codeInput?.setTouched(true);
+        setTouched(true);
       }}
       onBlur={() => {
-        codeInput?.setShowError(true);
+        setShowError(true);
         setFocused(false);
       }}
       onSubmit={() => {
-        codeInput?.setShowError(true);
+        setShowError(true);
         if (!error && props.onSubmit) {
           props.onSubmit(code);
         }

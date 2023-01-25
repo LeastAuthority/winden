@@ -1,9 +1,11 @@
+// TODO: remove
 import {
   NavigateOptions,
   useNavigate as unwrappedUseNavigate,
 } from "react-router-dom";
 import Link from "../components/Link";
-import { useWormhole } from "./useWormhole";
+import { selectWormholeStatus } from "../wormholeSlice";
+import { useAppSelector } from "./redux";
 
 /**
  * A wrapper around react-router-dom's {@link unwrappedUseNavigate | useNavigate}.
@@ -14,10 +16,15 @@ import { useWormhole } from "./useWormhole";
  */
 export function useNavigate() {
   const unwrappedNavigate = unwrappedUseNavigate();
-  const wormhole = useWormhole();
+  const wormholeStatus = useAppSelector(selectWormholeStatus);
 
   return function (to: string, options?: NavigateOptions) {
-    if (wormhole?.fileMeta) {
+    const isRedirectingHashUrlToReceivePage = Boolean(options?.state?.code);
+    if (
+      !isRedirectingHashUrlToReceivePage &&
+      wormholeStatus !== "idle" &&
+      wormholeStatus !== "done"
+    ) {
       window.location.href = to;
     } else {
       unwrappedNavigate(to, options);

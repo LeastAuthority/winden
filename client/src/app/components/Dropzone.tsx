@@ -4,6 +4,7 @@ import {
   createStyles,
   Divider,
   Group,
+  LoadingOverlay,
   Space,
   Stack,
   Text,
@@ -13,7 +14,9 @@ import classNames from "classnames";
 import React from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
 import { Plus } from "tabler-icons-react";
+import { useAppSelector } from "../hooks/redux";
 import { NoSleep } from "../NoSleep";
+import { selectWormholeStatus } from "../wormholeSlice";
 import Link from "./Link";
 
 const useStyles = createStyles((theme) => ({
@@ -84,6 +87,7 @@ type Props = {
 export default function Dropzone(props: Props) {
   const { classes } = useStyles();
   const isNarrowScreen = useMediaQuery("(max-width: 575px)");
+  const wormholeStatus = useAppSelector(selectWormholeStatus);
 
   const { getRootProps, getInputProps, open, isDragActive } = useDropzone({
     noClick: true,
@@ -135,6 +139,7 @@ export default function Dropzone(props: Props) {
         }),
       })}
     >
+      <LoadingOverlay visible={wormholeStatus === "requestingSend"} />
       <input {...getInputProps()} />
       {isNarrowScreen ? (
         <Stack align="center">

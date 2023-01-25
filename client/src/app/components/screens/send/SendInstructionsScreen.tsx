@@ -1,13 +1,13 @@
 import { Button, createStyles, Group, Stack, Text } from "@mantine/core";
 import { useClipboard, useViewportSize } from "@mantine/hooks";
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 import { Files, X } from "tabler-icons-react";
+import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { useCommonStyles } from "../../../hooks/useCommonStyles";
-import { useError } from "../../../hooks/useError";
-import { onTabExit, useTabExitWarning } from "../../../hooks/useTabExitWarning";
-import { useWormhole } from "../../../hooks/useWormhole";
-import { ErrorTypes } from "../../../util/errors";
+import {
+  requestCancelTransfer,
+  selectWormholeCode,
+} from "../../../wormholeSlice";
 import Content from "../../Content";
 import FileLabel from "../../FileLabel";
 
@@ -34,15 +34,6 @@ export function SendInstructionsScreenContent(props: ContentProps) {
   const { classes } = useStyles();
   const { width } = useViewportSize();
   const urlTextSize = width < 580 ? 16 : 14.4;
-  const error = useError();
-  const wormhole = useWormhole();
-
-  useEffect(() => {
-    if (error?.error === ErrorTypes.RECEIVER_REJECTED) {
-      wormhole?.reset();
-    }
-  });
-  useTabExitWarning();
 
   return (
     <Content>
@@ -115,23 +106,21 @@ export function SendInstructionsScreenContent(props: ContentProps) {
 type Props = {};
 
 export default function SendInstructionsScreen({}: Props) {
-  const wormhole = useWormhole();
   const clipboard = useClipboard({ timeout: 2000 });
-  const navigate = useNavigate();
+  const wormholeCode = useAppSelector(selectWormholeCode);
+  const dispatch = useAppDispatch();
 
-  return wormhole?.code ? (
+  return wormholeCode ? (
     <SendInstructionsScreenContent
-      code={wormhole.code}
+      code={wormholeCode}
       copied={clipboard.copied}
       onCopy={() =>
         clipboard.copy(
-          `${window.location.protocol}//${window.location.host}/#${wormhole.code}`
+          `${window.location.protocol}//${window.location.host}/#${wormholeCode}`
         )
       }
       onCancel={() => {
-        window.removeEventListener("beforeunload", onTabExit);
-        navigate("/s", { replace: true });
-        window.location.reload();
+        dispatch(requestCancelTransfer());
       }}
     />
   ) : null;

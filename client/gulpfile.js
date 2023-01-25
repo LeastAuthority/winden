@@ -71,7 +71,7 @@ const javascriptWatch = () =>
 
 const prepWorker = (cb) => {
   // cp wasm_exec.js to be glued
-  execSync('cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" src/worker');
+  execSync('cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" src/app');
   cb();
 };
 

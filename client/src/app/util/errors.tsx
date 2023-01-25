@@ -2,6 +2,8 @@ import { List, Text } from "@mantine/core";
 import React, { ReactElement, ReactNode } from "react";
 
 export const enum ErrorTypes {
+  SENDER_CANCELLED,
+  RECEIVER_CANCELLED,
   RECV_CONNECTION_TIMEOUT,
   SENDER_BAD_CODE,
   RECEIVER_REJECTED,
@@ -16,7 +18,11 @@ const ServerErrorMsg =
 
 export function detectErrorType(error: string) {
   console.log("Error details: ", error);
-  if (/^SendErr: decrypt message failed$/.test(error)) {
+  if (error.includes("unexpected EOF")) {
+    return ErrorTypes.SENDER_CANCELLED;
+  } else if (error.includes("failed to write")) {
+    return ErrorTypes.RECEIVER_CANCELLED;
+  } else if (/^SendErr: decrypt message failed$/.test(error)) {
     return ErrorTypes.SENDER_BAD_CODE;
   } else if (/(.*transfer rejected.*)/.test(error)) {
     return ErrorTypes.RECEIVER_REJECTED;
@@ -45,6 +51,44 @@ export function errorContent(type: ErrorTypes): {
   description: ReactElement | ReactNode[];
 } {
   switch (type) {
+    case ErrorTypes.SENDER_CANCELLED: {
+      return {
+        title: "Transfer cancelled/interrupted",
+        description: (
+          <>
+            <Text component="p">Either:</Text>
+            <Text component="p"></Text>
+            <Text component="p">
+              - The transfer was cancelled by the receiver.
+            </Text>
+            <Text component="p">
+              - Your or the receiver's Internet connection was interrupted.
+            </Text>
+            <Text component="p"></Text>
+            <Text component="p">Please try again.</Text>
+          </>
+        ),
+      };
+    }
+    case ErrorTypes.RECEIVER_CANCELLED: {
+      return {
+        title: "Transfer cancelled/interrupted",
+        description: (
+          <>
+            <Text component="p">Either:</Text>
+            <Text component="p"></Text>
+            <Text component="p">
+              - The transfer was cancelled by the sender.
+            </Text>
+            <Text component="p">
+              - Your or the sender's Internet connection was interrupted.
+            </Text>
+            <Text component="p"></Text>
+            <Text component="p">Please try again.</Text>
+          </>
+        ),
+      };
+    }
     case ErrorTypes.RECV_CONNECTION_TIMEOUT: {
       return {
         title: "Connection time-out",

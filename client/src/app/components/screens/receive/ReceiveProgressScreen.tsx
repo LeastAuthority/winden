@@ -1,22 +1,19 @@
 import React from "react";
-import { useNavigate } from "../../../hooks/useNavigate";
-import { onTabExit, useTabExitWarning } from "../../../hooks/useTabExitWarning";
+import { useAppDispatch } from "../../../hooks/redux";
+import { requestCancelTransfer } from "../../../wormholeSlice";
 import ProgressScreen from "../ProgressScreen";
 
 type Props = {};
 
 export default function ReceiveProgressScreen({}: Props) {
-  const navigate = useNavigate();
-  useTabExitWarning();
+  const dispatch = useAppDispatch();
 
   return (
     <ProgressScreen
       title="Receiving..."
       waitText="Waiting for sender to complete transfer..."
       onCancel={() => {
-        window.removeEventListener("beforeunload", onTabExit);
-        navigate("/r", { replace: true });
-        window.location.reload();
+        dispatch(requestCancelTransfer());
       }}
     />
   );

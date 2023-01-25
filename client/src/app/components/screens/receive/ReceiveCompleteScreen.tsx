@@ -1,15 +1,14 @@
 import { Button } from "@mantine/core";
 import React from "react";
 import { Download } from "tabler-icons-react";
-import { useCommonStyles } from "../../../hooks/useCommonStyles";
-import { useWormhole } from "../../../hooks/useWormhole";
+import { useAppDispatch } from "../../../hooks/redux";
+import { reset } from "../../../wormholeSlice";
 import CompleteScreen from "../CompleteScreen";
 
 type Props = {};
 
 export default function ReceiveCompleteScreen({}: Props) {
-  const wormhole = useWormhole();
-  const { classes } = useCommonStyles();
+  const dispatch = useAppDispatch();
 
   return (
     <CompleteScreen
@@ -17,7 +16,7 @@ export default function ReceiveCompleteScreen({}: Props) {
       render={() => (
         <Button
           leftIcon={<Download />}
-          onClick={() => wormhole?.reset()}
+          onClick={() => dispatch(reset())}
           color="blue"
         >
           Receive more
