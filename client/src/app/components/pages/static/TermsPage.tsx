@@ -145,7 +145,7 @@ export default function TermsPage({}: Props) {
         </li>
 
         <li>
-          <b>No Responsibility of Last Authority for user content</b>
+          <b>No Responsibility of Least Authority for user content</b>
 
           <ol>
             <li>
