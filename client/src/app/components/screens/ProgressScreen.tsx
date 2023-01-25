@@ -1,9 +1,15 @@
 import { Button, Progress, Space, Stack, Text } from "@mantine/core";
 import React from "react";
 import { X } from "tabler-icons-react";
+import { useAppSelector } from "../../hooks/redux";
 import { useCommonStyles } from "../../hooks/useCommonStyles";
-import { useWormhole } from "../../hooks/useWormhole";
 import { durationToClosestUnit } from "../../util/durationToClosestUnit";
+import {
+  selectWormholeEta,
+  selectWormholeFile,
+  selectWormholeSentBytes,
+  selectWormholeStatus,
+} from "../../wormholeSlice";
 import Content from "../Content";
 import FileLabel from "../FileLabel";
 
@@ -56,15 +62,18 @@ type Props = {
 };
 
 export default function ProgressScreen(props: Props) {
-  const wormhole = useWormhole();
+  const wormholeStatus = useAppSelector(selectWormholeStatus);
+  const wormholeFile = useAppSelector(selectWormholeFile);
+  const wormholeSentBytes = useAppSelector(selectWormholeSentBytes);
+  const wormholeEta = useAppSelector(selectWormholeEta);
 
-  return wormhole && wormhole.fileMeta && wormhole.progressEta ? (
+  return wormholeStatus === "transferring" ? (
     <ProgressScreenContent
       title={props.title}
       waitText={props.waitText}
-      bytesSent={wormhole.bytesSent}
-      fileSize={wormhole.fileMeta.size}
-      eta={wormhole.progressEta}
+      bytesSent={wormholeSentBytes || 0}
+      fileSize={wormholeFile!.size}
+      eta={wormholeEta || 0}
       onCancel={props.onCancel}
     />
   ) : null;

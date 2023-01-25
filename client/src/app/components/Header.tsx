@@ -3,8 +3,6 @@ import { useViewportSize } from "@mantine/hooks";
 import React from "react";
 import { Download, Send } from "tabler-icons-react";
 import { useNavigate } from "../hooks/useNavigate";
-import { onTabExit } from "../hooks/useTabExitWarning";
-import { useWormhole } from "../hooks/useWormhole";
 import Link from "./Link";
 
 const SUPER_NARROW_BREAKPOINT = 350;
@@ -67,7 +65,6 @@ function Logo() {
 export default function Header() {
   const { width } = useViewportSize();
   const navigate = useNavigate();
-  const wormhole = useWormhole();
   const buttonPaddingX = width < MOBILE_BREAKPOINT ? 11 : 22;
   const buttonHeight = width < MOBILE_BREAKPOINT ? 40 : 50;
 

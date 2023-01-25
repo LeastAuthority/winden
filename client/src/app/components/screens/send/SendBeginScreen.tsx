@@ -1,10 +1,11 @@
 import { Anchor, createStyles, Modal, Space, Text } from "@mantine/core";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FileRejection } from "react-dropzone";
-import { useCancelModal } from "../../../hooks/useCancelModal";
+import { useAppDispatch } from "../../../hooks/redux";
 import { useCommonStyles } from "../../../hooks/useCommonStyles";
-import { useWormhole } from "../../../hooks/useWormhole";
 import { NoSleep } from "../../../NoSleep";
+import { makeProgressFunc } from "../../../util/makeProgressFunc";
+import { requestTransfer, setTransferProgress } from "../../../wormholeSlice";
 import Content from "../../Content";
 import Dropzone from "../../Dropzone";
 import Link from "../../Link";
@@ -19,7 +20,6 @@ const useStyles = createStyles((_theme) => ({
 
 type ModalState =
   | "NONE"
-  | "TRANSFER_CANCELLED"
   | "DIRECTORIES_NOT_SUPPORTED"
   | "FILE_TOO_LARGE"
   | "OTHER_ERROR";
@@ -83,23 +83,6 @@ export function SendBeginScreenContent(props: ContentProps) {
             contact@winden.app if the problem remains.
           </Text>
         </Modal>
-        <Modal
-          centered
-          opened={props.modalState === "TRANSFER_CANCELLED"}
-          onClose={props.onModalClose}
-          title="Transfer cancelled/interrupted"
-        >
-          <Text component="p">Either:</Text>
-          <Text component="p"></Text>
-          <Text component="p">
-            - The transfer was cancelled by the receiver.
-          </Text>
-          <Text component="p">
-            - Your or the receiver's Internet connection was interrupted.
-          </Text>
-          <Text component="p"></Text>
-          <Text component="p">Please try again.</Text>
-        </Modal>
         <Text component="h1" className={commonClasses.headerText}>
           Send files in real-time
         </Text>
@@ -123,27 +106,27 @@ export function SendBeginScreenContent(props: ContentProps) {
 type Props = {};
 
 export default function SendBeginScreen(props: Props) {
-  const wormhole = useWormhole();
   const [modalState, setModalState] = useState<ModalState>("NONE");
-  const [cancelModal, _setCancelModal] = useCancelModal();
-
-  useEffect(() => {
-    if (cancelModal) {
-      setModalState("TRANSFER_CANCELLED");
-    }
-  }, [cancelModal]);
+  const dispatch = useAppDispatch();
 
   return (
     <SendBeginScreenContent
       modalState={modalState}
       onDrop={(files) => {
-        wormhole?.sendFile(files[0]);
+        dispatch(
+          requestTransfer({
+            type: "send",
+            filename: files[0].name,
+            file: files[0],
+            opts: {
+              progressFunc: makeProgressFunc((sentBytes, totalBytes) => {
+                dispatch(setTransferProgress([sentBytes, totalBytes]));
+              }),
+            },
+          })
+        );
       }}
       onReject={(rejections) => {
-        if (rejections.length) {
-          NoSleep.disable();
-        }
-
         if (rejections.length > 1) {
           setModalState("DIRECTORIES_NOT_SUPPORTED");
         } else if (rejections.length == 1) {

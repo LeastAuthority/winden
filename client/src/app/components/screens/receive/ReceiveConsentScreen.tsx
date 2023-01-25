@@ -1,16 +1,12 @@
 import { Anchor, Button, Stack, Text } from "@mantine/core";
-import React, { useState } from "react";
+import React from "react";
 import { Download, X } from "tabler-icons-react";
+import { useAppDispatch } from "../../../hooks/redux";
 import { useCommonStyles } from "../../../hooks/useCommonStyles";
-import { useError } from "../../../hooks/useError";
-import { useNavigate } from "../../../hooks/useNavigate";
-import { onTabExit, useTabExitWarning } from "../../../hooks/useTabExitWarning";
-import { useWormhole } from "../../../hooks/useWormhole";
 import { NoSleep } from "../../../NoSleep";
-import { detectErrorType } from "../../../util/errors";
+import { answerConsent } from "../../../wormholeSlice";
 import Content from "../../Content";
 import FileLabel from "../../FileLabel";
-import Link from "../../Link";
 
 type ContentProps = {
   submitting: boolean;
@@ -66,35 +62,17 @@ export function ReceiveConsentScreenContent(props: ContentProps) {
 type Props = {};
 
 export default function ReceiveConsentScreen({}: Props) {
-  const wormhole = useWormhole();
-  const error = useError();
-  const navigate = useNavigate();
-  const [submitting, setSubmitting] = useState(false);
-  useTabExitWarning();
+  const dispatch = useAppDispatch();
 
   return (
     <ReceiveConsentScreenContent
-      submitting={submitting}
+      submitting={false} // TODO: add a requested status
       onAccept={() => {
         NoSleep.enable();
-        setSubmitting(true);
-        wormhole?.fileMeta
-          ?.accept()
-          .catch((e: any) => {
-            if (e.includes("unexpected EOF")) {
-              window.removeEventListener("beforeunload", onTabExit);
-              navigate("/r?cancel=", { replace: true });
-              window.location.reload();
-            } else {
-              error?.setError(detectErrorType(e));
-            }
-          })
-          .finally(() => {
-            setSubmitting(false);
-          });
+        dispatch(answerConsent(true));
       }}
       onCancel={() => {
-        wormhole?.fileMeta?.reject().then(() => wormhole.reset());
+        dispatch(answerConsent(false));
       }}
     />
   );

@@ -1,9 +1,10 @@
 import { Group, Paper, Skeleton, Text } from "@mantine/core";
 import React from "react";
 import { File } from "tabler-icons-react";
+import { useAppSelector } from "../hooks/redux";
 import { useCommonStyles } from "../hooks/useCommonStyles";
-import { useWormhole } from "../hooks/useWormhole";
 import { sizeToClosestUnit } from "../util/sizeToClosestUnit";
+import { selectWormholeFile } from "../wormholeSlice";
 
 type ContentProps = { name: string; size: number };
 
@@ -37,11 +38,11 @@ export function FileLabelContent(props: ContentProps) {
 type Props = {};
 
 export default function FileLabel({}: Props) {
-  const wormhole = useWormhole();
+  const wormholeFile = useAppSelector(selectWormholeFile);
+
   return (
-    <FileLabelContent
-      name={wormhole?.fileMeta?.name}
-      size={wormhole?.fileMeta?.size}
-    />
+    wormholeFile && (
+      <FileLabelContent name={wormholeFile.name} size={wormholeFile.size} />
+    )
   );
 }

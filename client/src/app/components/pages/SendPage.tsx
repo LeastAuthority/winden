@@ -1,5 +1,6 @@
 import React from "react";
-import { useWormhole } from "../../hooks/useWormhole";
+import { useAppSelector } from "../../hooks/redux";
+import { selectWormholeStatus } from "../../wormholeSlice";
 import SendBeginScreen from "../screens/send/SendBeginScreen";
 import SendCompleteScreen from "../screens/send/SendCompleteScreen";
 import SendInstructionsScreen from "../screens/send/SendInstructionsScreen";
@@ -23,16 +24,16 @@ export function SendPageContent(props: Props) {
 }
 
 export default function SendPage() {
-  const wormhole = useWormhole();
+  const wormholeStatus = useAppSelector(selectWormholeStatus);
 
   return (
     <SendPageContent
       step={
-        wormhole?.done
+        wormholeStatus === "done"
           ? "DONE"
-          : wormhole?.progressEta
+          : wormholeStatus === "transferring"
           ? "PROGRESS"
-          : wormhole?.fileMeta
+          : wormholeStatus === "waiting"
           ? "INSTRUCTIONS"
           : "BEGIN"
       }

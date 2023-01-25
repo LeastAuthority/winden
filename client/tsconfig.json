@@ -8,5 +8,8 @@
       "@ionic/vue": ["./src/app/types/ionic.d.ts"]
     },
     "plugins": [{ "name": "typescript-plugin-css-modules" }]
-  }
+  },
+  "exclude": [
+    "./src/stories" // TODO: re-enable later
+  ]
 }

@@ -2,7 +2,6 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import CodeInput from "./CodeInput";
-import CodeInputProvider from "./providers/CodeInputProvider";
 import ThemeProvider from "./providers/ThemeProvider";
 
 const emptyLine = String.fromCharCode(8203);
@@ -19,9 +18,7 @@ describe("<CodeInput />", () => {
         const user = userEvent.setup();
         render(
           <ThemeProvider>
-            <CodeInputProvider>
-              <CodeInput />
-            </CodeInputProvider>
+            <CodeInput />
           </ThemeProvider>
         );
         const input = screen.getByTestId("code-input");
@@ -37,9 +34,7 @@ describe("<CodeInput />", () => {
         const user = userEvent.setup();
         render(
           <ThemeProvider>
-            <CodeInputProvider>
-              <CodeInput />
-            </CodeInputProvider>
+            <CodeInput />
           </ThemeProvider>
         );
         const input = screen.getByTestId("code-input");
@@ -54,9 +49,7 @@ describe("<CodeInput />", () => {
       const user = userEvent.setup();
       render(
         <ThemeProvider>
-          <CodeInputProvider>
-            <CodeInput />
-          </CodeInputProvider>
+          <CodeInput />
         </ThemeProvider>
       );
       const input = screen.getByTestId("code-input");
@@ -75,9 +68,7 @@ describe("<CodeInput />", () => {
       const user = userEvent.setup();
       render(
         <ThemeProvider>
-          <CodeInputProvider>
-            <CodeInput />
-          </CodeInputProvider>
+          <CodeInput />
         </ThemeProvider>
       );
       const input = screen.getByTestId("code-input");
@@ -96,9 +87,7 @@ describe("<CodeInput />", () => {
       const user = userEvent.setup();
       render(
         <ThemeProvider>
-          <CodeInputProvider>
-            <CodeInput />
-          </CodeInputProvider>
+          <CodeInput />
         </ThemeProvider>
       );
       const input = screen.getByTestId("code-input");
@@ -117,9 +106,7 @@ describe("<CodeInput />", () => {
       const user = userEvent.setup();
       render(
         <ThemeProvider>
-          <CodeInputProvider>
-            <CodeInput />
-          </CodeInputProvider>
+          <CodeInput />
         </ThemeProvider>
       );
       const input = screen.getByTestId("code-input");
@@ -140,9 +127,7 @@ describe("<CodeInput />", () => {
         const user = userEvent.setup();
         render(
           <ThemeProvider>
-            <CodeInputProvider>
-              <CodeInput onSubmit={onSubmit} />
-            </CodeInputProvider>
+            <CodeInput onSubmit={onSubmit} />
           </ThemeProvider>
         );
         const input = screen.getByTestId("code-input");
@@ -160,9 +145,7 @@ describe("<CodeInput />", () => {
         const user = userEvent.setup();
         render(
           <ThemeProvider>
-            <CodeInputProvider>
-              <CodeInput onSubmit={onSubmit} />
-            </CodeInputProvider>
+            <CodeInput onSubmit={onSubmit} />
           </ThemeProvider>
         );
         const input = screen.getByTestId("code-input");
@@ -181,9 +164,7 @@ describe("<CodeInput />", () => {
         const user = userEvent.setup();
         render(
           <ThemeProvider>
-            <CodeInputProvider>
-              <CodeInput onSubmit={onSubmit} />
-            </CodeInputProvider>
+            <CodeInput onSubmit={onSubmit} />
           </ThemeProvider>
         );
         const input = screen.getByTestId("code-input");
@@ -199,9 +180,7 @@ describe("<CodeInput />", () => {
         const user = userEvent.setup();
         render(
           <ThemeProvider>
-            <CodeInputProvider>
-              <CodeInput onSubmit={onSubmit} />
-            </CodeInputProvider>
+            <CodeInput onSubmit={onSubmit} />
           </ThemeProvider>
         );
         const input = screen.getByTestId("code-input");
@@ -216,9 +195,7 @@ describe("<CodeInput />", () => {
       it("will not show the error", () => {
         render(
           <ThemeProvider>
-            <CodeInputProvider>
-              <CodeInput />
-            </CodeInputProvider>
+            <CodeInput />
           </ThemeProvider>
         );
         const error = screen.getByTestId("code-error-message");
@@ -231,9 +208,7 @@ describe("<CodeInput />", () => {
         const user = userEvent.setup();
         render(
           <ThemeProvider>
-            <CodeInputProvider>
-              <CodeInput />
-            </CodeInputProvider>
+            <CodeInput />
           </ThemeProvider>
         );
         const container = screen.getByTestId("code-input-container");
@@ -250,9 +225,7 @@ describe("<CodeInput />", () => {
         const user = userEvent.setup();
         render(
           <ThemeProvider>
-            <CodeInputProvider>
-              <CodeInput />
-            </CodeInputProvider>
+            <CodeInput />
           </ThemeProvider>
         );
         const container = screen.getByTestId("code-input-container");
@@ -270,9 +243,7 @@ describe("<CodeInput />", () => {
           const user = userEvent.setup();
           render(
             <ThemeProvider>
-              <CodeInputProvider>
-                <CodeInput />
-              </CodeInputProvider>
+              <CodeInput />
             </ThemeProvider>
           );
           const input = screen.getByTestId("code-input");
@@ -287,9 +258,7 @@ describe("<CodeInput />", () => {
           const user = userEvent.setup();
           render(
             <ThemeProvider>
-              <CodeInputProvider>
-                <CodeInput />
-              </CodeInputProvider>
+              <CodeInput />
             </ThemeProvider>
           );
           const input = screen.getByTestId("code-input");
@@ -304,9 +273,7 @@ describe("<CodeInput />", () => {
           const user = userEvent.setup();
           render(
             <ThemeProvider>
-              <CodeInputProvider>
-                <CodeInput />
-              </CodeInputProvider>
+              <CodeInput />
             </ThemeProvider>
           );
           const input = screen.getByTestId("code-input");

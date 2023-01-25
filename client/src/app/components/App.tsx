@@ -2,9 +2,11 @@ import { useReducedMotion } from "@mantine/hooks";
 import React, { useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { useAppSelector } from "../hooks/redux";
 import { useCodeUrlCheck } from "../hooks/useCodeUrlCheck";
 import { useFlash } from "../hooks/useFlash";
 import { useTargetHighlights } from "../hooks/useTargetHighlights";
+import { selectIsWormholeLoaded } from "../wormholeSlice";
 import AppTemplate from "./AppTemplate";
 import Navigate from "./Navigate";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -31,7 +33,9 @@ export default function App({}: Props) {
     flash?.set(null);
   }, [location.pathname]);
 
-  return (
+  const isWormholeLoaded = useAppSelector(selectIsWormholeLoaded);
+
+  return isWormholeLoaded ? (
     <AppTemplate>
       <TransitionGroup component={null}>
         <CSSTransition
@@ -56,5 +60,7 @@ export default function App({}: Props) {
         </CSSTransition>
       </TransitionGroup>
     </AppTemplate>
+  ) : (
+    "Loading..."
   );
 }
