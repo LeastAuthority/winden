@@ -75,23 +75,10 @@ const prepWorker = (cb) => {
   cb();
 };
 
-const worker = () =>
-  gulp
-    .src("src/worker/index.ts")
-    .pipe(webpack(webpackConfig))
-    .pipe(gulp.dest("dist/worker"))
-    .pipe(connect.reload());
-
 const storybook = () => exec("npm run build-storybook");
 
 const publicClean = () =>
-  del([
-    "dist/*",
-    "!dist/app",
-    "!dist/storybook",
-    "!dist/worker",
-    "!dist/wormhole.wasm",
-  ]);
+  del(["dist/*", "!dist/app", "!dist/storybook", "!dist/wormhole.wasm"]);
 const publicCopy = () =>
   gulp
     .src("src/public/**/*", { dot: true })
@@ -178,7 +165,6 @@ const watch = () => {
     { ignoreInitial: false },
     javascriptWatch
   );
-  gulp.watch("src/worker/**/*.{js,ts,tsx}", { ignoreInitial: false }, worker);
   gulp.watch("src/public/**/*", { ignoreInitial: false }, public);
   gulp.watch("vendor/wormhole-william/**/*.go", { ignoreInitial: false }, wasm);
   start();
@@ -213,7 +199,6 @@ const deploySftp = (cb) => {
 };
 
 exports.javascript = javascript;
-exports.worker = worker;
 exports.public = public;
 exports.wasm = wasm;
 exports.storybook = storybook;
@@ -227,7 +212,6 @@ exports.deploy = gulp.series(
   prepWorker,
   public,
   javascript,
-  worker,
   setWasmVersion,
   wasm,
   // storybook,
@@ -238,7 +222,6 @@ exports.default = gulp.series(
   prepWorker,
   public,
   javascript,
-  worker,
   setWasmVersion,
   wasm,
   storybook
