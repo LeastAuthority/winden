@@ -8,7 +8,7 @@ describe("Check internal Pages", () => {
         "Send files in real-time"
       );
 
-      await $('a[to="/about"').click();
+      await $('a[href="/about"').click();
       
       expect(await $("main")).toHaveTextContaining(
         "Winden is a free web"
@@ -17,7 +17,7 @@ describe("Check internal Pages", () => {
 
     it("if FAQ opens", async () => {
         
-        await $('a[to="/faq"').click();
+        await $('a[href="/faq"').click();
         
         expect(await $("main")).toHaveTextContaining(
           "What makes Winden different?"
@@ -26,7 +26,7 @@ describe("Check internal Pages", () => {
     
     it("if Privacy opens", async () => {
         
-        await $('a[to="/privacy"').click();
+        await $('a[href="/privacy"').click();
         
         expect(await $("main")).toHaveTextContaining(
           "Who we are"
@@ -35,7 +35,7 @@ describe("Check internal Pages", () => {
 
     it("if Privacy opens", async () => {
         
-        await $('a[to="/for-business"').click();
+        await $('a[href="/for-business"').click();
         
         expect(await $("main")).toHaveTextContaining(
           "Interested in bringing Winden"
@@ -44,7 +44,7 @@ describe("Check internal Pages", () => {
 
     it("if Feedback opens", async () => {
         
-        await $('a[to="/feedback"').click();
+        await $('a[href="/feedback"').click();
         
         expect(await $("main")).toHaveTextContaining(
           "Loving Winden?"
@@ -54,7 +54,7 @@ describe("Check internal Pages", () => {
     describe("Check Terms", () => {
         it("if Terms & Conditions opens as link", async () => {
         
-            await $('a[to="/terms"').click();
+            await $('a[href="/terms"').click();
             
             expect(await $("h1")).toHaveTextContaining(
               "GENERAL TERMS AND CONDITIONS"
@@ -71,7 +71,7 @@ describe("Check internal Pages", () => {
                 "By using Winden you agree to the"
             );
 
-            await $('a[to="/terms"').click();
+            await $('a[href="/terms"').click();
             
             expect(await $("h1")).toHaveTextContaining(
                 "GENERAL TERMS AND CONDITIONS"
