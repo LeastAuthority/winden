@@ -29,7 +29,6 @@ export const config: Options.Testrunner = {
         },
       },
     },
-/*
     {
       browserName: "firefox",
       "moz:firefoxOptions": {
@@ -39,7 +38,6 @@ export const config: Options.Testrunner = {
         },
       },
     },
-*/
 /* -- Not Working on M1 chips
     {
       browserName: "MicrosoftEdge",
