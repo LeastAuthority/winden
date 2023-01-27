@@ -22,7 +22,6 @@ export const config: Options.Testrunner = {
             ],
   maxInstances: 1,
   capabilities: [
-/*
     {
       browserName: "chrome",
       acceptInsecureCerts: true,
@@ -44,7 +43,6 @@ export const config: Options.Testrunner = {
         },
       },
     },
-*/
     {
       browserName: "MicrosoftEdge",
       "ms:edgeOptions": {
