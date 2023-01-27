@@ -6,9 +6,10 @@ describe("Sending feedback", () => {
       await Page.open();
       const feedbackLink = await $('a[href="/feedback"]');
       await feedbackLink.click();
-      const submitButton = await $("button=Submit");
-      await submitButton.click();
+      const form = await $('[name="whatsGreat"]');
+      await form.click();
       const content = await $("body");
+      await content.click();
       await expect(content).toHaveTextContaining(
         "The form is empty. Please fill out the form."
       );
@@ -35,19 +36,54 @@ describe("Sending feedback", () => {
         await $("aria/5").click();
       });
       await tryOnlyFill(async () => {
-        const form = await $("#feedback-q1");
+        const form = await $('[name="whatsGreat"]');
         await form.click();
         await browser.keys(["my feedback"]);
       });
       await tryOnlyFill(async () => {
-        const form = await $("#feedback-q2");
+        const form = await $('[name="whatsUseful"]');
         await form.click();
         await browser.keys(["my feedback"]);
       });
       await tryOnlyFill(async () => {
-        const form = await $("#feedback-q3");
+        const form = await $('[name="whatsNotGreat"]');
         await form.click();
         await browser.keys(["my feedback"]);
+      });
+    });
+  });
+
+  describe("when one of the textareas exceed the character limit", () => {
+    it("will show an error", async () => {
+      const me = "a".repeat(2001);
+      async function tryOnlyFill(fillFn: () => Promise<void>) {
+        const feedbackLink = await $('a[href="/feedback"]');
+        await feedbackLink.click();
+        await fillFn();
+        const submitButton = await $("button=Submit");
+        await submitButton.click();
+        const content = await $("body");
+        await expect(content).toHaveTextContaining(
+          "Content should not exceed 2000 characters."
+        );
+      }
+
+      await Page.open();
+
+      await tryOnlyFill(async () => {
+        const form = await $('[name="whatsGreat"]');
+        await form.click();
+        await browser.keys([me]);
+      });
+      await tryOnlyFill(async () => {
+        const form = await $('[name="whatsUseful"]');
+        await form.click();
+        await browser.keys([me]);
+      });
+      await tryOnlyFill(async () => {
+        const form = await $('[name="whatsNotGreat"]');
+        await form.click();
+        await browser.keys([me]);
       });
     });
   });
