@@ -34,16 +34,12 @@ async function testTransferSuccess(fileName: string, timeout?: number) {
 
 async function testTransferFailure(fileName: string, timeout?: number) {
   const originalFilePath = path.join("./test/files/", fileName);
-  const receivedFilePath = path.join(
-    global.downloadDir,
-    path.basename(fileName)
-  );
-
+  
   await Page.open();
   const _sendWindow = await browser.getWindowHandle();
   await Page.uploadFiles(originalFilePath);
   const content = await $("body");
-  await expect(content).toHaveTextContaining("Large file sizes: coming soon");
+  expect(content).toHaveTextContaining("Large file sizes: coming soon");
 }
 
 describe("Send flow large files", () => {

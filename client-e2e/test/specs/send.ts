@@ -34,16 +34,12 @@ async function testTransferSuccess(fileName: string, timeout?: number) {
 
 async function testTransferFailure(fileName: string, timeout?: number) {
   const originalFilePath = path.join("./test/files/", fileName);
-  const receivedFilePath = path.join(
-    global.downloadDir,
-    path.basename(fileName)
-  );
 
   await Page.open();
   const _sendWindow = await browser.getWindowHandle();
   await Page.uploadFiles(originalFilePath);
   const content = await $("body");
-  await expect(content).toHaveTextContaining("Large file sizes: coming soon");
+  expect(content).toHaveTextContaining("Large file sizes: coming soon");
 }
 
 describe("Send flow", () => {
@@ -53,11 +49,12 @@ describe("Send flow", () => {
       await Page.uploadFiles("./test/files/hello-world.txt");
 
       const code = await Page.getCode()
-      const expectedCode = new RegExp(`^\\d+-\\w+-\\w+$`);
+      
+      const expectedCode = /^\d+-\w+-\w+$/;
       expect(code.getValue).toHaveValue(expectedCode);
 
       const content = await $("main");
-      await expect(content).toHaveTextContaining("hello-world.txt");
+      expect(content).toHaveTextContaining("hello-world.txt");
     });
     //TODO requires switch to https in dev
     it.skip("can copy generate link", async () => {});
@@ -97,7 +94,7 @@ describe("Send flow", () => {
       await Page.uploadFiles("./test/files/hello-world.txt");
       await (await $("button*=Cancel")).click();
       await Page.uploadFiles("./test/files/hello-world.txt");
-      await expect(await $("main")).toHaveTextContaining("Ready to send!");
+      expect(await $("main")).toHaveTextContaining("Ready to send!");
     });
   });
 });

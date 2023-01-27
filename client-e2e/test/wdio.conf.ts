@@ -15,7 +15,7 @@ export const config: Options.Testrunner = {
     },
   },
   specs: ["./test/specs/**/*.ts"],
-  maxInstances: 10,
+  maxInstances: 1,
   capabilities: [
     {
       browserName: "chrome",
@@ -38,6 +38,7 @@ export const config: Options.Testrunner = {
         },
       },
     },
+/* -- Not Working on M1 chips
     {
       browserName: "MicrosoftEdge",
       "ms:edgeOptions": {
@@ -49,6 +50,7 @@ export const config: Options.Testrunner = {
         },
       },
     },
+*/
   ],
   logLevel: "error",
   bail: 0,
