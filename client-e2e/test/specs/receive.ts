@@ -8,7 +8,7 @@ describe("Receive flow", () => {
     const input = await Page.receiveCodeInput();
     await input.click();
     await browser.keys(["7-gui rev "]);
-    await expect(input).toHaveValue("7-guitarist-revenge");
+    expect(input).toHaveValue("7-guitarist-revenge");
   });
 
   describe("when entering a code with improper format", () => {
@@ -20,7 +20,7 @@ describe("Receive flow", () => {
       await browser.keys(["revenge-guitarist-7"]);
       const content = await $("main");
       await content.click();
-      await expect(content).toHaveTextContaining(
+      expect(content).toHaveTextContaining(
         "Please use a code with the number-word-word format."
       );
     });

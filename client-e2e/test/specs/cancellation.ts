@@ -5,7 +5,9 @@ describe("Cancellation", () => {
     // TODO improve test, when Receiver side gets error handling implementation
     it("check if file is not downloadable anymore", async () => {
       await Page.open();
-      const sendWindow = await browser.getWindowHandle();
+      
+      await browser.getWindowHandle();
+      
       await Page.uploadFiles("./test/files/sizes/20MB");
       const codeUrl = await Page.getCodeUrl();
 
@@ -16,7 +18,7 @@ describe("Cancellation", () => {
 
       await browser.pause(20000);
       // check if Download button is not available
-      await expect(await Page.receiveDownloadButton()).not.toBeExisting();
+      expect(await Page.receiveDownloadButton()).not.toBeExisting();
     });
   });
 
@@ -63,7 +65,7 @@ describe("Cancellation", () => {
         await browser.waitUntil(() => Page.progressBar().isExisting());
         await (await Page.cancelButton()).click();
 
-        await expect(await $("main")).toHaveTextContaining(
+        expect(await $("main")).toHaveTextContaining(
           "Receive files in real-time"
         );
 
@@ -115,7 +117,7 @@ describe("Cancellation", () => {
         const codeUrl = await Page.getCodeUrl();
 
         // Receiver
-        const receiveWindow = await browser.newWindow(codeUrl);
+        await browser.newWindow(codeUrl);
         await browser.waitUntil(() =>
           Page.receiveDownloadButton().isExisting()
         );
@@ -141,7 +143,7 @@ describe("Cancellation", () => {
     describe("Cancel before accepted transfer", () => {
       it("Sends the Sender back with no message", async function () {
         // FIXME: flaky test that times out
-        this.retries(2);
+        this.retries(1);
 
         await Page.open();
         const sendWindow = await browser.getWindowHandle();
