@@ -20,7 +20,7 @@ Document current manual deployment and release steps for Winden.app
 5. Go to the [GitHub Actions page](https://github.com/LeastAuthority/winden/actions/workflows/deploy.yml) and select Deployment workflow;
 6. Click on `Run workflow` (right side) and choose Tag or Main branch, then select Deployment target environment `prod` and click *Run workflow*;
 7. Wait and check if the workflow was successfully executed;
-8. heck if the new tag is visible in (winden.app)[https://winden.app] webpage;
+8. Check if the new tag is visible in (winden.app)[https://winden.app] webpage;
 9. Check if new changes are visible;
 10. Run basic tests scenarios: Send file, Receive file;
 Notify the team in the group channel about the release;
