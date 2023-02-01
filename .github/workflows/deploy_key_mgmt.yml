@@ -6,16 +6,19 @@ on:
 
 jobs:
   test:
-    - uses: webfactory/ssh-agent@v0.7.0
-      with:
-        ssh-private-key: ${{ secrets.SFTP_IDENTITY }}
-    - name: Get authorized keys
-      run: |
-        cat <<EOF > get_authorized_keys.txt
-        open ${{ secrets.SFTP_USERNAME }}@${{ secrets.SFTP_HOSTNAME }}
-        cd .ssh
-        get authorized_keys
-        bye
-        EOF
-        sftp -b get_authorized_keyts.txt
-        ls -la
+    name: Deploy Key Rotation
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.SFTP_IDENTITY }}
+      - name: Get authorized keys
+        run: |
+          cat <<EOF > get_authorized_keys.txt
+          open ${{ secrets.SFTP_USERNAME }}@${{ secrets.SFTP_HOSTNAME }}
+          cd .ssh
+          get authorized_keys
+          bye
+          EOF
+          sftp -b get_authorized_keyts.txt
+          ls -la
