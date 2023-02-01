@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Current key hash
         run: |
-          cat <<EOF | md5
+          cat <<EOF | md5sum
           ${{ secrets.SFTP_IDENTITY }}
           EOF
           cat <<EOF | wc
