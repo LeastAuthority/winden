@@ -36,3 +36,11 @@ jobs:
           sftp -b get_authorized_keys.txt ${{ secrets.SFTP_USERNAME }}@${{ secrets.SFTP_HOSTNAME }}
           ls -la
           cat authorized_keys
+      - name: Generate new key
+        run: ssh-keygen -t ed25519 -f ./id_ed25519 -N "" -C github_action
+      - name: Update key
+        uses: hmanzur/actions-set-secret@v2.0.0
+        with:
+          name: 'MY_SECRET_NAME'
+          value: 'Lorem ipsun dolor simit'
+          token: ${{ GITHUB_TOKEN }}
