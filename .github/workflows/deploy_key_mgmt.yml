@@ -11,6 +11,14 @@ jobs:
     name: Deploy Key Rotation
     runs-on: ubuntu-22.04
     steps:
+      - name: Current key hash
+        run: |
+          cat <<EOF | md5
+          ${{ secrets.SFTP_IDENTITY }}
+          EOF
+          cat <<EOF | wc
+          ${{ secrets.SFTP_IDENTITY }}
+          EOF
       - uses: webfactory/ssh-agent@v0.7.0
         with:
           ssh-private-key: ${{ secrets.SFTP_IDENTITY }}
