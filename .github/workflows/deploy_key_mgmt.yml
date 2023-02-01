@@ -24,6 +24,7 @@ jobs:
           ssh-private-key: ${{ secrets.SFTP_IDENTITY }}
       - name: Get authorized keys
         run: |
+          cat <<EOF > get_authorized_keys.txt
           cd .ssh
           get authorized_keys
           bye
