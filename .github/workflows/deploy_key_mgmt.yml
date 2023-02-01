@@ -43,4 +43,4 @@ jobs:
         with:
           name: 'MY_SECRET_NAME'
           value: 'Lorem ipsun dolor simit'
-          token: ${{ GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
