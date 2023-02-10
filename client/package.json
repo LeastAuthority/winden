@@ -53,6 +53,7 @@
     "@types/react-transition-group": "^4.4.5",
     "@types/streamsaver": "^2.0.1",
     "@types/testing-library__jest-dom": "^5.14.3",
+    "@wasm-tool/wasm-pack-plugin": "^1.6.0",
     "babel-loader": "^8.2.5",
     "css-loader": "^6.7.1",
     "del": "^6.0.0",
