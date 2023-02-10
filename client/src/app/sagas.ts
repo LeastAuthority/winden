@@ -1,9 +1,10 @@
+import { channel } from "redux-saga";
 import { cancel, cancelled, fork, put, select, take } from "redux-saga/effects";
 import streamSaver from "streamsaver";
+import { Client, ReceiveResult, SendResult } from "../../pkg";
 import { setError } from "./errorSlice";
-import { loadAndRunWasm } from "./loadAndRunWasm";
 import { NoSleep } from "./NoSleep";
-import { FileStreamReader, TransferProgress } from "./types/wormhole";
+import { makeProgressFunc } from "./util/makeProgressFunc";
 import {
   completeLoading,
   completeTransfer,
@@ -13,7 +14,22 @@ import {
   setFileAndCode,
   setRequestingReceive,
   setRequestingSend,
+  setTransferProgress,
 } from "./wormholeSlice";
+
+function defer() {
+  var res, rej;
+
+  var promise: any = new Promise((resolve, reject) => {
+    res = resolve;
+    rej = reject;
+  });
+
+  promise.resolve = res;
+  promise.reject = rej;
+
+  return promise;
+}
 
 function* watchForNoSleepDisable() {
   while (true) {
@@ -46,44 +62,60 @@ export function* watchForTabExit() {
   }
 }
 
-let client: number;
+const downloadFileChannel = channel();
+
+export function* watchDownloadFileChannel(): any {
+  while (true) {
+    const action = yield take(downloadFileChannel);
+    yield put(action);
+  }
+}
+
+let pkg: typeof import("../../pkg");
+let client: Client;
 
 function* transfer(): any {
-  let cancellable: TransferProgress | FileStreamReader;
+  let cancel: any;
   try {
     while (true) {
       try {
         const { payload } = yield take("wormhole/requestTransfer");
         if (payload.type === "send") {
+          cancel = defer();
           yield put(setRequestingSend());
-          cancellable = yield window.Wormhole.Client.sendFile(
-            client,
-            payload.filename,
-            payload.file,
-            payload.opts
-          );
+          const sendResult: SendResult = yield pkg.send(client, payload.file);
           yield put(
             setFileAndCode({
               file: {
                 name: payload.filename,
                 size: payload.file.size,
               },
-              code: (cancellable as TransferProgress).code!,
+              code: sendResult.get_code(),
             })
           );
-          yield (cancellable as TransferProgress).done;
+          yield pkg.upload_file(
+            sendResult,
+            {
+              progress: makeProgressFunc((sentBytes, totalBytes) => {
+                downloadFileChannel.put(
+                  setTransferProgress([sentBytes, totalBytes])
+                );
+              }),
+            },
+            cancel
+          );
           yield put(completeTransfer());
         } else if (payload.type === "receive") {
+          cancel = defer();
           yield put(setRequestingReceive());
-          cancellable = yield window.Wormhole.Client.recvFile(
+          const receiveResult: ReceiveResult = yield pkg.receive(
             client,
-            payload.code,
-            payload.opts
+            payload.code
           );
           yield put(
             setConsenting({
-              name: (cancellable as FileStreamReader).name,
-              size: (cancellable as FileStreamReader).size,
+              name: receiveResult.get_file_name(),
+              size: Number(receiveResult.file_size),
             })
           );
           const { payload: consentPayload } = yield take(
@@ -91,28 +123,28 @@ function* transfer(): any {
           );
           if (consentPayload) {
             const fileStream = streamSaver.createWriteStream(
-              (cancellable as FileStreamReader).name,
+              receiveResult.get_file_name(),
               {
-                size: (cancellable as FileStreamReader).size,
+                size: Number(receiveResult.file_size),
               }
             );
             const writer = fileStream.getWriter();
-
-            let n: number;
-            let done = false;
-            while (!done) {
-              const buffer = new Uint8Array(
-                (cancellable as FileStreamReader).bufferSizeBytes
-              );
-              [n, done] = yield (cancellable as FileStreamReader).read(buffer);
-
-              writer.write(new Uint8Array(buffer).slice(0, n));
-            }
-
+            yield pkg.download_file(
+              receiveResult,
+              {
+                write: (x: unknown) => writer.write(x),
+                progress: makeProgressFunc((sentBytes, totalBytes) => {
+                  downloadFileChannel.put(
+                    setTransferProgress([sentBytes, totalBytes])
+                  );
+                }),
+              },
+              cancel
+            );
             yield writer.close();
             yield put(completeTransfer());
           } else {
-            (cancellable as FileStreamReader).reject();
+            yield pkg.reject_file(receiveResult);
           }
         } else {
           continue;
@@ -125,24 +157,25 @@ function* transfer(): any {
     }
   } finally {
     if (yield cancelled()) {
-      cancellable!.cancel();
+      cancel.resolve();
       yield put(reset());
     }
   }
 }
 
 export function* wormholeSaga(): any {
-  yield loadAndRunWasm();
-  client = window.Wormhole.Client.newClient({
-    rendezvousURL:
-      process.env["MAILBOX_URL"] || `ws://${window.location.hostname}:4000/v1`,
-    transitRelayURL:
-      process.env["RELAY_URL"] || `ws://${window.location.hostname}:4002`,
-    passPhraseComponentLength: 2,
-  });
+  const pkgImport = import("../../pkg").then((pkg) => pkg.default);
+  pkg = yield pkgImport;
+  client = pkg.Client.new(
+    "lothar.com/wormhole/text-or-file-xfer",
+    process.env["MAILBOX_URL"] || `ws://${window.location.hostname}:4000/v1`,
+    process.env["RELAY_URL"] || `ws://${window.location.hostname}:4002`,
+    2
+  );
   yield put(completeLoading());
   yield fork(watchForTabExit);
   yield fork(watchForNoSleepDisable);
+  yield fork(watchDownloadFileChannel);
   while (true) {
     const transferTask = yield fork(transfer);
     yield take("wormhole/requestCancelTransfer");

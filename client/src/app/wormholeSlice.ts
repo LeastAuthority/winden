@@ -1,7 +1,6 @@
 import { createAction, createSlice, SliceCaseReducers } from "@reduxjs/toolkit";
 import { setError } from "./errorSlice";
 import type { RootState } from "./store";
-import { TransferOptions } from "./types/wormhole";
 
 type FileInfo = {
   name: string;
@@ -58,8 +57,8 @@ export const completeLoading = createAction<void, "wormhole/completeLoading">(
   "wormhole/completeLoading"
 );
 export const requestTransfer = createAction<
-  | { type: "send"; filename: string; file: File; opts: TransferOptions }
-  | { type: "receive"; code: string; opts: TransferOptions },
+  | { type: "send"; filename: string; file: File }
+  | { type: "receive"; code: string },
   "wormhole/requestTransfer"
 >("wormhole/requestTransfer");
 export const setFileAndCode = createAction<

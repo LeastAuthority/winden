@@ -14,7 +14,6 @@ import { useNavigate } from "../hooks/useNavigate";
 import { applyCodeSuggestion } from "../util/applyCodeSuggestion";
 import { CODE_SEGMENT_DELIMITER } from "../util/constants";
 import { getCodeSuggestion } from "../util/getCodeSuggestion";
-import { makeProgressFunc } from "../util/makeProgressFunc";
 import { spellCheckCodeWord } from "../util/spellCheckCodeWord";
 import { CodeErrorType, validateCode } from "../util/validateCode";
 import { selectWormholeStatus } from "../wormholeSlice";
