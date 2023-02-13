@@ -7,7 +7,6 @@ const replace = require("gulp-replace");
 const gulpif = require("gulp-if");
 const webpack = require("webpack-stream");
 const Dotenv = require("dotenv-webpack");
-const SentryPlugin = require("@sentry/webpack-plugin");
 const fs = require("fs");
 const path = require("path");
 const proxy = require("http-proxy-middleware");
@@ -40,19 +39,7 @@ const webpackConfig = {
       },
     ],
   },
-  plugins: [
-    new Dotenv(),
-    ...(process.env.NODE_ENV === "playground"
-      ? [
-          new SentryPlugin({
-            release: process.env.RELEASE,
-            include: "./dist",
-            org: "least-authority",
-            project: "transfer-rewrite",
-          }),
-        ]
-      : []),
-  ],
+  plugins: [new Dotenv()],
   optimization: {
     minimize: process.env.NODE_ENV === "production",
   },
@@ -60,29 +47,23 @@ const webpackConfig = {
 
 const javascript = () =>
   gulp
-    .src(`src/app/index.${process.env.NODE_ENV}.tsx`)
+    .src(`src/app/index.tsx`)
     .pipe(
       webpack({
         ...webpackConfig,
-        entry: [
-          "web-streams-polyfill",
-          `./src/app/index.${process.env.NODE_ENV}.tsx`,
-        ],
+        entry: ["web-streams-polyfill", `./src/app/index.tsx`],
       })
     )
     .pipe(gulp.dest("dist/app"));
 
 const javascriptWatch = () =>
   gulp
-    .src(`src/app/index.${process.env.NODE_ENV}.tsx`)
+    .src(`src/app/index.tsx`)
     .pipe(
       webpack({
         ...webpackConfig,
         watch: true,
-        entry: [
-          "web-streams-polyfill",
-          `./src/app/index.${process.env.NODE_ENV}.tsx`,
-        ],
+        entry: ["web-streams-polyfill", `./src/app/index.tsx`],
       })
     )
     .pipe(gulp.dest("dist/app"))
