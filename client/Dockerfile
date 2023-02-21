@@ -8,21 +8,15 @@ RUN npm -g config set user root
 RUN npm install --global gulp-cli
 COPY --from=golang:1.19.3-alpine /usr/local/go/ /usr/local/go/
 
-RUN npm install --location=global @sentry/cli
-ENV SENTRYCLI_SKIP_DOWNLOAD=1
-
 ENV PATH="/usr/local/go/bin:${PATH}"
 ENV GOROOT="/usr/local/go"
 
 COPY package.json .
 COPY package-lock.json .
-ARG SENTRYCLI_USE_LOCAL=1
 RUN npm install --location=global --unsafe-perm
 COPY . .
 
 RUN npm install
-# prebuild, for CI optimization
-RUN gulp prepWorker public javascript worker wasm
 
 CMD ["gulp", "watch"]
 EXPOSE 8080
