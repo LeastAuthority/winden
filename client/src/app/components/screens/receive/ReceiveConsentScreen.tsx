@@ -1,5 +1,5 @@
 import { Anchor, Button, Stack, Text } from "@mantine/core";
-import React from "react";
+import React, { useState } from "react";
 import { Download, X } from "tabler-icons-react";
 import { useAppDispatch } from "../../../hooks/redux";
 import { useCommonStyles } from "../../../hooks/useCommonStyles";
@@ -63,11 +63,13 @@ type Props = {};
 
 export default function ReceiveConsentScreen({}: Props) {
   const dispatch = useAppDispatch();
+  const [submitting, setSubmitting] = useState(false);
 
   return (
     <ReceiveConsentScreenContent
-      submitting={false} // TODO: add a requested status
+      submitting={submitting}
       onAccept={() => {
+        setSubmitting(true);
         NoSleep.enable();
         dispatch(answerConsent(true));
       }}
