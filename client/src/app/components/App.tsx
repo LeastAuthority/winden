@@ -1,3 +1,4 @@
+import { LoadingOverlay } from "@mantine/core";
 import { useReducedMotion } from "@mantine/hooks";
 import React, { useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
@@ -61,6 +62,6 @@ export default function App({}: Props) {
       </TransitionGroup>
     </AppTemplate>
   ) : (
-    <div>Loading...</div>
+    <LoadingOverlay visible />
   );
 }
