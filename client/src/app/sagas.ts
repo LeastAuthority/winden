@@ -98,14 +98,15 @@ function* transfer(): any {
             );
             const writer = fileStream.getWriter();
 
+            let n: number;
             let done = false;
             while (!done) {
               const buffer = new Uint8Array(
                 (cancellable as FileStreamReader).bufferSizeBytes
               );
-              [, done] = yield (cancellable as FileStreamReader).read(buffer);
+              [n, done] = yield (cancellable as FileStreamReader).read(buffer);
 
-              writer.write(buffer);
+              writer.write(new Uint8Array(buffer).slice(0, n));
             }
 
             yield writer.close();

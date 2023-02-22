@@ -1,5 +1,6 @@
 .DS_Store
 .env
+/client/coverage
 /client-e2e/test/files/sizes/
 dist/
 node_modules/

@@ -1,15 +1,15 @@
 import { TransferOptions } from "../types/wormhole";
+import { PROGRESS_BAR_MS_PER_UPDATES } from "./constants";
 
 export function makeProgressFunc(
   onProgress: (sentBytes: number, totalBytes: number) => void
 ): TransferOptions["progressFunc"] {
   let lastProgressUpdate = Date.now();
   return (sentBytes, totalBytes) => {
-    const MS_PER_PROGRESS_UPDATE = 1000;
     const now = Date.now();
     if (
       sentBytes === totalBytes ||
-      now - lastProgressUpdate > MS_PER_PROGRESS_UPDATE
+      now - lastProgressUpdate > PROGRESS_BAR_MS_PER_UPDATES
     ) {
       onProgress(sentBytes, totalBytes);
       lastProgressUpdate = now;

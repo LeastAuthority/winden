@@ -159,7 +159,6 @@ const start = () => {
 };
 
 const watch = () => {
-  prepWorker;
   gulp.watch(
     "src/app/**/*.{ts,tsx,css}",
     { ignoreInitial: false },
@@ -202,7 +201,7 @@ exports.javascript = javascript;
 exports.public = public;
 exports.wasm = wasm;
 exports.storybook = storybook;
-exports.watch = watch;
+exports.watch = gulp.series(prepWorker, watch);
 // for CI optimization without watch
 exports.start = start;
 exports.clean = clean;

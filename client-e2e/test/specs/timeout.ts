@@ -11,12 +11,12 @@ async function testTimeoutSuccess(timeoutMs: number) {
   await Page.open();
   const _sendWindow = await browser.getWindowHandle();
   await Page.uploadFiles(originalFilePath);
-  const codeUrl = await Page.getCodeUrl()
+  const codeUrl = await Page.getCodeUrl();
 
   // Receiver
   const _receiveWindow = await browser.newWindow(codeUrl);
   await browser.waitUntil(() => Page.receiveDownloadButton().isExisting());
-  
+
   await browser.pause(timeoutMs);
 
   await (await Page.receiveDownloadButton()).click();
@@ -44,5 +44,4 @@ describe("Time out", () => {
       await testTimeoutSuccess(20 * 60 * 1000);
     });
   });
-
 });

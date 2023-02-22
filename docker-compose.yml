@@ -48,19 +48,6 @@ services:
       - "1025:1025"
     environment:
       - PYTHONUNBUFFERED=1
-  # build to run in CI
-  client-ci:
-    build: ./client
-    env_file:
-      - ./client/.env
-    ports:
-      - "8080:8080" # DevServer
-      - "35729:35729" # LiveReload
-    depends_on:
-      - mailbox
-      - relay
-    profiles:
-      - e2e
   # Selenium services
   chrome:
     volumes:
@@ -136,7 +123,7 @@ services:
       - ./client-e2e:/usr/src/app/client-e2e
       - test-downloads:/home/node/downloads
     depends_on:
-      client-ci:
+      client:
         condition: service_started
       chrome:
         condition: service_started

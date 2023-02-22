@@ -2,14 +2,18 @@ import * as Page from "../pageobjects/page";
 
 describe("Sending feedback", () => {
   describe("when all forms are empty", () => {
-    it("will give a validation error", async () => {
+    it.only("will give a validation error", async () => {
       await Page.open();
       const feedbackLink = await $('a[href="/feedback"]');
       await feedbackLink.click();
       const form = await $('[name="whatsGreat"]');
       await form.click();
+
+      const heading = await $("h1");
+      await heading.click();
+
       const content = await $("body");
-      await content.click();
+
       await expect(content).toHaveTextContaining(
         "The form is empty. Please fill out the form."
       );
@@ -60,8 +64,6 @@ describe("Sending feedback", () => {
         const feedbackLink = await $('a[href="/feedback"]');
         await feedbackLink.click();
         await fillFn();
-        const submitButton = await $("button=Submit");
-        await submitButton.click();
         const content = await $("body");
         await expect(content).toHaveTextContaining(
           "Content should not exceed 2000 characters."

@@ -21,8 +21,6 @@ RUN npm install --location=global --unsafe-perm
 COPY . .
 
 RUN npm install
-# prebuild, for CI optimization
-RUN gulp prepWorker public javascript wasm
 
 CMD ["gulp", "watch"]
 EXPOSE 8080

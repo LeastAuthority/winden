@@ -5,16 +5,16 @@ describe("Cancellation", () => {
     // TODO improve test, when Receiver side gets error handling implementation
     it("check if file is not downloadable anymore", async () => {
       await Page.open();
-      
+
       await browser.getWindowHandle();
-      
+
       await Page.uploadFiles("./test/files/sizes/20MB");
       const codeUrl = await Page.getCodeUrl();
 
       await (await Page.cancelButton()).click();
 
       await browser.pause(2000);
-      const _receiveWindow = await browser.newWindow(codeUrl);
+      const receiveWindow = await browser.newWindow(codeUrl);
 
       await browser.pause(20000);
       // check if Download button is not available
@@ -25,8 +25,6 @@ describe("Cancellation", () => {
   describe("Receiver cancellations", () => {
     describe("Rejects file when offer is received", () => {
       it("Sends the Sender back and show cancellation message, no message for Receiver", async function () {
-        this.retries(1);
-
         await Page.open();
         const sendWindow = await browser.getWindowHandle();
         await Page.uploadFiles("./test/files/sizes/20MB");
@@ -48,7 +46,6 @@ describe("Cancellation", () => {
 
     describe("Cancel during transfer", () => {
       it("Sends the Receiver and Sender back. The Sender gets an error message", async function () {
-        this.retries(1);
         await Page.open();
         const sendWindow = await browser.getWindowHandle();
         await Page.uploadFiles("./test/files/sizes/20MB");
@@ -136,15 +133,11 @@ describe("Cancellation", () => {
         //   async () =>
         //     await $("div*=Transfer cancelled/interrupted").isExisting()
         // );
-
       });
     });
 
     describe("Cancel before accepted transfer", () => {
       it("Sends the Sender back with no message", async function () {
-        // FIXME: flaky test that times out
-        this.retries(1);
-
         await Page.open();
         const sendWindow = await browser.getWindowHandle();
         await Page.uploadFiles("./test/files/sizes/20MB");
