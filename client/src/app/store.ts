@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
 import errorSlice from "./errorSlice";
+import flashSlice from "./flashSlice";
 import { wormholeSaga } from "./sagas";
 import wormholeSlice from "./wormholeSlice";
 
@@ -9,6 +10,7 @@ export const store = configureStore({
   reducer: {
     wormhole: wormholeSlice,
     error: errorSlice,
+    flash: flashSlice,
   },
   middleware: [sagaMiddleware],
 });

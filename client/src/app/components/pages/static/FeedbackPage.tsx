@@ -8,7 +8,8 @@ import {
 } from "@mantine/core";
 import { Form, Formik } from "formik";
 import React from "react";
-import { useFlash } from "../../../hooks/useFlash";
+import { setMessage } from "../../../flashSlice";
+import { useAppDispatch } from "../../../hooks/redux";
 import { useNavigate } from "../../../hooks/useNavigate";
 import StaticPage from "../StaticPage";
 
@@ -59,7 +60,7 @@ function submitFeedback(
 type Props = {};
 
 export default function FeedbackPage({}: Props) {
-  const flash = useFlash();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const labelProps = {
@@ -123,11 +124,13 @@ export default function FeedbackPage({}: Props) {
             );
             if (response.ok) {
               navigate("/s");
-              flash?.set({
-                title: "Feedback sent",
-                content:
-                  "Your feedback has been submitted successfully. Thank you for your feedback.",
-              });
+              dispatch(
+                setMessage({
+                  title: "Feedback sent",
+                  content:
+                    "Your feedback has been submitted successfully. Thank you for your feedback.",
+                })
+              );
             } else {
               formik.setFieldError(
                 "all",
