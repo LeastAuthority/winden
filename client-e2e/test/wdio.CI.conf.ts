@@ -17,9 +17,8 @@ export const config: Options.Testrunner = {
     },
   },
   specs: ["./test/specs/**/*.ts"],
-  
-  exclude: ["./test/specs/send-large-files.ts",
-            ],
+
+  exclude: ["./test/specs/send-large-files.ts"],
   maxInstances: 1,
   capabilities: [
     {
@@ -72,5 +71,16 @@ export const config: Options.Testrunner = {
   },
   beforeTest: function () {
     fsExtra.emptyDirSync(global.downloadDir);
+  },
+  afterTest: function () {
+    afterEach(async () => {
+      const handles = await browser.getWindowHandles();
+      for (let i = 1; i < handles.length; i++) {
+        await browser.switchToWindow(handles[i]);
+        await browser.closeWindow();
+      }
+      await browser.switchToWindow(handles[0]);
+      await browser.url("about:blank");
+    });
   },
 };

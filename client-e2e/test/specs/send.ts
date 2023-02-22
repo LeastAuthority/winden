@@ -15,7 +15,7 @@ async function testTransferSuccess(fileName: string, timeout?: number) {
   await Page.uploadFiles(originalFilePath);
 
   // Receiver
-  const codeUrl = await Page.getCodeUrl()
+  const codeUrl = await Page.getCodeUrl();
   const _receiveWindow = await browser.newWindow(codeUrl);
 
   await browser.waitUntil(() => Page.receiveDownloadButton().isExisting());
@@ -48,9 +48,8 @@ describe("Send flow", () => {
       await Page.open();
       await Page.uploadFiles("./test/files/hello-world.txt");
 
-      const code = await Page.getCode()
-      
-      const expectedCode = /^\d+-\w+-\w+$/;
+      const code = await Page.getCode();
+      const expectedCode = new RegExp(`^\\d+-\\w+-\\w+$`);
       expect(code.getValue).toHaveValue(expectedCode);
 
       const content = await $("main");

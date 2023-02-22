@@ -37,7 +37,9 @@ describe("Receive flow", () => {
         // max nameplate number 999, so will not impact real nameplate
         await browser.keys(["1000-guitarist-revenge"]);
         await (await Page.submitCodeButton()).click();
-        await browser.waitUntil(async () => (await $("div*=The code is wrong").isExisting()));
+        await browser.waitUntil(
+          async () => await $("div*=The code is wrong").isExisting()
+        );
       });
     });
 
@@ -50,8 +52,10 @@ describe("Receive flow", () => {
 
         // max nameplate number 999, so will not impact real nameplate
         await browser.keys(["1000-guitarist-unknown"]);
-        await (await Page.submitCodeButton()).click();
-        await browser.waitUntil(async () => (await $("div*=Second word is not recognized").isExisting()));
+        await (await $("body")).click();
+        await browser.waitUntil(
+          async () => await $("div*=Second word is not recognized").isExisting()
+        );
       });
     });
 
@@ -60,7 +64,7 @@ describe("Receive flow", () => {
         await Page.open();
         await Page.uploadFiles("./test/files/hello-world.txt");
 
-        const codeUrl = await Page.getCodeUrl()
+        const codeUrl = await Page.getCodeUrl();
         const re = new RegExp(
           `^http://${process.env.HOST_IP}:8080/#(\\d+)-\\w+-\\w+$`
         );
@@ -73,7 +77,9 @@ describe("Receive flow", () => {
         // very high chance the 2 words are not guitarist-revenge
         await browser.keys([`${nameplate}-guitarist-revenge`]);
         await (await Page.submitCodeButton()).click();
-        await browser.waitUntil(async () => (await $("div*=The code is wrong").isExisting()));
+        await browser.waitUntil(
+          async () => await $("div*=The code is wrong").isExisting()
+        );
       });
     });
   });

@@ -1,7 +1,9 @@
 export const homePageUrl = `http://${process.env.HOST_IP}:8080`;
 
-export function open() {
-  return browser.url(homePageUrl);
+export async function open() {
+  const url = await browser.url(homePageUrl);
+  await browser.waitUntil(async () => $('main[data-testid="App"').isExisting());
+  return url;
 }
 
 export async function uploadFiles(...files: string[]) {

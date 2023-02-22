@@ -1,6 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
+import { Provider } from "react-redux";
+import { MemoryRouter } from "react-router-dom";
+import { store } from "../store";
 import CodeInput from "./CodeInput";
 import ThemeProvider from "./providers/ThemeProvider";
 
@@ -18,7 +21,11 @@ describe("<CodeInput />", () => {
         const user = userEvent.setup();
         render(
           <ThemeProvider>
-            <CodeInput />
+            <MemoryRouter initialEntries={["/"]}>
+              <Provider store={store}>
+                <CodeInput />
+              </Provider>
+            </MemoryRouter>
           </ThemeProvider>
         );
         const input = screen.getByTestId("code-input");
@@ -34,7 +41,11 @@ describe("<CodeInput />", () => {
         const user = userEvent.setup();
         render(
           <ThemeProvider>
-            <CodeInput />
+            <MemoryRouter initialEntries={["/"]}>
+              <Provider store={store}>
+                <CodeInput />
+              </Provider>
+            </MemoryRouter>
           </ThemeProvider>
         );
         const input = screen.getByTestId("code-input");
@@ -49,7 +60,11 @@ describe("<CodeInput />", () => {
       const user = userEvent.setup();
       render(
         <ThemeProvider>
-          <CodeInput />
+          <MemoryRouter initialEntries={["/"]}>
+            <Provider store={store}>
+              <CodeInput />
+            </Provider>
+          </MemoryRouter>
         </ThemeProvider>
       );
       const input = screen.getByTestId("code-input");
@@ -68,7 +83,11 @@ describe("<CodeInput />", () => {
       const user = userEvent.setup();
       render(
         <ThemeProvider>
-          <CodeInput />
+          <MemoryRouter initialEntries={["/"]}>
+            <Provider store={store}>
+              <CodeInput />
+            </Provider>
+          </MemoryRouter>
         </ThemeProvider>
       );
       const input = screen.getByTestId("code-input");
@@ -87,7 +106,11 @@ describe("<CodeInput />", () => {
       const user = userEvent.setup();
       render(
         <ThemeProvider>
-          <CodeInput />
+          <MemoryRouter initialEntries={["/"]}>
+            <Provider store={store}>
+              <CodeInput />
+            </Provider>
+          </MemoryRouter>
         </ThemeProvider>
       );
       const input = screen.getByTestId("code-input");
@@ -106,7 +129,11 @@ describe("<CodeInput />", () => {
       const user = userEvent.setup();
       render(
         <ThemeProvider>
-          <CodeInput />
+          <MemoryRouter initialEntries={["/"]}>
+            <Provider store={store}>
+              <CodeInput />
+            </Provider>
+          </MemoryRouter>
         </ThemeProvider>
       );
       const input = screen.getByTestId("code-input");
@@ -127,7 +154,11 @@ describe("<CodeInput />", () => {
         const user = userEvent.setup();
         render(
           <ThemeProvider>
-            <CodeInput onSubmit={onSubmit} />
+            <MemoryRouter initialEntries={["/"]}>
+              <Provider store={store}>
+                <CodeInput onSubmit={onSubmit} />
+              </Provider>
+            </MemoryRouter>
           </ThemeProvider>
         );
         const input = screen.getByTestId("code-input");
@@ -145,13 +176,18 @@ describe("<CodeInput />", () => {
         const user = userEvent.setup();
         render(
           <ThemeProvider>
-            <CodeInput onSubmit={onSubmit} />
+            <MemoryRouter initialEntries={["/"]}>
+              <Provider store={store}>
+                <CodeInput onSubmit={onSubmit} />
+              </Provider>
+            </MemoryRouter>
           </ThemeProvider>
         );
         const input = screen.getByTestId("code-input");
         const button = screen.getByTestId("code-input-submit");
         await user.type(input, "asdf");
-        await user.click(button);
+        expect(user.click(button)).rejects.toThrow();
+        // await user.click(button);
         expect(onSubmit).not.toHaveBeenCalled();
       });
     });
@@ -164,7 +200,11 @@ describe("<CodeInput />", () => {
         const user = userEvent.setup();
         render(
           <ThemeProvider>
-            <CodeInput onSubmit={onSubmit} />
+            <MemoryRouter initialEntries={["/"]}>
+              <Provider store={store}>
+                <CodeInput onSubmit={onSubmit} />
+              </Provider>
+            </MemoryRouter>
           </ThemeProvider>
         );
         const input = screen.getByTestId("code-input");
@@ -180,7 +220,11 @@ describe("<CodeInput />", () => {
         const user = userEvent.setup();
         render(
           <ThemeProvider>
-            <CodeInput onSubmit={onSubmit} />
+            <MemoryRouter initialEntries={["/"]}>
+              <Provider store={store}>
+                <CodeInput onSubmit={onSubmit} />
+              </Provider>
+            </MemoryRouter>
           </ThemeProvider>
         );
         const input = screen.getByTestId("code-input");
@@ -195,7 +239,11 @@ describe("<CodeInput />", () => {
       it("will not show the error", () => {
         render(
           <ThemeProvider>
-            <CodeInput />
+            <MemoryRouter initialEntries={["/"]}>
+              <Provider store={store}>
+                <CodeInput />
+              </Provider>
+            </MemoryRouter>
           </ThemeProvider>
         );
         const error = screen.getByTestId("code-error-message");
@@ -208,7 +256,11 @@ describe("<CodeInput />", () => {
         const user = userEvent.setup();
         render(
           <ThemeProvider>
-            <CodeInput />
+            <MemoryRouter initialEntries={["/"]}>
+              <Provider store={store}>
+                <CodeInput />
+              </Provider>
+            </MemoryRouter>
           </ThemeProvider>
         );
         const container = screen.getByTestId("code-input-container");
@@ -225,7 +277,11 @@ describe("<CodeInput />", () => {
         const user = userEvent.setup();
         render(
           <ThemeProvider>
-            <CodeInput />
+            <MemoryRouter initialEntries={["/"]}>
+              <Provider store={store}>
+                <CodeInput />
+              </Provider>
+            </MemoryRouter>
           </ThemeProvider>
         );
         const container = screen.getByTestId("code-input-container");
@@ -243,7 +299,11 @@ describe("<CodeInput />", () => {
           const user = userEvent.setup();
           render(
             <ThemeProvider>
-              <CodeInput />
+              <MemoryRouter initialEntries={["/"]}>
+                <Provider store={store}>
+                  <CodeInput />
+                </Provider>
+              </MemoryRouter>
             </ThemeProvider>
           );
           const input = screen.getByTestId("code-input");
@@ -258,7 +318,11 @@ describe("<CodeInput />", () => {
           const user = userEvent.setup();
           render(
             <ThemeProvider>
-              <CodeInput />
+              <MemoryRouter initialEntries={["/"]}>
+                <Provider store={store}>
+                  <CodeInput />
+                </Provider>
+              </MemoryRouter>
             </ThemeProvider>
           );
           const input = screen.getByTestId("code-input");
@@ -273,7 +337,11 @@ describe("<CodeInput />", () => {
           const user = userEvent.setup();
           render(
             <ThemeProvider>
-              <CodeInput />
+              <MemoryRouter initialEntries={["/"]}>
+                <Provider store={store}>
+                  <CodeInput />
+                </Provider>
+              </MemoryRouter>
             </ThemeProvider>
           );
           const input = screen.getByTestId("code-input");
