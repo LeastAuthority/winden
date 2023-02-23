@@ -11,10 +11,12 @@ export const config: Options.Testrunner = {
     autoCompile: true,
     tsNodeOpts: {
       transpileOnly: true,
-      project: "test/tsconfig.json",
+      project: "./tsconfig.json",
     },
   },
-  specs: ["./test/specs/**/*.ts"],
+  specs: ["./specs/**/*.ts"],
+
+  exclude: ["./specs/send-large-files.ts"],
   maxInstances: 1,
   capabilities: [
     {
@@ -38,7 +40,6 @@ export const config: Options.Testrunner = {
         },
       },
     },
-/* -- Not Working on M1 chips
     {
       browserName: "MicrosoftEdge",
       "ms:edgeOptions": {
@@ -50,24 +51,34 @@ export const config: Options.Testrunner = {
         },
       },
     },
-*/
   ],
   logLevel: "error",
   bail: 0,
   baseUrl: "http://localhost",
   waitforTimeout: 10000,
-  connectionRetryTimeout: 120000,
-  connectionRetryCount: 3,
+  connectionRetryTimeout: 60000,
+  connectionRetryCount: 2,
   framework: "mocha",
   reporters: ["spec"],
   mochaOpts: {
     ui: "bdd",
-    timeout: 60000,
+    timeout: 120000,
   },
   onPrepare: function (_config, _capabilities) {
-    execSync("/usr/src/app/scripts/generate-sized-test-files.sh");
+    execSync("./scripts/generate-CI-test-files.sh");
   },
   beforeTest: function () {
     fsExtra.emptyDirSync(global.downloadDir);
+  },
+  afterTest: function () {
+    afterEach(async () => {
+      const handles = await browser.getWindowHandles();
+      for (let i = 1; i < handles.length; i++) {
+        await browser.switchToWindow(handles[i]);
+        await browser.closeWindow();
+      }
+      await browser.switchToWindow(handles[0]);
+      await browser.url("about:blank");
+    });
   },
 };

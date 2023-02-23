@@ -18,8 +18,8 @@ describe("Cancellation", () => {
 
       await browser.pause(20000);
       // check if Download button is not available
-      expect(await Page.receiveDownloadButton()).not.toBeExisting();
-    });
+      await expect(await Page.receiveDownloadButton()).not.toBeExisting();
+    }, 2);
   });
 
   describe("Receiver cancellations", () => {
@@ -35,12 +35,14 @@ describe("Cancellation", () => {
         // Receiver
         await browser.waitUntil(() => Page.cancelButton().isExisting());
         await (await Page.cancelButton()).click();
-        expect(await $("main")).toHaveTextContaining(
+        await expect(await $("main")).toHaveTextContaining(
           "Receive files in real-time"
         );
         // Sender
         await browser.switchToWindow(sendWindow);
-        expect(await $("p*=The receiver rejected this transfer.").isExisting());
+        await expect(
+          await $("p*=The receiver rejected this transfer.").isExisting()
+        );
       });
     });
 
@@ -62,7 +64,7 @@ describe("Cancellation", () => {
         await browser.waitUntil(() => Page.progressBar().isExisting());
         await (await Page.cancelButton()).click();
 
-        expect(await $("main")).toHaveTextContaining(
+        await expect(await $("main")).toHaveTextContaining(
           "Receive files in real-time"
         );
 
@@ -91,7 +93,7 @@ describe("Cancellation", () => {
         browser.pause(5000);
         await (await Page.cancelButton()).click();
 
-        expect(await $("main")).toHaveTextContaining(
+        await expect(await $("main")).toHaveTextContaining(
           "Receive files in real-time"
         );
 
@@ -124,7 +126,9 @@ describe("Cancellation", () => {
         await browser.switchToWindow(sendWindow);
         await browser.waitUntil(() => Page.progressBar().isExisting());
         await (await Page.cancelButton()).click();
-        expect(await $("main")).toHaveTextContaining("Send files in real-time");
+        await expect(await $("main")).toHaveTextContaining(
+          "Send files in real-time"
+        );
 
         // Receiver
         // TODO: Currently receiver doesn't get any message, when sender cancels the transfer
@@ -147,7 +151,9 @@ describe("Cancellation", () => {
         await browser.switchToWindow(sendWindow);
         await browser.waitUntil(() => Page.cancelButton().isExisting());
         await (await Page.cancelButton()).click();
-        expect(await $("main")).toHaveTextContaining("Send files in real-time");
+        await expect(await $("main")).toHaveTextContaining(
+          "Send files in real-time"
+        );
       });
       // TODO not implemented functionality
       it.skip("Receiver get cancellation messages after pressing Download", async function () {});

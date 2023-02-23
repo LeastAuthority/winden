@@ -4,11 +4,13 @@ describe("Check internal Pages", () => {
   it("if About Us opens", async () => {
     await Page.open();
 
-    expect(await $("main")).toHaveTextContaining("Send files in real-time");
+    await expect(await $("main")).toHaveTextContaining(
+      "Send files in real-time"
+    );
 
     await $('a[href="/about"]').click();
 
-    expect(await $("main")).toHaveTextContaining("Winden is a free web");
+    await expect(await $("main")).toHaveTextContaining("Winden is a free web");
   });
 
   it("if FAQ opens", async () => {
@@ -16,7 +18,7 @@ describe("Check internal Pages", () => {
 
     await $('a[href="/faq"]').click();
 
-    expect(await $("main")).toHaveTextContaining(
+    await expect(await $("main")).toHaveTextContaining(
       "What makes Winden different?"
     );
   });
@@ -26,7 +28,7 @@ describe("Check internal Pages", () => {
 
     await $('a[href="/privacy"]').click();
 
-    expect(await $("main")).toHaveTextContaining("Who we are");
+    await expect(await $("main")).toHaveTextContaining("Who we are");
   });
 
   it("if Privacy opens", async () => {
@@ -34,7 +36,7 @@ describe("Check internal Pages", () => {
 
     await $('a[href="/for-business"]').click();
 
-    expect(await $("main")).toHaveTextContaining(
+    await expect(await $("main")).toHaveTextContaining(
       "Interested in bringing Winden"
     );
   });
@@ -44,7 +46,7 @@ describe("Check internal Pages", () => {
 
     await $('a[href="/feedback"]').click();
 
-    expect(await $("main")).toHaveTextContaining("Loving Winden?");
+    await expect(await $("main")).toHaveTextContaining("Loving Winden?");
   });
 
   describe("Check Terms", () => {
@@ -53,22 +55,24 @@ describe("Check internal Pages", () => {
 
       await $('a[href="/terms"]').click();
 
-      expect(await $("h1")).toHaveTextContaining(
+      await expect(await $("h1")).toHaveTextContaining(
         "GENERAL TERMS AND CONDITIONS"
       );
     });
     it("if Terms & Conditions is present in Sender block and opens", async () => {
       await Page.open();
 
-      expect(await $("main")).toHaveTextContaining("Send files in real-time");
+      await expect(await $("main")).toHaveTextContaining(
+        "Send files in real-time"
+      );
 
-      expect(await $("main")).toHaveTextContaining(
+      await expect(await $("main")).toHaveTextContaining(
         "By using Winden you agree to the"
       );
 
       await $('a[href="/terms"]').click();
 
-      expect(await $("h1")).toHaveTextContaining(
+      await expect(await $("h1")).toHaveTextContaining(
         "GENERAL TERMS AND CONDITIONS"
       );
     });
@@ -84,9 +88,9 @@ describe("Check internal Pages", () => {
       const _receiveWindow = await browser.newWindow(codeUrl);
       await browser.waitUntil(() => Page.receiveDownloadButton().isExisting());
 
-      expect(await $("main")).toHaveTextContaining("Ready to download");
+      await expect(await $("main")).toHaveTextContaining("Ready to download");
 
-      expect(await $("main")).toHaveTextContaining(
+      await expect(await $("main")).toHaveTextContaining(
         "By using Winden you agree to the"
       );
 
@@ -95,7 +99,7 @@ describe("Check internal Pages", () => {
       await browser.switchWindow("/terms");
       //await browser.waitUntil(() => Page.($("h1")))
 
-      expect(await $("h1")).toHaveTextContaining(
+      await expect(await $("h1")).toHaveTextContaining(
         "GENERAL TERMS AND CONDITIONS"
       );
     });
@@ -105,7 +109,7 @@ describe("Check internal Pages", () => {
 describe("Check external Pages", () => {
   it("if Winden Github opens", async () => {
     await Page.open();
-    expect(
+    await expect(
       await $('a[href="https://github.com/LeastAuthority/winden"]').isExisting()
     );
   });

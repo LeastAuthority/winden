@@ -15,7 +15,7 @@ async function testTransferSuccess(fileName: string, timeout?: number) {
   await Page.uploadFiles(originalFilePath);
 
   // Receiver
-  const codeUrl = await Page.getCodeUrl()
+  const codeUrl = await Page.getCodeUrl();
   const _receiveWindow = await browser.newWindow(codeUrl);
 
   await browser.waitUntil(() => Page.receiveDownloadButton().isExisting());
@@ -34,16 +34,15 @@ async function testTransferSuccess(fileName: string, timeout?: number) {
 
 async function testTransferFailure(fileName: string, timeout?: number) {
   const originalFilePath = path.join("./test/files/", fileName);
-  
+
   await Page.open();
   const _sendWindow = await browser.getWindowHandle();
   await Page.uploadFiles(originalFilePath);
   const content = await $("body");
-  expect(content).toHaveTextContaining("Large file sizes: coming soon");
+  await expect(content).toHaveTextContaining("Large file sizes: coming soon");
 }
 
 describe("Send flow large files", () => {
-
   describe("when uploading a file with the size of 300MB", () => {
     it("will tell the user that the file is too large", async () => {
       await testTransferFailure("sizes/300MB");
@@ -63,5 +62,4 @@ describe("Send flow large files", () => {
       await testTransferFailure("sizes/4.3GB");
     });
   });
-
 });

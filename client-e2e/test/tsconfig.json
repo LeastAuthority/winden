@@ -4,6 +4,7 @@
     "types": [
       "node",
       "webdriverio/async",
+      "@wdio/globals/types",
       "@wdio/mocha-framework",
       "expect-webdriverio"
     ],
