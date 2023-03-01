@@ -15,9 +15,6 @@
     "@mantine/core": "^5.2.4",
     "@mantine/hooks": "^5.2.4",
     "@reduxjs/toolkit": "^1.9.1",
-    "@sentry/react": "^7.6.0",
-    "@sentry/tracing": "^7.6.0",
-    "@sentry/webpack-plugin": "^1.18.9",
     "bowser": "^2.11.0",
     "classnames": "^2.3.1",
     "fastest-levenshtein": "^1.0.12",
@@ -34,8 +31,7 @@
     "tabler-icons-react": "^1.51.0",
     "vue": "^3.0.0-0",
     "vue-router": "^4.0.0-0",
-    "web-streams-polyfill": "^2.0.2",
-    "worker-rpc": "^0.2.0"
+    "web-streams-polyfill": "^2.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.18.5",
