@@ -330,9 +330,8 @@ export default function FaqPage({}: Props) {
         same code that you receive in your browser, as it could be manipulated
         by others on the way. That&rsquo;s not us, this is any website or
         web-based application that you use. If you prefer code that you can
-        verify and only need to
-        <em>trust on first use</em>, you can rely on secure and open source
-        downloadable applications, such as{" "}
+        verify and only need to <em>trust on first use</em>, you can rely on
+        secure and open source downloadable applications, such as{" "}
         <a
           href="https://leastauthority.com/community-matters/destiny/"
           rel="noopener noreferrer"
@@ -393,8 +392,7 @@ export default function FaqPage({}: Props) {
         </li>
         <li>
           Transit relay URL: <code>tcp://relay.mw.leastauthority.com:4001</code>{" "}
-          and
-          <code>wss://relay.mw.leastauthority.com</code>
+          and <code>wss://relay.mw.leastauthority.com</code>
         </li>
         <li>
           AppID: <code>lothar.com/wormhole/text-or-file-xfer</code>
@@ -434,21 +432,12 @@ export default function FaqPage({}: Props) {
         </li>
         <li>
           <a
-            href="https://github.com/LeastAuthority/wormhole-william"
+            href="https://github.com/magic-wormhole/magic-wormhole.rs"
             rel="noopener noreferrer"
           >
-            Wormhole-william
+            magic-wormhole.rs
             <ExternalLink size={16} />
           </a>{" "}
-          (Go implementation, forked from
-          <a
-            href="https://github.com/psanford/wormhole-william"
-            rel="noopener noreferrer"
-          >
-            original code
-            <ExternalLink size={16} />
-          </a>
-          )
         </li>
         <li>
           <a href="https://github.com/magic-wormhole" rel="noopener noreferrer">
@@ -463,7 +452,7 @@ export default function FaqPage({}: Props) {
             protocol
             <ExternalLink size={16} />
           </a>
-          ,
+          ,{" "}
           <a
             href="https://github.com/magic-wormhole/magic-wormhole-mailbox-server"
             rel="noopener noreferrer"
@@ -471,7 +460,7 @@ export default function FaqPage({}: Props) {
             mailbox
             <ExternalLink size={16} />
           </a>
-          and
+          , and{" "}
           <a
             href="https://github.com/magic-wormhole/magic-wormhole-transit-relay"
             rel="noopener noreferrer"
