@@ -75,7 +75,9 @@ docker compose logs -f
 ```
 
 #### Email from Feedback API
+
 We use a dummy SMTP server to log emails sent from `feedback-api`. To view the emails, run the following command:
+
 ```sh
 docker compose logs -f dummy-smtp-server
 ```
@@ -121,7 +123,7 @@ docker compose run client npm run test
 docker compose run client npm run test -- --watch
 
 # or run individual tests
-docker compose run client npm run test -- -i client/src/worker/tests/streaming.test.ts
+docker compose run client npm run test -- client/src/app/components/CodeInput.test.tsx
 ```
 
 Run the end-to-end tests with the following
@@ -134,9 +136,10 @@ docker-compose run --rm client-e2e
 docker-compose --profile e2e down
 ```
 
-*Note*: Run on ARM64 system, use different compose file:
+_Note_: Run on ARM64 system, use different compose file:
+
 ```sh
-docker compose -f docker-compose-arm64.yml run --rm client-e2e 
+docker compose -f docker-compose-arm64.yml run --rm client-e2e
 ```
 
 ### Debugging end-to-end tests

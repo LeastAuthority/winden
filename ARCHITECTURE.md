@@ -9,16 +9,12 @@ The folder structure looks like so:
 ```
 - client/
 - client-e2e/
-- mailbox/
-- relay/
 - docker-compose.yml
 ```
 
 The codebase is meant to be run on docker containers through `docker-compose`. Each top-level folder is responsible for a particular container, so there's a `docker-compose.yml` file as well as a `Dockerfile` in each folder.
 
-- `mailbox` runs the magic wormhole mailbox
-- `relay` runs the magic wormhole transit relay
-- `client` contains the code for the front-end. It uses `mailbox` and `relay` to achieve magic wormhole functionality.
+- `client` contains the code for the front-end.
 - `client-e2e` is a project using [WebdriverIO](https://webdriver.io/) and [Selenium](https://www.selenium.dev/) to run end-to-end tests for `client`.
 
 ### Selenium docker containers
@@ -43,11 +39,10 @@ The folder structure for `client` looks like this:
     - hooks
     - types
     - util
-    - wormhole
   - public
-  - worker
 - vendor
-  - wormhole-william
+  - magic-wormhole.rs
+- wasm
 ```
 
 ### `src`
@@ -56,7 +51,11 @@ The folder structure for `client` looks like this:
 
 ### `vendor`
 
-- `vendor` as of now only contains a submodule to `wormhole-william`. This is included to compile the wasm module (`wormhole.wasm`). The compilation is handled by Gulp.
+- `vendor` as of now only contains a submodule to `magic-wormhole.rs`. This is included to compile the wasm module.
+
+### `wasm`
+
+- `wasm` contains the bindings that allow us to use `magic-wormhole.rs` in the browser via webassembly.
 
 ### `src/app`
 
@@ -66,11 +65,6 @@ The react app code is located here.
 - `src/app/hooks` for React hooks.
 - `src/app/types` for type-only `.ts` files and `d.ts` files
 - `src/app/util` contain files that typically export a single pure function or several constant values. They are usually shared across multiple files
-- `src/app/wormhole` contains bridge code to interact with the webworker code located at `src/worker` (see [src/worker](#srcworker))
-
-### `src/worker`
-
-- `src/worker` contains code that compiles the webworker. The webworker is responsible for communication with the wasm module compiled from `vendor/wormhole-william/wasm` (see [vendor](#vendor))
 
 ### `src/public`
 
@@ -81,14 +75,12 @@ The react app code is located here.
 `gulp` builds the following parts of the application and outputs them to `client/dist`, which can be viewed in the browser.
 
 - the react app (`src/app`)
-- the webworker (`src/worker`)
-- the wasm module (`vendor/wormhole-william/wasm`)
+- the wasm module (`wasm` and `src/vendor/magic-wormhole.rs`)
 - the static assets (`src/public`)
 
 ### Gulp task overview
 
-- `gulp javascript` builds the react app to `dist/app`. The code is bundled by Webpack.
-- `gulp worker` builds the webworker to `dist/worker`. The code is bundled by Webpack.
+- `gulp javascript` builds the react app to `dist/app`. This includes the wasm module. The code is bundled by Webpack.
 - `gulp public` copies the files in `src/public` to `dist`.
 - `gulp` (the default task) will compile all parts at once.
 - `gulp watch` will run a development server at `localhost:8080` that serves the `dist/` folder, as well as recompile on any file changes. [gulp-connect](https://github.com/avevlad/gulp-connect) is used so that the browser will automatically refresh the page on file change. This is the default command when starting the `client` container.
