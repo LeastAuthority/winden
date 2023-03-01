@@ -76,8 +76,8 @@ jobs:
       - name: Run UNIT and INTEGRATION tests
         run: |
           docker compose --profile e2e up -d client
-          # give some time load webapp
-          sleep 60
+          # wait for webpack to compile app before running tests
+          { docker compose logs -f --tail 0 client & echo $! > pid; } | { grep -P -m1 "webpack .+ compiled successfully" && kill -9 $(cat pid) && rm pid; }
           docker compose --profile e2e run client npm run test -- --coverage
 
       - name: Run END-2-END tests
