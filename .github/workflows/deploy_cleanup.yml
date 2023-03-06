@@ -1,0 +1,56 @@
+name: Deployment cleanup
+
+# only trigger on pull request closed events
+on:
+  pull_request:
+    types: [ closed ]
+
+jobs:
+  doc-cleanup:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      actions: read
+      contents: read
+    steps:
+      - id: cleanup-deploy
+        name: Cleanup deployed  setup
+        env:
+          SFTP_HOSTNAME: ${{ secrets.SFTP_HOSTNAME }}
+          SFTP_USERNAME: ${{ secrets.SFTP_USERNAME }}
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan $SFTP_HOSTNAME > ~/.ssh/known_hosts
+          cat <<EOF > ~/.ssh/id_ed25519
+          ${{ secrets.SFTP_IDENTITY }}
+          EOF
+          chmod 0600 ~/.ssh/id_ed25519
+          ssh-keygen -f ~/.ssh/id_ed25519 -y > ~/.ssh/id_ed25519.pub
+          sudo apt install -y lftp 
+          SUFFIX="${{ github.event.pull_request.number }}"
+          echo -e "rm -r winden_stage/${SUFFIX}\nbye" | lftp sftp://${SFTP_USERNAME}:unused@${SFTP_HOSTNAME}
+
+      - name: Delete PR comment
+        uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            })
+            const botComment = comments.find(comment => {
+              return comment.user.type === 'Bot' && comment.body.includes('AsciiDoc conversion')
+            })
+
+            const comment_data = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            }
+            if (botComment) {
+              comment_data.comment_id = botComment.id
+              github.rest.issues.deleteComment(comment_data)
+            }
+

@@ -1,4 +1,3 @@
-import "@ionic/vue";
 import "./wasm_exec.js";
 
 import React from "react";

@@ -37,22 +37,12 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Setup npm, yarn etc.
-        uses: actions/setup-node@v2
-        with:
-          node-version: "16"
-
-      - name: Install docker and docker-compose
-        run: |
-          sudo curl -o /usr/local/bin/docker-compose -L "https://github.com/docker/compose/releases/download/v2.11.2/docker-compose-linux-x86_64"
-          sudo chmod +x /usr/local/bin/docker-compose
-
       - name: Setup for running tests
         run: |
           IP=$(ip address show  eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f1 | head -n1)
           printf "HOST_IP address is: %s\n" "$IP"
           cat <<EOF >> ./client-e2e/.env
-          HOST_IP="$IP"
+          HOST_IP="client"
           EOF
           cat <<EOF >> ./client/.env
           MAILBOX_URL="ws://$IP:4000/v1"
@@ -64,14 +54,8 @@ jobs:
           printf "Client-e2e .env:\n"
           cat ./client-e2e/.env
 
-      - name: Setup client
-        run: docker compose run client npm i
-
       - name: Setup docker images
         run: docker compose --profile e2e build
-
-      - name: Setup packages
-        run: docker compose --profile e2e run client-e2e npm i
 
       - name: Run UNIT and INTEGRATION tests
         run: |

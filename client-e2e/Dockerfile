@@ -1,10 +1,9 @@
-FROM node:16-alpine
+FROM node:lts-alpine
 
 WORKDIR /usr/src/app/client-e2e
 
-COPY package.json .
-COPY package-lock.json .
-#RUN npm install
-COPY . .
+RUN apk add bash
 
-CMD ["npm", "run", "wdio"]
+ADD start-wdio.sh .
+
+CMD ./start-wdio.sh

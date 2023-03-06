@@ -11,6 +11,9 @@ on:
           - stage
           - prod
         required: true
+  pull_request:
+    branches:
+      - main
 #  workflow_run:
 #    workflows: [transfer-repo-CI]
 #    types: [completed]
@@ -31,17 +34,6 @@ jobs:
         with:
           submodules: recursive
 
-      - name: setup npm, yarn etc.
-        uses: actions/setup-node@v3
-        with:
-          node-version: "16"
-
-      - name: Install docker and docker-compose
-        run: |
-          sudo curl -o /usr/local/bin/docker-compose -L \
-          "https://github.com/docker/compose/releases/download/v2.6.1/docker-compose-linux-x86_64"
-          sudo chmod +x /usr/local/bin/docker-compose
-
       - name: create variables for production env.
         if: inputs.environment == 'prod'
         run: |
@@ -54,6 +46,11 @@ jobs:
           echo "MAILBOX_URL=wss://mailbox.stage.winden.app/v1" >> $GITHUB_ENV
           echo "RELAY_URL=wss://relay.stage.winden.app/" >> $GITHUB_ENV
 
+      - name: Dump docker version details
+        run: |
+          docker version
+          docker compose version
+
       - name: create config .env file
         run: |
           touch ./client/.env
@@ -64,17 +61,63 @@ jobs:
           SFTP_USERNAME=${{ secrets.SFTP_USERNAME }}
           SFTP_IDENTITY="${{ secrets.SFTP_IDENTITY }}"
           NODE_ENV=production
-          ENVIRONMENT=${{ inputs.environment }}
+          ENVIRONMENT=${{ github.event_name == 'workflow_dispatch' && inputs.environment || 'stage' }}
+          SUFFIX="${{ github.event.pull_request.number }}"
           EOF
           touch ./client-e2e/.env
 
       - name: prepare
+        id: prepare
         run: |
-          docker-compose build
-          docker-compose run client npm i
+          docker compose build
+          docker compose run client npm install --include=dev
+          docker compose run client npm version
+          docker compose run client npm list
 
       - name: deploy
-        run: docker-compose run client gulp deploy
+        id: deploy
+        run: docker compose run client gulp deploy
 
       - name: tear down
-        run: docker-compose down
+        id: cleanup
+        run: docker compose down
+
+      - name: Update PR with result
+        uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // 1. Retrieve existing bot comments for the PR
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            })
+            const botComment = comments.find(comment => {
+              return comment.user.type === 'Bot' && comment.body.includes('Frontend deployment')
+            })
+
+            // 2. Prepare format of the comment
+            const output = `#### Container setup 🖌 \`${{ steps.prepare.outcome }}\`
+            #### Frontend deployment ⚙️\`${{ steps.deploy.outcome }}\`
+            #### Cleanup 🧹 \`${{ steps.cleanup.outcome }}\`
+
+            #### [Winden frontend preview](https://stage.winden.app/${{ github.event.pull_request.number }}/)
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+            // 3. If we have a comment, update it, otherwise create a new one
+            const comment_data = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            }
+            if (botComment) {
+              comment_data.comment_id = botComment.id
+              github.rest.issues.updateComment(comment_data)
+            } else {
+              comment_data.issue_number = context.issue.number
+              github.rest.issues.createComment(comment_data)
+            }
+

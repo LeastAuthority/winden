@@ -185,13 +185,14 @@ const deploySftp = (cb) => {
 
   // transfer files
   let environment = process.env.ENVIRONMENT ?? process.env.NODE_ENV;
+  let suffix = process.env.SUFFIX ? `/${process.env.SUFFIX}` : "";
   log.info(
     `Using environment: ${environment} (NODE_ENV: ${process.env.NODE_ENV}, ENVIRONMENT: ${process.env.ENVIRONMENT})`
   );
   execSync(
     `lftp sftp://${process.env.SFTP_USERNAME}:dummy@${process.env.SFTP_HOSTNAME}`,
     {
-      input: `mirror -R dist winden_${environment}`,
+      input: `mirror -R dist winden_${environment}${suffix}`,
     }
   );
   cb();
@@ -207,21 +208,13 @@ exports.start = start;
 exports.clean = clean;
 exports.prepWorker = prepWorker;
 
-exports.deploy = gulp.series(
-  prepWorker,
-  public,
-  javascript,
-  setWasmVersion,
-  wasm,
-  // storybook,
-  deploySftp
-);
-
 exports.default = gulp.series(
   prepWorker,
   public,
   javascript,
   setWasmVersion,
-  wasm,
-  storybook
+  wasm
+  //storybook
 );
+
+exports.deploy = gulp.series(exports.default, deploySftp);

@@ -14,7 +14,7 @@ services:
     env_file:
       - ./client/.env
     volumes:
-      - ./:/usr/src/app
+      - ./client:/usr/src/app/client
     ports:
       - "8080:8080" # DevServer
       - "35729:35729" # LiveReload
@@ -50,15 +50,14 @@ services:
       - PYTHONUNBUFFERED=1
   # Selenium services
   chrome:
+    image: seleniarm/node-chromium:latest
     volumes:
       - test-downloads:/home/seluser/downloads
     ports:
       - "5900:5900"
-    build:
-      dockerfile: ./client-e2e/images/Dockerfile.chrome
     shm_size: 2gb
-    depends_on:
-      - selenium-hub
+#    depends_on:
+#      - selenium-hub
     environment:
       - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
@@ -67,15 +66,14 @@ services:
     profiles:
       - e2e
   edge:
+    image: selenium/node-edge:latest
     volumes:
       - test-downloads:/home/seluser/downloads
     ports:
       - "5901:5900"
-    build:
-      dockerfile: ./client-e2e/images/Dockerfile.edge
     shm_size: 2gb
-    depends_on:
-      - selenium-hub
+#    depends_on:
+#      - selenium-hub
     environment:
       - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
@@ -84,20 +82,20 @@ services:
     profiles:
       - e2e
   firefox:
+    image: selenium/node-firefox:latest
     volumes:
       - test-downloads:/home/seluser/downloads
     ports:
       - "5902:5900"
-    build:
-      dockerfile: ./client-e2e/images/Dockerfile.firefox
     shm_size: 2gb
-    depends_on:
-      - selenium-hub
+#    depends_on:
+#      - selenium-hub
     environment:
       - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
       - SE_NODE_SESSION_TIMEOUT=1800
+      - EXT
     profiles:
       - e2e
   selenium-hub:
@@ -113,6 +111,13 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
+    depends_on:
+      chrome:
+        condition: service_started
+      firefox:
+        condition: service_started
+      edge:
+        condition: service_started
     profiles:
       - e2e
   client-e2e:
@@ -124,12 +129,6 @@ services:
       - test-downloads:/home/node/downloads
     depends_on:
       client:
-        condition: service_started
-      chrome:
-        condition: service_started
-      firefox:
-        condition: service_started
-      edge:
         condition: service_started
       selenium-hub:
         condition: service_healthy
