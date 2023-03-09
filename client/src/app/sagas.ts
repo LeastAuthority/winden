@@ -1,5 +1,13 @@
 import { channel } from "redux-saga";
-import { cancel, cancelled, fork, put, select, take } from "redux-saga/effects";
+import {
+  all,
+  cancel,
+  cancelled,
+  fork,
+  put,
+  select,
+  take,
+} from "redux-saga/effects";
 import streamSaver from "streamsaver";
 import { Client, ReceiveResult, SendResult } from "../../pkg";
 import { setError } from "./errorSlice";
@@ -71,6 +79,12 @@ export function* watchDownloadFileChannel(): any {
   }
 }
 
+export function* receiveChannel(answer: any): any {
+  const { payload: consentPayload } = yield take("wormhole/answerConsent");
+  answer.resolve(consentPayload);
+  return consentPayload;
+}
+
 let pkg: typeof import("../../pkg");
 let client: Client;
 
@@ -118,18 +132,17 @@ function* transfer(): any {
               size: Number(receiveResult.file_size),
             })
           );
-          const { payload: consentPayload } = yield take(
-            "wormhole/answerConsent"
+          const fileStream = streamSaver.createWriteStream(
+            receiveResult.get_file_name(),
+            {
+              size: Number(receiveResult.file_size),
+            }
           );
-          if (consentPayload) {
-            const fileStream = streamSaver.createWriteStream(
-              receiveResult.get_file_name(),
-              {
-                size: Number(receiveResult.file_size),
-              }
-            );
-            const writer = fileStream.getWriter();
-            yield pkg.download_file(
+          const writer = fileStream.getWriter();
+          const answer = defer();
+          const answerTask = yield fork(receiveChannel, answer);
+          const [, accepted] = yield all([
+            pkg.wait_for_answer(
               receiveResult,
               {
                 write: (x: unknown) => writer.write(x),
@@ -139,12 +152,14 @@ function* transfer(): any {
                   );
                 }),
               },
-              cancel
-            );
+              cancel,
+              answer
+            ),
+            answerTask.toPromise(),
+          ]);
+          if (accepted) {
             yield writer.close();
             yield put(completeTransfer());
-          } else {
-            yield pkg.reject_file(receiveResult);
           }
         } else {
           continue;

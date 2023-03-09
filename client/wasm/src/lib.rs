@@ -2,15 +2,14 @@ use futures::future::BoxFuture;
 use futures::io::{AsyncRead, Error};
 use futures::AsyncWrite;
 use magic_wormhole::rendezvous::RendezvousError;
-use magic_wormhole::transfer::{ReceiveRequest, TransferError};
+use magic_wormhole::transfer::{ReceiveRequest, ReceiveRequestAnswer, TransferError};
+use magic_wormhole::{transfer, transit, AppID, Code, Wormhole, WormholeError};
 use std::borrow::Cow;
 use std::future::Future;
 use std::panic;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 use thiserror::Error;
-
-use magic_wormhole::{transfer, transit, AppID, Code, Wormhole, WormholeError};
 use wasm_bindgen::prelude::*;
 use wasm_bindgen_futures::JsFuture;
 
@@ -20,10 +19,6 @@ extern "C" {
 
     #[wasm_bindgen(js_namespace = console)]
     fn log(s: &str);
-}
-
-macro_rules! console_log {
-    ($($t:tt)*) => (log(&format_args!($($t)*).to_string()))
 }
 
 #[wasm_bindgen]
@@ -243,6 +238,48 @@ pub async fn receive(client: &Client, code: String) -> Result<ReceiveResult, Was
         }
         None => Err(WasmWormholeError::RequestCancelled),
     }
+}
+
+#[wasm_bindgen]
+pub async fn wait_for_answer(
+    mut receive_result: ReceiveResult,
+    opts: JsValue,
+    promise: js_sys::Promise,
+    promise2: js_sys::Promise,
+) -> Result<JsValue, WasmWormholeError> {
+    let future = wasm_bindgen_futures::JsFuture::from(promise2);
+    let answer = receive_result
+        .req
+        .as_mut()
+        .unwrap()
+        .wait_for_answer(async {
+            match future.await {
+                Ok(js_value) => {
+                    if let Some(accepted) = js_value.as_bool() {
+                        accepted
+                    } else {
+                        false
+                    }
+                }
+                Err(_) => false,
+            }
+        })
+        .await?;
+
+    match answer {
+        ReceiveRequestAnswer::Accept => {
+            download_file(receive_result, opts, promise).await?;
+        }
+        ReceiveRequestAnswer::Reject => {
+            reject_file(receive_result)
+                .await
+                .expect("TODO handle rejection failed");
+        }
+        ReceiveRequestAnswer::Cancel => {
+            todo!();
+        }
+    }
+    Ok(JsValue::UNDEFINED)
 }
 
 /**
