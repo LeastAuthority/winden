@@ -12,6 +12,7 @@ import {
   selectWormholeStatus,
   setConsenting,
   setFileAndCode,
+  setIsPeerConnected,
   setRequestingReceive,
   setRequestingSend,
   setTransferProgress,
@@ -62,11 +63,11 @@ export function* watchForTabExit() {
   }
 }
 
-const downloadFileChannel = channel();
+const transferChannel = channel();
 
-export function* watchDownloadFileChannel(): any {
+export function* watchTransferChannel(): any {
   while (true) {
-    const action = yield take(downloadFileChannel);
+    const action = yield take(transferChannel);
     yield put(action);
   }
 }
@@ -97,10 +98,13 @@ function* transfer(): any {
             sendResult,
             {
               progress: makeProgressFunc((sentBytes, totalBytes) => {
-                downloadFileChannel.put(
+                transferChannel.put(
                   setTransferProgress([sentBytes, totalBytes])
                 );
               }),
+              on_peer_connected: () => {
+                transferChannel.put(setIsPeerConnected());
+              },
             },
             cancel
           );
@@ -134,7 +138,7 @@ function* transfer(): any {
               {
                 write: (x: unknown) => writer.write(x),
                 progress: makeProgressFunc((sentBytes, totalBytes) => {
-                  downloadFileChannel.put(
+                  transferChannel.put(
                     setTransferProgress([sentBytes, totalBytes])
                   );
                 }),
@@ -166,6 +170,7 @@ function* transfer(): any {
 export function* wormholeSaga(): any {
   const pkgImport = import("../../pkg").then((pkg) => pkg.default);
   pkg = yield pkgImport;
+  pkg.init();
   client = pkg.Client.new(
     "lothar.com/wormhole/text-or-file-xfer",
     process.env["MAILBOX_URL"] || `ws://${window.location.hostname}:4000/v1`,
@@ -175,7 +180,7 @@ export function* wormholeSaga(): any {
   yield put(completeLoading());
   yield fork(watchForTabExit);
   yield fork(watchForNoSleepDisable);
-  yield fork(watchDownloadFileChannel);
+  yield fork(watchTransferChannel);
   while (true) {
     const transferTask = yield fork(transfer);
     yield take("wormhole/requestCancelTransfer");
