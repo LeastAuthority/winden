@@ -156,6 +156,13 @@ pub async fn upload_file(
 
     let wormhole = f.await?;
 
+    if let Ok(on_peer_connected_func) = js_sys::Reflect::get(&opts, &"on_peer_connected".into()) {
+        let on_peer_connected_func = js_sys::Function::from(on_peer_connected_func);
+        on_peer_connected_func
+            .call0(&JsValue::UNDEFINED)
+            .expect("Failed to call on_peer_connected");
+    }
+
     let file_name = send_result.file.name();
     let file_size = send_result.file.size() as u64;
     let mut file_wrapper = FileWrapper::new(send_result.file);

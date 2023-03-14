@@ -1,4 +1,11 @@
-import { Button, createStyles, Group, Stack, Text } from "@mantine/core";
+import {
+  Button,
+  createStyles,
+  Group,
+  Loader,
+  Stack,
+  Text,
+} from "@mantine/core";
 import { useClipboard, useViewportSize } from "@mantine/hooks";
 import React from "react";
 import { Files, X } from "tabler-icons-react";
@@ -6,6 +13,7 @@ import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { useCommonStyles } from "../../../hooks/useCommonStyles";
 import {
   requestCancelTransfer,
+  selectIsPeerConnected,
   selectWormholeCode,
 } from "../../../wormholeSlice";
 import Content from "../../Content";
@@ -13,6 +21,7 @@ import FileLabel from "../../FileLabel";
 
 type ContentProps = {
   code: string;
+  isPeerConnected: boolean;
   copied: boolean;
   onCopy: () => void;
   onCancel: () => void;
@@ -90,6 +99,20 @@ export function SendInstructionsScreenContent(props: ContentProps) {
             {props.copied ? "Link copied!" : "Copy link"}
           </Button>
         </Group>
+        <Group spacing="xs">
+          <Loader size={14.4} />
+          <Text
+            component="p"
+            size={14.4}
+            weight={400}
+            color="dark-grey"
+            align="center"
+          >
+            {props.isPeerConnected
+              ? "Receiver connected. Waiting for receiver to start transfer..."
+              : "Waiting for receiver to connect..."}
+          </Text>
+        </Group>
         <Button
           leftIcon={<X />}
           data-testid="send-page-cancel-button"
@@ -108,11 +131,13 @@ type Props = {};
 export default function SendInstructionsScreen({}: Props) {
   const clipboard = useClipboard({ timeout: 2000 });
   const wormholeCode = useAppSelector(selectWormholeCode);
+  const isPeerConnected = useAppSelector(selectIsPeerConnected);
   const dispatch = useAppDispatch();
 
   return wormholeCode ? (
     <SendInstructionsScreenContent
       code={wormholeCode}
+      isPeerConnected={isPeerConnected}
       copied={clipboard.copied}
       onCopy={() =>
         clipboard.copy(
