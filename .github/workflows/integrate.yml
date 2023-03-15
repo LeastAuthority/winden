@@ -90,7 +90,3 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        with:
-          args: >
-            -Dsonar.sources=client/src,client/wasm/src
-            -Dsonar.tests=client-e2e/test
