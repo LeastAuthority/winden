@@ -6,6 +6,7 @@ RUN apk add git openssh lftp curl rust
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
+RUN curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
 RUN npm -g config set user root
 RUN npm install --global gulp-cli
