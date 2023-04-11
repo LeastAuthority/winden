@@ -18,6 +18,8 @@ import {
   setTransferProgress,
 } from "./wormholeSlice";
 
+streamSaver.mitm = "/mitm.html";
+
 function defer() {
   var res, rej;
 
