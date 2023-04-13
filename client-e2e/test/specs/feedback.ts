@@ -2,7 +2,7 @@ import * as Page from "../pageobjects/page";
 
 describe("Sending feedback", () => {
   describe("when all forms are empty", () => {
-    it.only("will give a validation error", async () => {
+    it("will give a validation error", async () => {
       await Page.open();
       const feedbackLink = await $('a[href="/feedback"]');
       await feedbackLink.click();
