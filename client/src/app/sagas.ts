@@ -8,6 +8,7 @@ import { makeProgressFunc } from "./util/makeProgressFunc";
 import {
   completeLoading,
   completeTransfer,
+  requestCancelTransfer,
   reset,
   selectWormholeStatus,
   setConsenting,
@@ -138,7 +139,12 @@ function* transfer(): any {
             yield pkg.download_file(
               receiveResult,
               {
-                write: (x: unknown) => writer.write(x),
+                write: (x: unknown) =>
+                  writer.write(x).catch((e) => {
+                    // If `writer.write` throws, the user cancelled the download through the browser's download manager.
+                    console.error("Failed to write:", e);
+                    transferChannel.put(requestCancelTransfer());
+                  }),
                 progress: makeProgressFunc((sentBytes, totalBytes) => {
                   transferChannel.put(
                     setTransferProgress([sentBytes, totalBytes])
