@@ -33,6 +33,7 @@ export const config: Options.Testrunner = {
     },
     {
       browserName: "firefox",
+      acceptInsecureCerts: true,
       "moz:firefoxOptions": {
         prefs: {
           "browser.download.dir": global.downloadDirBrowser,
@@ -42,6 +43,7 @@ export const config: Options.Testrunner = {
     },
     {
       browserName: "MicrosoftEdge",
+      acceptInsecureCerts: true,
       "ms:edgeOptions": {
         prefs: {
           "download.default_directory": global.downloadDirBrowser,

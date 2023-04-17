@@ -14,7 +14,7 @@ services:
     env_file:
       - ./client/.env
     volumes:
-      - ./:/usr/src/app
+      - ./client:/usr/src/app/client
     ports:
       - "8080:8080" # DevServer
       - "35729:35729" # LiveReload
@@ -66,6 +66,8 @@ services:
       - SE_NODE_SESSION_TIMEOUT=1800
     profiles:
       - e2e
+    extra_hosts:
+      - "localwinden:${HOST_IP}"
   edge:
     volumes:
       - test-downloads:/home/seluser/downloads
@@ -83,6 +85,8 @@ services:
       - SE_NODE_SESSION_TIMEOUT=1800
     profiles:
       - e2e
+    extra_hosts:
+      - "localwinden:${HOST_IP}"
   firefox:
     volumes:
       - test-downloads:/home/seluser/downloads
@@ -100,6 +104,8 @@ services:
       - SE_NODE_SESSION_TIMEOUT=1800
     profiles:
       - e2e
+    extra_hosts:
+      - "localwinden:${HOST_IP}"
   selenium-hub:
     image: selenium/hub:latest
     container_name: selenium-hub
@@ -117,8 +123,6 @@ services:
       - e2e
   client-e2e:
     build: ./client-e2e
-    env_file:
-      - ./client-e2e/.env
     volumes:
       - ./client-e2e:/usr/src/app/client-e2e
       - test-downloads:/home/node/downloads

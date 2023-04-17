@@ -2,7 +2,7 @@ FROM node:16-alpine
 
 WORKDIR /usr/src/app/client
 
-RUN apk add git openssh lftp curl rust
+RUN apk add git openssh openssl lftp curl rust
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
@@ -21,5 +21,5 @@ COPY . .
 
 RUN npm install
 
-CMD ["npm", "run", "serve"]
+CMD ["./node_modules/.bin/ts-node", "./scripts/devserver.ts"]
 EXPOSE 8080

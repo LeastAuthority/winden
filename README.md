@@ -44,6 +44,7 @@ git clone --recurse-submodules git@github.com:LeastAuthority/winden.git
 ```sh
 docker compose build
 docker compose run client npm i
+docker compose run client ./scripts/setup.sh
 docker compose run client-e2e npm i
 ```
 
@@ -60,6 +61,9 @@ Start the `client` service. This will run development server on port 8080.
 ```sh
 docker compose up -d client
 ```
+
+Note: the server will serve HTTPS using a self-signed certificate, so you must visit `https://localhost:8080`, using `https` instead of `http`.
+You must set up your browser to allow the certificate on port `localhost:8080` as well as `localhost:35729` for live reloading to work.
 
 ### View logs
 
@@ -102,8 +106,8 @@ docker compose run client npm run format
 The e2e tests run on the selenium docker containers. They will run the test against the `client` running on the host.
 To get the containers to connect to be able to connect to the host, we need to add the host's local IP to the environment:
 
-1. Create an empty file `./client-e2e/.env`.
-2. Inside `./client-e2e/.env`, insert `HOST_IP=<YOUR_IP_HERE>` (you could find your local IP through `ifconfig` or similar)
+1. Copy the file `./.env.example` to `./.env`.
+2. Inside `./.env`, insert `HOST_IP=<YOUR_IP_HERE>` (you could find your local IP through `ifconfig` or similar)
 
 ### Running tests
 
