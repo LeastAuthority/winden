@@ -80,6 +80,7 @@ let client: Client;
 
 function* transfer(): any {
   let cancel: any;
+  let writer: WritableStreamDefaultWriter | undefined;
   try {
     while (true) {
       try {
@@ -135,12 +136,12 @@ function* transfer(): any {
                 size: Number(receiveResult.file_size),
               }
             );
-            const writer = fileStream.getWriter();
+            writer = fileStream.getWriter();
             yield pkg.download_file(
               receiveResult,
               {
                 write: (x: unknown) =>
-                  writer.write(x).catch((e) => {
+                  writer!.write(x).catch((e) => {
                     // If `writer.write` throws, the user cancelled the download through the browser's download manager.
                     console.error("Failed to write:", e);
                     transferChannel.put(requestCancelTransfer());
@@ -163,6 +164,10 @@ function* transfer(): any {
         }
       } catch (error) {
         console.error(error);
+        if (writer) {
+          writer.abort();
+          writer = undefined;
+        }
         yield put(setError(error as string));
         continue;
       }
@@ -170,6 +175,10 @@ function* transfer(): any {
   } finally {
     if (yield cancelled()) {
       cancel.resolve();
+      if (writer) {
+        writer.abort();
+        writer = undefined;
+      }
       yield put(reset());
     }
   }
