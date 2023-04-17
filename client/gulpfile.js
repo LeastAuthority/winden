@@ -61,7 +61,7 @@ const javascript = () =>
     .pipe(
       webpackStream({
         ...webpackConfig,
-        entry: ["web-streams-polyfill", `./src/app/index.tsx`],
+        entry: ["web-streams-polyfill/ponyfill", `./src/app/index.tsx`],
       })
     )
     .pipe(gulp.dest("dist/app"));
@@ -73,7 +73,7 @@ const javascriptWatch = () =>
       webpackStream({
         ...webpackConfig,
         watch: true,
-        entry: ["web-streams-polyfill", `./src/app/index.tsx`],
+        entry: ["web-streams-polyfill/ponyfill", `./src/app/index.tsx`],
       })
     )
     .pipe(gulp.dest("dist/app"))
