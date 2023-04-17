@@ -109,8 +109,8 @@ docker-compose run client npm run format
 The e2e tests run on the selenium docker containers. They will run the test against the `client` running on the host.
 To get the containers to connect to be able to connect to the host, we need to add the host's local IP to the environment:
 
-1. Create an empty file `./client-e2e/.env`.
-2. Inside `./client-e2e/.env`, insert `HOST_IP=<YOUR_IP_HERE>` (you could find your local IP through `ifconfig` or similar)
+1. Copy the file `./.env.example` to `./.env`.
+2. Inside `./.env`, insert `HOST_IP=<YOUR_IP_HERE>` (you could find your local IP through `ifconfig` or similar)
 
 ### Running tests
 

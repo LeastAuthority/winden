@@ -122,6 +122,11 @@ const start = () => {
     host: "0.0.0.0",
     root: "dist",
     livereload: true,
+    https: {
+      key: fs.readFileSync(__dirname + "/certs/server.key"),
+      cert: fs.readFileSync(__dirname + "/certs/server.cert"),
+      passphrase: "gulp",
+    },
     fallback: "src/public/index.html",
     middleware: () => {
       return [
