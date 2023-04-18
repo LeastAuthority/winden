@@ -136,12 +136,6 @@ docker-compose run --rm client-e2e
 docker-compose --profile e2e down
 ```
 
-_Note_: Run on ARM64 system, use different compose file:
-
-```sh
-docker compose -f docker-compose-arm64.yml run --rm client-e2e
-```
-
 ### Debugging end-to-end tests
 
 See https://github.com/SeleniumHQ/docker-selenium#debugging

@@ -1,4 +1,0 @@
-# specific image to run chromium on M1 chip machines
-FROM seleniarm/node-chromium
-RUN mkdir /home/seluser/downloads && chown 1200:1201 /home/seluser/downloads
-CMD ["/opt/bin/entry_point.sh"]
