@@ -99,7 +99,7 @@ docker compose run -p 6006:6006 client npm run storybook
 Winden uses [prettier](https://prettier.io/) for code formatting. When code is pushed to this repo, a git hook will run to verify that the code is formatted. The push will be rejected if the check fails. In order to successfully push, format the code with the following command:
 
 ```
-docker-compose run client npm run format
+docker compose run client npm run format
 ```
 
 ## Testing
@@ -130,10 +130,12 @@ Run the end-to-end tests with the following
 
 ```sh
 # Run the tests. This would also start the selenium hub if it's not running yet.
-docker-compose run --rm client-e2e
+docker compose -f docker-compose.yml -f docker-compose.e2e.yml run --rm client-e2e
+# If running on ARM64, you must use the e2e-arm64 override instead.
+docker compose -f docker-compose.yml -f docker-compose.e2e-arm64.yml run --rm client-e2e
 
 # Once you're done working with the e2e tests, stop the containers running the selenium hub.
-docker-compose --profile e2e down
+docker compose --profile e2e down
 ```
 
 ### Debugging end-to-end tests
@@ -186,7 +188,7 @@ NODE_ENV=production # or `development` if deploying to playground
 Now you can deploy by running the following:
 
 ```sh
-docker-compose run client gulp deploy
+docker compose run client gulp deploy
 ```
 
 Note that this gulp task will also create a new [build](#building) of the app.
