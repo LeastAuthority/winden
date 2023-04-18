@@ -2,7 +2,7 @@ FROM node:16-alpine
 
 WORKDIR /usr/src/app/client
 
-RUN apk add git openssh lftp curl rust
+RUN apk add git openssh openssl lftp curl rust
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
@@ -21,6 +21,9 @@ RUN npm install --location=global --unsafe-perm
 COPY . .
 
 RUN npm install
+
+RUN mkdir certs
+RUN openssl req -nodes -new -x509 -days 3650 -subj '/C=PH/O=Internet Widgits Pty Ltd' -keyout certs/server.key -out certs/server.cert
 
 CMD ["gulp", "watch"]
 EXPOSE 8080

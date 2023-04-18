@@ -14,7 +14,8 @@ services:
     env_file:
       - ./client/.env
     volumes:
-      - ./:/usr/src/app
+      - ./client:/usr/src/app/client
+      - /usr/src/app/client/certs
     ports:
       - "8080:8080" # DevServer
       - "35729:35729" # LiveReload
