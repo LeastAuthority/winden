@@ -47,12 +47,6 @@ docker compose run client npm i
 docker compose run client-e2e npm i
 ```
 
-### Set up pre-commit hooks
-
-```sh
-npm i
-```
-
 ### Run development environment
 
 The following command will run `gulp watch` in the `client` container. `gulp watch` essentially does the following:
@@ -96,7 +90,7 @@ docker compose run -p 6006:6006 client npm run storybook
 
 ### Format code
 
-Winden uses [prettier](https://prettier.io/) for code formatting. When code is pushed to this repo, a git hook will run to verify that the code is formatted. The push will be rejected if the check fails. In order to successfully push, format the code with the following command:
+Winden uses [prettier](https://prettier.io/) for code formatting. Format the code with the following command:
 
 ```
 docker-compose run client npm run format
