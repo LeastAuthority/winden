@@ -125,12 +125,6 @@ services:
     depends_on:
       client:
         condition: service_started
-      chrome:
-        condition: service_started
-      firefox:
-        condition: service_started
-      edge:
-        condition: service_started
       selenium-hub:
         condition: service_healthy
     profiles:

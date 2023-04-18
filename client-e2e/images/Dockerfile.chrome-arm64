@@ -1,0 +1,3 @@
+FROM seleniarm/node-chromium:latest
+RUN mkdir /home/seluser/downloads && chown 1200:1201 /home/seluser/downloads
+CMD ["/opt/bin/entry_point.sh"]
