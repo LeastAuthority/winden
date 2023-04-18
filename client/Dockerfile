@@ -22,7 +22,7 @@ COPY . .
 
 RUN npm install
 
-RUN mkdir certs
+RUN mkdir -p certs
 RUN openssl req -nodes -new -x509 -days 3650 -subj '/C=PH/O=Internet Widgits Pty Ltd' -keyout certs/server.key -out certs/server.cert
 
 CMD ["gulp", "watch"]
