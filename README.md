@@ -68,6 +68,9 @@ docker compose up -d client
 docker compose run -p 8080:8080 client gulp watch # equivalent command
 ```
 
+Note: the server will serve HTTPS using a self-signed certificate, so you must visit `https://localhost:8080`, using `https` instead of `http`.
+You must set up your browser to allow the certificate on port `localhost:8080` as well as `localhost:35729` for live reloading to work.
+
 ### View logs
 
 ```sh
