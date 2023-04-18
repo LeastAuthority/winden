@@ -9,10 +9,13 @@
     "@wdio/spec-reporter": "^8.3.0",
     "@wdio/types": "^8.3.0",
     "fs-extra": "^11.1.0",
+    "prettier": "^2.8.7",
     "ts-node": "^10.8.0",
     "typescript": "^4.7.2"
   },
   "scripts": {
-    "wdio": "wdio run test/wdio.conf.ts"
+    "wdio": "wdio run test/wdio.conf.ts",
+    "lint": "prettier --check **/*.{json,md,html,js,jsx,ts,tsx}",
+    "format": "prettier --write **/*.{json,md,html,js,jsx,ts,tsx}"
   }
 }
