@@ -1,5 +1,7 @@
 import express from "express";
+import fs from "fs";
 import { createProxyMiddleware } from "http-proxy-middleware";
+import https from "https";
 import path from "path";
 import webpack from "webpack";
 import webpackDevMiddleware from "webpack-dev-middleware";
@@ -28,4 +30,15 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../src/public/index.html"));
 });
 
-app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));
+const server = https.createServer(
+  {
+    key: fs.readFileSync(path.join(__dirname, "../certs/server.key")),
+    cert: fs.readFileSync(path.join(__dirname, "../certs/server.cert")),
+    passphrase: "gulp",
+  },
+  app
+);
+
+server.listen(PORT, () =>
+  console.log(`Development server is now listening on port ${PORT}!`)
+);
