@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "ts-node ./scripts/devserver.ts",
     "build": "ts-node ./scripts/build.ts",
-    "deploy": "echo \"TODO: implement\" && exit 1",
+    "deploy": "ts-node ./scripts/build.ts --deploy",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook -o dist/storybook",
     "test": "jest",
@@ -57,6 +57,7 @@
     "@types/testing-library__jest-dom": "^5.14.3",
     "@wasm-tool/wasm-pack-plugin": "^1.6.0",
     "babel-loader": "^8.2.5",
+    "commander": "^10.0.1",
     "css-loader": "^6.7.1",
     "dotenv": "^16.0.1",
     "dotenv-webpack": "^7.1.0",
