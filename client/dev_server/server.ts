@@ -24,4 +24,8 @@ app.use(
   })
 );
 
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../src/public/index.html"));
+});
+
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));
