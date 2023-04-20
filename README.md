@@ -55,17 +55,10 @@ npm i
 
 ### Run development environment
 
-The following command will run `gulp watch` in the `client` container. `gulp watch` essentially does the following:
-
-- rebuild the Javascript bundle whenever changes are made to the Javascript/Typescript source files
-- rebuild the WASM module whenever changes are made to the `wormhole-willam` source files
-- serve the output at localhost:8080 and automatically refresh the page on any change.
-
-Learn more about the build system at [ARCHITECTURE.md](ARCHITECTURE.md#build-process)
+Start the `client` service. This will run development server on port 8080.
 
 ```sh
 docker compose up -d client
-docker compose run -p 8080:8080 client gulp watch # equivalent command
 ```
 
 Note: the server will serve HTTPS using a self-signed certificate, so you must visit `https://localhost:8080`, using `https` instead of `http`.
@@ -178,8 +171,6 @@ NODE_ENV=production
 
 ## Deploying
 
-We build and deploy by running a gulp task inside a docker container. We do this through the `.env` file.
-
 - Create `client/.env` if it does not exist already
 - Fill it with the following: (Replace placeholders in angle brackets with the appropriate values)
 
@@ -195,10 +186,10 @@ NODE_ENV=production # or `development` if deploying to playground
 Now you can deploy by running the following:
 
 ```sh
-docker-compose run client gulp deploy
+docker-compose run client npm run deploy
 ```
 
-Note that this gulp task will also create a new [build](#building) of the app.
+Note that this will also create a new [build](#building) of the app.
 
 ## Codebase Architecture
 

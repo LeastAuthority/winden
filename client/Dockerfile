@@ -9,7 +9,6 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 RUN curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
 RUN npm -g config set user root
-RUN npm install --global gulp-cli
 
 RUN npm install --location=global @sentry/cli
 ENV SENTRYCLI_SKIP_DOWNLOAD=1
@@ -25,5 +24,5 @@ RUN npm install
 RUN mkdir -p certs
 RUN openssl req -nodes -new -x509 -days 3650 -subj '/C=PH/O=Internet Widgits Pty Ltd' -keyout certs/server.key -out certs/server.cert
 
-CMD ["gulp", "watch"]
+CMD ["npm", "run", "serve"]
 EXPOSE 8080
