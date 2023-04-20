@@ -9,7 +9,6 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 RUN curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
 RUN npm -g config set user root
-RUN npm install --global gulp-cli
 
 RUN npm install --location=global @sentry/cli
 ENV SENTRYCLI_SKIP_DOWNLOAD=1
@@ -22,5 +21,5 @@ COPY . .
 
 RUN npm install
 
-CMD ["gulp", "watch"]
+CMD ["npm", "run", "serve"]
 EXPOSE 8080

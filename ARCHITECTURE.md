@@ -24,7 +24,7 @@ To run the tests, Selenium hub is run through docker-compose. This is convenient
 ## `client` tech stack
 
 `client` is a [NodeJS](https://nodejs.org/en/) codebase written in [TypeScript](https://www.typescriptlang.org/). It uses [the npm cli](https://docs.npmjs.com/cli/) to manage dependencies.
-[Webpack](https://webpack.js.org/) and [Gulp](https://gulpjs.com/) are used to compile the source code (located in `client/src`) to static files to be viewed by the browser.
+[Webpack](https://webpack.js.org/) is used to compile the source code (located in `client/src`) to static files to be viewed by the browser.
 
 For the frontend UI, [ReactJS](https://reactjs.org/) is used. React is used as it encourages declarative rendering and FP principles, which makes the code easier to maintain.
 
@@ -69,22 +69,6 @@ The react app code is located here.
 ### `src/public`
 
 - `src/public` contains static files that should be copied to the final build such as images, fonts, etc.
-
-## Build process
-
-`gulp` builds the following parts of the application and outputs them to `client/dist`, which can be viewed in the browser.
-
-- the react app (`src/app`)
-- the wasm module (`wasm` and `src/vendor/magic-wormhole.rs`)
-- the static assets (`src/public`)
-
-### Gulp task overview
-
-- `gulp javascript` builds the react app to `dist/app`. This includes the wasm module. The code is bundled by Webpack.
-- `gulp public` copies the files in `src/public` to `dist`.
-- `gulp` (the default task) will compile all parts at once.
-- `gulp watch` will run a development server at `localhost:8080` that serves the `dist/` folder, as well as recompile on any file changes. [gulp-connect](https://github.com/avevlad/gulp-connect) is used so that the browser will automatically refresh the page on file change. This is the default command when starting the `client` container.
-- `gulp clean` deletes the `dist` folder.
 
 ## CSS Modules
 

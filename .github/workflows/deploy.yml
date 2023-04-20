@@ -74,7 +74,7 @@ jobs:
           docker-compose run client npm i
 
       - name: deploy
-        run: docker-compose run client gulp deploy
+        run: docker-compose run client npm run deploy
 
       - name: tear down
         run: docker-compose down
