@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.5.4-beta",
   "scripts": {
-    "serve": "ts-node ./dev_server/server.ts",
+    "serve": "ts-node ./scripts/devserver.ts",
     "deploy": "echo \"TODO: implement\" && exit 1",
     "test": "jest",
     "storybook": "start-storybook -p 6006",
