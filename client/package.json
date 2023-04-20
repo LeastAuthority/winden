@@ -4,10 +4,11 @@
   "version": "0.5.4-beta",
   "scripts": {
     "serve": "ts-node ./scripts/devserver.ts",
+    "build": "ts-node ./scripts/build.ts",
     "deploy": "echo \"TODO: implement\" && exit 1",
-    "test": "jest",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook -o dist/storybook",
+    "test": "jest",
     "lint": "prettier --check **/*.{json,md,html,js,jsx,ts,tsx}",
     "format": "prettier --write **/*.{json,md,html,js,jsx,ts,tsx}"
   },
@@ -47,6 +48,7 @@
     "@testing-library/user-event": "^14.1.1",
     "@types/dotenv-webpack": "^7.0.3",
     "@types/express": "^4.17.17",
+    "@types/fs-extra": "^11.0.1",
     "@types/jest": "^27.4.1",
     "@types/react": "^18.0.5",
     "@types/react-dom": "^18.0.1",
@@ -59,6 +61,7 @@
     "dotenv": "^16.0.1",
     "dotenv-webpack": "^7.1.0",
     "express": "^4.18.2",
+    "fs-extra": "^11.1.1",
     "html-webpack-plugin": "^5.5.0",
     "http-proxy-middleware": "^2.0.6",
     "jest": "^27.5.1",

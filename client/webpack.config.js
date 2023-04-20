@@ -7,6 +7,7 @@ module.exports = {
   devtool: "source-map",
   entry: path.join(__dirname, "src/app/index.tsx"),
   output: {
+    path: path.resolve(__dirname, "dist/app"),
     filename: "main.js",
   },
   resolve: {
