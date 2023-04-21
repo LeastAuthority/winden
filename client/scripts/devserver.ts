@@ -20,11 +20,19 @@ app.use(
   })
 );
 
-app.use(
-  webpackDevMiddleware(webpack(webpackConfig), {
-    publicPath: "/app",
-  })
-);
+let bundled = false;
+app.get("/bundle-status", (req, res) => {
+  res.send(bundled.toString());
+});
+
+const webpackDevServer = webpackDevMiddleware(webpack(webpackConfig), {
+  publicPath: "/app",
+});
+app.use(webpackDevServer);
+webpackDevServer.waitUntilValid(() => {
+  console.log(`Bundle has been compiled successfully`);
+  bundled = true;
+});
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../src/public/index.html"));
