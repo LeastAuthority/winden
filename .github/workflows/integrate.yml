@@ -68,9 +68,6 @@ jobs:
       - name: Setup docker images
         run: docker compose --profile e2e build
 
-      - name: Setup packages
-        run: docker compose --profile e2e run client-e2e npm i
-
       - name: Start up devserver
         working-directory: .github/scripts
         run: |
@@ -78,6 +75,9 @@ jobs:
 
       - name: Run UNIT and INTEGRATION tests
         run: docker compose --profile e2e run client npm run test -- --coverage
+
+      - name: Setup e2e packages
+        run: docker compose --profile e2e run client-e2e npm i
 
       - name: Run END-2-END tests
         run: |
