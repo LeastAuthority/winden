@@ -1,4 +1,6 @@
-printf "Starting server"
+printf "Starting server\n"
 docker compose --profile e2e up -d client
-printf "Waiting for webpack to compile..."
-{ docker compose logs -f --tail 0 client & echo $! > pid; } | { grep -P -m1 "webpack .+ compiled successfully" && kill -9 $(cat pid) && rm pid; }
+printf "Waiting for webpack to compile...\n"
+# try going back to hardcoded wait time
+sleep 120
+printf "Done sleeping"
