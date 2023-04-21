@@ -72,10 +72,9 @@ jobs:
         run: docker compose --profile e2e run client-e2e npm i
 
       - name: Start up devserver
+        working-directory: .github/scripts
         run: |
-          docker compose --profile e2e up -d client
-          # wait for webpack to compile app before running tests
-          { docker compose logs -f --tail 0 client & echo $! > pid; } | { grep -P -m1 "webpack .+ compiled successfully" && kill -9 $(cat pid) && rm pid; }
+          ./start-and-wait.sh
 
       - name: Run UNIT and INTEGRATION tests
         run: docker compose --profile e2e run client npm run test -- --coverage
