@@ -66,12 +66,12 @@ jobs:
         run: docker compose run --rm client npm i
 
       - name: Setup docker images
-        run: docker compose --profile e2e --build-arg UID=$(id -u $(whoami)) build
+        run: docker compose --profile e2e build --build-arg UID=$(id -u $(whoami))
 
-      # - name: Setup tmate session
-      #   uses: mxschmitt/action-tmate@v3
-      #   with:
-      #     limit-access-to-actor: true
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        with:
+          limit-access-to-actor: true
 
       - name: Start up devserver
         run: |
