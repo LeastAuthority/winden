@@ -69,7 +69,6 @@ jobs:
         run: docker compose --profile e2e build
 
       - name: Start up devserver
-        working-directory: .github/scripts
         run: |
           docker compose up -d client
           docker compose exec -it client /usr/src/app/client/scripts/wait-for-webpack.sh
