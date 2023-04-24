@@ -2,7 +2,7 @@ FROM node:16-alpine
 
 WORKDIR /usr/src/app/client
 
-RUN apk add git openssh openssl lftp curl rust
+RUN apk add git openssh openssl lftp curl rust bash
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"

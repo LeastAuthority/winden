@@ -63,7 +63,7 @@ jobs:
           cat ./.env
 
       - name: Setup client
-        run: docker compose run client npm i
+        run: docker compose run --rm client npm i
 
       - name: Setup docker images
         run: docker compose --profile e2e build
@@ -71,7 +71,8 @@ jobs:
       - name: Start up devserver
         working-directory: .github/scripts
         run: |
-          ./start-and-wait.sh
+          docker compose up -d client
+          docker compose exec -it client ./scripts/wait-for-webpack.sh
 
       - name: Run UNIT and INTEGRATION tests
         run: docker compose --profile e2e run client npm run test -- --coverage
