@@ -68,6 +68,11 @@ jobs:
       - name: Setup docker images
         run: docker compose --profile e2e build
 
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        with:
+          limit-access-to-actor: true
+
       - name: Start up devserver
         run: |
           docker compose up -d client
