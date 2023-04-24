@@ -10,7 +10,8 @@
     "build-storybook": "build-storybook -o dist/storybook",
     "test": "jest",
     "lint": "prettier --check **/*.{json,md,html,js,jsx,ts,tsx}",
-    "format": "prettier --write **/*.{json,md,html,js,jsx,ts,tsx}"
+    "format": "prettier --write **/*.{json,md,html,js,jsx,ts,tsx}",
+    "wait-for-webpack": "ts-node ./scripts/waitForWebpack.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.10.4",
@@ -21,6 +22,7 @@
     "classnames": "^2.3.1",
     "fastest-levenshtein": "^1.0.12",
     "formik": "^2.2.9",
+    "node-fetch": "^2.6.9",
     "nosleep.js": "^0.12.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
