@@ -66,17 +66,17 @@ jobs:
         run: docker compose run --rm client npm i
 
       - name: Setup docker images
-        run: docker compose --profile e2e build
+        run: docker compose --profile e2e --build-arg UID=$(id -u $(whoami)) build
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        with:
-          limit-access-to-actor: true
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
+      #   with:
+      #     limit-access-to-actor: true
 
       - name: Start up devserver
         run: |
           docker compose up -d client
-          docker compose exec client npm run wait-for-webpack
+          docker compose exec client ./scripts/wait-for-webpack.sh
 
       - name: Run UNIT and INTEGRATION tests
         run: docker compose --profile e2e run client npm run test -- --coverage
