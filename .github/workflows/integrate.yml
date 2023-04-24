@@ -71,7 +71,7 @@ jobs:
       - name: Start up devserver
         run: |
           docker compose up -d client
-          docker compose exec -it client /usr/src/app/client/scripts/wait-for-webpack.sh
+          docker compose exec client /usr/src/app/client/scripts/wait-for-webpack.sh
 
       - name: Run UNIT and INTEGRATION tests
         run: docker compose --profile e2e run client npm run test -- --coverage
