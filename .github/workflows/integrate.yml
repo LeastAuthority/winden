@@ -62,11 +62,11 @@ jobs:
           printf "Client-e2e .env:\n"
           cat ./.env
 
-      - name: Setup client
-        run: docker compose run --rm client npm i
-
       - name: Setup docker images
         run: docker compose --profile e2e build --build-arg UID=$(id -u $(whoami))
+
+      - name: Setup client
+        run: docker compose run --rm client npm i
 
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
