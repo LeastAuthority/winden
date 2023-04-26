@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  chrome:
+    build:
+      dockerfile: ./client-e2e/images/Dockerfile.chrome-arm64
+  firefox:
+    build:
+      dockerfile: ./client-e2e/images/Dockerfile.firefox-arm64
+  selenium-hub:
+    image: seleniarm/hub:latest
+  client-e2e:
+    depends_on:
+      chrome:
+        condition: service_started
+      firefox:
+        condition: service_started
