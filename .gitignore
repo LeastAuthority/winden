@@ -4,4 +4,4 @@
 /client-e2e/test/files/sizes/
 dist/
 node_modules/
-wasm_exec.js
+/client/wasm/target/

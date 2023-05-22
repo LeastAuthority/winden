@@ -3,46 +3,27 @@ import React, { ReactElement, ReactNode } from "react";
 
 export const enum ErrorTypes {
   SENDER_CANCELLED,
-  RECEIVER_CANCELLED,
-  RECV_CONNECTION_TIMEOUT,
   SENDER_BAD_CODE,
+  RECEIVER_CANCELLED,
+  RECEIVER_BAD_CODE,
   RECEIVER_REJECTED,
-  BAD_CODE,
   MAILBOX_RELAY_CONNECTION,
-  INTERRUPT,
-  WASM_EXITED,
+  UNKNOWN,
 }
 
-const ServerErrorMsg =
-  "Unfortunately, Winden cannot connect to the Least Authority servers. Please try again or let us know at contact@winden.app if the problem remains.";
-
 export function detectErrorType(error: string) {
-  console.log("Error details: ", error);
-  if (error.includes("unexpected EOF")) {
+  if (error.match(/Failed to send.+Task has been cancelled/i)) {
     return ErrorTypes.SENDER_CANCELLED;
-  } else if (error.includes("failed to write")) {
+  } else if (error.match(/Failed to receive.+Task has been cancelled/i)) {
     return ErrorTypes.RECEIVER_CANCELLED;
-  } else if (/^SendErr: decrypt message failed$/.test(error)) {
-    return ErrorTypes.SENDER_BAD_CODE;
-  } else if (/(.*transfer rejected.*)/.test(error)) {
+  } else if (error.includes("transfer rejected")) {
     return ErrorTypes.RECEIVER_REJECTED;
-  } else if (
-    /^decrypt message failed$/.test(error) ||
-    error.startsWith("Nameplate is unclaimed")
-  ) {
-    return ErrorTypes.BAD_CODE;
-    // cases: this can happen before transfer, but also during the transfer.
-    // TODO: separate error messages depending when it happens
-  } else if (
-    /(.*unclean connection close.*)|(.*websocket.Dial failed.*)|(failed to establish connection$)|(^WebSocket connection to.*failed.*)/.test(
-      error
-    )
-  ) {
+  } else if (error.startsWith("Bad code:")) {
+    return ErrorTypes.RECEIVER_BAD_CODE;
+  } else if (error.startsWith("Failed to connect to")) {
     return ErrorTypes.MAILBOX_RELAY_CONNECTION;
-  } else if (/(.*unknown send result.*)/.test(error)) {
-    return ErrorTypes.INTERRUPT;
   } else {
-    return ErrorTypes.RECV_CONNECTION_TIMEOUT;
+    return ErrorTypes.UNKNOWN;
   }
 }
 
@@ -89,20 +70,6 @@ export function errorContent(type: ErrorTypes): {
         ),
       };
     }
-    case ErrorTypes.RECV_CONNECTION_TIMEOUT: {
-      return {
-        title: "Connection time-out",
-        description: (
-          <>
-            <Text component="p">
-              It looks like the connection between you and the sender was
-              briefly lost.
-            </Text>
-            <Text component="p">Please ask the sender for a new code.</Text>
-          </>
-        ),
-      };
-    }
     case ErrorTypes.RECEIVER_REJECTED: {
       return {
         title: "Transfer cancelled",
@@ -130,7 +97,7 @@ export function errorContent(type: ErrorTypes): {
         ),
       };
     }
-    case ErrorTypes.BAD_CODE: {
+    case ErrorTypes.RECEIVER_BAD_CODE: {
       return {
         title: "Oops...",
         description: (
@@ -153,23 +120,16 @@ export function errorContent(type: ErrorTypes): {
     case ErrorTypes.MAILBOX_RELAY_CONNECTION: {
       return {
         title: "Oops",
-        description: [ServerErrorMsg],
-      };
-    }
-    case ErrorTypes.INTERRUPT: {
-      return {
-        title: "Transfer cancelled/interrupted",
         description: (
-          <>
-            <Text component="p">
-              The transfer was cancelled or interrupted.
-            </Text>
-            <Text component="p">Please try again.</Text>
-          </>
+          <Text component="p">
+            Unfortunately, Winden cannot connect to the Least Authority servers.
+            Please try again or let us know at contact@winden.app if the problem
+            remains.
+          </Text>
         ),
       };
     }
-    case ErrorTypes.WASM_EXITED: {
+    case ErrorTypes.UNKNOWN: {
       return {
         title: "Something went wrong",
         description: [

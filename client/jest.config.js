@@ -6,4 +6,5 @@ module.exports = {
   moduleNameMapper: {
     "\\.css$": "<rootDir>/jest-style-mock.js",
   },
+  testResultsProcessor: "jest-sonar-reporter",
 };

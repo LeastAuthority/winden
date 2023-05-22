@@ -1,7 +1,6 @@
 import { createAction, createSlice, SliceCaseReducers } from "@reduxjs/toolkit";
 import { setError } from "./errorSlice";
 import type { RootState } from "./store";
-import { TransferOptions } from "./types/wormhole";
 
 type FileInfo = {
   name: string;
@@ -30,6 +29,7 @@ type WormholeState =
       file: FileInfo;
       code: string;
       startedAt: null;
+      isPeerConnected: boolean;
     }
   | {
       status: "consenting";
@@ -58,14 +58,18 @@ export const completeLoading = createAction<void, "wormhole/completeLoading">(
   "wormhole/completeLoading"
 );
 export const requestTransfer = createAction<
-  | { type: "send"; filename: string; file: File; opts: TransferOptions }
-  | { type: "receive"; code: string; opts: TransferOptions },
+  | { type: "send"; filename: string; file: File }
+  | { type: "receive"; code: string },
   "wormhole/requestTransfer"
 >("wormhole/requestTransfer");
 export const setFileAndCode = createAction<
   { file: FileInfo; code: string },
   "wormhole/setFileAndCode"
 >("wormhole/setFileAndCode");
+export const setIsPeerConnected = createAction<
+  void,
+  "wormhole/setIsPeerConnected"
+>("wormhole/setIsPeerConnected");
 export const answerConsent = createAction<boolean, "wormhole/answerConsent">(
   "wormhole/answerConsent"
 );
@@ -118,6 +122,15 @@ export const wormholeSlice = createSlice<
             file: action.payload.file,
             code: action.payload.code,
             startedAt: null,
+            isPeerConnected: false,
+          };
+        }
+      })
+      .addCase(setIsPeerConnected, (state) => {
+        if (state.status === "waiting") {
+          return {
+            ...state,
+            isPeerConnected: true,
           };
         }
       })
@@ -194,6 +207,8 @@ export const selectIsWormholeLoaded = (state: RootState) =>
 export const selectWormholeStatus = (state: RootState) => state.wormhole.status;
 export const selectWormholeCode = (state: RootState) =>
   state.wormhole.status === "waiting" ? state.wormhole.code : null;
+export const selectIsPeerConnected = (state: RootState) =>
+  state.wormhole.status === "waiting" ? state.wormhole.isPeerConnected : false;
 export const selectTransferProgressPercent = (state: RootState) =>
   state.wormhole.status === "transferring"
     ? Math.round((state.wormhole.sentBytes / state.wormhole.totalBytes) * 100)

@@ -3,7 +3,6 @@ import React from "react";
 import { useAppDispatch } from "../../../hooks/redux";
 import { useCommonStyles } from "../../../hooks/useCommonStyles";
 import { NoSleep } from "../../../NoSleep";
-import { makeProgressFunc } from "../../../util/makeProgressFunc";
 import { requestTransfer, setTransferProgress } from "../../../wormholeSlice";
 import CodeInput from "../../CodeInput";
 import Content from "../../Content";
@@ -45,11 +44,6 @@ export default function ReceiveBeginScreen({}: Props) {
           requestTransfer({
             type: "receive",
             code,
-            opts: {
-              progressFunc: makeProgressFunc((sentBytes, totalBytes) => {
-                dispatch(setTransferProgress([sentBytes, totalBytes]));
-              }),
-            },
           })
         );
       }}

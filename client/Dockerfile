@@ -2,17 +2,22 @@ FROM node:lts-alpine
 
 WORKDIR /usr/src/app/client
 
-RUN apk add bash git openssh lftp
+RUN apk add git openssh lftp curl rust
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+RUN curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
 RUN npm install --global gulp-cli
-RUN npm install --global prettier
 
-COPY --from=golang:1.19.3-alpine /usr/local/go/ /usr/local/go/
+RUN npm install --location=global @sentry/cli
+ENV SENTRYCLI_SKIP_DOWNLOAD=1
 
-ENV PATH="/usr/local/go/bin:${PATH}"
-ENV GOROOT="/usr/local/go"
-
-ADD start-gulp.sh .
+COPY package.json .
+COPY package-lock.json .
+ARG SENTRYCLI_USE_LOCAL=1
+RUN npm install --location=global --unsafe-perm
+COPY . .
 
 CMD ./start-gulp.sh
 

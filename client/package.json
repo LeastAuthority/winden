@@ -27,10 +27,9 @@
     "react-router-dom": "^6.3.0",
     "react-transition-group": "^4.4.2",
     "redux-saga": "^1.2.2",
-    "streamsaver": "^2.0.5",
+    "streamsaver": "^2.0.6",
     "tabler-icons-react": "^1.51.0",
-    "web-streams-polyfill": "^2.0.2",
-    "worker-rpc": "^0.2.0"
+    "web-streams-polyfill": "^3.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.18.5",
@@ -52,6 +51,7 @@
     "@types/react-transition-group": "^4.4.5",
     "@types/streamsaver": "^2.0.1",
     "@types/testing-library__jest-dom": "^5.14.3",
+    "@wasm-tool/wasm-pack-plugin": "^1.6.0",
     "babel-loader": "^8.2.5",
     "css-loader": "^6.7.1",
     "del": "^6.0.0",
@@ -64,7 +64,7 @@
     "html-webpack-plugin": "^5.5.0",
     "http-proxy-middleware": "^2.0.6",
     "jest": "^27.5.1",
-    "jest-cli": "^29.5.0",
+    "jest-sonar-reporter": "^2.0.0",
     "prettier": "^2.8.0",
     "raw-loader": "^4.0.2",
     "resize-observer-polyfill": "^1.5.1",

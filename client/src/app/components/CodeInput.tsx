@@ -9,19 +9,14 @@ import {
 } from "@mantine/core";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { useAppSelector } from "../hooks/redux";
 import { useNavigate } from "../hooks/useNavigate";
 import { applyCodeSuggestion } from "../util/applyCodeSuggestion";
 import { CODE_SEGMENT_DELIMITER } from "../util/constants";
 import { getCodeSuggestion } from "../util/getCodeSuggestion";
-import { makeProgressFunc } from "../util/makeProgressFunc";
 import { spellCheckCodeWord } from "../util/spellCheckCodeWord";
 import { CodeErrorType, validateCode } from "../util/validateCode";
-import {
-  requestTransfer,
-  selectWormholeStatus,
-  setTransferProgress,
-} from "../wormholeSlice";
+import { selectWormholeStatus } from "../wormholeSlice";
 
 type ContentProps = {
   code: string;
@@ -152,7 +147,7 @@ export default function CodeInput(props: Props) {
   const [showError, setShowError] = useState(false);
   const codeSuggestion = getCodeSuggestion(code || "");
   const error = validateCode(code);
-  const location = useLocation();
+  const location = useLocation() as { state?: { code?: string } };
   const navigate = useNavigate();
   const wormholeStatus = useAppSelector(selectWormholeStatus);
 

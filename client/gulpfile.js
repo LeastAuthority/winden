@@ -5,11 +5,12 @@ const log = require("fancy-log");
 const connect = require("gulp-connect");
 const replace = require("gulp-replace");
 const gulpif = require("gulp-if");
-const webpack = require("webpack-stream");
+const webpackStream = require("webpack-stream");
 const Dotenv = require("dotenv-webpack");
 const fs = require("fs");
 const path = require("path");
 const proxy = require("http-proxy-middleware");
+const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
 
 require("dotenv").config();
 
@@ -39,9 +40,18 @@ const webpackConfig = {
       },
     ],
   },
-  plugins: [new Dotenv()],
+  plugins: [
+    new WasmPackPlugin({
+      crateDirectory: path.resolve(__dirname, "./wasm"),
+      outDir: path.resolve(__dirname, "./pkg"),
+    }),
+    new Dotenv(),
+  ],
   optimization: {
     minimize: process.env.NODE_ENV === "production",
+  },
+  experiments: {
+    asyncWebAssembly: true,
   },
 };
 
@@ -49,9 +59,9 @@ const javascript = () =>
   gulp
     .src(`src/app/index.tsx`)
     .pipe(
-      webpack({
+      webpackStream({
         ...webpackConfig,
-        entry: ["web-streams-polyfill", `./src/app/index.tsx`],
+        entry: ["web-streams-polyfill/ponyfill", `./src/app/index.tsx`],
       })
     )
     .pipe(gulp.dest("dist/app"));
@@ -60,25 +70,18 @@ const javascriptWatch = () =>
   gulp
     .src(`src/app/index.tsx`)
     .pipe(
-      webpack({
+      webpackStream({
         ...webpackConfig,
         watch: true,
-        entry: ["web-streams-polyfill", `./src/app/index.tsx`],
+        entry: ["web-streams-polyfill/ponyfill", `./src/app/index.tsx`],
       })
     )
     .pipe(gulp.dest("dist/app"))
     .pipe(connect.reload());
 
-const prepWorker = (cb) => {
-  // cp wasm_exec.js to be glued
-  execSync('cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" src/app');
-  cb();
-};
-
 const storybook = () => exec("npm run build-storybook");
 
-const publicClean = () =>
-  del(["dist/*", "!dist/app", "!dist/storybook", "!dist/wormhole.wasm"]);
+const publicClean = () => del(["dist/*", "!dist/app", "!dist/storybook"]);
 const publicCopy = () =>
   gulp
     .src("src/public/**/*", { dot: true })
@@ -114,33 +117,6 @@ const public = gulp.series(
   allowRobots
 );
 
-// Set agent version in go library to identify as web app client
-const setWasmVersion = async () => {
-  gulp
-    .src(["vendor/wormhole-william/version/version.go"])
-    .pipe(
-      replace(new RegExp(`AgentString = "(.*)"`), 'AgentString = "winden.app"')
-    )
-    .pipe(
-      replace(
-        new RegExp(`AgentVersion = "(.*)"`),
-        'AgentVersion = "' + package.version + '"'
-      )
-    )
-    .pipe(gulp.dest("vendor/wormhole-william/version/"));
-};
-
-// added -buildvcs=false as it fails to build on Github actions with error obtaining VCS status: exit status 128
-const wasmBuild = () =>
-  exec(
-    "cd vendor/wormhole-william && GOOS=js GOARCH=wasm go build  -buildvcs=false -o ../../dist/wormhole.wasm ./wasm/module"
-  );
-// exec doesn't return a stream, but we need a non-empty stream to be able to reload.
-// so we build a stream using gulpfile.js
-const wasmReload = () => gulp.src("gulpfile.js").pipe(connect.reload());
-
-const wasm = gulp.series(wasmBuild, wasmReload);
-
 const start = () => {
   connect.server({
     host: "0.0.0.0",
@@ -165,7 +141,6 @@ const watch = () => {
     javascriptWatch
   );
   gulp.watch("src/public/**/*", { ignoreInitial: false }, public);
-  gulp.watch("vendor/wormhole-william/**/*.go", { ignoreInitial: false }, wasm);
   start();
 };
 
@@ -200,21 +175,19 @@ const deploySftp = (cb) => {
 
 exports.javascript = javascript;
 exports.public = public;
-exports.wasm = wasm;
 exports.storybook = storybook;
-exports.watch = gulp.series(prepWorker, watch);
+exports.watch = gulp.series(watch);
 // for CI optimization without watch
 exports.start = start;
 exports.clean = clean;
-exports.prepWorker = prepWorker;
 
-exports.default = gulp.series(
-  prepWorker,
+exports.deploy = gulp.series(
   public,
   javascript,
-  setWasmVersion,
-  wasm
-  //storybook
+  // storybook,
+  deploySftp
 );
+
+exports.default = gulp.series(public, javascript, storybook);
 
 exports.deploy = gulp.series(exports.default, deploySftp);

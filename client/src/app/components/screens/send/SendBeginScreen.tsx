@@ -4,7 +4,6 @@ import { FileRejection } from "react-dropzone";
 import { useAppDispatch } from "../../../hooks/redux";
 import { useCommonStyles } from "../../../hooks/useCommonStyles";
 import { NoSleep } from "../../../NoSleep";
-import { makeProgressFunc } from "../../../util/makeProgressFunc";
 import { requestTransfer, setTransferProgress } from "../../../wormholeSlice";
 import Content from "../../Content";
 import Dropzone from "../../Dropzone";
@@ -118,11 +117,6 @@ export default function SendBeginScreen(props: Props) {
             type: "send",
             filename: files[0].name,
             file: files[0],
-            opts: {
-              progressFunc: makeProgressFunc((sentBytes, totalBytes) => {
-                dispatch(setTransferProgress([sentBytes, totalBytes]));
-              }),
-            },
           })
         );
       }}
