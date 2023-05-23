@@ -65,7 +65,7 @@ describe("Receive flow", () => {
         await Page.uploadFiles("./test/files/hello-world.txt");
 
         const codeUrl = await Page.getCodeUrl();
-        const re = new RegExp(`^https://localwinden:8080/#(\\d+)-\\w+-\\w+$`);
+        const re = new RegExp(`^${homePageUrl}/#(\\d+)-\\w+-\\w+$`);
         const nameplate = parseInt(codeUrl.match(re)[1]);
 
         const _receiveWindow = await browser.newWindow(homePageUrl);
