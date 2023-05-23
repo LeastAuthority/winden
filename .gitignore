@@ -1,5 +1,7 @@
 .DS_Store
 .env
+pkg/
+/client/certs
 /client/coverage
 /client-e2e/test/files/sizes/
 dist/

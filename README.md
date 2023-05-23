@@ -44,6 +44,7 @@ git clone --recurse-submodules git@github.com:LeastAuthority/winden.git
 ```sh
 docker compose build
 docker compose run client npm i
+docker compose run client ./scripts/setup.sh
 docker compose run client-e2e npm i
 ```
 

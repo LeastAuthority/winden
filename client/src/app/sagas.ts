@@ -190,8 +190,10 @@ export function* wormholeSaga(): any {
   pkg.init();
   client = pkg.Client.new(
     "lothar.com/wormhole/text-or-file-xfer",
-    process.env["MAILBOX_URL"] || `ws://${window.location.hostname}:4000/v1`,
-    process.env["RELAY_URL"] || `ws://${window.location.hostname}:4002`,
+    process.env["MAILBOX_URL"] ||
+      `wss://${window.location.hostname}:${window.location.port}/mailbox/v1`,
+    process.env["RELAY_URL"] ||
+      `wss://${window.location.hostname}:${window.location.port}/relay`,
     2
   );
   yield put(completeLoading());

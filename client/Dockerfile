@@ -21,8 +21,5 @@ COPY . .
 
 RUN npm install
 
-RUN mkdir -p certs
-RUN openssl req -nodes -new -x509 -days 3650 -subj '/C=PH/O=Internet Widgits Pty Ltd' -keyout certs/server.key -out certs/server.cert
-
-CMD ["npm", "run", "serve"]
+CMD ["./node_modules/.bin/ts-node", "./scripts/devserver.ts"]
 EXPOSE 8080
