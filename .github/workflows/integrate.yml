@@ -77,7 +77,7 @@ jobs:
         run: |
           docker compose run --rm client npm i
           docker compose run --rm client ./scripts/setup.sh
-          docker compose run --rm client-e2e npm i
+          docker-compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e run --rm client-e2e npm i
 
       - name: Start up devserver
         run: |
