@@ -10,7 +10,7 @@ use std::pin::Pin;
 use std::task::{Context, Poll};
 use thiserror::Error;
 
-use magic_wormhole::{transfer, transit, AppID, Code, Wormhole, WormholeError};
+use magic_wormhole::{transfer, transit, AppID, Code, Wormhole, WormholeError, MailboxConnection};
 use wasm_bindgen::prelude::*;
 use wasm_bindgen_futures::JsFuture;
 
@@ -120,10 +120,11 @@ pub async fn send(client: &Client, file: web_sys::File) -> Result<SendResult, Wa
 
     let rendezvous = Box::new(client.rendezvous_url.as_str());
     let config = transfer::APP_CONFIG.rendezvous_url(Cow::Owned(rendezvous.to_string()));
-    let (server_welcome, wormhole_future) = Wormhole::connect_without_code(config, 2).await?;
+    let connection = MailboxConnection::create(config, 2).await?;
+    let wormhole_future = Wormhole::connect(mailbox_connection);
 
     Ok(SendResult {
-        code: server_welcome.code.0,
+        code: connection.code.0,
         transit_server_url: client.transit_server_url.clone(),
         f: Some(Box::pin(wormhole_future)),
         file,
@@ -219,9 +220,14 @@ pub async fn receive(client: &Client, code: String) -> Result<ReceiveResult, Was
     let rendezvous = Box::new(client.rendezvous_url.as_str());
     let config = transfer::APP_CONFIG.rendezvous_url(Cow::Owned(rendezvous.to_string()));
 
-    let wormhole = match Wormhole::connect_with_code(config, Code(code), true).await {
-        Ok((_, x)) => x,
+    let connection = match MailboxConnection::connect(config, Code(code), false).await {
+        Ok(x) => x,
         Err(e) => return Err(WasmWormholeError::BadCode(e)),
+    };
+
+    let wormhole = match Wormhole::connect(connection).await {
+        Ok((_, x)) => x,
+        Err(e) => return Err(WasmWormholeError::WormholeConnectionFailed(e)),
     };
 
     let req = transfer::request_file(
