@@ -226,7 +226,7 @@ pub async fn receive(client: &Client, code: String) -> Result<ReceiveResult, Was
     };
 
     let wormhole = match Wormhole::connect(connection).await {
-        Ok((_, x)) => x,
+        Ok(x) => x,
         Err(e) => return Err(WasmWormholeError::WormholeConnectionFailed(e)),
     };
 
