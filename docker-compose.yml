@@ -53,61 +53,64 @@ services:
     volumes:
       - test-downloads:/home/seluser/downloads
     ports:
-      - "5900:5900"
+      - 5900:5900
+      - 7900:7900
     build:
       dockerfile: ./client-e2e/images/Dockerfile.chrome
     shm_size: 2gb
     depends_on:
       - selenium-hub
+      - client
     environment:
       - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
       - SE_NODE_SESSION_TIMEOUT=1800
+      - SE_VNC_NO_PASSWORD=1
     profiles:
       - e2e
-    extra_hosts:
-      - "localwinden:${HOST_IP}"
   edge:
     volumes:
       - test-downloads:/home/seluser/downloads
     ports:
-      - "5901:5900"
+      - 5901:5900
+      - 7901:7900
     build:
       dockerfile: ./client-e2e/images/Dockerfile.edge
     shm_size: 2gb
     depends_on:
       - selenium-hub
+      - client
     environment:
       - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
       - SE_NODE_SESSION_TIMEOUT=1800
+      - SE_VNC_NO_PASSWORD=1
     profiles:
       - e2e
-    extra_hosts:
-      - "localwinden:${HOST_IP}"
   firefox:
     volumes:
       - test-downloads:/home/seluser/downloads
     ports:
-      - "5902:5900"
+      - 5902:5900
+      - 7902:7900
     build:
       dockerfile: ./client-e2e/images/Dockerfile.firefox
     shm_size: 2gb
     depends_on:
       - selenium-hub
+      - client
     environment:
       - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
       - SE_NODE_SESSION_TIMEOUT=1800
+      - SE_VNC_NO_PASSWORD=1
     profiles:
       - e2e
-    extra_hosts:
-      - "localwinden:${HOST_IP}"
   selenium-hub:
-    image: selenium/hub:latest
+    image: selenium/hub:4.9.1-20230508
     container_name: selenium-hub
     ports:
       - "4442:4442"
