@@ -1,5 +1,6 @@
 import { nanoid } from "nanoid";
 
+// @ts-ignore
 const worker = new Worker(new URL("./worker.ts", import.meta.url));
 
 type StreamData = {
@@ -21,18 +22,23 @@ function waitFor(fn: () => boolean) {
 
 export async function createStream(filename: string): Promise<string> {
   const id = nanoid();
-  worker.postMessage({ data: { type: "createStream", id, filename } });
+  worker.postMessage({ type: "createStream", id, filename });
   streams[id] = { ready: false };
-  await waitFor(() => streams[id].ready);
+  await waitFor(() => {
+    return streams[id].ready;
+  });
   return id;
 }
 
 export function write(id: string, data: Uint8Array) {
-  worker.postMessage({ data: { type: "write", id, data } });
+  worker.postMessage({ type: "write", id, data });
 }
 
-export function close(id: string) {
-  worker.postMessage({ type: "close", id });
+export async function close(id: string) {
+  worker.postMessage({ type: "closeStream", id });
+  await waitFor(() => {
+    return !streams[id];
+  });
 }
 
 worker.addEventListener("message", (e) => {

@@ -23,7 +23,7 @@ type StreamData = {
 
 const streams: Record<string, StreamData> = {};
 
-window.addEventListener("message", async (e: MessageEvent<MessageData>) => {
+onmessage = async (e: MessageEvent<MessageData>) => {
   if (e.data.type === "createStream") {
     // Get handle to draft file in OPFS
     const root = await navigator.storage.getDirectory();
@@ -35,7 +35,7 @@ window.addEventListener("message", async (e: MessageEvent<MessageData>) => {
     const accessHandle = await draftHandle.createSyncAccessHandle();
     // save for later use
     streams[e.data.id] = { accessHandle, unflushedBytes: 0 };
-    self.postMessage({ data: { type: "streamCreated", id: e.data.id } });
+    self.postMessage({ type: "streamCreated", id: e.data.id });
   } else if (e.data.type === "write") {
     const stream = streams[e.data.id];
     stream.unflushedBytes += await stream.accessHandle.write(e.data.data);
@@ -50,6 +50,6 @@ window.addEventListener("message", async (e: MessageEvent<MessageData>) => {
     }
     stream.accessHandle.close();
     delete streams[e.data.id];
-    self.postMessage({ data: { type: "streamClosed", id: e.data.id } });
+    self.postMessage({ type: "streamClosed", id: e.data.id });
   }
-});
+};

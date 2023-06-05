@@ -5,8 +5,8 @@
     "sourceMap": true,
     "strict": true,
     "plugins": [{ "name": "typescript-plugin-css-modules" }],
-    "module": "es2020",
-    "moduleResolution": "node"
+    // "module": "es2020",
+    // "moduleResolution": "node"
   },
   "exclude": [
     "./src/stories" // TODO: re-enable later
