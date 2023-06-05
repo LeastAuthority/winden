@@ -1,4 +1,4 @@
-export const homePageUrl = `http://${process.env.HOST_IP}:8080`;
+export const homePageUrl = `https://client:8080`;
 
 export async function open() {
   const url = await browser.url(homePageUrl);

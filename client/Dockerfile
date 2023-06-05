@@ -2,14 +2,13 @@ FROM node:16-alpine
 
 WORKDIR /usr/src/app/client
 
-RUN apk add git openssh lftp curl rust
+RUN apk add git openssh openssl lftp curl rust bash
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 RUN curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
 RUN npm -g config set user root
-RUN npm install --global gulp-cli
 
 RUN npm install --location=global @sentry/cli
 ENV SENTRYCLI_SKIP_DOWNLOAD=1
@@ -22,5 +21,5 @@ COPY . .
 
 RUN npm install
 
-CMD ["gulp", "watch"]
+CMD ["./node_modules/.bin/ts-node", "./scripts/devserver.ts"]
 EXPOSE 8080

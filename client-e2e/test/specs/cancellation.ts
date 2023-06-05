@@ -116,7 +116,7 @@ describe("Cancellation", () => {
         const codeUrl = await Page.getCodeUrl();
 
         // Receiver
-        await browser.newWindow(codeUrl);
+        const receiveWindow = await browser.newWindow(codeUrl);
         await browser.waitUntil(() =>
           Page.receiveDownloadButton().isExisting()
         );
@@ -131,12 +131,11 @@ describe("Cancellation", () => {
         );
 
         // Receiver
-        // TODO: Currently receiver doesn't get any message, when sender cancels the transfer
-        // await browser.switchToWindow(receiveWindow);
-        // await browser.waitUntil(
-        //   async () =>
-        //     await $("div*=Transfer cancelled/interrupted").isExisting()
-        // );
+        await browser.switchToWindow(receiveWindow);
+        await browser.waitUntil(
+          async () =>
+            await $("div*=Transfer cancelled/interrupted").isExisting()
+        );
       });
     });
 

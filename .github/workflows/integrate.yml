@@ -5,6 +5,12 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+    inputs:
+      debug_enabled:
+        type: boolean
+        description: "Run the build with tmate debugging enabled (https://github.com/marketplace/actions/debugging-with-tmate)"
+        required: false
+        default: false
 
 jobs:
   pre:
@@ -35,7 +41,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: recursive
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: Setup npm, yarn etc.
         uses: actions/setup-node@v2
@@ -51,44 +57,49 @@ jobs:
         run: |
           IP=$(ip address show  eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f1 | head -n1)
           printf "HOST_IP address is: %s\n" "$IP"
-          cat <<EOF >> ./client-e2e/.env
+          cat <<EOF >> ./.env
           HOST_IP="$IP"
           EOF
           cat <<EOF >> ./client/.env
-          MAILBOX_URL="ws://$IP:4000/v1"
-          RELAY_URL="ws://$IP:4002"
           NODE_ENV=development
+          MAILBOX_URL="wss://mailbox.stage.mw.leastauthority.com/v1"
+          RELAY_URL="wss://relay.stage.mw.leastauthority.com"
           EOF
           printf "Client .env:\n"
           cat ./client/.env
           printf "Client-e2e .env:\n"
-          cat ./client-e2e/.env
-
-      - name: Setup client
-        run: docker compose run client npm i
+          cat ./.env
 
       - name: Setup docker images
-        run: docker compose --profile e2e build
+        run: docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e build
 
-      - name: Setup packages
-        run: docker compose --profile e2e run client-e2e npm i
+      - name: Set up containers
+        run: |
+          docker compose run --rm client npm i
+          docker compose run --rm client ./scripts/setup.sh
+          docker-compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e run --rm client-e2e npm i
+
+      - name: Start up devserver
+        run: |
+          docker compose up -d client
+          docker compose exec client ./scripts/wait-for-webpack.sh
+
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_enabled }}
 
       - name: Run UNIT and INTEGRATION tests
-        run: |
-          docker compose --profile e2e up -d client
-          # wait for webpack to compile app before running tests
-          { docker compose logs -f --tail 0 client & echo $! > pid; } | { grep -P -m1 "webpack .+ compiled successfully" && kill -9 $(cat pid) && rm pid; }
-          docker compose --profile e2e run client npm run test -- --coverage
+        run: docker compose run --rm client npm run test -- --coverage
 
       - name: Run END-2-END tests
         run: |
-          docker compose --profile e2e run --rm client-e2e
+          docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e run --rm client-e2e
 
       - name: Stop the containers
-        run: docker compose --profile e2e down
+        run: docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e down
 
       - uses: sonarsource/sonarqube-scan-action@master
-#        if: github.ref_name == 'main' && github.event_name == 'push'
+        #        if: github.ref_name == 'main' && github.event_name == 'push'
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}

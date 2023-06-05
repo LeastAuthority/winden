@@ -80,6 +80,7 @@ let client: Client;
 
 function* transfer(): any {
   let cancel: any;
+  let writer: WritableStreamDefaultWriter | undefined;
   try {
     while (true) {
       try {
@@ -135,12 +136,12 @@ function* transfer(): any {
                 size: Number(receiveResult.file_size),
               }
             );
-            const writer = fileStream.getWriter();
+            writer = fileStream.getWriter();
             yield pkg.download_file(
               receiveResult,
               {
                 write: (x: unknown) =>
-                  writer.write(x).catch((e) => {
+                  writer!.write(x).catch((e) => {
                     // If `writer.write` throws, the user cancelled the download through the browser's download manager.
                     console.error("Failed to write:", e);
                     transferChannel.put(requestCancelTransfer());
@@ -163,6 +164,10 @@ function* transfer(): any {
         }
       } catch (error) {
         console.error(error);
+        if (writer) {
+          writer.abort();
+          writer = undefined;
+        }
         yield put(setError(error as string));
         continue;
       }
@@ -170,6 +175,10 @@ function* transfer(): any {
   } finally {
     if (yield cancelled()) {
       cancel.resolve();
+      if (writer) {
+        writer.abort();
+        writer = undefined;
+      }
       yield put(reset());
     }
   }
@@ -181,8 +190,10 @@ export function* wormholeSaga(): any {
   pkg.init();
   client = pkg.Client.new(
     "lothar.com/wormhole/text-or-file-xfer",
-    process.env["MAILBOX_URL"] || `ws://${window.location.hostname}:4000/v1`,
-    process.env["RELAY_URL"] || `ws://${window.location.hostname}:4002`,
+    process.env["MAILBOX_URL"] ||
+      `wss://${window.location.hostname}:${window.location.port}/mailbox/v1`,
+    process.env["RELAY_URL"] ||
+      `wss://${window.location.hostname}:${window.location.port}/relay`,
     2
   );
   yield put(completeLoading());

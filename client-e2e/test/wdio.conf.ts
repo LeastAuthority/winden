@@ -33,6 +33,7 @@ export const config: Options.Testrunner = {
     },
     {
       browserName: "firefox",
+      acceptInsecureCerts: true,
       "moz:firefoxOptions": {
         prefs: {
           "browser.download.dir": global.downloadDirBrowser,
@@ -42,6 +43,7 @@ export const config: Options.Testrunner = {
     },
     {
       browserName: "MicrosoftEdge",
+      acceptInsecureCerts: true,
       "ms:edgeOptions": {
         prefs: {
           "download.default_directory": global.downloadDirBrowser,
@@ -54,7 +56,7 @@ export const config: Options.Testrunner = {
   ],
   logLevel: "error",
   bail: 0,
-  baseUrl: "http://localhost",
+  baseUrl: "https://client:8080",
   waitforTimeout: 10000,
   connectionRetryTimeout: 60000,
   connectionRetryCount: 2,
