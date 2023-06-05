@@ -27,7 +27,7 @@ onmessage = async (e: MessageEvent<MessageData>) => {
   if (e.data.type === "createStream") {
     // Get handle to draft file in OPFS
     const root = await navigator.storage.getDirectory();
-    const draftHandle = await root.getFileHandle("filename", {
+    const draftHandle = await root.getFileHandle(e.data.filename, {
       create: true,
     });
     // Get sync access handle
@@ -44,6 +44,7 @@ onmessage = async (e: MessageEvent<MessageData>) => {
       stream.unflushedBytes = 0;
     }
   } else if (e.data.type === "closeStream") {
+    debugger;
     const stream = streams[e.data.id];
     if (stream.unflushedBytes) {
       stream.accessHandle.flush();
