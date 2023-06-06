@@ -27,7 +27,7 @@ onmessage = async (e: MessageEvent<MessageData>) => {
   if (e.data.type === "createStream") {
     // Get handle to draft file in OPFS
     const root = await navigator.storage.getDirectory();
-    const draftHandle = await root.getFileHandle(e.data.filename, {
+    const draftHandle = await root.getFileHandle(e.data.id, {
       create: true,
     });
     // Get sync access handle
