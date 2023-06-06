@@ -60,7 +60,7 @@ export async function downloadFile(filename: string) {
   const file = await fileHandle.getFile();
 
   var link = document.createElement("a");
-  link.download = file.name;
+  link.download = filename;
   link.href = URL.createObjectURL(file);
   link.click();
 }
