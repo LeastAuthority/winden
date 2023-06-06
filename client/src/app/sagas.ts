@@ -136,33 +136,6 @@ function* transfer(): any {
             "wormhole/answerConsent"
           );
           if (consentPayload) {
-            // const fileStream = streamSaver.createWriteStream(
-            //   receiveResult.get_file_name(),
-            //   {
-            //     size: Number(receiveResult.file_size),
-            //   }
-            // );
-            // writer = fileStream.getWriter();
-            // yield pkg.download_file(
-            //   receiveResult,
-            //   {
-            //     write: (x: unknown) =>
-            //       writer!.write(x).catch((e) => {
-            //         // If `writer.write` throws, the user cancelled the download through the browser's download manager.
-            //         console.error("Failed to write:", e);
-            //         transferChannel.put(requestCancelTransfer());
-            //       }),
-            //     progress: makeProgressFunc((sentBytes, totalBytes) => {
-            //       transferChannel.put(
-            //         setTransferProgress([sentBytes, totalBytes])
-            //       );
-            //     }),
-            //   },
-            //   cancel
-            // );
-            // yield writer.close();
-            // yield put(completeTransfer());
-
             const fileName = receiveResult.get_file_name();
             const stream = yield createStream(receiveResult.get_file_name());
             yield pkg.download_file(

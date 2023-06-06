@@ -4,9 +4,7 @@
     "jsx": "react",
     "sourceMap": true,
     "strict": true,
-    "plugins": [{ "name": "typescript-plugin-css-modules" }],
-    // "module": "es2020",
-    // "moduleResolution": "node"
+    "plugins": [{ "name": "typescript-plugin-css-modules" }]
   },
   "exclude": [
     "./src/stories" // TODO: re-enable later
