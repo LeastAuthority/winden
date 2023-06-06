@@ -2,6 +2,10 @@ import { nanoid } from "nanoid";
 
 // @ts-ignore
 const worker = new Worker(new URL("./worker.ts", import.meta.url));
+const cleanerWorker = new Worker(
+  // @ts-ignore
+  new URL("./cleanerWorker.ts", import.meta.url)
+);
 
 type StreamData = {
   ready: boolean;
@@ -48,11 +52,6 @@ worker.addEventListener("message", (e) => {
     delete streams[e.data.id];
   }
 });
-
-export async function deleteFile(filename: string) {
-  const root = await navigator.storage.getDirectory();
-  return root.removeEntry(filename);
-}
 
 export async function downloadFile(filename: string) {
   const directoryHandle = await navigator.storage.getDirectory();
