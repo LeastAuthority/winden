@@ -17,6 +17,7 @@ export type MessageData =
     };
 
 type StreamData = {
+  filename: string;
   accessHandle: any;
   unflushedBytes: number;
 };
@@ -34,7 +35,11 @@ onmessage = async (e: MessageEvent<MessageData>) => {
     // @ts-ignore
     const accessHandle = await draftHandle.createSyncAccessHandle();
     // save for later use
-    streams[e.data.id] = { accessHandle, unflushedBytes: 0 };
+    streams[e.data.id] = {
+      filename: e.data.filename,
+      accessHandle,
+      unflushedBytes: 0,
+    };
     self.postMessage({ type: "streamCreated", id: e.data.id });
   } else if (e.data.type === "write") {
     const stream = streams[e.data.id];
@@ -44,13 +49,16 @@ onmessage = async (e: MessageEvent<MessageData>) => {
       stream.unflushedBytes = 0;
     }
   } else if (e.data.type === "closeStream") {
-    debugger;
     const stream = streams[e.data.id];
     if (stream.unflushedBytes) {
       stream.accessHandle.flush();
     }
     stream.accessHandle.close();
+    self.postMessage({
+      type: "streamClosed",
+      id: e.data.id,
+      filename: streams[e.data.id].filename,
+    });
     delete streams[e.data.id];
-    self.postMessage({ type: "streamClosed", id: e.data.id });
   }
 };

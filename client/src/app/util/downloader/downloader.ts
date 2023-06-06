@@ -45,21 +45,18 @@ export async function close(id: string) {
   });
 }
 
-worker.addEventListener("message", (e) => {
+worker.addEventListener("message", async (e) => {
   if (e.data.type === "streamCreated") {
     streams[e.data.id].ready = true;
   } else if (e.data.type === "streamClosed") {
+    const directoryHandle = await navigator.storage.getDirectory();
+    const fileHandle = await directoryHandle.getFileHandle(e.data.id);
+    const file = await fileHandle.getFile();
+
+    var link = document.createElement("a");
+    link.download = e.data.filename;
+    link.href = URL.createObjectURL(file);
+    link.click();
     delete streams[e.data.id];
   }
 });
-
-export async function downloadFile(filename: string) {
-  const directoryHandle = await navigator.storage.getDirectory();
-  const fileHandle = await directoryHandle.getFileHandle(filename);
-  const file = await fileHandle.getFile();
-
-  var link = document.createElement("a");
-  link.download = filename;
-  link.href = URL.createObjectURL(file);
-  link.click();
-}

@@ -4,17 +4,11 @@ import streamSaver from "streamsaver";
 import { Client, ReceiveResult, SendResult } from "../../pkg";
 import { setError } from "./errorSlice";
 import { NoSleep } from "./NoSleep";
-import {
-  close,
-  createStream,
-  downloadFile,
-  write,
-} from "./util/downloader/downloader";
+import { close, createStream, write } from "./util/downloader/downloader";
 import { makeProgressFunc } from "./util/makeProgressFunc";
 import {
   completeLoading,
   completeTransfer,
-  requestCancelTransfer,
   reset,
   selectWormholeStatus,
   setConsenting,
@@ -154,7 +148,6 @@ function* transfer(): any {
               cancel
             );
             yield close(stream);
-            downloadFile(fileName);
             yield put(completeTransfer());
           } else {
             yield pkg.reject_file(receiveResult);
