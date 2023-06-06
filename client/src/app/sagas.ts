@@ -137,7 +137,6 @@ function* transfer(): any {
               {
                 write: (x: Uint8Array) => {
                   write(stream, x);
-                  return Promise.resolve();
                 },
                 progress: makeProgressFunc((sentBytes, totalBytes) => {
                   transferChannel.put(

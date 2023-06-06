@@ -313,14 +313,12 @@ pub async fn reject_file(mut receive_result: ReceiveResult) -> Result<JsValue, J
 
 struct FileWriter {
     writer: JsValue,
-    f: Box<Option<JsFuture>>,
 }
 
 impl FileWriter {
     fn new(writer: JsValue) -> Self {
         FileWriter {
             writer,
-            f: Box::new(None),
         }
     }
 }
@@ -345,30 +343,11 @@ impl AsyncWrite for FileWriter {
             panic!("writer.write is not a function")
         }
         let write_fn = js_sys::Function::from(write);
-        if let Some(f) = &mut *self.f {
-            let p = Pin::new(&mut *f);
-            match p.poll(cx) {
-                Poll::Pending => Poll::Pending,
-                Poll::Ready(_) => {
-                    self.f = Box::new(None);
-                    Poll::Ready(Ok(buf.len()))
-                }
-            }
-        } else {
-            let abuf = js_sys::ArrayBuffer::new(buf.len() as u32);
-            let uarr = js_sys::Uint8Array::new(&abuf);
-            uarr.copy_from(buf);
-            let write_call = write_fn.call1(&JsValue::UNDEFINED, &uarr.into());
-            let returned_promise: js_sys::Promise = write_call.unwrap().into();
-            let mut returned_future: JsFuture = returned_promise.into();
-            let p = Pin::new(&mut returned_future);
-            match p.poll(cx) {
-                _ => {
-                    self.f = Box::new(Some(returned_future));
-                    Poll::Pending
-                }
-            }
-        }
+        let abuf = js_sys::ArrayBuffer::new(buf.len() as u32);
+        let uarr = js_sys::Uint8Array::new(&abuf);
+        uarr.copy_from(buf);
+        let write_call = write_fn.call1(&JsValue::UNDEFINED, &uarr.into());
+        Poll::Ready(Ok(buf.len()))
     }
 }
 
