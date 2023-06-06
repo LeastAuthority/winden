@@ -1,5 +1,3 @@
-const MIN_FLUSH_AMOUNT_BYTES = 10000000;
-
 export type MessageData =
   | {
       type: "createStream";
@@ -19,7 +17,7 @@ export type MessageData =
 type StreamData = {
   filename: string;
   accessHandle: any;
-  unflushedBytes: number;
+  offset: number;
 };
 
 const streams: Record<string, StreamData> = {};
@@ -38,21 +36,18 @@ onmessage = async (e: MessageEvent<MessageData>) => {
     streams[e.data.id] = {
       filename: e.data.filename,
       accessHandle,
-      unflushedBytes: 0,
+      offset: 0,
     };
     self.postMessage({ type: "streamCreated", id: e.data.id });
   } else if (e.data.type === "write") {
     const stream = streams[e.data.id];
-    stream.unflushedBytes += await stream.accessHandle.write(e.data.data);
-    if (stream.unflushedBytes >= MIN_FLUSH_AMOUNT_BYTES) {
-      stream.accessHandle.flush();
-      stream.unflushedBytes = 0;
-    }
+    const bytesWritten = await stream.accessHandle.write(e.data.data, {
+      at: stream.offset,
+    });
+    stream.offset += bytesWritten;
   } else if (e.data.type === "closeStream") {
     const stream = streams[e.data.id];
-    if (stream.unflushedBytes) {
-      stream.accessHandle.flush();
-    }
+    stream.accessHandle.flush();
     stream.accessHandle.close();
     self.postMessage({
       type: "streamClosed",
