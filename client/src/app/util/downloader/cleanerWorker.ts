@@ -16,4 +16,4 @@ cleanup();
 
 setInterval(() => {
   cleanup();
-}, 60000);
+}, 30000);
