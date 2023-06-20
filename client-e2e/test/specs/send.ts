@@ -73,7 +73,7 @@ describe("Send flow", () => {
   describe("when uploading a file with the size of 5MB", () => {
     it("will transfer successfully", async () => {
       // 100 sec.
-      await testTransferSuccess("sizes/5MB", 100000);
+      await testTransferSuccess("sizes/5MB.bin", 100000);
     });
   });
 
@@ -81,7 +81,7 @@ describe("Send flow", () => {
     // TODO: enable, when speed issue fixed, currently fails with Firefox
     it.skip("will transfer successfully", async () => {
       // 100 sec.
-      await testTransferSuccess("sizes/20MB", 100000);
+      await testTransferSuccess("sizes/20MB.bin", 100000);
     });
   });
 

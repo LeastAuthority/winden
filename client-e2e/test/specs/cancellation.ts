@@ -8,7 +8,7 @@ describe("Cancellation", () => {
 
       await browser.getWindowHandle();
 
-      await Page.uploadFiles("./test/files/sizes/20MB");
+      await Page.uploadFiles("./test/files/sizes/20MB.bin");
       const codeUrl = await Page.getCodeUrl();
 
       await (await Page.cancelButton()).click();
@@ -27,7 +27,7 @@ describe("Cancellation", () => {
       it("Sends the Sender back and show cancellation message, no message for Receiver", async function () {
         await Page.open();
         const sendWindow = await browser.getWindowHandle();
-        await Page.uploadFiles("./test/files/sizes/20MB");
+        await Page.uploadFiles("./test/files/sizes/20MB.bin");
 
         const codeUrl = await Page.getCodeUrl();
         const _receiveWindow = await browser.newWindow(codeUrl);
@@ -50,7 +50,7 @@ describe("Cancellation", () => {
       it("Sends the Receiver and Sender back. The Sender gets an error message", async function () {
         await Page.open();
         const sendWindow = await browser.getWindowHandle();
-        await Page.uploadFiles("./test/files/sizes/20MB");
+        await Page.uploadFiles("./test/files/sizes/20MB.bin");
 
         const codeUrl = await Page.getCodeUrl();
         const _receiveWindow = await browser.newWindow(codeUrl);
@@ -78,7 +78,7 @@ describe("Cancellation", () => {
       it("(after 5 sec.) Sends the Receiver and Sender back. The Sender gets an error message", async function () {
         await Page.open();
         const sendWindow = await browser.getWindowHandle();
-        await Page.uploadFiles("./test/files/sizes/20MB");
+        await Page.uploadFiles("./test/files/sizes/20MB.bin");
 
         const codeUrl = await Page.getCodeUrl();
         const _receiveWindow = await browser.newWindow(codeUrl);
@@ -112,7 +112,7 @@ describe("Cancellation", () => {
       it("Sends the Receiver and Sender back. The Receiver gets an error message", async function () {
         await Page.open();
         const sendWindow = await browser.getWindowHandle();
-        await Page.uploadFiles("./test/files/sizes/20MB");
+        await Page.uploadFiles("./test/files/sizes/20MB.bin");
         const codeUrl = await Page.getCodeUrl();
 
         // Receiver
@@ -143,7 +143,7 @@ describe("Cancellation", () => {
       it("Sends the Sender back with no message", async function () {
         await Page.open();
         const sendWindow = await browser.getWindowHandle();
-        await Page.uploadFiles("./test/files/sizes/20MB");
+        await Page.uploadFiles("./test/files/sizes/20MB.bin");
         const codeUrl = await Page.getCodeUrl();
 
         const _receiveWindow = await browser.newWindow(codeUrl);
