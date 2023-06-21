@@ -3,6 +3,7 @@
 pkg/
 /client/certs
 /client/coverage
+/client/test-report.xml
 /client-e2e/test/files/sizes/
 dist/
 node_modules/

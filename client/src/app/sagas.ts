@@ -4,11 +4,11 @@ import streamSaver from "streamsaver";
 import { Client, ReceiveResult, SendResult } from "../../pkg";
 import { setError } from "./errorSlice";
 import { NoSleep } from "./NoSleep";
+import { close, createStream, write } from "./util/downloader/downloader";
 import { makeProgressFunc } from "./util/makeProgressFunc";
 import {
   completeLoading,
   completeTransfer,
-  requestCancelTransfer,
   reset,
   selectWormholeStatus,
   setConsenting,
@@ -130,22 +130,14 @@ function* transfer(): any {
             "wormhole/answerConsent"
           );
           if (consentPayload) {
-            const fileStream = streamSaver.createWriteStream(
-              receiveResult.get_file_name(),
-              {
-                size: Number(receiveResult.file_size),
-              }
-            );
-            writer = fileStream.getWriter();
+            const fileName = receiveResult.get_file_name();
+            const stream = yield createStream(receiveResult.get_file_name());
             yield pkg.download_file(
               receiveResult,
               {
-                write: (x: unknown) =>
-                  writer!.write(x).catch((e) => {
-                    // If `writer.write` throws, the user cancelled the download through the browser's download manager.
-                    console.error("Failed to write:", e);
-                    transferChannel.put(requestCancelTransfer());
-                  }),
+                write: (x: Uint8Array) => {
+                  write(stream, x);
+                },
                 progress: makeProgressFunc((sentBytes, totalBytes) => {
                   transferChannel.put(
                     setTransferProgress([sentBytes, totalBytes])
@@ -154,7 +146,7 @@ function* transfer(): any {
               },
               cancel
             );
-            yield writer.close();
+            yield close(stream);
             yield put(completeTransfer());
           } else {
             yield pkg.reject_file(receiveResult);

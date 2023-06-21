@@ -11,6 +11,8 @@ const emptyLine = String.fromCharCode(8203);
 
 global.ResizeObserver = require("resize-observer-polyfill");
 
+jest.mock("../util/downloader/downloader.ts");
+
 // Sometimes tests fails on Github CI
 jest.retryTimes(1);
 
