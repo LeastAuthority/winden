@@ -55,9 +55,10 @@ export default function FaqPage({}: Props) {
           <a href="#multiple-files">send one file at a time</a>.
         </li>
         <li>
-          File size limits: In this initial stage, it is only possible to send
-          files of up to 200 MB. When sending files to mobile devices, this
-          number may be smaller than 100 MB.
+          File size limits: In this initial stage, becaause of the browser APIs,
+          the receiver needs to hold the entire contents of the file in memory.
+	  Therefore, it is only possible to send files of up to 200 MB. When
+          sending files to mobile devices, this number may be smaller than 100 MB.
         </li>
         <li>
           Cancellation: Canceling a transfer may lead to the application getting
