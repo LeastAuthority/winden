@@ -172,8 +172,9 @@ NODE_ENV=production
 - Fill it with the following: (Replace placeholders in angle brackets with the appropriate values)
 
 ```sh
-S3_BUCKET=<URL>
-CDF_DISTRIBUTION_ID=<ID>
+SFTP_USERNAME=<username>
+SFTP_IDENTITY=<path to ssh key>
+SFTP_HOSTNAME=<hostname>
 
 MAILBOX_URL="wss://<mailbox server>/v1"
 RELAY_URL="wss://<relay server>"
