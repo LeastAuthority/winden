@@ -28,7 +28,8 @@ COPY package.json .
 COPY package-lock.json .
 RUN npm install --location=global --unsafe-perm
 
-# Copy the whole context except what is explicitely ignored
+# Copy the whole context except what is explicitly ignored
+# TODO: be explicit instead?
 COPY . .
 
 # Install the required pages again, but localy this time
