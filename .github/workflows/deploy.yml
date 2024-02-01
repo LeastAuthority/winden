@@ -42,6 +42,17 @@ jobs:
           "https://github.com/docker/compose/releases/download/v2.6.1/docker-compose-linux-x86_64"
           sudo chmod +x /usr/local/bin/docker-compose
 
+      - name: Cache docker images
+        uses: ScribeMD/docker-cache@0.3.3
+        with:
+          key: |
+            docker-${{ runner.os }}-${{ hashFiles(
+              'docker-compose*.yml',
+              'client/Dockerfile',
+              'client-e2e/Dockerfile',
+              'client-e2e/images/Dockerfile.*',
+            ) }}
+
       - name: create variables for production env.
         if: inputs.environment == 'prod'
         run: |
