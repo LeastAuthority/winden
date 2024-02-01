@@ -25,7 +25,7 @@ jobs:
         uses: fkirc/skip-duplicate-actions@v5
         with:
           concurrent_skipping: "same_content_newer"
-          paths: '["client/**", "client-e2e/**", ".github/workflows/integrate.yml"]'
+          paths: '["docker-compose*", "client/**", "client-e2e/**", ".github/workflows/integrate.yml"]'
 
   build:
     name: Build/Test
