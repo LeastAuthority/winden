@@ -1,8 +1,10 @@
 FROM node:16-alpine
 
+# Switch to the existing node user instead of root
+USER node
+
 # Switch to the directory where the client code will live
 WORKDIR /usr/src/app/client-e2e
-
 
 # Install the required packages... But not really?
 # FIXME: do it or get rid of this block
