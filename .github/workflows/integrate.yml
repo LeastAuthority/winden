@@ -61,7 +61,7 @@ jobs:
               'docker-compose*.yml',
               'client/Dockerfile',
               'client-e2e/Dockerfile',
-              'client-e2e/images/Dockerfile.*',
+              'client-e2e/images/Dockerfile.*'
             ) }}
 
       - name: Setup for running tests
