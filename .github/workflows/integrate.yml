@@ -80,11 +80,16 @@ jobs:
 
       - name: Build images - if not cached
         run: |
-          docker images
           repository=${{ github.repository }}
-          docker images --quiet ${repository##*/}_client:latest | grep -v "^$" || \
-          docker compose --progress=plain -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e \
-          build --build-arg uid=$(id -u) --build-arg gid=${_GID} client
+          # Verify the cache
+          docker images --quiet ${repository##*/}-client:latest | grep -v "^$" && \
+          CLIENT=0 || CLIENT=1
+          docker images --quiet ${repository##*/}-client-e2e:latest | grep -v "^$" && \
+          CLIENT_E2E=0 || CLIENT_E2E=1
+          # Build images if any client is missing
+          test $CLIENT -a $CLIENT_E2E || \
+            docker compose --progress=plain -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e \
+            build --build-arg uid=$(id -u) --build-arg gid=${_GID}
 
       - name: Setup containers
         run: |

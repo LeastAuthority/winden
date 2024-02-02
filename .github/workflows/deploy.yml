@@ -77,9 +77,14 @@ jobs:
       - name: build image - if not cached
         run: |
           repository=${{ github.repository }}
-          docker images --quiet ${repository##*/}_client:latest | grep -v "^$" || \
-          docker compose --progress=plain -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e \
-          build --build-arg uid=$(id -u) --build-arg gid=${_GID} client
+          # Verify the cache
+          docker images --quiet ${repository##*/}-client:latest | grep -v "^$" && \
+          CLIENT=0 || CLIENT=1
+          # Build images if client is missing
+          test $CLIENT || \
+            docker compose --progress=plain -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e \
+            build --build-arg uid=$(id -u) --build-arg gid=${_GID} \
+            client
 
       - name: prepare
         run: |
