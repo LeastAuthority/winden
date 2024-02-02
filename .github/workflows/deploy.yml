@@ -46,7 +46,7 @@ jobs:
           docker compose build --build-arg uid="$(id -u)" --build-arg gid="$(id -g)"
           docker compose run client npm i
 
-      - name: Deploy application
+      - name: Deploy package
         run: docker compose run client npm run deploy
 
       - name: Stop containers
