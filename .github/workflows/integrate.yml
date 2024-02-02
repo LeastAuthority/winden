@@ -52,8 +52,8 @@ jobs:
           EOF
           cat <<EOF >> ./client/.env
           NODE_ENV=development
-          MAILBOX_URL="wss://mailbox.stage.mw.winden.app/v1"
-          RELAY_URL="wss://relay.stage.mw.windent.app"
+          MAILBOX_URL="wss://mailbox.stage.winden.app/v1"
+          RELAY_URL="wss://relay.stage.winden.app"
           EOF
           printf "Client .env:\n"
           cat ./client/.env
