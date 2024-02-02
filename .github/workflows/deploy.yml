@@ -68,9 +68,19 @@ jobs:
           EOF
           touch ./client-e2e/.env
 
+      - name: build image - if not cached
+        run: |
+          repository=${{ github.repository }}
+          docker images --quiet ${repository##*/}_client:latest | grep -v "^$" || \
+          docker compose build --progress=plain \
+          -f docker-compose.yml -f docker-compose.e2e.yml \
+          --profile e2e build \
+          --build-arg uid=$(id -u) \
+          --build-arg gid=${_GID} \
+          client
+
       - name: prepare
         run: |
-          docker compose --progress plain build --build-arg uid="$(id -u)" --build-arg gid="$(id -g)" client
           docker compose run --no-deps client npm i
 
       - name: deploy

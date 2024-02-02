@@ -71,12 +71,21 @@ jobs:
           printf "Client-e2e .env:\n"
           cat ./.env
 
-      - name: Set up containers
+      - name: Build images - if not cached
         run: |
-          docker compose --progress plain -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e build --build-arg uid="$(id -u)" --build-arg gid="$(id -g)"
-          docker compose run --rm client npm i
-          docker compose run --rm client ./scripts/setup.sh
-          docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e run --rm client-e2e npm i
+          repository=${{ github.repository }}
+          docker images --quiet ${repository##*/}_client:latest | grep -v "^$" || \
+          docker compose build --progress=plain \
+          -f docker-compose.yml -f docker-compose.e2e.yml \
+          --profile e2e build \
+          --build-arg uid=$(id -u) \
+          --build-arg gid=${_GID}
+
+      - name: Setup containers
+        run: |
+          docker compose run --rm --no-deps client npm i
+          docker compose run --rm --no-deps client ./scripts/setup.sh
+          docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e run --rm --no-deps client-e2e npm i
 
       - name: Start up devserver
         run: |
