@@ -25,7 +25,7 @@ jobs:
         uses: fkirc/skip-duplicate-actions@v5
         with:
           concurrent_skipping: "same_content_newer"
-          paths: '["docker-compose.yml", "client/**", "client-e2e/**", ".github/workflows/integrate.yml"]'
+          paths: '["docker-compose*.yml", "client/**", "client-e2e/**", ".github/workflows/integrate.yml"]'
 
   build:
     name: Build/Test
@@ -42,6 +42,17 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+
+      - name: Cache images
+        uses: ScribeMD/docker-cache@0.3.7
+        with:
+          key: |
+            docker-${{ runner.os }}-${{ hashFiles(
+              'docker-compose*.yml',
+              'client/Dockerfile',
+              'client-e2e/Dockerfile',
+              'client-e2e/images/Dockerfile.*'
+            ) }}
 
       - name: Prepare environment
         run: |
@@ -60,17 +71,39 @@ jobs:
           printf "Client-e2e .env:\n"
           cat ./.env
 
-      - name: Prepare containers
+      - name: Fix group membership
+        id: fix_group
         run: |
-          docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e build --build-arg uid="$(id -u)" --build-arg gid="$(id -g)"
-          docker compose run --rm client npm i
-          docker compose run --rm client ./scripts/setup.sh
-          docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e run --rm client-e2e npm i
+          # Add the existing `runner` group to avoid the `docker` one
+          sudo adduser runner runner
+          echo "_GID=$(grep -E "^runner:" /etc/group | cut -d: -f3)" >> $GITHUB_ENV
+
+      - name: Build images - if not cached
+        run: |
+          repository=${{ github.repository }}
+          # Verify the cache
+          docker images --quiet ${repository##*/}-client:latest | grep -v "^$" && \
+          CLIENT=0 || CLIENT=1
+          docker images --quiet ${repository##*/}-client-e2e:latest | grep -v "^$" && \
+          CLIENT_E2E=0 || CLIENT_E2E=1
+          # Build images if any client is missing
+          test $CLIENT -eq 0 -a $CLIENT_E2E -eq 0 || \
+            docker compose --progress plain -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e \
+              build --build-arg uid=$(id -u) --build-arg gid=${_GID}
+
+      - name: Setup containers
+        run: |
+          docker compose run --rm --no-deps -e CI=true client npm clean-install
+          docker compose run --rm --no-deps client ./scripts/setup.sh
+          docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e \
+            run --rm --no-deps -e CI=true client-e2e npm clean-install
 
       - name: Start devserver
         run: |
-          docker compose up -d client
+          docker compose --progress plain up -d client
           docker compose exec client ./scripts/wait-for-webpack.sh
+          docker compose ps
+          docker compose logs client
 
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
@@ -81,10 +114,11 @@ jobs:
 
       - name: Run END-2-END tests
         run: |
-          docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e run --rm client-e2e
+          docker compose --progress plain -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e \
+            run --rm client-e2e npm run wdio
 
       - name: Stop containers
-        run: docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e down
+        run: docker compose --profile e2e down
 
       - uses: sonarsource/sonarqube-scan-action@v2
         env:
