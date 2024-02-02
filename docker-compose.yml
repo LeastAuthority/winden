@@ -102,7 +102,7 @@ services:
     build:
       context: .
       dockerfile: ./client-e2e/images/Dockerfile.firefox
-    shm_size: 2gb
+    shm_size: 3gb
     depends_on:
       - selenium-hub
       - client
