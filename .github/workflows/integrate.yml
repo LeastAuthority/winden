@@ -92,6 +92,8 @@ jobs:
         run: |
           docker compose up -d client
           docker compose exec client ./scripts/wait-for-webpack.sh
+          docker compose ps
+          docker compose logs client
 
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
