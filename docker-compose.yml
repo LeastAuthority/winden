@@ -8,7 +8,7 @@ services:
     image: leastauthority/magic-wormhole-relay:22.11.1
     ports:
       - "4001:4001" # TCP
-      - "4002:4002" # WebSocket
+      - "4200:4200" # WebSocket
   client:
     build: ./client
     env_file:
