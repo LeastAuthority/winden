@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:18-alpine
 
 # Install some require system packages
 RUN apk add git openssh openssl lftp curl rust bash
