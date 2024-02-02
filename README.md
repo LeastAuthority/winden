@@ -35,23 +35,22 @@ git clone --recurse-submodules git@github.com:LeastAuthority/winden.git
 
 ### System Prerequisites
 
-- npm
-- docker
-- docker compose
+- docker (v20.10.24+)
+- docker compose (docker-compose v1.29.2+ should work too)
 
 ### Set up docker images
 
 ```sh
 docker compose build
-docker compose run client npm i
-docker compose run client ./scripts/setup.sh
-docker compose -f docker-compose.yml -f docker-compose.e2e.yml run client-e2e npm i
+docker compose run --no-deps client npm i
+docker compose run --no-deps client ./scripts/setup.sh
+docker compose -f docker-compose.yml -f docker-compose.e2e.yml run --no-deps client-e2e npm i
 ```
 
 ### Set up pre-commit hooks
 
 ```sh
-npm i
+docker compose run --no-deps client npm i
 ```
 
 ### Run development environment
@@ -127,9 +126,9 @@ Run the end-to-end tests with the following
 
 ```sh
 # Run the tests. This would also start the selenium hub if it's not running yet.
-docker compose -f docker-compose.yml -f docker-compose.e2e.yml run --rm client-e2e
+docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e run --rm client-e2e
 # If running on ARM64, you must use the e2e-arm64 override instead.
-docker compose -f docker-compose.yml -f docker-compose.e2e-arm64.yml run --rm client-e2e
+docker compose -f docker-compose.yml -f docker-compose.e2e-arm64.yml --profile e2e run --rm client-e2e
 
 # Once you're done working with the e2e tests, stop the containers running the selenium hub.
 docker compose --profile e2e down
@@ -145,41 +144,46 @@ And https://webdriver.io/docs/api/browser/debug/
 ## Building
 
 - Create `client/.env` if it does not exist already
-- Fill it with the following for:
+- Fill it with one of the following for:
 
-(Playground environment)
+  - Local development
 
-```sh
-MAILBOX_URL="wss://<mailbox server>/v1"
-RELAY_URL="wss:///<relay server>"
-# Use the following line for a development build
-NODE_ENV=development
-```
+  ```sh
+    MAILBOX_URL="wss://client:8080/mailbox"
+    RELAY_URL="wss://client:8080/relay"
+    ```
 
-(Production environment)
+  - Staging
+ 
+   ```sh
+    MAILBOX_URL="wss://mailbox.stage.winden.app/v1"
+    RELAY_URL="wss://relay.stage.winden.app"
+    ```
 
-```sh
-# Production
-MAILBOX_URL="wss://<mailbox server>/v1"
-RELAY_URL="wss:///<relay server>"
-# Or use the following line instead for a production build
-NODE_ENV=production
-```
+  - Production
+
+  ```sh
+    MAILBOX_URL="wss://mailbox.winden.app/v1"
+    RELAY_URL="wss://relay.winden.app"
+    ```
+
+- Add the targeted NodeJS build type:
+
+  - Use the following line for a development build
+
+  ```sh
+    NODE_ENV=development
+    ```
+
+  - Or use the following line instead for a production build
+
+  ```sh
+    NODE_ENV=production
+    ```
 
 ## Deploying
 
-- Create `client/.env` if it does not exist already
-- Fill it with the following: (Replace placeholders in angle brackets with the appropriate values)
-
-```sh
-SFTP_USERNAME=<username>
-SFTP_IDENTITY=<path to ssh key>
-SFTP_HOSTNAME=<hostname>
-
-MAILBOX_URL="wss://<mailbox server>/v1"
-RELAY_URL="wss://<relay server>"
-NODE_ENV=production # or `development` if deploying to playground
-```
+- Create `client/.env` as described above
 
 Now you can deploy by running the following:
 
