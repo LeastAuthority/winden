@@ -31,11 +31,6 @@ jobs:
         with:
           submodules: recursive
 
-      - name: setup npm, yarn etc.
-        uses: actions/setup-node@v3
-        with:
-          node-version: "16"
-
       - name: Cache docker images
         uses: ScribeMD/docker-cache@0.3.3
         with:

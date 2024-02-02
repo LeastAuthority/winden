@@ -43,11 +43,6 @@ jobs:
           submodules: recursive
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
-      - name: Setup npm, yarn etc.
-        uses: actions/setup-node@v2
-        with:
-          node-version: "16"
-
       - name: Cache docker images
         uses: ScribeMD/docker-cache@0.3.3
         with:
