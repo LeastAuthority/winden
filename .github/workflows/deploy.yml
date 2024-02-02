@@ -36,12 +36,6 @@ jobs:
         with:
           node-version: "16"
 
-      - name: Install docker and docker-compose
-        run: |
-          sudo curl -o /usr/local/bin/docker-compose -L \
-          "https://github.com/docker/compose/releases/download/v2.6.1/docker-compose-linux-x86_64"
-          sudo chmod +x /usr/local/bin/docker-compose
-
       - name: Cache docker images
         uses: ScribeMD/docker-cache@0.3.3
         with:

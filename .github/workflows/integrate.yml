@@ -48,11 +48,6 @@ jobs:
         with:
           node-version: "16"
 
-      - name: Install docker and docker-compose
-        run: |
-          sudo curl -o /usr/local/bin/docker-compose -L "https://github.com/docker/compose/releases/download/v2.11.2/docker-compose-linux-x86_64"
-          sudo chmod +x /usr/local/bin/docker-compose
-
       - name: Cache docker images
         uses: ScribeMD/docker-cache@0.3.3
         with:
@@ -83,7 +78,7 @@ jobs:
 
       - name: Set up containers
         run: |
-          docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e build --build-arg uid="$(id -u)" --build-arg gid="$(id -g)"
+          docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e build --progress plain --build-arg uid="$(id -u)" --build-arg gid="$(id -g)"
           docker compose run --rm client npm i
           docker compose run --rm client ./scripts/setup.sh
           docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e run --rm client-e2e npm i
