@@ -72,12 +72,8 @@ jobs:
         run: |
           repository=${{ github.repository }}
           docker images --quiet ${repository##*/}_client:latest | grep -v "^$" || \
-          docker compose build --progress=plain \
-          -f docker-compose.yml -f docker-compose.e2e.yml \
-          --profile e2e build \
-          --build-arg uid=$(id -u) \
-          --build-arg gid=${_GID} \
-          client
+          docker compose --progress=plain -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e \
+          build --build-arg uid=$(id -u) --build-arg gid=${_GID} client
 
       - name: prepare
         run: |
