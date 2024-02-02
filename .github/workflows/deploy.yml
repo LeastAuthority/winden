@@ -11,27 +11,18 @@ on:
           - stage
           - prod
         required: true
-#  workflow_run:
-#    workflows: [transfer-repo-CI]
-#    types: [completed]
-#    branches: [main]
 
 jobs:
   deploy:
-    # `if` required because a workflow run is triggered regardless of
-    # the result of the previous workflow (see the documentation page)
-    #    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: Deploy
     runs-on: ubuntu-22.04
-    env:
-      TEST_ENV: foobar
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      - name: Cache docker images
+      - name: Cache images
         uses: ScribeMD/docker-cache@0.3.7
         with:
           key: |
@@ -42,21 +33,16 @@ jobs:
               'client-e2e/images/Dockerfile.*'
             ) }}
 
-      - name: create variables for production env.
-        if: inputs.environment == 'prod'
-        run: |
-          echo "MAILBOX_URL=wss://mailbox.winden.app/v1" >> $GITHUB_ENV
-          echo "RELAY_URL=wss://relay.winden.app/" >> $GITHUB_ENV
-
-      - name: create variables for stage env.
-        if: inputs.environment == 'stage'
-        run: |
-          echo "MAILBOX_URL=wss://mailbox.stage.winden.app/v1" >> $GITHUB_ENV
-          echo "RELAY_URL=wss://relay.stage.winden.app/" >> $GITHUB_ENV
-
-      - name: create config .env file
+      - name: Prepare environment
         run: |
           touch ./client/.env
+          if [ "${{ inputs.environment }}" = "prod" ]; then
+            echo "MAILBOX_URL=wss://mailbox.winden.app/v1" >> ./client/.env
+            echo "RELAY_URL=wss://relay.winden.app/" >> ./client/.env
+          else
+            echo "MAILBOX_URL=wss://mailbox.stage.winden.app/v1" >> ./client/.env
+            echo "RELAY_URL=wss://relay.stage.winden.app/" >> ./client/.env
+          fi
           cat <<EOF >> ./client/.env
           MAILBOX_URL="${{ env.MAILBOX_URL }}"
           RELAY_URL="${{ env.RELAY_URL }}"
@@ -68,30 +54,30 @@ jobs:
           EOF
           touch ./client-e2e/.env
 
-      - name: fix group membership
+      - name: Fix group membership
         run: |
           # Add the existing `runner` group to avoid the `docker` one
           sudo adduser runner runner
           echo "_GID=$(grep -E "^runner:" /etc/group | cut -d: -f3)" >> $GITHUB_ENV
 
-      - name: build image - if not cached
+      - name: Build image - if not cached
         run: |
           repository=${{ github.repository }}
           # Verify the cache
           docker images --quiet ${repository##*/}-client:latest | grep -v "^$" && \
           CLIENT=0 || CLIENT=1
-          # Build images if client is missing
+          # Build image if client is missing
           test $CLIENT -eq 0 || \
             docker compose --progress plain -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e \
             build --build-arg uid=$(id -u) --build-arg gid=${_GID} \
             client
 
-      - name: prepare
+      - name: Prepare containers
         run: |
           docker compose run --no-deps client npm i
 
-      - name: deploy
+      - name: Deploy package
         run: docker-compose run --no-deps client npm run deploy
 
-      - name: tear down
+      - name: Stop containers
         run: docker-compose down

@@ -38,7 +38,7 @@ jobs:
         os: [ubuntu-latest]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
@@ -54,7 +54,7 @@ jobs:
               'client-e2e/images/Dockerfile.*'
             ) }}
 
-      - name: Setup for running tests
+      - name: Prepare environment
         run: |
           IP=$(ip address show  eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f1 | head -n1)
           printf "HOST_IP address is: %s\n" "$IP"
@@ -97,7 +97,7 @@ jobs:
           docker compose run --rm --no-deps client ./scripts/setup.sh
           docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e run --rm --no-deps client-e2e npm i
 
-      - name: Start up devserver
+      - name: Start devserver
         run: |
           docker compose --progress plain up -d client
           docker compose exec client ./scripts/wait-for-webpack.sh
@@ -115,7 +115,7 @@ jobs:
         run: |
           docker compose --progress plain -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e run --rm client-e2e
 
-      - name: Stop the containers
+      - name: Stop containers
         run: docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e down
 
       - uses: sonarsource/sonarqube-scan-action@master
