@@ -1,11 +1,11 @@
 version: "3.9"
 services:
   mailbox:
-    image: leastauthority/magic-wormhole-mailbox:latest
+    image: leastauthority/magic-wormhole-mailbox:22.11.1
     ports:
       - "4000:4000" # WebSocket
   relay:
-    image: leastauthority/magic-wormhole-relay:latest
+    image: leastauthority/magic-wormhole-relay:22.11.1
     ports:
       - "4001:4001" # TCP
       - "4200:4200" # WebSocket
@@ -115,7 +115,7 @@ services:
     profiles:
       - e2e
   selenium-hub:
-    image: selenium/hub:4.9.1-20230508
+    image: selenium/hub:4.11.0-20230801
     container_name: selenium-hub
     ports:
       - "4442:4442"

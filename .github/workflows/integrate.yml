@@ -16,7 +16,7 @@ jobs:
   pre:
     # Verification to be done before the real check
     name: Pre-check
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     outputs:
       should_skip: ${{ steps.skip_flag.outputs.should_skip }}
     steps:
@@ -120,7 +120,7 @@ jobs:
       - name: Stop containers
         run: docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e down
 
-      - uses: sonarsource/sonarqube-scan-action@master
+      - uses: sonarsource/sonarqube-scan-action@v2
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
