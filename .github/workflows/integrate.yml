@@ -86,7 +86,7 @@ jobs:
       - name: Stop containers
         run: docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e down
 
-      - uses: sonarsource/sonarqube-scan-action@master
+      - uses: sonarsource/sonarqube-scan-action@v2
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
