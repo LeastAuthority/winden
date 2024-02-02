@@ -96,7 +96,7 @@ jobs:
           docker compose run --rm --no-deps -e CI=true client npm clean-install
           docker compose run --rm --no-deps client ./scripts/setup.sh
           docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e \
-            run --rm --no-deps -e CI=true client-e2e npm clean-installed
+            run --rm --no-deps -e CI=true client-e2e npm clean-install
 
       - name: Start devserver
         run: |
