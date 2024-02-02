@@ -70,8 +70,8 @@ jobs:
 
       - name: prepare
         run: |
-          docker-compose build --progress plain --build-arg uid="$(id -u)" --build-arg gid="$(id -g)" client
-          docker-compose run --no-deps client npm i
+          docker compose --progress plain build --build-arg uid="$(id -u)" --build-arg gid="$(id -g)" client
+          docker compose run --no-deps client npm i
 
       - name: deploy
         run: docker-compose run --no-deps client npm run deploy
