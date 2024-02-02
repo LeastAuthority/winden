@@ -88,7 +88,7 @@ jobs:
           CLIENT_E2E=0 || CLIENT_E2E=1
           # Build images if any client is missing
           test $CLIENT -eq 0 -a $CLIENT_E2E -eq 0 || \
-            docker compose --progress=plain -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e \
+            docker compose --progress plain -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e \
             build --build-arg uid=$(id -u) --build-arg gid=${_GID}
 
       - name: Setup containers
@@ -99,7 +99,7 @@ jobs:
 
       - name: Start up devserver
         run: |
-          docker compose up -d client
+          docker compose --progress plain up -d client
           docker compose exec client ./scripts/wait-for-webpack.sh
           docker compose ps
           docker compose logs client
@@ -113,7 +113,7 @@ jobs:
 
       - name: Run END-2-END tests
         run: |
-          docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e run --rm client-e2e
+          docker compose --progress plain -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e run --rm client-e2e
 
       - name: Stop the containers
         run: docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e down
