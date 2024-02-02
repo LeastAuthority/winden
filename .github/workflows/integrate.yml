@@ -63,8 +63,8 @@ jobs:
           EOF
           cat <<EOF >> ./client/.env
           NODE_ENV=development
-          MAILBOX_URL="wss://mailbox.stage.mw.leastauthority.com/v1"
-          RELAY_URL="wss://relay.stage.mw.leastauthority.com"
+          MAILBOX_URL="wss://mailbox.stage.winden.app/v1"
+          RELAY_URL="wss://relay.stage.winden.app"
           EOF
           printf "Client .env:\n"
           cat ./client/.env
@@ -119,7 +119,6 @@ jobs:
         run: docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e down
 
       - uses: sonarsource/sonarqube-scan-action@master
-        #        if: github.ref_name == 'main' && github.event_name == 'push'
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
