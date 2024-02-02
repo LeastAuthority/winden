@@ -31,33 +31,3 @@ ENV PATH="/home/${user}/.cargo/bin:${PATH}"
 # Install wasm-pack to build the WebAssembly packages
 # FIXME: make it reproducible!
 RUN curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-
-# Switch to the parent directory of where the client code will live
-# So the modules installed here will be found by the module resolution
-# See https://nodejs.org/api/modules.html#all-together
-WORKDIR /usr/src/app
-
-RUN npm install @sentry/cli && \
-    npm cache clean --force 2> /dev/null
-ENV SENTRYCLI_SKIP_DOWNLOAD=1
-ARG SENTRYCLI_USE_LOCAL=1
-
-# Install the required packages globaly and unsafely
-COPY package.json .
-COPY package-lock.json .
-RUN npm clean-install && \
-    npm cache clean --force 2> /dev/null
-
-# Add paths to node modules installed above
-ENV PATH=/usr/src/app/node_modules/.bin:$PATH
-
-# Switch to the directory where the client code will live
-WORKDIR /usr/src/app/client
-
-# Copy the whole context except what is explicitly ignored
-# TODO: be explicit instead?
-COPY . .
-
-# Start the dev server by default
-CMD ["npm", "run", "serve"]
-EXPOSE 8080

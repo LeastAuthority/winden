@@ -22,6 +22,17 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Cache images
+        uses: ScribeMD/docker-cache@0.3.7
+        with:
+          key: |
+            docker-${{ runner.os }}-${{ hashFiles(
+              'docker-compose*.yml',
+              'client/Dockerfile',
+              'client-e2e/Dockerfile',
+              'client-e2e/images/Dockerfile.*'
+            ) }}
+
       - name: Prepare environment
         run: |
           touch ./client/.env
@@ -41,13 +52,30 @@ jobs:
           EOF
           touch ./client-e2e/.env
 
+      - name: Fix group membership
+        run: |
+          # Add the existing `runner` group to avoid the `docker` one
+          sudo adduser runner runner
+          echo "_GID=$(grep -E "^runner:" /etc/group | cut -d: -f3)" >> $GITHUB_ENV
+
+      - name: Build image - if not cached
+        run: |
+          repository=${{ github.repository }}
+          # Verify the cache
+          docker images --quiet ${repository##*/}-client:latest | grep -v "^$" && \
+          CLIENT=0 || CLIENT=1
+          # Build image if client is missing
+          test $CLIENT -eq 0 || \
+            docker compose --progress plain -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e \
+            build --build-arg uid=$(id -u) --build-arg gid=${_GID} client
+
       - name: Prepare containers
         run: |
-          docker compose build --build-arg uid="$(id -u)" --build-arg gid="$(id -g)"
-          docker compose run client npm i
+          docker compose build --build-arg uid="$(id -u)" --build-arg gid="$(id -g)" client
+          docker compose run --no-deps -e CI=true client npm clean-install
 
       - name: Deploy package
-        run: docker compose run client npm run deploy
+        run: docker compose run --no-deps client npm run deploy
 
       - name: Stop containers
         run: docker compose down
