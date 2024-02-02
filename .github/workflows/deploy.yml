@@ -81,11 +81,11 @@ jobs:
 
       - name: prepare
         run: |
-          docker-compose build --build-arg uid="$(id -u)" --build-arg gid="$(id -g)"
-          docker-compose run client npm i
+          docker-compose build --progress plain --build-arg uid="$(id -u)" --build-arg gid="$(id -g)" client
+          docker-compose run --no-deps client npm i
 
       - name: deploy
-        run: docker-compose run client npm run deploy
+        run: docker-compose run --no-deps client npm run deploy
 
       - name: tear down
         run: docker-compose down
