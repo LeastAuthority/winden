@@ -16,7 +16,7 @@ jobs:
   pre:
     # Verification to be done before the real check
     name: Pre-check
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     outputs:
       should_skip: ${{ steps.skip_flag.outputs.should_skip }}
     steps:
