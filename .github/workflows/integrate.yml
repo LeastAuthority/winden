@@ -80,6 +80,7 @@ jobs:
 
       - name: Build images - if not cached
         run: |
+          docker images
           repository=${{ github.repository }}
           docker images --quiet ${repository##*/}_client:latest | grep -v "^$" || \
           docker compose --progress=plain -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e \
