@@ -38,13 +38,13 @@ jobs:
         os: [ubuntu-latest]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: recursive
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: Cache docker images
-        uses: ScribeMD/docker-cache@0.3.3
+        uses: ScribeMD/docker-cache@0.3.7
         with:
           key: |
             docker-${{ runner.os }}-${{ hashFiles(
