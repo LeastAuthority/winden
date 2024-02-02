@@ -25,7 +25,7 @@ jobs:
         uses: fkirc/skip-duplicate-actions@v5
         with:
           concurrent_skipping: "same_content_newer"
-          paths: '["client/**", "client-e2e/**", ".github/workflows/integrate.yml"]'
+          paths: '["docker-compose.yml", "client/**", "client-e2e/**", ".github/workflows/integrate.yml"]'
 
   build:
     name: Build/Test
@@ -38,22 +38,12 @@ jobs:
         os: [ubuntu-latest]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
-      - name: Setup npm, yarn etc.
-        uses: actions/setup-node@v2
-        with:
-          node-version: "16"
-
-      - name: Install docker and docker-compose
-        run: |
-          sudo curl -o /usr/local/bin/docker-compose -L "https://github.com/docker/compose/releases/download/v2.11.2/docker-compose-linux-x86_64"
-          sudo chmod +x /usr/local/bin/docker-compose
-
-      - name: Setup for running tests
+      - name: Prepare environment
         run: |
           IP=$(ip address show  eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f1 | head -n1)
           printf "HOST_IP address is: %s\n" "$IP"
@@ -62,22 +52,22 @@ jobs:
           EOF
           cat <<EOF >> ./client/.env
           NODE_ENV=development
-          MAILBOX_URL="wss://mailbox.stage.mw.leastauthority.com/v1"
-          RELAY_URL="wss://relay.stage.mw.leastauthority.com"
+          MAILBOX_URL="wss://mailbox.stage.mw.winden.app/v1"
+          RELAY_URL="wss://relay.stage.mw.windent.app"
           EOF
           printf "Client .env:\n"
           cat ./client/.env
           printf "Client-e2e .env:\n"
           cat ./.env
 
-      - name: Set up containers
+      - name: Prepare containers
         run: |
           docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e build --build-arg uid="$(id -u)" --build-arg gid="$(id -g)"
           docker compose run --rm client npm i
           docker compose run --rm client ./scripts/setup.sh
           docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e run --rm client-e2e npm i
 
-      - name: Start up devserver
+      - name: Start devserver
         run: |
           docker compose up -d client
           docker compose exec client ./scripts/wait-for-webpack.sh
@@ -93,11 +83,10 @@ jobs:
         run: |
           docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e run --rm client-e2e
 
-      - name: Stop the containers
+      - name: Stop containers
         run: docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e down
 
       - uses: sonarsource/sonarqube-scan-action@master
-        #        if: github.ref_name == 'main' && github.event_name == 'push'
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}

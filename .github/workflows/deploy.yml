@@ -11,55 +11,28 @@ on:
           - stage
           - prod
         required: true
-#  workflow_run:
-#    workflows: [transfer-repo-CI]
-#    types: [completed]
-#    branches: [main]
 
 jobs:
   deploy:
-    # `if` required because a workflow run is triggered regardless of
-    # the result of the previous workflow (see the documentation page)
-    #    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: Deploy
     runs-on: ubuntu-22.04
-    env:
-      TEST_ENV: foobar
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      - name: setup npm, yarn etc.
-        uses: actions/setup-node@v3
-        with:
-          node-version: "16"
-
-      - name: Install docker and docker-compose
-        run: |
-          sudo curl -o /usr/local/bin/docker-compose -L \
-          "https://github.com/docker/compose/releases/download/v2.6.1/docker-compose-linux-x86_64"
-          sudo chmod +x /usr/local/bin/docker-compose
-
-      - name: create variables for production env.
-        if: inputs.environment == 'prod'
-        run: |
-          echo "MAILBOX_URL=wss://mailbox.winden.app/v1" >> $GITHUB_ENV
-          echo "RELAY_URL=wss://relay.winden.app/" >> $GITHUB_ENV
-
-      - name: create variables for stage env.
-        if: inputs.environment == 'stage'
-        run: |
-          echo "MAILBOX_URL=wss://mailbox.stage.winden.app/v1" >> $GITHUB_ENV
-          echo "RELAY_URL=wss://relay.stage.winden.app/" >> $GITHUB_ENV
-
-      - name: create config .env file
+      - name: Prepare environment
         run: |
           touch ./client/.env
+          if [ "${{ inputs.environment }}" = "prod" ]; then
+            echo "MAILBOX_URL=wss://mailbox.winden.app/v1" >> ./client/.env
+            echo "RELAY_URL=wss://relay.winden.app/" >> ./client/.env
+          else
+            echo "MAILBOX_URL=wss://mailbox.stage.winden.app/v1" >> ./client/.env
+            echo "RELAY_URL=wss://relay.stage.winden.app/" >> ./client/.env
+          fi
           cat <<EOF >> ./client/.env
-          MAILBOX_URL="${{ env.MAILBOX_URL }}"
-          RELAY_URL="${{ env.RELAY_URL }}"
           SFTP_HOSTNAME=${{ secrets.SFTP_HOSTNAME }}
           SFTP_USERNAME=${{ secrets.SFTP_USERNAME }}
           SFTP_IDENTITY="${{ secrets.SFTP_IDENTITY }}"
@@ -68,13 +41,13 @@ jobs:
           EOF
           touch ./client-e2e/.env
 
-      - name: prepare
+      - name: Prepare containers
         run: |
-          docker-compose build --build-arg uid="$(id -u)" --build-arg gid="$(id -g)"
-          docker-compose run client npm i
+          docker compose build --build-arg uid="$(id -u)" --build-arg gid="$(id -g)"
+          docker compose run client npm i
 
-      - name: deploy
-        run: docker-compose run client npm run deploy
+      - name: Deploy package
+        run: docker compose run client npm run deploy
 
-      - name: tear down
-        run: docker-compose down
+      - name: Stop containers
+        run: docker compose down
