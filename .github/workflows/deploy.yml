@@ -44,8 +44,6 @@ jobs:
             echo "RELAY_URL=wss://relay.stage.winden.app/" >> ./client/.env
           fi
           cat <<EOF >> ./client/.env
-          MAILBOX_URL="${{ env.MAILBOX_URL }}"
-          RELAY_URL="${{ env.RELAY_URL }}"
           SFTP_HOSTNAME=${{ secrets.SFTP_HOSTNAME }}
           SFTP_USERNAME=${{ secrets.SFTP_USERNAME }}
           SFTP_IDENTITY="${{ secrets.SFTP_IDENTITY }}"
@@ -74,10 +72,11 @@ jobs:
 
       - name: Prepare containers
         run: |
-          docker compose run --no-deps client npm i
+          docker compose build --build-arg uid="$(id -u)" --build-arg gid="$(id -g)"
+          docker compose run client npm i
 
       - name: Deploy package
-        run: docker-compose run --no-deps client npm run deploy
+        run: docker compose run client npm run deploy
 
       - name: Stop containers
-        run: docker-compose down
+        run: docker compose down
