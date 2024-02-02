@@ -7,7 +7,7 @@ services:
     build:
       dockerfile: ./client-e2e/images/Dockerfile.firefox-arm64
   selenium-hub:
-    image: seleniarm/hub:latest
+    image: seleniarm/hub:4.11.0-20230801
   client-e2e:
     depends_on:
       chrome:
