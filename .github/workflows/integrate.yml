@@ -89,13 +89,14 @@ jobs:
           # Build images if any client is missing
           test $CLIENT -eq 0 -a $CLIENT_E2E -eq 0 || \
             docker compose --progress plain -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e \
-            build --build-arg uid=$(id -u) --build-arg gid=${_GID}
+              build --build-arg uid=$(id -u) --build-arg gid=${_GID}
 
       - name: Setup containers
         run: |
-          docker compose run --rm --no-deps client npm i
+          docker compose run --rm --no-deps -e CI=true client npm clean-install
           docker compose run --rm --no-deps client ./scripts/setup.sh
-          docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e run --rm --no-deps client-e2e npm i
+          docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e \
+            run --rm --no-deps -e CI=true client-e2e npm clean-installed
 
       - name: Start devserver
         run: |
@@ -113,7 +114,8 @@ jobs:
 
       - name: Run END-2-END tests
         run: |
-          docker compose --progress plain -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e run --rm client-e2e
+          docker compose --progress plain -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e \
+            run --rm client-e2e
 
       - name: Stop containers
         run: docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e down

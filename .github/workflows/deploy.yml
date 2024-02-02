@@ -72,7 +72,7 @@ jobs:
       - name: Prepare containers
         run: |
           docker compose build --build-arg uid="$(id -u)" --build-arg gid="$(id -g)" client
-          docker compose run --no-deps client npm i
+          docker compose run --no-deps -e CI=true client npm clean-install
 
       - name: Deploy package
         run: docker compose run --no-deps client npm run deploy
