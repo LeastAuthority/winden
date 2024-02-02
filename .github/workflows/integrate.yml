@@ -71,6 +71,13 @@ jobs:
           printf "Client-e2e .env:\n"
           cat ./.env
 
+      - name: Fix group membership
+        id: fix_group
+        run: |
+          # Add the existing `runner` group to avoid the `docker` one
+          sudo adduser runner runner
+          echo "_GID=$(grep -E "^runner:" /etc/group | cut -d: -f3)" >> $GITHUB_ENV
+
       - name: Build images - if not cached
         run: |
           repository=${{ github.repository }}

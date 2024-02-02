@@ -68,6 +68,12 @@ jobs:
           EOF
           touch ./client-e2e/.env
 
+      - name: fix group membership
+        run: |
+          # Add the existing `runner` group to avoid the `docker` one
+          sudo adduser runner runner
+          echo "_GID=$(grep -E "^runner:" /etc/group | cut -d: -f3)" >> $GITHUB_ENV
+
       - name: build image - if not cached
         run: |
           repository=${{ github.repository }}
