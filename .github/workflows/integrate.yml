@@ -70,14 +70,12 @@ jobs:
           printf "Client-e2e .env:\n"
           cat ./.env
 
-      - name: Setup docker images
-        run: docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e build
-
       - name: Set up containers
         run: |
+          docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e build --build-arg uid="$(id -u)" --build-arg gid="$(id -g)"
           docker compose run --rm client npm i
           docker compose run --rm client ./scripts/setup.sh
-          docker-compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e run --rm client-e2e npm i
+          docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e run --rm client-e2e npm i
 
       - name: Start up devserver
         run: |

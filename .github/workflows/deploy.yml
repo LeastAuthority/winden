@@ -70,7 +70,7 @@ jobs:
 
       - name: prepare
         run: |
-          docker-compose build
+          docker-compose build --build-arg uid="$(id -u)" --build-arg gid="$(id -g)"
           docker-compose run client npm i
 
       - name: deploy
