@@ -26,9 +26,10 @@ USER ${user}
 # Install the rust toolchain
 WORKDIR /home/${user}
 RUN curl --proto '=https' --tlsv1.2 -sSf --output rustup-init \
-   https://static.rust-lang.org/rustup/archive/1.26.0/x86_64-unknown-linux-musl/rustup-init \
-   && chmod +x rustup-init \
-   && ./rustup-init -y --profile minimal
+    https://static.rust-lang.org/rustup/archive/1.26.0/x86_64-unknown-linux-musl/rustup-init \
+    && chmod +x rustup-init \
+    && ./rustup-init -y --profile minimal \
+    && rm -f rustup-init
 ENV PATH="/home/${user}/.cargo/bin:${PATH}"
 
 # Install wasm-pack to build the WebAssembly packages
