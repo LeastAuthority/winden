@@ -23,11 +23,14 @@ RUN DIRS="/usr/src/app" && \
 # Switch to non-root user
 USER ${user}
 
-# Install latest rust on top of it
-# FIXME: make it reproducible!
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+# Install the rust toolchain
+WORKDIR /home/${user}
+RUN curl --proto '=https' --tlsv1.2 -sSf --output rustup-init \
+   https://static.rust-lang.org/rustup/archive/1.26.0/x86_64-unknown-linux-musl/rustup-init \
+   && chmod +x rustup-init \
+   && ./rustup-init -y --profile minimal
 ENV PATH="/home/${user}/.cargo/bin:${PATH}"
 
 # Install wasm-pack to build the WebAssembly packages
-# FIXME: make it reproducible!
-RUN curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+RUN cargo install --version 0.12.1 wasm-pack \
+    && rm -rf /home/${user}/.cargo/registry
