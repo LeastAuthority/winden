@@ -66,13 +66,11 @@ jobs:
           CLIENT=0 || CLIENT=1
           # Build image if client is missing
           test $CLIENT -eq 0 || \
-            docker compose --progress plain -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e \
-            build --build-arg uid=$(id -u) --build-arg gid=${_GID} client
+            docker compose --progress plain build --build-arg uid=$(id -u) --build-arg gid=${_GID} client
 
       - name: Prepare containers
         run: |
-          docker compose build --build-arg uid="$(id -u)" --build-arg gid="$(id -g)" client
-          docker compose run --no-deps -e CI=true client npm clean-install
+          docker compose run --rm --no-deps -e CI=true client npm install
 
       - name: Deploy package
         run: docker compose run --no-deps client npm run deploy
