@@ -1,12 +1,14 @@
 # Start from the official Rust image
-FROM rust:1.75.0-alpine3.18@sha256:d4d3ccbfb49d4119c748144b2767966a8a3361ee9c529e8fcfa1fa9adfbc9cf5 as builder
+FROM rust:1.71.1-alpine3.18@sha256:3419c5212b75ce4e7786b71bd2bd49587a2481f8b42ca685d719d265a11c7e96 as builder
 
 # Install component 'rust-std' for 'wasm32-unknown-unknown'
+# FIXME: validate downloaded content with checksum
 RUN wget -q -O - https://static.rust-lang.org/dist/rust-std-${RUST_VERSION}-wasm32-unknown-unknown.tar.gz \
     | gunzip | tar -x --strip-components 4 -C /usr/local/rustup/toolchains/${RUST_VERSION}-x86_64-unknown-linux-musl/lib/rustlib \
     rust-std-${RUST_VERSION}-wasm32-unknown-unknown/rust-std-wasm32-unknown-unknown/lib/rustlib/wasm32-unknown-unknown
 
 # Install wasm-pack to build the WebAssembly package
+# FIXME: validate downloaded content with checksum
 RUN WASM_PACK_VERSION=0.12.1 \
     && wget -q -O - https://github.com/rustwasm/wasm-pack/releases/download/v${WASM_PACK_VERSION}/wasm-pack-v${WASM_PACK_VERSION}-x86_64-unknown-linux-musl.tar.gz \
     | gunzip | tar -x --strip-components 1 -C /usr/local/cargo/bin \
