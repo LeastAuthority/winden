@@ -1,5 +1,5 @@
 # Start from the official Rust image
-FROM rust:1.71.1-alpine3.18@sha256:3419c5212b75ce4e7786b71bd2bd49587a2481f8b42ca685d719d265a11c7e96 as builder
+FROM rust:1.75.0-alpine3.18@sha256:d4d3ccbfb49d4119c748144b2767966a8a3361ee9c529e8fcfa1fa9adfbc9cf5 as builder
 
 # Install component 'rust-std' for 'wasm32-unknown-unknown'
 # FIXME: validate downloaded content with checksum
@@ -18,7 +18,7 @@ RUN WASM_PACK_VERSION=0.12.1 \
 FROM node:16-alpine3.18@sha256:a1f9d027912b58a7c75be7716c97cfbc6d3099f3a97ed84aa490be9dee20e787
 
 # Install some require system packages
-RUN apk add git openssh openssl lftp curl bash
+RUN apk add git openssh openssl lftp curl gcc musl-dev bash
 
 # Parameters for default user:group
 ARG uid=1000
