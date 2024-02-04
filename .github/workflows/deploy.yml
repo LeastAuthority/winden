@@ -47,7 +47,7 @@ jobs:
           SFTP_HOSTNAME=${{ secrets.SFTP_HOSTNAME }}
           SFTP_USERNAME=${{ secrets.SFTP_USERNAME }}
           SFTP_IDENTITY="${{ secrets.SFTP_IDENTITY }}"
-          NODE_ENV=production
+          NODE_ENV=development
           ENVIRONMENT=${{ inputs.environment }}
           EOF
           touch ./client-e2e/.env
@@ -70,7 +70,7 @@ jobs:
 
       - name: Prepare containers
         run: |
-          docker compose run --rm --no-deps -e CI=true client npm install
+          docker compose run --rm --no-deps -e CI=true client npm clean-install
 
       - name: Deploy package
         run: docker compose run --no-deps client npm run deploy
