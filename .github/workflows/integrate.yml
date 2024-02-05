@@ -39,7 +39,7 @@ jobs:
 
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
-        if: ${{ github.event_name == 'workflow_dispatch' }}
+        #if: ${{ github.event_name == 'workflow_dispatch' }}
         timeout-minutes: 30
         with:
           detached: true
@@ -65,8 +65,8 @@ jobs:
           EOF
           cat <<EOF >> ./client/.env
           NODE_ENV=development
-          MAILBOX_URL="wss://mailbox.stage.winden.app/v1"
-          RELAY_URL="wss://relay.stage.winden.app"
+          MAILBOX_URL="ws://$IP:8080/mailbox/v1"
+          RELAY_URL="ws://$IP:8080/relay"
           EOF
           printf "Client .env:\n"
           cat ./client/.env
