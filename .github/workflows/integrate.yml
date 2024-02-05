@@ -5,12 +5,6 @@ on:
   push:
   pull_request:
   workflow_dispatch:
-    inputs:
-      debug_enabled:
-        type: boolean
-        description: "Run the build with tmate debugging enabled (https://github.com/marketplace/actions/debugging-with-tmate)"
-        required: false
-        default: false
 
 jobs:
   pre:
@@ -30,7 +24,7 @@ jobs:
   build:
     name: Build/Test
     needs: pre
-    if: needs.pre.outputs.should_skip != 'true'
+    if: ${{ github.event_name == 'workflow_dispatch' || needs.pre.outputs.should_skip != 'true' }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
     strategy:
@@ -42,6 +36,14 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        #if: ${{ github.event_name == 'workflow_dispatch' }}
+        timeout-minutes: 30
+        with:
+          detached: true
+          limit-access-to-actor: true
 
       - name: Cache images
         uses: ScribeMD/docker-cache@0.3.7
@@ -63,8 +65,8 @@ jobs:
           EOF
           cat <<EOF >> ./client/.env
           NODE_ENV=development
-          MAILBOX_URL="wss://mailbox.stage.winden.app/v1"
-          RELAY_URL="wss://relay.stage.winden.app"
+          MAILBOX_URL="ws://$IP:8080/mailbox/v1"
+          RELAY_URL="ws://$IP:8080/relay"
           EOF
           printf "Client .env:\n"
           cat ./client/.env
@@ -98,16 +100,12 @@ jobs:
           docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e \
             run --rm --no-deps -e CI=true client-e2e npm clean-install
 
-      - name: Start devserver
+      - name: Start containers
         run: |
           docker compose --progress plain up -d client
           docker compose exec client ./scripts/wait-for-webpack.sh
           docker compose ps
           docker compose logs client
-
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_enabled }}
 
       - name: Run UNIT and INTEGRATION tests
         run: docker compose run --rm client npm run test -- --coverage

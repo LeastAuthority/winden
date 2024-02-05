@@ -1,7 +1,8 @@
 import express from "express";
 import fs from "fs";
 import { createProxyMiddleware } from "http-proxy-middleware";
-import https from "https";
+//import https from "https";
+import http from "http";
 import path from "path";
 import webpack from "webpack";
 import webpackDevMiddleware from "webpack-dev-middleware";
@@ -56,12 +57,13 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../src/public/index.html"));
 });
 
-const server = https.createServer(
-  {
-    key: fs.readFileSync(path.join(__dirname, "../certs/server.key")),
-    cert: fs.readFileSync(path.join(__dirname, "../certs/server.cert")),
-    passphrase: "gulp",
-  },
+//const server = https.createServer(
+const server = http.createServer(
+  // {
+  //   key: fs.readFileSync(path.join(__dirname, "../certs/server.key")),
+  //   cert: fs.readFileSync(path.join(__dirname, "../certs/server.cert")),
+  //   passphrase: "gulp",
+  // },
   app
 );
 
