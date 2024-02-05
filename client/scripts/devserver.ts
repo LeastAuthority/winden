@@ -31,7 +31,7 @@ app.use(
 
 app.use(
   createProxyMiddleware("/relay", {
-    target: "http://relay:4200",
+    target: "http://relay:4002",
     changeOrigin: true,
     ws: true,
     pathRewrite: { "^/relay": "" },
