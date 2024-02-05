@@ -24,7 +24,7 @@ jobs:
   build:
     name: Build/Test
     needs: pre
-    if: ${{ github.event_name != 'workflow_dispatch' || needs.pre.outputs.should_skip != 'true' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || needs.pre.outputs.should_skip != 'true' }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
     strategy:
@@ -40,6 +40,8 @@ jobs:
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
         if: ${{ github.event_name == 'workflow_dispatch' }}
+        with:
+          detached: true
 
       - name: Cache images
         uses: ScribeMD/docker-cache@0.3.7
