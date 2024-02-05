@@ -40,8 +40,10 @@ jobs:
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
         if: ${{ github.event_name == 'workflow_dispatch' }}
+        timeout-minutes: 30
         with:
           detached: true
+          limit-access-to-actor: true
 
       - name: Cache images
         uses: ScribeMD/docker-cache@0.3.7
@@ -63,8 +65,8 @@ jobs:
           EOF
           cat <<EOF >> ./client/.env
           NODE_ENV=development
-          MAILBOX_URL="wss://client:8080/mailbox"
-          RELAY_URL="wss://client:8080/relay"
+          MAILBOX_URL="ws://mailbox:4000/v1"
+          RELAY_URL="ws:relay:4002"
           EOF
           printf "Client .env:\n"
           cat ./client/.env
