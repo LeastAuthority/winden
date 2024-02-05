@@ -78,7 +78,7 @@ jobs:
           sudo adduser runner runner
           echo "_GID=$(grep -E "^runner:" /etc/group | cut -d: -f3)" >> $GITHUB_ENV
 
-      - name: Build images - if not cached
+      - name: Build images
         run: |
           repository=${{ github.repository }}
           # Verify the cache
@@ -91,7 +91,7 @@ jobs:
             docker compose --progress plain -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e \
               build --build-arg uid=$(id -u) --build-arg gid=${_GID}
 
-      - name: Setup containers
+      - name: Prepare containers
         run: |
           docker compose run --rm --no-deps -e CI=true client npm clean-install
           docker compose run --rm --no-deps client ./scripts/setup.sh
