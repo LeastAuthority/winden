@@ -43,6 +43,10 @@ jobs:
           submodules: recursive
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_enabled == 'true' }}
+
       - name: Cache images
         uses: ScribeMD/docker-cache@0.3.7
         with:
@@ -98,16 +102,12 @@ jobs:
           docker compose -f docker-compose.yml -f docker-compose.e2e.yml --profile e2e \
             run --rm --no-deps -e CI=true client-e2e npm clean-install
 
-      - name: Start devserver
+      - name: Start containers
         run: |
           docker compose --progress plain up -d client
           docker compose exec client ./scripts/wait-for-webpack.sh
           docker compose ps
           docker compose logs client
-
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_enabled }}
 
       - name: Run UNIT and INTEGRATION tests
         run: docker compose run --rm client npm run test -- --coverage
