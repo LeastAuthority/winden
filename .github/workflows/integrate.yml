@@ -5,12 +5,6 @@ on:
   push:
   pull_request:
   workflow_dispatch:
-    inputs:
-      debug_enabled:
-        type: boolean
-        description: "Run the build with tmate debugging enabled (https://github.com/marketplace/actions/debugging-with-tmate)"
-        required: false
-        default: false
 
 jobs:
   pre:
@@ -30,7 +24,7 @@ jobs:
   build:
     name: Build/Test
     needs: pre
-    if: needs.pre.outputs.should_skip != 'true'
+    if: ${{ github.event_name != 'workflow_dispatch' || needs.pre.outputs.should_skip != 'true' }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
     strategy:
@@ -45,7 +39,7 @@ jobs:
 
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_enabled == 'true' }}
+        if: ${{ github.event_name == 'workflow_dispatch' }}
 
       - name: Cache images
         uses: ScribeMD/docker-cache@0.3.7
