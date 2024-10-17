@@ -2,6 +2,12 @@ AddType application/wasm .wasm
 
 RewriteEngine On
 
+RewriteCond %{HTTP_HOST} "=stage.winden.app"
+RewriteRule "^(v\d+)/feedback$"  "https://feedback.stage.mw.leastauthority.com/$1/feedback" [P,L]
+
+RewriteCond %{HTTP_HOST} "=winden.app"
+RewriteRule "^(v\d+)/feedback$"  "https://feedback.mw.leastauthority.com/$1/feedback" [P,L]
+
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^ index.html [L]
