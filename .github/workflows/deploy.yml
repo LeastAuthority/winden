@@ -34,6 +34,8 @@ jobs:
             ) }}
 
       - name: Prepare environment
+        environment:
+          SFTP_ROOT: /var/www
         run: |
           touch ./client/.env
           if [ "${{ inputs.environment }}" = "prod" ]; then
@@ -44,9 +46,10 @@ jobs:
             echo "RELAY_URL=wss://relay.stage.winden.app/" >> ./client/.env
           fi
           cat <<EOF >> ./client/.env
-          SFTP_HOSTNAME=${{ secrets.SFTP_HOSTNAME }}
-          SFTP_USERNAME=${{ secrets.SFTP_USERNAME }}
+          SFTP_HOSTNAME="${{ secrets.SFTP_HOSTNAME }}"
+          SFTP_USERNAME="${{ secrets.SFTP_USERNAME }}"
           SFTP_IDENTITY="${{ secrets.SFTP_IDENTITY }}"
+          SFTP_PATH="${{ env.SFTP_ROOT }}/winden_${{ inputs.environment }}"
           NODE_ENV=development
           ENVIRONMENT=${{ inputs.environment }}
           EOF

@@ -141,6 +141,18 @@ And https://webdriver.io/docs/api/browser/debug/
 
 > If you run the WDIO testrunner make sure you increase the timeout property of the test framework you are using (e.g. Mocha or Jasmine) in order to prevent test termination due to a test timeout. Also avoid executing the command with multiple capabilities running at the same time.
 
+## Deploying
+
+- Create `client/.env` as described above
+
+Now you can deploy by running the following:
+
+```sh
+docker-compose run --no-deps --rm client npm run deploy
+```
+
+Note that this will also create a new [build](#building) of the app.
+
 ## Building
 
 - Create `client/.env` if it does not exist already
@@ -180,18 +192,6 @@ And https://webdriver.io/docs/api/browser/debug/
   ```sh
     NODE_ENV=production
     ```
-
-## Deploying
-
-- Create `client/.env` as described above
-
-Now you can deploy by running the following:
-
-```sh
-docker-compose run client npm run deploy
-```
-
-Note that this will also create a new [build](#building) of the app.
 
 ## Codebase Architecture
 
