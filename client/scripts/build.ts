@@ -66,7 +66,7 @@ const options = program.opts();
       execSync(
         `lftp sftp://${process.env.SFTP_USERNAME}:dummy@${process.env.SFTP_HOSTNAME}`,
         {
-          input: `mirror -R dist ${process.env.STFP_PATH}`,
+          input: `mirror -R dist ${process.env.SFTP_PATH}`,
         }
       );
     }
