@@ -34,7 +34,7 @@ jobs:
             ) }}
 
       - name: Prepare environment
-        environment:
+        env:
           SFTP_ROOT: /var/www
         run: |
           touch ./client/.env
