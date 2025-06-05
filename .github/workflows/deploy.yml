@@ -23,7 +23,7 @@ jobs:
           submodules: recursive
 
       - name: Cache images
-        uses: ScribeMD/docker-cache@0.3.7
+        uses: AndreKurait/docker-cache@0.6.0
         with:
           key: |
             docker-${{ runner.os }}-${{ hashFiles(

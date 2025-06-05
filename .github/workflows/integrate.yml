@@ -44,7 +44,7 @@ jobs:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: Cache images
-        uses: ScribeMD/docker-cache@0.3.7
+        uses: AndreKurait/docker-cache@0.6.0
         with:
           key: |
             docker-${{ runner.os }}-${{ hashFiles(
