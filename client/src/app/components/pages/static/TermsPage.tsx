@@ -14,7 +14,7 @@ export default function TermsPage({}: Props) {
       <p>
         Thank you for choosing our service which allows people to transfer data
         ("Service"). The Service is provided by Least Authority TFA GmbH,
-        Thaerstraße 28a, 10249 Berlin (<b>"Least Authority"</b>, <b>"we"</b> or{" "}
+        Warschauer Straße 58A, 10243 Berlin (<b>"Least Authority"</b>, <b>"we"</b> or{" "}
         <b>"us"</b> or <b>"our"</b>). By using the Service, you conclude a
         binding agreement with us under the following terms and conditions. The
         Terms shall apply in the version current at the time of the first use of
