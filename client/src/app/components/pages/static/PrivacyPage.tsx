@@ -13,7 +13,7 @@ export default function PrivacyPage({}: Props) {
       <h2>Who we are</h2>
       <p>
         Winden is operated by Least Authority TFA GmbH (‘Least Authority’, ‘we’,
-        ‘us’), located at Thaerstraße 28a, 10249 Berlin in Germany.
+        ‘us’), located at Warschauer Straße 58A, 10243 Berlin in Germany.
       </p>
       <p>
         As a privacy-focused company we aim to know as little about you as
